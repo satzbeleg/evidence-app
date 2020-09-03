@@ -43,46 +43,6 @@ export default {
 <style lang="scss">
 // Import Bulma's core
 @import "~bulma/sass/utilities/_all";
-
-/*
-// Set your colors
-$info: #f1896f;
-$info-invert: findColorInvert($primary);
-$twitter: #4099FF;
-$twitter-invert: findColorInvert($twitter);
-
-// Setup $colors to use as bulma classes (e.g. 'is-twitter')
-$colors: (
-    "white": ($white, $black),
-    "black": ($black, $white),
-    "light": ($light, $light-invert),
-    "dark": ($dark, $dark-invert),
-    "primary": ($primary, $primary-invert),
-    "info": ($info, $info-invert),
-    "success": ($success, $success-invert),
-    "warning": ($warning, $warning-invert),
-    "danger": ($danger, $danger-invert),
-    "twitter": ($twitter, $twitter-invert)
-);
-
-// Links
-$link: $primary;
-$link-invert: $primary-invert;
-$link-focus-border: $primary;
-*/
-
-[theme="dark"] {
-  html, body, nav, .navbar-burger, .navbar-menu, .navbar-start, .navbar-item, .navbar-link {
-    background-color: $dark;
-    color: $light;
-  }
-  h1, h2, h3, h4, h5, h6, .title, .subtitle {
-    color: $light;
-  }
-}
-
-
-
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
