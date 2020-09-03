@@ -3,6 +3,10 @@
     "home": "Startseite",
     "about": "Über uns"
   },
+  "home": {
+    "welcome": "Herzlich Willkommen",
+    "welcome_text": "Sie können Satzbeispiele mit den folgenden Tools bewerten ..."
+  },
   "auth": {
     "login": "Anmelden",
     "login_noun": "Anmeldung",
