@@ -48,3 +48,11 @@ export default {
   name: 'Home',
 }
 </script>
+
+
+<style scoped>
+.container {
+  display: grid;
+  grid-gap: 3vh;
+}
+</style>
