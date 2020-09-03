@@ -13,28 +13,16 @@
         <!-- {{ $i18n.locale }} -->
         <b-navbar-item>
           <b-dropdown v-model="$i18n.locale" aria-role="list">
+
             <button class="button is-light" type="button" slot="trigger">
               <template v-if="$i18n.locale == 'de'"><span>Deutsch</span></template>
-              <template v-if="$i18n.locale == 'de-DE-nds'"><span>Plattdüütsch</span></template>
-              <!-- <template v-if="$i18n.locale == 'de-DE-ksh'"><span>Kölsch</span></template> -->
-              <!-- <template v-if="$i18n.locale == 'de-CH-gsw'"><span>Schwyzerdütsch</span></template> -->
-              <!-- <template v-if="$i18n.locale == 'de-AT-bar'"><span>Boarisch</span></template> -->
-              <template v-if="$i18n.locale == 'ko-KR'"><span>한국어</span></template>
-              <template v-if="$i18n.locale == 'zh-TW'"><span>中文 (繁體)</span></template>
               <template v-if="$i18n.locale == 'en-US'"><span>English</span></template>
-              <!-- <template v-if="$i18n.locale == 'ja-JP'"><span>日本語</span></template> -->
               <b-icon icon="caret-down"></b-icon>
             </button>
 
             <b-dropdown-item aria-role="listitem" value="de">Deutsch</b-dropdown-item>
-            <b-dropdown-item aria-role="listitem" value="de-DE-nds">Plattdüütsch</b-dropdown-item>
-            <!-- <b-dropdown-item aria-role="listitem" value="de-DE-ksh">Kölsch (Ripuarisch)</b-dropdown-item> -->
-            <!-- <b-dropdown-item aria-role="listitem" value="de-CH-gsw">Schwyzerdütsch</b-dropdown-item> -->
-            <!-- <b-dropdown-item aria-role="listitem" value="de-AT-bar">Boarisch</b-dropdown-item> -->
-            <b-dropdown-item aria-role="listitem" value="ko-KR">한국어</b-dropdown-item>
-            <b-dropdown-item aria-role="listitem" value="zh-TW">中文 (繁體)</b-dropdown-item> 
             <b-dropdown-item aria-role="listitem" value="en-US">English</b-dropdown-item>
-            <!-- <b-dropdown-item aria-role="listitem" value="ja-JP">日本語</b-dropdown-item> -->
+            
           </b-dropdown>
         </b-navbar-item>
 
