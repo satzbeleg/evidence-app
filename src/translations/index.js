@@ -43,10 +43,6 @@ export default new VueI18n({
   formatter: new CustomFormatter({ default_locale }),
   messages: {
     'de': require('./de.json'),
-    'de-DE-nds': require('./de-DE-nds.json'),
-    'en-US': require('./en-US.json'),
-    'ja-JP': require('./ja-JP.json'),
-    'ko-KR': require('./ko-KR.json'),
-    'zh-TW': require('./zh-TW.json'),
+    'en-US': require('./en-US.json')
   }
 })
