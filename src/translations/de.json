@@ -1,0 +1,25 @@
+{
+  "header": {
+    "home": "Startseite",
+    "about": "Über uns"
+  },
+  "auth": {
+    "login": "Anmelden",
+    "login_noun": "Anmeldung",
+    "login_cta": "Bitte melden Sie sich an, um fortzufahren.",
+    "signup": "Registrieren",
+    "logout": "Abmelden",
+    "remember": "Merken",
+    "email": "E-Mail",
+    "email_place": "alex@musterbeispiel.de",
+    "password": "Passwort",
+    "password_place": "Ihr Passwort",
+    "username": "Benutzername",
+    "username_place": "Ihr Benutzername"
+  },
+  "settings": {
+    "settings": "Einstellungen",
+    "appearance": "Aussehen",
+    "darkmode": "Dunkler Modus"
+  }
+}

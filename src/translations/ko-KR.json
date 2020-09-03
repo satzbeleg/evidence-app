@@ -1,0 +1,15 @@
+{
+  "header": {
+    "home": "대문",
+    "about": "소개"
+  },
+  "auth": {
+    "login": "로그인",
+    "signup": "가입하기"
+  },
+  "settings": {
+    "settings": "설정",
+    "appearance": "외관",
+    "darkmode": "어두운 테마"
+  }
+}

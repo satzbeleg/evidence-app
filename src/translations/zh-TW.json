@@ -1,0 +1,15 @@
+{
+  "header": {
+    "home": "首页",
+    "about": "關於"
+  },
+  "auth": {
+    "login": "登錄",
+    "signup": "註冊"
+  },
+  "settings": {
+    "settings": "設定值",
+    "appearance": "出現",
+    "darkmode": "黑暗主題"
+  }
+}

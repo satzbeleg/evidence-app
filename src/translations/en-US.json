@@ -1,0 +1,34 @@
+{
+  "message": {
+    "hello": "hello!!",
+    "foo": "{msg} foo in the U.S.!",
+    "myphrase": "the cowboy {0} many {1}.",
+    "plural": "You have {n, plural, =0{no messages} one{1 message} other{# messages}}.",
+    "select": "{gender, select, male{He} female{She} other{They}} liked this.",
+    "number": "Current Percent: {current, number, percent}",
+    "time": "Current Time: {current, time, short}"
+  },
+  "header": {
+    "home": "Home",
+    "about": "About"
+  },
+  "auth": {
+    "login": "Login",
+    "login_noun": "Login",
+    "login_cta": "Please login to proceed.",
+    "signup": "Sign Up",
+    "logout": "Log Out",
+    "remember": "Remember me",
+    "email": "Email",
+    "email_place": "avery@doe.com",
+    "password": "Password",
+    "password_place": "Your Password",
+    "username": "Username",
+    "username_place": "Your Username"
+  },
+  "settings": {
+    "settings": "Settings",
+    "appearance": "Appearance",
+    "darkmode": "Dark theme"
+  }
+}

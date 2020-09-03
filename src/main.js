@@ -1,0 +1,45 @@
+import Vue from 'vue';
+import App from './App.vue';
+import router from './router';
+
+/** fontawesome */
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
+library.add(fas);
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+Vue.component('vue-fontawesome', FontAwesomeIcon);
+
+/** load Buefy for Vue */
+import Buefy from 'buefy';
+//import 'buefy/dist/buefy.css'; // must be deactivated if SCSS is used
+Vue.use(Buefy, {
+  defaultIconComponent: 'vue-fontawesome',
+  defaultIconPack: 'fas',
+});
+
+/** PWA */
+import './registerServiceWorker';
+
+/** Meta data */
+import VueMeta from 'vue-meta';
+Vue.use(VueMeta, {
+  keyName: 'head'
+});
+
+/** i18n */
+import i18n from '@/translations';
+
+/** Vuex state management */
+import store from './store';
+
+
+/** misc */
+Vue.config.productionTip = false;
+
+new Vue({
+  store,
+  i18n,
+  router,
+  render: h => h(App)
+}).$mount('#app');
