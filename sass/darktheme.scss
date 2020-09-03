@@ -1,0 +1,18 @@
+@charset "utf-8";
+// invert white/gray/dark
+// bulma/sass/utilities/initial-variables.sas
+$black: hsl(0, 0%, 96%) !default;
+$black-bis: hsl(0, 0%, 93%) !default;
+$black-ter: hsl(0, 0%, 86%) !default;
+$grey-darker: hsl(0, 0%, 79%) !default;
+$grey-dark: hsl(0, 0%, 71%) !default;
+$grey: hsl(0, 0%, 52%) !default;
+$grey-light: hsl(0, 0%, 29%) !default;
+$grey-lighter: hsl(0, 0%, 14%) !default;
+$grey-lightest: hsl(0, 0%, 7%) !default;
+$white-ter: hsl(0, 0%, 4%) !default;
+$white-bis: hsl(0, 0%, 2%) !default;
+$white: hsl(0, 0%, 0%) !default;
+// load all other dynamic css generators
+@import "../node_modules/bulma/bulma.sass";
+@import "../node_modules/buefy/src/scss/buefy";

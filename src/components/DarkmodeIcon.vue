@@ -14,6 +14,7 @@ export default {
 
   computed: {
     isDarkMode(){
+      this.$store.dispatch("darkmode/enforceTheme");
       return this.$store.getters['darkmode/isdark'];
     }
   },
