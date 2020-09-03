@@ -12,6 +12,10 @@
     "home": "Home",
     "about": "About"
   },
+  "home": {
+    "welcome": "Welcome",
+    "welcome_text": "You can rank sentence examples with the following tools ..."
+  },
   "auth": {
     "login": "Login",
     "login_noun": "Login",
