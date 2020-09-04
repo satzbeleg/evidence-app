@@ -14,14 +14,14 @@ export default {
 
   computed: {
     isDarkMode(){
-      this.$store.dispatch("darkmode/enforceTheme");
-      return this.$store.getters['darkmode/isdark'];
+      this.$store.dispatch("settings/darkmode/enforceTheme");
+      return this.$store.getters['settings/darkmode/isdark'];
     }
   },
 
   methods: {
     toggleTheme(){
-      this.$store.dispatch("darkmode/toggleTheme");
+      this.$store.dispatch("settings/darkmode/toggleTheme");
     }
   }
 

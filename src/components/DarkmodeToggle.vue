@@ -16,10 +16,10 @@ export default {
   computed: {
     isDarkMode: {
       get(){
-        return this.$store.getters['darkmode/isdark'];
+        return this.$store.getters['settings/darkmode/isdark'];
       },
       set(){
-        this.$store.dispatch("darkmode/toggleTheme");
+        this.$store.dispatch("settings/darkmode/toggleTheme");
       }
     }
   }

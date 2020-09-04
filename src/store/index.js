@@ -4,7 +4,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import login from './modules/login.js';
-import darkmode from './modules/darkmode.js';
+import settings from './modules/settings';
 import swipe1 from './modules/swipe1.js';
 Vue.use(Vuex);
 
@@ -23,7 +23,7 @@ const vuexStorage = new VuexPersist({
 const store = new Vuex.Store({
   modules: {
     login: login,
-    darkmode: darkmode,
+    settings: settings,
     swipe1: swipe1
   },
   plugins: [vuexStorage.plugin]
