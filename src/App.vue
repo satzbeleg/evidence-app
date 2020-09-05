@@ -1,13 +1,13 @@
 <template>
   <div id="app">
-    <TheHeader/>
+    <TheNavbar/>
     <router-view />
   </div>
 </template>
 
 
 <script>
-import TheHeader from '@/components/TheHeader.vue';
+import TheNavbar from '@/components/TheNavbar.vue';
 import ConnectivityDetection from '@/mixins/connectivity-detection.js';
 
 export default {
@@ -30,7 +30,7 @@ export default {
     ],*/
   },
   components: {
-    TheHeader
+    TheNavbar
   },
 
   mixins: [
