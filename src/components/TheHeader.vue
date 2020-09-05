@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <!-- navigation/menu -->
-    <b-navbar class="is-spaced has-shadow">
+    <b-navbar class="is-fixed-top is-spaced has-shadow">
       
       <template slot="brand">
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
