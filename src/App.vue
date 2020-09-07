@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <TheHeader/>
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
@@ -46,5 +46,11 @@ export default {
 // Import Bulma and Buefy styles
 @import "~bulma";
 @import "~buefy/src/scss/buefy";
+</style>
+
+<style>
+#app > .section {
+  padding-top: 4.5rem;
+}
 </style>
 
