@@ -24,30 +24,19 @@ export default {
   directives: {
     scale_font_size: {
       inserted: function(el){
-        console.log(el.textContent.length)
-        el.style.fontSize = scaleFontSize(el.textContent.length);
+        const n_len = el.textContent.length;
+        const n_min_chars = 25;   // if 10 or less chars, then use 24px
+        const n_max_chars = 250;  // if 250 chars, then use 8px
+        const min_font_sz = 12;
+        const max_font_sz = 20; // if n_len<=n_min_chars
+        // min-max scaling
+        const scale_factor = (n_len - n_min_chars) / (n_max_chars - n_min_chars);
+        const font_size = max_font_sz - (max_font_sz - min_font_sz) * scale_factor
+        el.style.fontSize = `${font_size}px`;
       }
     }
   }
 }
-
-/** JS snippet */
-//import Vue from 'vue';
-//Vue.directive()
-
-const scaleFontSize = function(n_len){
-  const n_min_chars = 25;   // if 10 or less chars, then use 24px
-  const n_max_chars = 250;  // if 250 chars, then use 8px
-  const min_font_sz = 12;
-  const max_font_sz = 20; // if n_len<=n_min_chars
-  // min-max scaling
-  const scale_factor = (n_len - n_min_chars) / (n_max_chars - n_min_chars);
-  const font_size = max_font_sz - (max_font_sz - min_font_sz) * scale_factor
-  return `${font_size}px`;
-}
-// class="scale-fontsize-to-textlength"
-//const elems = document.querySelectorAll(".scale-fontsize-to-textlength");
-//elems.forEach(el => { el.style.fontSize = scaleFontSize(el.textContent.length); });
 </script>
 
 
