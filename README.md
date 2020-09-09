@@ -44,7 +44,8 @@ General
     - `yarn add localforage`
 - Data
     - Generate random UUIDs: `yarn add uuid`
-
+- Cosmetic CSS stuff:
+    - Fit text to a fixed-sized html element (`v-fit2box` directive): `yarn add vue-fit2box`
 
 Component development
 
