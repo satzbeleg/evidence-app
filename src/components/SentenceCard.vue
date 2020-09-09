@@ -2,7 +2,7 @@
   <div class="card is-quarter" v-bind:id="identifier">
     <div class="card-content">
       <div class="content center">
-        <p v-scale_font_size>
+        <p v-scale-font-size2="{test:'hehe1'}">
           {{ sentence }}
           {{ sentence.length }}
         </p>
@@ -22,21 +22,44 @@ export default {
   },
 
   directives: {
-    scale_font_size: {
+    'scale-font-size': {  // min-max scaling
       inserted: function(el){
-        const n_len = el.textContent.length;
-        const n_min_chars = 25;   // if 10 or less chars, then use 24px
-        const n_max_chars = 250;  // if 250 chars, then use 8px
-        const min_font_sz = 12;
-        const max_font_sz = 20; // if n_len<=n_min_chars
-        // min-max scaling
-        const scale_factor = (n_len - n_min_chars) / (n_max_chars - n_min_chars);
-        const font_size = max_font_sz - (max_font_sz - min_font_sz) * scale_factor
-        el.style.fontSize = `${font_size}px`;
+        const numChars = el.textContent.length;
+        const minChars = 25;   // if 10 or less chars, then use 24px
+        const maxChars = 250;  // if 250 chars, then use 8px
+        const minFontSize = 0.8;
+        const maxFontSize = 1.4; // if n_len<=n_min_chars
+        const scaleFont = (numChars - minChars) / (maxChars - minChars);
+        const fontSize = maxFontSize - (maxFontSize - minFontSize) * scaleFont;
+        el.style.fontSize = `${fontSize}rem`;
       }
-    }
+    },
+    'scale-font-size2': {  // scale to box size
+      inserted: function(el){
+        const bh = el.closest('.card').clientHeight / 16.0;  // approx to rem units
+        const bw = el.closest('.card').clientWidth / 16.0;
+        const fh = 1;
+        const fw = getTextWidth(el.textContent, `${fh}rem`);
+        // console.log(bh, bw, bh * bw, fh, fw);
+        const scaleFont = 2.0 * Math.sqrt(bh * bw) / Math.sqrt(fw);
+        // console.log(scaleFont)
+        const fontSize = fh * scaleFont;
+        el.style.fontSize = `${fontSize}rem`;
+      }
+    },
+
   }
 }
+
+
+function getTextWidth(text, font){
+  let canvas = document.createElement("canvas");
+  let context = canvas.getContext("2d");
+  context.font = font;
+  let metrics = context.measureText(text);
+  return metrics.width;
+}
+
 </script>
 
 
@@ -55,9 +78,8 @@ export default {
 
 .card {
   margin-bottom: min(3vh, 25px);
-
-  height: min(18vh, 180px);
-  max-width: 400px; 
+  height: min(19vh, 180px);
+  max-width: 400px;
 }
 
 
