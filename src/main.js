@@ -33,6 +33,10 @@ import i18n from '@/translations';
 /** Vuex state management */
 import store from './store';
 
+/** v-fit-text-to-box */
+import FitTextToBox from './test.js';
+//import FitTextToBox from 'v-fit-text-to-box';
+Vue.directive('fit-text-to-box', FitTextToBox);
 
 /** misc */
 Vue.config.productionTip = false;

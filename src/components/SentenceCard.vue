@@ -2,7 +2,7 @@
   <div class="card is-quarter" v-bind:id="identifier">
     <div class="card-content">
       <div class="content center">
-        <p v-scale-font-size2="{test:'hehe1'}">
+        <p v-fit-text-to-box>
           {{ sentence }}
           {{ sentence.length }}
         </p>
@@ -36,21 +36,25 @@ export default {
     },
     'scale-font-size2': {  // scale to box size
       inserted: function(el){
-        const bh = el.closest('.card').clientHeight / 16.0;  // approx to rem units
-        const bw = el.closest('.card').clientWidth / 16.0;
-        const fh = 1;
-        const fw = getTextWidth(el.textContent, `${fh}rem`);
-        // console.log(bh, bw, bh * bw, fh, fw);
-        const scaleFont = 2.0 * Math.sqrt(bh * bw) / Math.sqrt(fw);
-        // console.log(scaleFont)
-        const fontSize = fh * scaleFont;
-        el.style.fontSize = `${fontSize}rem`;
-      }
+        el.style.fontSize = fitTextToBox(el);
+      },
     },
 
   }
 }
 
+
+function fitTextToBox(el){
+  const bh = el.closest('.card').clientHeight / 16.0;  // approx to rem units
+  const bw = el.closest('.card').clientWidth / 16.0;
+  const fh = 1;
+  const fw = getTextWidth(el.textContent, `${fh}rem`);
+  // console.log(bh, bw, bh * bw, fh, fw);
+  const scaleFont = 2.0 * Math.sqrt(bh * bw) / Math.sqrt(fw);
+  // console.log(scaleFont)
+  const fontSize = fh * scaleFont;
+  return `${fontSize}rem`;
+}
 
 function getTextWidth(text, font){
   let canvas = document.createElement("canvas");
@@ -64,7 +68,6 @@ function getTextWidth(text, font){
 
 
 <style scoped>
-
 .center {
   margin: 0;
   position: absolute;
@@ -81,7 +84,5 @@ function getTextWidth(text, font){
   height: min(19vh, 180px);
   max-width: 400px;
 }
-
-
 </style>
 
