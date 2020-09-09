@@ -34,9 +34,8 @@ import i18n from '@/translations';
 import store from './store';
 
 /** v-fit-text-to-box */
-import FitTextToBox from './test.js';
-//import FitTextToBox from 'v-fit-text-to-box';
-Vue.directive('fit-text-to-box', FitTextToBox);
+import Fit2Box from 'vue-fit2box';
+Vue.directive('fit2box', Fit2Box);
 
 /** misc */
 Vue.config.productionTip = false;
