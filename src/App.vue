@@ -21,8 +21,8 @@ export default {
     bodyAttrs: {
       //theme: ['dark']
     },
-    title: 'Default App Title',
-    titleTemplate: '%s | vue-meta Example App',
+    title: 'Evidence Annotation App',
+    titleTemplate: '%s | Evidence Annotation App',
     /*meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
