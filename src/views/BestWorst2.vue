@@ -4,14 +4,11 @@
       <!-- <div class="column is-multiline"> -->
       <div v-for="sentence in example" :key="sentence.id">
         <a v-on:click="sendToFsm(sentence.id);">
-          {{ state.matches('pickbest') }} {{ sentence.id }}
-        <SentenceCard v-bind:sentence="sentence.text" 
-                      v-bind:identifier="sentence.id" 
-                      v-on:cardclicked="onClickCard" />
+          <SentenceCard v-bind:sentence="sentence.text" 
+                        v-bind:identifier="sentence.id"/>
         </a>
       </div>
     </div>
-    counter: {{ counter }} <br>
     context: {{ context.best_id }} <br>
     state: <pre>{{ state }}</pre>
   </section>
@@ -107,8 +104,7 @@ export default {
         {"id": "67", "text": "Duis aute irure dolor in  reprehenderit in voluptate velit esse cillum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."},
         {"id": "890", "text": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
       ],
-      counter: 0,
-      // events: [],
+      events: [],
       /** xstate FSM fuer Vue2 */
       fsmService: interpret(fsmBestWorst1),
       state: fsmBestWorst1.initialState,
@@ -117,20 +113,6 @@ export default {
   },
 
   methods: {
-    onClickCard(identifier){
-      //console.log(identifier);
-      // toogle card's class
-      let el = document.getElementById(identifier);
-      if( el.classList.contains("card-selected") ){
-        el.classList.remove("card-selected");
-        // this.events.push({"action": "undo", "id": identifier}); // log actions
-        this.counter -= 1
-      }else{
-        el.classList.add("card-selected");
-        // this.events.push({"action": "select", "id": identifier}); // log actions
-        this.counter += 1
-      }
-    },
     /** xstate FSM fuer Vue2 */
     send(evt, id) {
       //console.log(evt)
@@ -138,10 +120,15 @@ export default {
       this.fsmService.send(evt);
     },
     sendToFsm(id){
+      let el = document.getElementById(id);
       if( id === this.context.best_id ){
         this.send('UNDO');
+        el.classList.remove("card-selected");
+        this.events.push({"action": "undo", "id": id});
       }else{
         this.send('NEXT', id);
+        el.classList.add("card-selected");
+        this.events.push({"action": "select", "id": id}); 
       }
     }
   }
