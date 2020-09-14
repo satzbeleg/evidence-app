@@ -32,7 +32,7 @@ export default {
         {'label': 'reset', 'icon': 'sync-alt', 'path': "#2"},
         {'label': 'undo', 'icon': 'undo-alt', 'path': "#3"},
       ],
-      //labelclass: "is-hidden-mobile"
+      labelclass: "", //"is-hidden-mobile"
     }
   }
 
