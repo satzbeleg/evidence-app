@@ -38,10 +38,13 @@ General
 - SASS/Themes
     - `yarn add node-sass --dev`
     - `yarn add sass-loader --dev`
-- State Management, ~~LocalStorage~~ localForage (IndexedDB). All Vuex states of a session are synced with the browser's localForage API, and synced with an online REST API in the background.
+- State Management. , and synced with an .
     - `yarn add vuex`
-    - `yarn add vuex-persist`
-    - `yarn add localforage`
+    - Sync Vuex states with the browser's localForage API: `yarn add vuex-persist`
+    - localForage (IndexedDB) instead of ~~LocalStorage~~: `yarn add localforage`
+    - [ ] Sync Vuex states with online REST API in the background
+    - Finite State Machines: `yarn add xstate`
+    - ~~Sync FSMs with Vuex: `yarn add @xstate/vue`~~
 - Data
     - Generate random UUIDs: `yarn add uuid`
 - Cosmetic CSS stuff:
