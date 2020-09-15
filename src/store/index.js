@@ -6,6 +6,7 @@ import Vuex from 'vuex';
 import login from './modules/login.js';
 import settings from './modules/settings';
 import swipe1 from './modules/swipe1.js';
+import bestworst from './modules/bestworst';
 Vue.use(Vuex);
 
 
@@ -13,7 +14,7 @@ Vue.use(Vuex);
 import VuexPersist from 'vuex-persist';
 import localForage from 'localforage'
 const vuexStorage = new VuexPersist({
-  key: 'vuex-my-app-name', // name of the store in storage API
+  key: 'vuex-evidence', // name of the store in storage API
   // storage: window.localStorage,
   storage: localForage, // alternative is 'window.localStorage'
   asyncStorage: true, // required for localForage, see https://github.com/championswimmer/vuex-persist/issues/117#issuecomment-493906644
@@ -24,7 +25,8 @@ const store = new Vuex.Store({
   modules: {
     login: login,
     settings: settings,
-    swipe1: swipe1
+    swipe1: swipe1,
+    bestworst: bestworst
   },
   plugins: [vuexStorage.plugin]
 });

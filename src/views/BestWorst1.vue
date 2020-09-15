@@ -1,13 +1,15 @@
 <template>
   <section class="section">
     <div class="container is-centered">
-      <!-- <div class="column is-multiline"> -->
-      <div v-for="sentence in example" :key="sentence.id">
-        <SentenceCard v-bind:sentence="sentence.text" 
-                      v-bind:identifier="sentence.id" 
-                      v-on:cardclicked="onClickCard" />
-      </div>
+        <div v-for="sentence in examples" :key="sentence.id">
+          <SentenceCard v-bind:sentence="sentence.text" 
+                        v-bind:identifier="sentence.id" 
+                        v-on:cardclicked="onClickCard" />
+        </div>
+        <b-button v-on:click="loadNext" type="is-warning">Load Next Sentence Examples</b-button>
     </div>
+
+    <h1 class="subtitle">Logging</h1>
     counter: {{ counter }} <br>
     events: <pre>{{ events }}</pre>
   </section>
@@ -26,18 +28,22 @@ export default {
 
   data(){
     return {
-      example: [
-        {"id": "123", "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-        {"id": "45", "text": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."},
-        {"id": "67", "text": "Duis aute irure dolor in  reprehenderit in voluptate velit esse cillum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."},
-        {"id": "890", "text": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-      ],
       counter: 0,
       events: [],
     }
   },
 
+  computed: {
+    examples(){
+      return this.$store.getters['bestworst/current/getExamples'];
+    }
+  },
+
   methods: {
+    loadNext(){
+      this.$store.dispatch('bestworst/current/next');
+    },
+
     onClickCard(identifier){
       //console.log(identifier);
       // toogle card's class
