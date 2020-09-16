@@ -1,12 +1,31 @@
 <template>
   <section class="section">
     <div class="container is-centered">
-        <div v-for="sentence in examples" :key="sentence.id">
+      <b-button v-on:click="loadNext" type="is-warning">Load Next Sentence Examples</b-button>
+
+        <div v-for="(sentence, index) in examples" :key="index" style="border: solid 1px">
+          {{ sentence.id }}
+          {{ sentence.text }}
+        </div>
+
+        <!--
+        <div v-for="(sentence, index) in examples" :key="index">
           <SentenceCard v-bind:sentence="sentence.text" 
-                        v-bind:identifier="sentence.id" 
+                        v-bind:identifier="sentence.id"
                         v-on:cardclicked="onClickCard" />
         </div>
-        <b-button v-on:click="loadNext" type="is-warning">Load Next Sentence Examples</b-button>
+        -->
+
+        <div v-if="(examples instanceof Array)">
+          <SentenceCard v-bind:sentence="examples[0].text" 
+                        v-bind:identifier="examples[0].id"
+                        v-on:cardclicked="onClickCard" />
+
+          <SentenceCard v-bind:sentence="examples[1].text" 
+                        v-bind:identifier="examples[1].id"
+                        v-on:cardclicked="onClickCard" />
+        </div>
+
     </div>
 
     <h1 class="subtitle">Logging</h1>
@@ -28,6 +47,7 @@ export default {
 
   data(){
     return {
+      //examples: [],
       counter: 0,
       events: [],
     }
@@ -42,6 +62,8 @@ export default {
   methods: {
     loadNext(){
       this.$store.dispatch('bestworst/current/next');
+      //this.examples = this.$store.getters['bestworst/current/getExamples'];
+      this.$forceUpdate();
     },
 
     onClickCard(identifier){
