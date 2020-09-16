@@ -1,4 +1,4 @@
-/** "bestworst/current" to annotate the current example set */
+/** "bestworst1/current" to annotate the current example set */
 export default {
   namespaced: true,
 
@@ -19,17 +19,17 @@ export default {
 
   actions: {
     /** move to bestword/ranked/result
-     *  pull from bestworst/unlabeled/queue */
+     *  pull from bestworst1/unlabeled/queue */
     next(state) {
       // move ranking results
       if(typeof state.rankings !== 'undefined'){
-        //this.dispatch("bestworst/rankings/saveResult", state.rankings);
+        //this.dispatch("bestworst1/rankings/saveResult", state.rankings);
         console.log(state.rankings)
       }
       // pull new example set
       // we need to strip the reactive observer stuff
-      //const newExampleSet = JSON.parse(JSON.stringify(this.getters["bestworst/unlabeled/dequeueNext"]));
-      const newExampleSet = this.getters["bestworst/unlabeled/dequeueNext"];
+      //const newExampleSet = JSON.parse(JSON.stringify(this.getters["bestworst1/unlabeled/dequeueNext"]));
+      const newExampleSet = this.getters["bestworst1/unlabeled/dequeueNext"];
       state.commit("ASSIGN_EXAMPLESET", newExampleSet);
       state.commit("RESET_RANKINGS", newExampleSet.set_id);
     },

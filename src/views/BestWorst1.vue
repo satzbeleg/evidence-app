@@ -3,26 +3,9 @@
     <div class="container is-centered">
       <b-button v-on:click="loadNext" type="is-warning">Load Next Sentence Examples</b-button>
 
-        <div v-for="(sentence, index) in examples" :key="index" style="border: solid 1px">
-          {{ sentence.id }}
-          {{ sentence.text }}
-        </div>
-
-        <!--
         <div v-for="(sentence, index) in examples" :key="index">
           <SentenceCard v-bind:sentence="sentence.text" 
                         v-bind:identifier="sentence.id"
-                        v-on:cardclicked="onClickCard" />
-        </div>
-        -->
-
-        <div v-if="(examples instanceof Array)">
-          <SentenceCard v-bind:sentence="examples[0].text" 
-                        v-bind:identifier="examples[0].id"
-                        v-on:cardclicked="onClickCard" />
-
-          <SentenceCard v-bind:sentence="examples[1].text" 
-                        v-bind:identifier="examples[1].id"
                         v-on:cardclicked="onClickCard" />
         </div>
 
@@ -31,6 +14,8 @@
     <h1 class="subtitle">Logging</h1>
     counter: {{ counter }} <br>
     events: <pre>{{ events }}</pre>
+
+    Problems: (1) Doesn't update the Array
   </section>
 </template>
 
@@ -47,7 +32,6 @@ export default {
 
   data(){
     return {
-      //examples: [],
       counter: 0,
       events: [],
     }
@@ -55,15 +39,17 @@ export default {
 
   computed: {
     examples(){
-      return this.$store.getters['bestworst/current/getExamples'];
+      // var tmp = this.$store.getters['bestworst1/current/getExamples'];
+      // this.$forceUpdate();
+      // return tmp;
+      return this.$store.getters['bestworst1/current/getExamples'];
     }
   },
 
   methods: {
     loadNext(){
-      this.$store.dispatch('bestworst/current/next');
-      //this.examples = this.$store.getters['bestworst/current/getExamples'];
-      this.$forceUpdate();
+      this.$store.dispatch('bestworst1/current/next');
+      // this.$forceUpdate();
     },
 
     onClickCard(identifier){

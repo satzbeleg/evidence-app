@@ -46,15 +46,27 @@ const routes = [{
   },
   {
     path: '/bestworst1',
-    name: 'Best-Worst-Scaling with 2 Actions',
+    name: 'NOT WORKING! Best-Worst-Scaling with 2 Actions (vuex)',
     component: () =>
       import ('../views/BestWorst1.vue')
   },
   {
     path: '/bestworst2',
-    name: 'Best-Worst-Scaling with 2 Actions (xstate)',
+    name: 'NOT WORKING! Best-Worst-Scaling with 2 Actions (xstate)',
     component: () =>
       import ('../views/BestWorst2.vue')
+  },
+  {
+    path: '/bestworst3',
+    name: 'Best-Worst-Scaling with 2 Actions (xstate)',
+    component: () =>
+      import ('../views/BestWorst3.vue')
+  },
+  {
+    path: '/demo-fit2box',
+    name: 'Demo für vue-fit2box',
+    component: () =>
+      import ('../views/DemoFit2Box.vue')
   },
 ];
 

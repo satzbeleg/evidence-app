@@ -1,4 +1,4 @@
-/** "bestworst/unlabeled" to manage the example sets as FIFO queue */
+/** "bestworst1/unlabeled" to manage the example sets as FIFO queue */
 export default {
   namespaced: true,
 

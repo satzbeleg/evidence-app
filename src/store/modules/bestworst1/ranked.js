@@ -1,4 +1,4 @@
-/** "bestworst/ranked" to dump the annotated example set */
+/** "bestworst1/ranked" to dump the annotated example set */
 export default {
   namespaced: true,
   state: () => ({
