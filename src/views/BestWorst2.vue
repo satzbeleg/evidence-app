@@ -11,6 +11,8 @@
     </div>
     context: {{ context.best_id }} <br>
     state: <pre>{{ state }}</pre>
+
+    Problem: (1) Xstate is too complicated
   </section>
 </template>
 
