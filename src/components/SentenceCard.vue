@@ -1,14 +1,13 @@
 <template>
-  <div class="card is-quarter" v-bind:id="identifier"
+  <div class="card is-quarter" v-bind:id="identifier" 
        style="cursor: pointer;" v-on:click="handlerClick">
+
     <div class="card-content">
       <div class="content center">
-        <p v-fit2box>
-          {{ sentence }}
-          {{ sentence.length }}
-        </p>
+        <div v-fit2box="sentence" class="fixed-box" ></div>
       </div>
     </div>
+    
   </div>
 </template>
 
@@ -21,9 +20,6 @@ export default {
     identifier: String,
     sentence: String
   },
-
-  // data
-  // toogle message, e.g. green best example, red worst example
   
   methods: {
     handlerClick(){
@@ -38,6 +34,12 @@ export default {
 
 
 <style scoped>
+.card {
+  margin-bottom: min(3vh, 25px);
+  height: min(19vh, 180px);
+  max-width: 400px;
+}
+
 .center {
   margin: 0;
   position: absolute;
@@ -49,8 +51,8 @@ export default {
   width: 90%;
 }
 
-.card {
-  margin-bottom: min(3vh, 25px);
+.fixed-box {
+  padding-top: min(3vh, 25px);
   height: min(19vh, 180px);
   max-width: 400px;
 }
