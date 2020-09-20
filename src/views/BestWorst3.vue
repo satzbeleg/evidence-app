@@ -19,6 +19,10 @@ import Vue from 'vue';
 export default {
   name: "BestWorstTwoActions",
 
+  metaInfo: {
+    title: "Best-Worst Ranking"
+  },
+
   components: {
     BestWorstChoices
   },
