@@ -45,12 +45,6 @@ const routes = [{
       import ('../views/Swipe2.vue')
   },
   {
-    path: '/bestworst1',
-    name: 'NOT WORKING! Best-Worst-Scaling with 2 Actions (vuex)',
-    component: () =>
-      import ('../views/BestWorst1.vue')
-  },
-  {
     path: '/bestworst3',
     name: 'Best-Worst-Scaling with 2 Actions (xstate)',
     component: () =>

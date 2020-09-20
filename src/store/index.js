@@ -6,7 +6,6 @@ import Vuex from 'vuex';
 import login from './modules/login.js';
 import settings from './modules/settings';
 import swipe1 from './modules/swipe1.js';
-import bestworst1 from './modules/bestworst1';
 Vue.use(Vuex);
 
 
@@ -26,7 +25,6 @@ const store = new Vuex.Store({
     login: login,
     settings: settings,
     swipe1: swipe1,
-    bestworst1: bestworst1
   },
   plugins: [vuexStorage.plugin]
 });
