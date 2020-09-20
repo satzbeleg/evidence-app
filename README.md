@@ -38,10 +38,10 @@ General
 - SASS/Themes
     - `yarn add node-sass --dev`
     - `yarn add sass-loader --dev`
-- State Management, ~~LocalStorage~~ localForage (IndexedDB). All Vuex states of a session are synced with the browser's localForage API, and synced with an online REST API in the background.
+- State Management
     - `yarn add vuex`
-    - `yarn add vuex-persist`
-    - `yarn add localforage`
+    - Sync Vuex states with the browser's localForage API: `yarn add vuex-persist`
+    - localForage (IndexedDB) instead of ~~LocalStorage~~: `yarn add localforage`
 - Data
     - Generate random UUIDs: `yarn add uuid`
 - Cosmetic CSS stuff:
@@ -74,6 +74,7 @@ Component development
     +-- views           (Single view/page; have app/database logic)
     +-- components      (Are doing 1 thing; Receive data from view/page)
     +-- mixins          (Shared JS code)
+    +-- directives      (Directives plugins)
     +-- assets          (Media files used in components)
     +-- translations    (i18n locales)
     +-- store           (Vuex state management, SSOT)

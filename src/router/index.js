@@ -33,22 +33,16 @@ const routes = [{
     meta: { requiresAuth: true }
   },
   {
-    path: '/swipe1',
-    name: 'Tinder-like swipe',
+    path: '/bestworst3',
+    name: 'Best-Worst-Scaling with 2 Actions (xstate)',
     component: () =>
-      import ('../views/Swipe1.vue')
+      import ('../views/BestWorst3.vue')
   },
   {
-    path: '/swipe2',
-    name: 'Swipe one card',
+    path: '/demo-fit2box',
+    name: 'Demo für vue-fit2box',
     component: () =>
-      import ('../views/Swipe2.vue')
-  },
-  {
-    path: '/bestworst1',
-    name: 'Best-Worst-Scaling with 2 Actions',
-    component: () =>
-      import ('../views/BestWorstTwoActions.vue')
+      import ('../views/DemoFit2Box.vue')
   },
 ];
 
