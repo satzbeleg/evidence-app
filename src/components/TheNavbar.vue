@@ -44,30 +44,20 @@
         <span>{{ $t('settings.settings') }}</span>
       </b-navbar-item>
 
-      <b-navbar-dropdown label="Swipe Demos">
-        <b-navbar-item tag="router-link" :to="{ path: '/swipe1' }">
+      <b-navbar-dropdown label="Satzbeispiele bewerten">
+
+        <b-navbar-item tag="router-link" :to="{ path: '/bestworst3' }">
           <div class="media">
             <b-icon pack="fas" icon="mobile-alt" type="is-primary"></b-icon>
             <div class="media-content">
-              <strong>Tinder-like swipe</strong>
+              <strong>Best-Worst Ranking</strong>
               <br />
-              <small>Left/Right/Up swipe directions</small>
+              <small>Wähle zuerst das beste Satzbeispiel und dann das schlechteste Beispiel aus.</small>
             </div>
           </div>
         </b-navbar-item>
         <hr class="navbar-divider is-hidden-widescreen" />
 
-        <b-navbar-item tag="router-link" :to="{ path: '/swipe2' }">
-          <div class="media">
-            <b-icon pack="fas" icon="mobile-alt" type="is-primary"></b-icon>
-            <div class="media-content">
-              <strong>Binary Labelling</strong>
-              <br />
-              <small>Swipe a card left/right</small>
-            </div>
-          </div>
-        </b-navbar-item>
-        <hr class="navbar-divider is-hidden-widescreen" />
       </b-navbar-dropdown>
     </template>
 

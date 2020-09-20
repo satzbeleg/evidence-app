@@ -5,7 +5,6 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import login from './modules/login.js';
 import settings from './modules/settings';
-import swipe1 from './modules/swipe1.js';
 Vue.use(Vuex);
 
 
@@ -24,7 +23,6 @@ const store = new Vuex.Store({
   modules: {
     login: login,
     settings: settings,
-    swipe1: swipe1,
   },
   plugins: [vuexStorage.plugin]
 });

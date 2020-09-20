@@ -33,18 +33,6 @@ const routes = [{
     meta: { requiresAuth: true }
   },
   {
-    path: '/swipe1',
-    name: 'Tinder-like swipe',
-    component: () =>
-      import ('../views/Swipe1.vue')
-  },
-  {
-    path: '/swipe2',
-    name: 'Swipe one card',
-    component: () =>
-      import ('../views/Swipe2.vue')
-  },
-  {
     path: '/bestworst3',
     name: 'Best-Worst-Scaling with 2 Actions (xstate)',
     component: () =>
