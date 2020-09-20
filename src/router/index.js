@@ -51,12 +51,6 @@ const routes = [{
       import ('../views/BestWorst1.vue')
   },
   {
-    path: '/bestworst2',
-    name: 'NOT WORKING! Best-Worst-Scaling with 2 Actions (xstate)',
-    component: () =>
-      import ('../views/BestWorst2.vue')
-  },
-  {
     path: '/bestworst3',
     name: 'Best-Worst-Scaling with 2 Actions (xstate)',
     component: () =>
