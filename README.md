@@ -43,8 +43,6 @@ General
     - Sync Vuex states with the browser's localForage API: `yarn add vuex-persist`
     - localForage (IndexedDB) instead of ~~LocalStorage~~: `yarn add localforage`
     - [ ] Sync Vuex states with online REST API in the background
-    - Finite State Machines: `yarn add xstate`
-    - ~~Sync FSMs with Vuex: `yarn add @xstate/vue`~~
 - Data
     - Generate random UUIDs: `yarn add uuid`
 - Cosmetic CSS stuff:

@@ -7585,7 +7585,6 @@ vue-eslint-parser@^7.0.0:
 vue-fit2box@^0.2.1:
   version "0.2.1"
   resolved "https://registry.yarnpkg.com/vue-fit2box/-/vue-fit2box-0.2.1.tgz#52c8b6499c645fbb3589b6a1626d2b8c3edfb199"
-  integrity sha512-E8Kzk2G94ovJ+ybhSPwizz6GeoNsPnLiKi09vPc17HWEbH3HOnhfl0SIqQ6o6TJPdnNsTvNI2iLUlRXbnH78lw==
 
 vue-hot-reload-api@^2.3.0:
   version "2.3.4"
@@ -8008,11 +8007,6 @@ ws@^6.0.0, ws@^6.2.1:
   resolved "https://registry.npm.taobao.org/ws/download/ws-6.2.1.tgz?cache=0&sync_timestamp=1593925660500&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fws%2Fdownload%2Fws-6.2.1.tgz#442fdf0a47ed64f59b6a5d8ff130f4748ed524fb"
   dependencies:
     async-limiter "~1.0.0"
-
-xstate@^4.13.0:
-  version "4.13.0"
-  resolved "https://registry.yarnpkg.com/xstate/-/xstate-4.13.0.tgz#0be22ceb8bae2bc6a025fab330fe44204d76771c"
-  integrity sha512-UnUJJzP2KTPqnmxIoD/ymXtpy/hehZnUlO6EXqWC/72XkPb15p9Oz/X4WhS3QE+by7NP+6b5bCi/GTGFzm5D+A==
 
 xtend@^4.0.0, xtend@~4.0.1:
   version "4.0.2"
