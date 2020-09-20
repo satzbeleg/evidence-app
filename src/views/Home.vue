@@ -17,7 +17,7 @@
             Markiere zuerst das <strong>beste</strong> Satzbeispiel an.
             Zum Schluß wähle noch das <strong>schlechteste</strong> Satzbeispiel aus.
           </div>
-          <router-link :to="{ path: '/best-worst-scaling3' }">
+          <router-link :to="{ path: '/bestworst3' }">
             <a class="button is-primary">Start</a>
           </router-link>
         </div>
