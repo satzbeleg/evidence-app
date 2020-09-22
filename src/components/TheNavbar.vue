@@ -96,10 +96,16 @@
 
 
 <script>
+import { useI18n } from 'vue-i18n';
 import DarkmodeIcon from "@/components/DarkmodeIcon.vue";
 
 export default {
   name: "TheNavbar",
+
+  setup(){
+    const { t, locale } = useI18n();
+    return { t, locale }
+  },
 
   components: {
     DarkmodeIcon,

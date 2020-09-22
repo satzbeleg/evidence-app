@@ -2,12 +2,10 @@
   <section class="section" id="home">
     <div class="container">
       <!-- put the following into components ... -->
-      <!-- 
       <div class="content">
-        <h1 class="title">{{ $t('home.welcome') }}</h1>
-        <p class="subtitle">{{ $t('home.welcome_text') }}</p>
+        <h1 class="title">{{ t('home.welcome') }}</h1>
+        <p class="subtitle">{{ t('home.welcome_text') }}</p>
       </div>
-      -->
 
       <div class="card">
         <div class="card-content">
@@ -34,8 +32,16 @@
 
 
 <script>
+import { useI18n } from 'vue-i18n';
+
+
 export default {
   name: 'Home',
+
+  setup(){
+    const { t } = useI18n();
+    return { t }
+  }
 }
 </script>
 

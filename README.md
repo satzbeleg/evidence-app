@@ -27,7 +27,9 @@ General
 - [vue-router](https://router.vuejs.org/): `yarn add vue-router` 
 - [Buefy](https://buefy.org/documentation): `yarn add buefy`
 - [vue-meta](https://github.com/nuxt/vue-meta): `yarn add vue-meta`
-- [Multi-Lang i18n support](https://kazupon.github.io/vue-i18n/): `yarn add vue-i18n`
+- [Multi-Lang i18n support](https://kazupon.github.io/vue-i18n/): 
+    - vue2: `yarn add vue-i18n`
+    - vue3: https://github.com/intlify/vue-i18n-next
     - [messageformat](https://messageformat.github.io/messageformat/v3/): `yarn add messageformat` (handles pluralization and gender for i18n)
 - [Fontawesome 5](https://github.com/FortAwesome/vue-fontawesome#installation):
     - `yarn add @fortawesome/fontawesome-svg-core`

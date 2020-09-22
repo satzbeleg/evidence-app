@@ -1,5 +1,5 @@
 // import Vue from 'vue';
-import VueI18n from 'vue-i18n';
+import { createI18n } from 'vue-i18n';
 // Vue.use(VueI18n);
 
 /** Custom formatter 
@@ -38,7 +38,7 @@ const default_locale = navigator.language || 'de';
  * - header: TheHeader.vue (navigation) 
  * - settings: Settings.vue
  */
-export default new VueI18n({
+export default createI18n({
   locale: default_locale,
   formatter: new CustomFormatter({ default_locale }),
   messages: {

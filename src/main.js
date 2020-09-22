@@ -1,8 +1,3 @@
-/** Create the App */
-import { createApp, h } from 'vue';
-import App from './App.vue';
-
-
 /** fontawesome */
 // import { library } from '@fortawesome/fontawesome-svg-core';
 // import { fas } from '@fortawesome/free-solid-svg-icons';
@@ -28,19 +23,18 @@ import './registerServiceWorker';
 //   keyName: 'head'
 // });
 
-/** i18n */
-// import i18n from '@/translations';
-
-
 /** v-fit-text-to-box */
 // import Fit2Box from 'vue-fit2box';
 //import Fit2Box from '@/directives/fit2box';
 // Vue.directive('fit2box', Fit2Box);
 
 
+/** Load packages */
+import { createApp, h } from 'vue';
+import App from './App.vue';
+
 /** Add everything together */
 const app = createApp({
-  // i18n,
   render: () => h(App)
 });
 
@@ -53,6 +47,11 @@ app.use(router);
 import store from './store';
 app.use(store);
 // store.isReady().then(() => app.use(store));
+
+/** i18n */
+import i18n from '@/translations';
+app.use(i18n);
+
 
 /** Mount the app */
 app.mount('#app');
