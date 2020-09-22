@@ -2,10 +2,12 @@
   <section class="section" id="home">
     <div class="container">
       <!-- put the following into components ... -->
+      <!-- 
       <div class="content">
         <h1 class="title">{{ $t('home.welcome') }}</h1>
         <p class="subtitle">{{ $t('home.welcome_text') }}</p>
       </div>
+      -->
 
       <div class="card">
         <div class="card-content">
@@ -17,9 +19,11 @@
             Markiere zuerst das <strong>beste</strong> Satzbeispiel an.
             Zum Schluß wähle noch das <strong>schlechteste</strong> Satzbeispiel aus.
           </div>
+          <!-- 
           <router-link :to="{ path: '/bestworst3' }">
             <a class="button is-primary">Start</a>
           </router-link>
+          -->
         </div>
       </div>
 
