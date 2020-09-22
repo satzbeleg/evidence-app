@@ -5,7 +5,7 @@
       v-bind:itemState="states[0]"
       v-bind:sentId="items[0].id"
       v-bind:sentText="items[0].text"
-      v-on:itemSelected="onTransition"
+      v-on:item-selected="onTransition"
     />
 
     <ItemCard 
@@ -13,7 +13,7 @@
       v-bind:itemState="states[1]"
       v-bind:sentId="items[1].id"
       v-bind:sentText="items[1].text"
-      v-on:itemSelected="onTransition"
+      v-on:item-selected="onTransition"
     />
 
     <ItemCard 
@@ -21,7 +21,7 @@
       v-bind:itemState="states[2]"
       v-bind:sentId="items[2].id"
       v-bind:sentText="items[2].text"
-      v-on:itemSelected="onTransition"
+      v-on:item-selected="onTransition"
     />
 
     <ItemCard 
@@ -29,7 +29,7 @@
       v-bind:itemState="states[3]"
       v-bind:sentId="items[3].id"
       v-bind:sentText="items[3].text"
-      v-on:itemSelected="onTransition"
+      v-on:item-selected="onTransition"
     />
 
     <b-button v-if="isFinalState" v-on:click.prevent="onSubmit">Ok</b-button>
@@ -115,7 +115,7 @@ export default {
         "event-timestamp": evt.timeStamp,
         "message": "submitted" 
       });
-      this.$emit('rankingDone', Array.from(this.history))
+      this.$emit('ranking-done', Array.from(this.history))
     },
 
     onAbort(evt){
@@ -124,7 +124,7 @@ export default {
         "event-timestamp": evt.timeStamp,
         "message": "aborted"
       });
-      this.$emit('rankingDone', Array.from(this.history))
+      this.$emit('ranking-done', Array.from(this.history))
     }
   },
 

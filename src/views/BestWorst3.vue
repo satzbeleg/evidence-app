@@ -3,7 +3,7 @@
     <div class="container is-centered">
       <BestWorstChoices 
         v-bind:items="current"
-        v-on:rankingDone="nextExample"
+        v-on:ranking-done="nextExample"
         :key="counter"
       />
     </div>

@@ -28,7 +28,7 @@ export default {
   
   methods: {
     onClick(evt){
-      this.$emit('itemSelected', evt, this.itemPos, this.itemState)
+      this.$emit('item-selected', evt, this.itemPos, this.itemState)
     },
   },
 
