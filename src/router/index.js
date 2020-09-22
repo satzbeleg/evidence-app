@@ -1,8 +1,7 @@
 import Vue from 'vue';
-import VueRouter from 'vue-router';
+import { createRouter, createWebHashHistory } from 'vue-router';
 import VueMeta from 'vue-meta';
 
-Vue.use(VueRouter);
 Vue.use(VueMeta);
 
 
@@ -47,7 +46,8 @@ const routes = [{
 ];
 
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 });
 

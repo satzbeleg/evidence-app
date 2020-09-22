@@ -1,11 +1,6 @@
-/** Information
- * - Application Structure with Vuex: https://vuex.vuejs.org/guide/structure.html
- */
-import Vue from 'vue';
 import Vuex from 'vuex';
 import login from './modules/login.js';
 import settings from './modules/settings';
-Vue.use(Vuex);
 
 
 /** Sync Vuex states with browser's localStorage */
@@ -19,7 +14,7 @@ const vuexStorage = new VuexPersist({
 });
 
 
-const store = new Vuex.Store({
+const store = Vuex.createStore({
   modules: {
     login: login,
     settings: settings,

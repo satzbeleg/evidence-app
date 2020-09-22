@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue, { createApp, h } from 'vue';
 import App from './App.vue';
 import router from './router';
 
@@ -38,12 +38,7 @@ import Fit2Box from 'vue-fit2box';
 //import Fit2Box from '@/directives/fit2box';
 Vue.directive('fit2box', Fit2Box);
 
-/** misc */
-Vue.config.productionTip = false;
-
-new Vue({
-  store,
+createApp({
   i18n,
-  router,
-  render: h => h(App)
-}).$mount('#app');
+  render: () => h(App)
+}).use(router).use(store).mount('#app');

@@ -1,7 +1,7 @@
 <template>
   <!-- navigation/menu -->
   <b-navbar class="is-fixed-top is-spaced has-shadow">
-    <template slot="brand">
+    <template v-slot:brand>
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <img src="../assets/logo.png" alt="general app logo" />
       </b-navbar-item>
@@ -10,7 +10,7 @@
       <!-- {{ $i18n.locale }} -->
       <b-navbar-item>
         <b-dropdown v-model="$i18n.locale" aria-role="list">
-          <button class="button is-light" type="button" slot="trigger">
+          <button class="button is-light" type="button">
             <template v-if="$i18n.locale == 'de'">
               <span>Deutsch</span>
             </template>
@@ -30,7 +30,7 @@
       </b-navbar-item>
     </template>
 
-    <template slot="start">
+    <template v-slot:start>
       <b-navbar-item tag="router-link" :to="{ path: '/' }">
         <b-icon pack="fas" icon="home" style="color: red; align:left"></b-icon>
         <span>{{ $t('header.home') }}</span>
@@ -61,7 +61,7 @@
       </b-navbar-dropdown>
     </template>
 
-    <template slot="end">
+    <template v-slot:end>
       <b-navbar-item tag="div">
         <div class="field is-grouped is-grouped-multiline">
           <p class="control" v-if="!this.$store.getters['login/isAuthenticated']">
