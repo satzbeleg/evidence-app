@@ -22,28 +22,41 @@ Hints:
 - VS Code extension: [Vetur](https://github.com/vuejs/vetur)
 
 ## Used plugins
-General
-
-- [vue-router](https://router.vuejs.org/): `yarn add vue-router` 
-- [Buefy](https://buefy.org/documentation): `yarn add buefy`
-- [vue-meta](https://github.com/nuxt/vue-meta): `yarn add vue-meta`
+Vue.js
+- Upgrade from Vue2 to Vue3: 
+    - vue3: `yarn add vue-next` (Version 3.0.0)
+- [Vue Router](https://router.vuejs.org/): 
+    - vue2: `yarn add vue-router` 
+    - vue3: https://github.com/vuejs/vue-router-next (Version 4.0.0)
+- [Vuex State Management](https://vuex.vuejs.org/)
+    - vue2: `yarn add vuex`
+    - vue3: Install Version 4.0.0
+    - Sync Vuex states with the browser's localForage API: `yarn add vuex-persist`
+    - localForage (IndexedDB) instead of ~~LocalStorage~~: `yarn add localforage`
 - [Multi-Lang i18n support](https://kazupon.github.io/vue-i18n/): 
     - vue2: `yarn add vue-i18n`
-    - vue3: https://github.com/intlify/vue-i18n-next
+    - vue3: https://github.com/intlify/vue-i18n-next (Version 9.0.0)
     - [messageformat](https://messageformat.github.io/messageformat/v3/): `yarn add messageformat` (handles pluralization and gender for i18n)
-- [Fontawesome 5](https://github.com/FortAwesome/vue-fontawesome#installation):
-    - `yarn add @fortawesome/fontawesome-svg-core`
-    - `yarn add @fortawesome/free-solid-svg-icons`
-    - `yarn add @fortawesome/vue-fontawesome`
+
+CSS
+
+- Bulma
+    - ~~[Buefy](https://buefy.org/documentation) for vue2: `yarn add buefy`~~
+    - Bulma CSS for vue3: `yarn add bulma`
+- Fontawesome 5:
+    - ~~`yarn add @fortawesome/fontawesome-svg-core`~~
+    - ~~`yarn add @fortawesome/free-solid-svg-icons`~~
+    - ~~`yarn add @fortawesome/vue-fontawesome`, see [here](https://github.com/FortAwesome/vue-fontawesome#installation)~~
+    - CSS for vue2: `yarn add font-awesome`
+
+
+- [vue-meta](https://github.com/nuxt/vue-meta): `yarn add vue-meta`
+
 - PWA
     - Base functionality for PWA: `yarn add cli-plugin-pwa`
 - SASS/Themes
     - `yarn add node-sass --dev`
     - `yarn add sass-loader --dev`
-- State Management
-    - `yarn add vuex`
-    - Sync Vuex states with the browser's localForage API: `yarn add vuex-persist`
-    - localForage (IndexedDB) instead of ~~LocalStorage~~: `yarn add localforage`
 - Data
     - Generate random UUIDs: `yarn add uuid`
 - Cosmetic CSS stuff:

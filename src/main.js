@@ -15,7 +15,7 @@
 // });
 
 /** PWA */
-import './registerServiceWorker';
+// import './registerServiceWorker';
 
 /** Meta data */
 // import VueMeta from 'vue-meta';
