@@ -1,24 +1,25 @@
 // Dev version of https://github.com/ulf1/vue-fit2box
+// New Vue3 syntax: https://v3.vuejs.org/guide/migration/custom-directives.html#_3-x-syntax
 export default {
   /** for the initial call/rendering */
-  inserted: function(el, binding) {
+  mounted: function(el, binding) {
     el.textContent = binding.value;
     el.style.fontSize = fitTextToBox(el);
   },
   /** when a new text string is injected */
-  update: function(el, binding) { 
+  removed: function(el, binding) {
     el.textContent = binding.value;
     el.style.fontSize = fitTextToBox(el);
   },
   /** if the HTML element's dimension changes, see https://web.dev/resize-observer/ */
-  bind: function(el, binding){
+  beforeMount: function(el, binding) {
     el.resize_ob = new ResizeObserver(() => {
       el.textContent = binding.value;
       el.style.fontSize = fitTextToBox(el);
     });
     el.resize_ob.observe(el);
   },
-  unbind: function(el){
+  unmounted: function(el) {
     el.resize_ob.unobserve(el);
     el.resize_ob = undefined;
   }

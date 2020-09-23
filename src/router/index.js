@@ -33,12 +33,12 @@ const routes = [{
   //   component: () =>
   //     import ('../views/BestWorst3.vue')
   // },
-  // {
-  //   path: '/demo-fit2box',
-  //   name: 'Demo für vue-fit2box',
-  //   component: () =>
-  //     import ('../views/DemoFit2Box.vue')
-  // },
+  {
+    path: '/demo-fit2box',
+    name: 'Demo für vue-fit2box',
+    component: () =>
+      import ('../views/DemoFit2Box.vue')
+  },
 ];
 
 
