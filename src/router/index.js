@@ -1,10 +1,6 @@
 // import Vue from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 
-// import VueMeta from 'vue-meta';
-// Vue.use(VueMeta);
-
-
 /** Routes */
 const routes = [{
     path: '/',
@@ -12,12 +8,12 @@ const routes = [{
     component: () =>
       import ('../views/Home.vue')
   },
-  // {
-  //   path: '/login',
-  //   name: 'Login',
-  //   component: () =>
-  //     import ('../views/Login.vue')
-  // },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () =>
+      import ('../views/Login.vue')
+  },
   {
     path: '/about',
     name: 'About',

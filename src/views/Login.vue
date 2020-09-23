@@ -5,54 +5,51 @@
         <div class="columns is-centered">
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
 
-          <h3 class="title">{{ $t('auth.login_noun') }}</h3>
+          <h3 class="title">{{ t('auth.login_noun') }}</h3>
           <hr class="login-hr">
-          <p class="subtitle">{{ $t('auth.login_cta') }}</p>
+          <p class="subtitle">{{ t('auth.login_cta') }}</p>
 
           <form @submit.prevent="handleLogin" class="box form">
 
-            <b-field v-bind:label="$t('auth.username')">
+            <div class="field">
+              <label class="label">{{ t('auth.username') }}</label>
               <p class="control has-icons-left has-icons-right">
-                <b-icon pack="fas" 
-                        icon="user" 
-                        class="is-small is-left"
-                        ></b-icon>
-                <b-input v-model="username"
-                         type="text"
-                         v-bind:placeholder="$t('auth.username_place')"
-                         ></b-input>
+                <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                <input class="input" 
+                       type="text"
+                       v-model="username"
+                       v-bind:placeholder="t('auth.username_place')">
               </p>
-            </b-field>
+            </div>
 
-            <b-field v-bind:label="$t('auth.password')">
+            <div class="field">
+              <label class="label">{{ t('auth.password') }}</label>
               <p class="control has-icons-left has-icons-right">
-                <b-icon pack="fas" 
-                        icon="lock" 
-                        class="is-small is-left"
-                        ></b-icon>
-                <b-input v-model="password" 
-                         type="password"
-                         v-bind:placeholder="$t('auth.password_place')"
-                         ></b-input>
+                <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                <input class="input" 
+                       type="password"
+                       v-model="password" 
+                       v-bind:placeholder="t('auth.password_place')">
               </p>
-            </b-field>
+            </div>
             
-            <b-field>
+            <div class="field">
               <p class="control">
-                <b-checkbox v-model="remember">
-                  {{ $t('auth.remember') }}
-                </b-checkbox>
+                <label class="checkbox">
+                  <input type="checkbox" v-model="remember">
+                  {{ t('auth.remember') }}
+                </label>
               </p>
-            </b-field>
+            </div> 
 
-            <b-field>
+            <div class="field">
               <p class="control">
                 <button class="button is-primary" type="submit">
-                  <strong>{{ $t('auth.login') }}</strong>
-                  <b-icon pack="fas" icon="sign-in-alt"></b-icon>
+                  <strong>{{ t('auth.login') }}</strong>
+                  <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
                 </button>
               </p>
-            </b-field>
+            </div>
         
           </form>
 
@@ -65,8 +62,16 @@
 
 
 <script>
+import { useI18n } from 'vue-i18n';
+
+
 export default {
   name: "Login",
+
+  setup(){
+    const { t, locale } = useI18n();
+    return { t, locale }
+  },
 
   data(){
     return {
