@@ -1,14 +1,15 @@
 <template>
   <div id="app">
-    <!-- <TheNavbar/> -->
-    <router-link to='/'>Home</router-link>
+    <TheNavbar/>
     <router-view/>
   </div>
 </template>
 
 
 <script>
-// import TheNavbar from '@/components/TheNavbar.vue';
+import '@fortawesome/fontawesome-free/css/all.css';
+import '@fortawesome/fontawesome-free/js/all.js';
+import TheNavbar from '@/components/TheNavbar.vue';
 // import ConnectivityDetection from '@/mixins/connectivity-detection.js';
 
 export default {
@@ -29,9 +30,9 @@ export default {
   //   ],
   // },
 
-  // components: {
-  //   TheNavbar
-  // },
+  components: {
+    TheNavbar
+  },
 
   // mixins: [
   //   ConnectivityDetection
@@ -45,6 +46,7 @@ export default {
 @import "~bulma";
 //@import "~buefy/src/scss/buefy";
 </style>
+
 
 <style>
 #app > .section {
