@@ -20,13 +20,13 @@ const routes = [{
     component: () =>
       import ('../views/About.vue')
   },
-  // {
-  //   path: '/settings',
-  //   name: 'Setttings',
-  //   component: () =>
-  //     import ('../views/Settings.vue'),
-  //   meta: { requiresAuth: true }
-  // },
+  {
+    path: '/settings',
+    name: 'Setttings',
+    component: () =>
+      import ('../views/Settings.vue'),
+    meta: { requiresAuth: true }
+  },
   // {
   //   path: '/bestworst3',
   //   name: 'Best-Worst-Scaling with 2 Actions (xstate)',

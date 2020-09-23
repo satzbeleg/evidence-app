@@ -14,21 +14,6 @@ import TheNavbar from '@/components/TheNavbar.vue';
 
 export default {
   name: "App",
-  
-  // metaInfo: {
-  //   htmlAttrs: {
-  //     lang: 'de',
-  //     amp: true,
-  //   },
-  //   bodyAttrs: {},
-  //   title: 'Evidence Annotation App',
-  //   titleTemplate: '%s | Evidence Annotation App',
-  //   meta: [
-  //     { charset: 'utf-8' },
-  //     { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
-  //     { name: 'description', content: 'Put the description for the Vue.js app here.' },
-  //   ],
-  // },
 
   components: {
     TheNavbar
@@ -44,7 +29,7 @@ export default {
 <style lang="scss">
 @import "~bulma/sass/utilities/_all";
 @import "~bulma";
-//@import "~buefy/src/scss/buefy";
+@import '~bulma-switch';
 </style>
 
 

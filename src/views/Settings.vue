@@ -2,10 +2,10 @@
   <section class="section" id="settings">
     <div class="container">
       <!-- put the following into components ... -->
-      <h1 class="title">{{ $t('settings.settings') }}</h1>
+      <h1 class="title">{{ t('settings.settings') }}</h1>
 
-      <h2 class="subtitle">{{ $t('settings.appearance') }}</h2>
-      <DarkmodeToggle v-bind:label="$t('settings.darkmode')" />
+      <h2 class="subtitle">{{ t('settings.appearance') }}</h2>
+      <DarkmodeToggle v-bind:label="t('settings.darkmode')" />
 
       <!-- put the above into components ... -->
     </div>
@@ -15,16 +15,19 @@
 
 <script>
 import DarkmodeToggle from '@/components/DarkmodeToggle.vue';
+import { useI18n } from 'vue-i18n';
+
 
 export default {
   name: "Settings",
 
-  metaInfo: {
-    title: 'Settings'
-  },
-
   components: {
     DarkmodeToggle
+  },
+
+  setup(){
+    const { t, locale } = useI18n();
+    return { t, locale }
   },
 }
 </script>

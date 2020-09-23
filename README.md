@@ -16,9 +16,6 @@ Useful commands:
 - Compiles and minifies for production: `yarn build`
 - Lints and fixes files: `yarn lint`
 - Open Vue.js UI: `vue ui`
-
-Hints:
-
 - VS Code extension: [Vetur](https://github.com/vuejs/vetur)
 
 ## Used plugins
@@ -37,12 +34,16 @@ Vue.js
     - vue2: `yarn add vue-i18n`
     - vue3: https://github.com/intlify/vue-i18n-next (Version 9.0.0)
     - [messageformat](https://messageformat.github.io/messageformat/v3/): `yarn add messageformat` (handles pluralization and gender for i18n)
+- PWA
+    - Base functionality for PWA: `yarn add cli-plugin-pwa`
+    - `yarn add register-service-worker` 
 
 CSS
 
 - Bulma
     - ~~[Buefy](https://buefy.org/documentation) for vue2: `yarn add buefy`~~
     - Bulma CSS for vue3: `yarn add bulma`
+    - Bulma Extensions, Switch Toggle: `yarn add bulma-switch`, see [here](https://wikiki.github.io/form/switch/)
 - Fontawesome 5:
     - ~~`yarn add @fortawesome/fontawesome-svg-core`~~
     - ~~`yarn add @fortawesome/free-solid-svg-icons`~~
@@ -50,10 +51,6 @@ CSS
     - CSS for vue3: `yarn add @fortawesome/fontawesome-free`
 
 
-- [vue-meta](https://github.com/nuxt/vue-meta): `yarn add vue-meta`
-
-- PWA
-    - Base functionality for PWA: `yarn add cli-plugin-pwa`
 - SASS/Themes
     - `yarn add node-sass --dev`
     - `yarn add sass-loader --dev`
@@ -62,9 +59,6 @@ CSS
 - Cosmetic CSS stuff:
     - Fit text to a fixed-sized html element (`v-fit2box` directive): `yarn add vue-fit2box`
 
-Component development
-
-- [swiped-events](https://github.com/john-doherty/swiped-events): `yarn add swiped-events` (small footprint JS code, just a div for swipe events)
 
 
 ## Folders
