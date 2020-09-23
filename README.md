@@ -47,7 +47,7 @@ CSS
     - ~~`yarn add @fortawesome/fontawesome-svg-core`~~
     - ~~`yarn add @fortawesome/free-solid-svg-icons`~~
     - ~~`yarn add @fortawesome/vue-fontawesome`, see [here](https://github.com/FortAwesome/vue-fontawesome#installation)~~
-    - CSS for vue2: `yarn add font-awesome`
+    - CSS for vue3: `yarn add @fortawesome/fontawesome-free`
 
 
 - [vue-meta](https://github.com/nuxt/vue-meta): `yarn add vue-meta`
