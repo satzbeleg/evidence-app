@@ -15,9 +15,9 @@
 
 <script>
 import s from './enums.js';
+import { defineComponent } from 'vue'; 
 
-
-export default {
+export default defineComponent({
   name: "BestWorstItem",
 
   props: {
@@ -26,6 +26,14 @@ export default {
     sentId: String, // SentenceID
     sentText: String,  // SentenceText
   },
+
+  setup(props){
+    console.log(props)
+  },
+
+  // setup(props){
+  //   return { ...toRefs(props) }
+  // },
   
   methods: {
     onClick(evt){
@@ -42,7 +50,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 

@@ -60,11 +60,11 @@ export default defineComponent({
   },
 
   setup(props, { emit }){
-
-    // props.then(() => {
+    //props.then(() => {
       const itemsRef = toRefs(props).items
       const itemsRef3 = itemsRef.value[3]
-    // })
+    //})
+    console.log("Choices: ", itemsRef)
 
     const data = reactive({
       states: [s.MIDDLE, s.MIDDLE, s.MIDDLE, s.MIDDLE],  // initial state?
