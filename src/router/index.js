@@ -27,12 +27,12 @@ const routes = [{
       import ('../views/Settings.vue'),
     meta: { requiresAuth: true }
   },
-  // {
-  //   path: '/bestworst3',
-  //   name: 'Best-Worst-Scaling with 2 Actions (xstate)',
-  //   component: () =>
-  //     import ('../views/BestWorst3.vue')
-  // },
+  {
+    path: '/bestworst3',
+    name: 'Best-Worst-Scaling with 2 Actions (xstate)',
+    component: () =>
+      import ('../views/BestWorst3.vue')
+  },
   {
     path: '/demo-fit2box',
     name: 'Demo für vue-fit2box',

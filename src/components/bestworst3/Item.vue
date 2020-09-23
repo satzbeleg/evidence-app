@@ -5,6 +5,7 @@
       <div class="card-content">
         <div class="content center">
           <div v-fit2box="sentText" class="fixed-box" ></div>
+          <!-- <div class="fixed-box">{{ sentText }}</div>  -->
         </div>
       </div>
     </div>

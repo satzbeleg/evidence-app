@@ -19,10 +19,10 @@ export default {
     });
     el.resize_ob.observe(el);
   },
-  unmounted: function(el) {
-    el.resize_ob.unobserve(el);
-    el.resize_ob = undefined;
-  }
+  // unmounted: function(el) {
+  //   el.resize_ob.unobserve(el);
+  //   el.resize_ob = undefined;
+  // }
 }
 
 function fitTextToBox(el) {

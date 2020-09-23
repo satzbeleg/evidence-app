@@ -1,10 +1,11 @@
 <template>
   <section class="section">
     <div class="container is-centered">
+      {{ data.counter }}
       <BestWorstChoices 
-        v-bind:items="current"
+        v-bind:items="data.current"
         v-on:ranking-done="nextExample"
-        :key="counter"
+        :key="data.counter"
       />
     </div>
   </section>
@@ -13,7 +14,7 @@
 
 <script>
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import Vue from 'vue';
+import { reactive } from 'vue';
 
 
 export default {
@@ -27,9 +28,9 @@ export default {
     BestWorstChoices
   },
 
-  data(){
-    return {
-    /** Array with unlabelled example sets. It's a FIFO queue */
+  setup(){
+    const data = reactive({
+      /** Array with unlabelled example sets. It's a FIFO queue */
       queue: [{
           "set_id": "some-rnd-id-generated-1",
           "examples": [
@@ -59,55 +60,32 @@ export default {
         }
       ],
 
-      // An "example" is a set of four sentences
-      // example: [
-      //   {"id": "123", "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."},
-      //   {"id": "45", "text": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."},
-      //   {"id": "67", "text": "Duis aute irure dolor in  reprehenderit in voluptate velit esse cillum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."},
-      //   {"id": "890", "text": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."}
-      // ],
-      current: [undefined, undefined, undefined, undefined],
+      // 
+      current: [],
 
       // Use to trigger component re-rendering with :key
       counter: 1,
 
       // Move this to Vuex lateron
-      ranked: []
+      ranked: [],
+    });
+
+    function nextChoice(){
+      const tmp = data.queue.shift().examples
+      data.current = JSON.parse(JSON.stringify(tmp));
     }
-  },
 
-  created(){
-    const tmp = this.queue.shift();
-    this.current = JSON.parse(JSON.stringify(tmp.examples))
-    // this.nextChoice();
-  },
-
-  methods: {
-    nextChoice(){
-      const tmp = JSON.parse(JSON.stringify(this.queue.shift()));
-      Array.from(tmp.examples).forEach((val, idx) => {
-        Vue.set(this.current, idx, val)
-      });
-      console.log(tmp)
-    },
-
-    nextExample(history){ 
-      // store rankings
-      this.ranked.push(JSON.parse(JSON.stringify(history)));
-      //console.log("Ranking is finished", JSON.parse(JSON.stringify(history)));
-      //console.log(Array.from(this.ranked))
-
-      // load next set
-      this.nextChoice();
-      // console.log("Check this", this.current)
-      // this.$forceUpdate()
-
-      // Force re-rendering with the :key Trick
-      // it will reset "data()" in the Component
-      this.counter++
-      // console.log(this.counter)
+    function nextExample(history){
+      data.ranked.push(JSON.parse(JSON.stringify(history)));
+      nextChoice();
+      data.counter++
     }
-  }
+
+    // created
+    nextChoice()
+
+    return { data, nextChoice, nextExample }
+  },
 
 }
 </script>
