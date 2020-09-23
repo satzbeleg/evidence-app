@@ -1,32 +1,10 @@
-/** fontawesome */
-// import { library } from '@fortawesome/fontawesome-svg-core';
-// import { fas } from '@fortawesome/free-solid-svg-icons';
-// library.add(fas);
-
-// import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-// Vue.component('vue-fontawesome', FontAwesomeIcon);
-
-/** load Buefy for Vue */
-// import Buefy from 'buefy';
-// //import 'buefy/dist/buefy.css'; // must be deactivated if SCSS is used
-// Vue.use(Buefy, {
-//   defaultIconComponent: 'vue-fontawesome',
-//   defaultIconPack: 'fas',
-// });
-
-/** PWA */
-// import './registerServiceWorker';
-
-/** Meta data */
-// import VueMeta from 'vue-meta';
-// Vue.use(VueMeta, {
-//   keyName: 'head'
-// });
-
 /** v-fit-text-to-box */
 // import Fit2Box from 'vue-fit2box';
 //import Fit2Box from '@/directives/fit2box';
 // Vue.directive('fit2box', Fit2Box);
+
+/** PWA */
+import './registerServiceWorker';
 
 
 /** Load packages */
