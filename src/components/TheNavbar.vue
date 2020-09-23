@@ -1,16 +1,14 @@
 <template>
   <!-- navigation/menu -->
-  <!-- <b-navbar class="is-fixed-top is-spaced has-shadow"> -->
   <nav class="navbar is-fixed-top is-spaced has-shadow" role="navigation" aria-label="main navigation">
 
-    <div class="navbar-brand">  <!-- <template v-slot:brand> -->
-      <router-link class="navbar-item" :to="{ path: '/' }">  <!-- <b-navbar-item tag="router-link" :to="{ path: '/' }"> -->
+    <div class="navbar-brand">
+      <router-link class="navbar-item" :to="{ path: '/' }">
         <img src="../assets/logo.png" alt="general app logo" />
-      </router-link>  <!-- </b-navbar-item> -->
+      </router-link>
 
       <!-- language switcher -->
-      <div class="navbar-item">  <!-- <b-navbar-item> -->
-        <!-- <b-dropdown v-model="locale" aria-role="list"> -->
+      <div class="navbar-item">
         <div class="dropdown is-hoverable">
           <div class="dropdown-trigger">
             <button class="button is-light" type="button" aria-haspopup="true" aria-controls="dropdown-menu">
@@ -18,23 +16,23 @@
                 <template v-if="locale == 'de'">Deutsch</template>
                 <template v-if="locale == 'en-US'">English</template>
               </span>
-              <span class="icon"><i class="fas fa-caret-down"></i></span>  <!-- <b-icon icon="caret-down"></b-icon> -->
+              <span class="icon"><i class="fas fa-caret-down"></i></span>
             </button>
           </div>
         
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content" v-on:click="locale = $event.target.id">
-              <a id="de" class="dropdown-item">Deutsch</a>   <!-- <b-dropdown-item aria-role="listitem" value="de">Deutsch</b-dropdown-item> -->
-              <a id="en-US" class="dropdown-item">English</a>   <!-- <b-dropdown-item aria-role="listitem" value="en-US">English</b-dropdown-item> -->
+              <a id="de" class="dropdown-item">Deutsch</a>
+              <a id="en-US" class="dropdown-item">English</a>
             </div>
           </div>
 
-        </div>  <!-- </b-dropdown> -->
-      </div>  <!-- </b-navbar-item> -->
+        </div>
+      </div>
 
-      <!-- <b-navbar-item>
+      <div class="navbar-item">
         <DarkmodeIcon />
-      </b-navbar-item> -->
+      </div>
 
       <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="myNavbarMenu">
         <span aria-hidden="true"></span>
@@ -42,25 +40,26 @@
         <span aria-hidden="true"></span>
       </a>
 
-    </div>  <!-- </template> -->
+    </div>
+
 
     <div id="myNavbarMenu" class="navbar-menu">
-      <div class="navbar-start">   <!-- <template v-slot:start> -->
+      <div class="navbar-start">
 
-        <router-link class="navbar-item" :to="{ path: '/' }">  <!-- <b-navbar-item tag="router-link" :to="{ path: '/' }"> -->
-          <span class="icon has-text-info"><i class="fas fa-home"></i></span>  <!-- <b-icon pack="fas" icon="home" style="color: red; align:left"></b-icon> -->
+        <router-link class="navbar-item" :to="{ path: '/' }">
+          <span class="icon has-text-info"><i class="fas fa-home"></i></span>
           <span>{{ t('header.home') }}</span>
-        </router-link> <!-- </b-navbar-item> -->
+        </router-link>
 
-        <router-link class="navbar-item" :to="{ path: '/about' }">  <!-- <b-navbar-item tag="router-link" :to="{ path: '/about' }"> -->
-          <span class="icon has-text-primary"><i class="fas fa-user"></i></span>  <!-- <b-icon pack="fas" icon="user" type="is-primary"></b-icon> -->
+        <router-link class="navbar-item" :to="{ path: '/about' }">
+          <span class="icon has-text-primary"><i class="fas fa-user"></i></span>
           <span>{{ t('header.about') }}</span>
-        </router-link> <!-- </b-navbar-item> -->
+        </router-link>
 
-        <router-link class="navbar-item" :to="{ path: '/' }">  <!-- <b-navbar-item tag="router-link" :to="{ path: '/settings' }"> -->
-          <span class="icon has-text-dark"><i class="fas fa-cog"></i></span>  <!-- <b-icon pack="fas" icon="cog" type="is-primary"></b-icon> -->
+        <router-link class="navbar-item" :to="{ path: '/settings' }">
+          <span class="icon has-text-dark"><i class="fas fa-cog"></i></span>
           <span>{{ t('settings.settings') }}</span>
-        </router-link> <!-- </b-navbar-item> -->
+        </router-link>
 
 
         <div class="navbar-item has-dropdown is-hoverable">
@@ -68,34 +67,34 @@
             Satzbeispiele bewerten
           </a>
 
-          <div class="navbar-dropdown">   <!-- <b-navbar-dropdown label="Satzbeispiele bewerten"> -->
+          <div class="navbar-dropdown">
 
-            <router-link class="navbar-item" :to="{ path: '/' }">  <!-- <b-navbar-item tag="router-link" :to="{ path: '/bestworst3' }"> -->
+            <router-link class="navbar-item" :to="{ path: '/bestworst3' }">
               <div class="media">
-                <span class="icon is-primary"><i class="fas fa-mobile-alt"></i></span>  <!-- <b-icon pack="fas" icon="mobile-alt" type="is-primary"></b-icon> -->
+                <span class="icon is-primary"><i class="fas fa-mobile-alt"></i></span>
                 <div class="media-content">
                   <strong>Best-Worst Ranking</strong>
                   <br />
                   <small>Wähle zuerst das beste Satzbeispiel und dann das schlechteste Beispiel aus.</small>
                 </div>
               </div>
-            </router-link>   <!-- </b-navbar-item> -->
+            </router-link>
             <hr class="navbar-divider is-hidden-widescreen" />
 
-          </div>   <!-- </b-navbar-dropdown> -->
+          </div>
         </div>
-      </div> <!-- </template> -->
+      </div>
     
     
-      <div class="navbar-end">  <!-- <template v-slot:end> -->
-        <div class="navbar-item">  <!-- <b-navbar-item tag="div"> -->
+      <div class="navbar-end">
+        <div class="navbar-item">
           <div class="field is-grouped is-grouped-multiline">
 
             <p class="control" v-if="!this.$store.getters['login/isAuthenticated']">
               <router-link :to="{ path: '/register' }">
                 <a class="button is-info">
                   <strong>{{ t('auth.signup') }}</strong>
-                  <span class="icon"><i class="fas fa-user-plus"></i></span>   <!-- <b-icon pack="fas" icon="user-plus"></b-icon> -->
+                  <span class="icon"><i class="fas fa-user-plus"></i></span>
                 </a>
               </router-link>
             </p>
@@ -104,7 +103,7 @@
               <router-link :to="{ path: '/login' }">
                 <a class="button is-primary">
                   <strong>{{ t('auth.login') }}</strong>
-                  <span class="icon"><i class="fas fa-sign-in-alt"></i></span>  <!-- <b-icon pack="fas" icon="sign-in-alt"></b-icon> -->
+                  <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
                 </a>
               </router-link>
             </p>
@@ -112,7 +111,7 @@
             <p class="control" v-if="this.$store.getters['login/isAuthenticated']">
               <a class="button is-danger" v-on:click="onLogout()">
                 <strong>{{ t('auth.logout') }}</strong>
-                <span class="icon"><i class="fas fa-sign-out-alt"></i></span>  <!-- <b-icon pack="fas" icon="sign-out-alt"></b-icon> -->
+                <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
               </a>
             </p>
           </div>
@@ -129,7 +128,7 @@
 <script>
 import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
-// import DarkmodeIcon from "@/components/DarkmodeIcon.vue";
+import DarkmodeIcon from "@/components/DarkmodeIcon.vue";
 
 export default {
   name: "TheNavbar",
@@ -139,9 +138,9 @@ export default {
     return { t, locale }
   },
 
-  // components: {
-  //   DarkmodeIcon,
-  // },
+  components: {
+    DarkmodeIcon,
+  },
 
   methods: {
     onLogout() {
