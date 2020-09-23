@@ -1,7 +1,6 @@
 <template>
   <section class="section">
     <div class="container is-centered">
-      {{ data.counter }}
       <BestWorstChoices 
         v-bind:items="data.current"
         v-on:ranking-done="nextExample"
@@ -57,6 +56,15 @@ export default {
             { "id": "293", "test": "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." },
             { "id": "294", "test": "Überall dieselbe alte Leier." },
           ]
+        },
+        {
+          "set_id": "some-rnd-id-generated-4",
+          "examples": [
+            { "id": "391", "test": "lkfgakjlkdkgl." },
+            { "id": "392", "test": "kfdlmfdlgmkfdfl" },
+            { "id": "393", "test": "dsafdasggfg" },
+            { "id": "394", "test": "dsafdsg" },
+          ]
         }
       ],
 
@@ -70,15 +78,17 @@ export default {
       ranked: [],
     });
 
-    function nextChoice(){
-      const tmp = data.queue.shift().examples
-      data.current = JSON.parse(JSON.stringify(tmp));
+    async function nextChoice(){
+      // const tmp = data.queue.shift().examples
+      // data.current = JSON.parse(JSON.stringify(tmp));
+      data.current = data.queue.shift().examples
     }
 
-    function nextExample(history){
+    async function nextExample(history){
       data.ranked.push(JSON.parse(JSON.stringify(history)));
       nextChoice();
       data.counter++
+      console.log(data.counter, data.ranked)
     }
 
     // created

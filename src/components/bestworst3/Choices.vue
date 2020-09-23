@@ -3,37 +3,39 @@
     <ItemCard 
       itemPos="0"
       v-bind:itemState="data.states[0]"
-      v-bind:sentId="items[0].id"
-      v-bind:sentText="items[0].text"
+      v-bind:sentId="itemsRef[0].id"
+      v-bind:sentText="itemsRef[0].text"
       v-on:item-selected="onTransition"
     />
 
     <ItemCard 
       itemPos="1"
       v-bind:itemState="data.states[1]"
-      v-bind:sentId="items[1].id"
-      v-bind:sentText="items[1].text"
+      v-bind:sentId="itemsRef[1].id"
+      v-bind:sentText="itemsRef[1].text"
       v-on:item-selected="onTransition"
     />
 
     <ItemCard 
       itemPos="2"
       v-bind:itemState="data.states[2]"
-      v-bind:sentId="items[2].id"
-      v-bind:sentText="items[2].text"
+      v-bind:sentId="itemsRef[2].id"
+      v-bind:sentText="itemsRef[2].text"
       v-on:item-selected="onTransition"
     />
 
     <ItemCard 
       itemPos="3"
       v-bind:itemState="data.states[3]"
-      v-bind:sentId="items[3].id"
-      v-bind:sentText="items[3].text"
+      v-bind:sentId="itemsRef3.id"
+      v-bind:sentText="itemsRef3.text"
       v-on:item-selected="onTransition"
     />
 
     <button class="button" v-if="isFinalState" v-on:click.prevent="onSubmit">Ok</button>
     <button class="button" v-else v-on:click.prevent="onAbort">Skip</button>
+
+    {{ itemsRef3 }}
   </div>
 </template>
 
@@ -41,9 +43,9 @@
 <script>
 import ItemCard from './Item.vue';
 import s from './enums.js';
-import { reactive } from 'vue';
+import { defineComponent, reactive, toRefs } from 'vue';
 
-export default {
+export default defineComponent({
   name: "BestWorstChoices",
 
   components: {
@@ -51,10 +53,19 @@ export default {
   },
 
   props: {
-    items: Array
+    items: {
+      type: Array,
+      required: true
+    }
   },
 
   setup(props, { emit }){
+
+    // props.then(() => {
+      const itemsRef = toRefs(props).items
+      const itemsRef3 = itemsRef.value[3]
+    // })
+
     const data = reactive({
       states: [s.MIDDLE, s.MIDDLE, s.MIDDLE, s.MIDDLE],  // initial state?
       history: []
@@ -66,7 +77,7 @@ export default {
       "state": Array.from(data.states) 
     });
 
-    function logStates(evt){
+    async function logStates(evt){
       data.history.push({
         "posix-timestamp": new Date().getTime(), 
         "event-timestamp": evt.timeStamp,
@@ -75,7 +86,7 @@ export default {
       // console.log(data.history)
     }
 
-    function onTransition(evt, itemPos, itemState){
+    async function onTransition(evt, itemPos, itemState){
       console.log(`Execute the state transition here! ${itemPos}: ${itemState}`);
       // set new state
       if(itemState === s.MIDDLE){  // the previous state was MIDDLE
@@ -97,7 +108,7 @@ export default {
       }
     }
 
-    function onSubmit(evt){
+    async function onSubmit(evt){
       data.history.push({
         "posix-timestamp": new Date().getTime(), 
         "event-timestamp": evt.timeStamp,
@@ -106,7 +117,7 @@ export default {
       emit('ranking-done', Array.from(data.history))
     }
 
-    function onAbort(evt){
+    async function onAbort(evt){
       data.history.push({
         "posix-timestamp": new Date().getTime(),
         "event-timestamp": evt.timeStamp,
@@ -115,12 +126,12 @@ export default {
       emit('ranking-done', Array.from(data.history))
     }
 
-    function isFinalState(){  // damit der Submit/Ok Button auftaucht
+    async function isFinalState(){  // damit der Submit/Ok Button auftaucht
       return data.states.some((x) => x === s.WORST)
     }
 
-    return { data, logStates, onTransition, onSubmit, onAbort, isFinalState }
+    return { data, itemsRef, itemsRef3, logStates, onTransition, onSubmit, onAbort, isFinalState }
   }
 
-}
+});
 </script>
