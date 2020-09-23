@@ -118,10 +118,10 @@
 
         </div>
 
-      </div>  <!-- </b-navbar-item> -->
-    </div>  <!-- </template> -->
+      </div>
+    </div>
 
-  </nav>  <!-- </b-navbar> -->
+  </nav>
 </template>
 
 
