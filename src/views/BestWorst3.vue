@@ -51,19 +51,19 @@ export default {
         {
           "set_id": "some-rnd-id-generated-3",
           "examples": [
-            { "id": "291", "test": "Eine wunderbare Heiterkeit hat meine ganze Seele eingenommen, gleich den süßen Frühlingsmorgen, die ich mit ganzem Herzen genieße." },
-            { "id": "292", "test": "Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular." },
-            { "id": "293", "test": "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." },
-            { "id": "294", "test": "Überall dieselbe alte Leier." },
+            { "id": "291", "text": "Eine wunderbare Heiterkeit hat meine ganze Seele eingenommen, gleich den süßen Frühlingsmorgen, die ich mit ganzem Herzen genieße." },
+            { "id": "292", "text": "Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular." },
+            { "id": "293", "text": "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." },
+            { "id": "294", "text": "Überall dieselbe alte Leier." },
           ]
         },
         {
           "set_id": "some-rnd-id-generated-4",
           "examples": [
-            { "id": "391", "test": "lkfgakjlkdkgl." },
-            { "id": "392", "test": "kfdlmfdlgmkfdfl" },
-            { "id": "393", "test": "dsafdasggfg" },
-            { "id": "394", "test": "dsafdsg" },
+            { "id": "391", "text": "lkfgakjlkdkgl." },
+            { "id": "392", "text": "kfdlmfdlgmkfdfl" },
+            { "id": "393", "text": "dsafdasggfg" },
+            { "id": "394", "text": "dsafdsg" },
           ]
         }
       ],
