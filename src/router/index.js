@@ -18,12 +18,12 @@ const routes = [{
   //   component: () =>
   //     import ('../views/Login.vue')
   // },
-  // {
-  //   path: '/about',
-  //   name: 'About',
-  //   component: () =>
-  //     import ('../views/About.vue')
-  // },
+  {
+    path: '/about',
+    name: 'About',
+    component: () =>
+      import ('../views/About.vue')
+  },
   // {
   //   path: '/settings',
   //   name: 'Setttings',

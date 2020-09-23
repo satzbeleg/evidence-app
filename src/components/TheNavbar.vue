@@ -52,7 +52,7 @@
           <span>{{ t('header.home') }}</span>
         </router-link> <!-- </b-navbar-item> -->
 
-        <router-link class="navbar-item" :to="{ path: '/' }">  <!-- <b-navbar-item tag="router-link" :to="{ path: '/about' }"> -->
+        <router-link class="navbar-item" :to="{ path: '/about' }">  <!-- <b-navbar-item tag="router-link" :to="{ path: '/about' }"> -->
           <span class="icon has-text-primary"><i class="fas fa-user"></i></span>  <!-- <b-icon pack="fas" icon="user" type="is-primary"></b-icon> -->
           <span>{{ t('header.about') }}</span>
         </router-link> <!-- </b-navbar-item> -->
