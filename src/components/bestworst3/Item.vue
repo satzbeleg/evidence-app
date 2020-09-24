@@ -27,14 +27,11 @@ export default defineComponent({
     sentText: String,  // SentenceText
   },
 
-  setup(props){
-    console.log(props)
-  },
-
   // setup(props){
+  //   console.log(props)
   //   return { ...toRefs(props) }
   // },
-  
+
   methods: {
     onClick(evt){
       this.$emit('item-selected', evt, this.itemPos, this.itemState)

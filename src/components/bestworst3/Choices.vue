@@ -3,39 +3,38 @@
     <ItemCard 
       itemPos="0"
       v-bind:itemState="data.states[0]"
-      v-bind:sentId="itemsRef[0].id"
-      v-bind:sentText="itemsRef[0].text"
+      v-bind:sentId="items[0].id"
+      v-bind:sentText="items[0].text"
       v-on:item-selected="onTransition"
     />
 
     <ItemCard 
       itemPos="1"
       v-bind:itemState="data.states[1]"
-      v-bind:sentId="itemsRef[1].id"
-      v-bind:sentText="itemsRef[1].text"
+      v-bind:sentId="items[1].id"
+      v-bind:sentText="items[1].text"
       v-on:item-selected="onTransition"
     />
 
     <ItemCard 
       itemPos="2"
       v-bind:itemState="data.states[2]"
-      v-bind:sentId="itemsRef[2].id"
-      v-bind:sentText="itemsRef[2].text"
+      v-bind:sentId="items[2].id"
+      v-bind:sentText="items[2].text"
       v-on:item-selected="onTransition"
     />
 
     <ItemCard 
       itemPos="3"
       v-bind:itemState="data.states[3]"
-      v-bind:sentId="itemsRef3.id"
-      v-bind:sentText="itemsRef3.text"
+      v-bind:sentId="items[3].id"
+      v-bind:sentText="items[3].text"
       v-on:item-selected="onTransition"
     />
 
     <button class="button" v-if="isFinalState" v-on:click.prevent="onSubmit">Ok</button>
     <button class="button" v-else v-on:click.prevent="onAbort">Skip</button>
 
-    {{ itemsRef3 }}
   </div>
 </template>
 
@@ -43,7 +42,7 @@
 <script>
 import ItemCard from './Item.vue';
 import s from './enums.js';
-import { defineComponent, reactive, toRefs } from 'vue';
+import { defineComponent, reactive } from 'vue';
 
 export default defineComponent({
   name: "BestWorstChoices",
@@ -60,11 +59,6 @@ export default defineComponent({
   },
 
   setup(props, { emit }){
-    //props.then(() => {
-      const itemsRef = toRefs(props).items
-      const itemsRef3 = itemsRef.value[3]
-    //})
-    console.log("Choices: ", itemsRef)
 
     const data = reactive({
       states: [s.MIDDLE, s.MIDDLE, s.MIDDLE, s.MIDDLE],  // initial state?
@@ -130,7 +124,7 @@ export default defineComponent({
       return data.states.some((x) => x === s.WORST)
     }
 
-    return { data, itemsRef, itemsRef3, logStates, onTransition, onSubmit, onAbort, isFinalState }
+    return { data, logStates, onTransition, onSubmit, onAbort, isFinalState }
   }
 
 });
