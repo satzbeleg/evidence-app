@@ -10,7 +10,7 @@
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';
 import TheNavbar from '@/components/TheNavbar.vue';
-// import ConnectivityDetection from '@/mixins/connectivity-detection.js';
+import useConnToast from '@/functions/conn-toast.js';
 
 export default {
   name: "App",
@@ -19,9 +19,10 @@ export default {
     TheNavbar
   },
 
-  // mixins: [
-  //   ConnectivityDetection
-  // ]
+  setup(){
+    useConnToast();
+  }
+
 }
 </script>
 

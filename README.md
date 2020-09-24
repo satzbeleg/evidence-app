@@ -43,7 +43,8 @@ CSS
 - Bulma
     - ~~[Buefy](https://buefy.org/documentation) for vue2: `yarn add buefy`~~
     - Bulma CSS for vue3: `yarn add bulma`
-    - Bulma Extensions, Switch Toggle: `yarn add bulma-switch`, see [here](https://wikiki.github.io/form/switch/)
+    - Bulma Ext., Switch Toggle: `yarn add bulma-switch`, see [here](https://wikiki.github.io/form/switch/)
+    - Bulma Ext., Toast: `yarn add bulma-toast`, see [here](https://rfoel.github.io/bulma-toast/)
 - Fontawesome 5:
     - ~~`yarn add @fortawesome/fontawesome-svg-core`~~
     - ~~`yarn add @fortawesome/free-solid-svg-icons`~~
