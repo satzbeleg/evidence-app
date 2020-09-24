@@ -6,7 +6,7 @@ const routes = [{
     path: '/',
     name: 'Home',
     component: () =>
-      import ('../views/Home.vue')
+      import ( /* webpackPreload: true */ '../views/Home.vue')
   },
   {
     path: '/login',
