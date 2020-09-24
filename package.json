@@ -9,24 +9,19 @@
     "css-build": "node-sass --omit-source-map-url sass/darktheme.scss public/css/darktheme.css"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.30",
-    "@fortawesome/free-solid-svg-icons": "^5.14.0",
-    "@fortawesome/vue-fontawesome": "^0.1.10",
-    "buefy": "^0.9.2",
+    "@fortawesome/fontawesome-free": "^5.14.0",
+    "bulma": "^0.9.0",
+    "bulma-switch": "^2.0.0",
+    "bulma-toast": "^2.0.3",
     "core-js": "^3.6.5",
-    "idb": "^5.0.4",
     "localforage": "^1.9.0",
     "messageformat": "^2.3.0",
     "register-service-worker": "^1.7.1",
-    "swiped-events": "^1.1.0",
-    "uuid": "^8.3.0",
-    "vue": "^2.6.11",
-    "vue-fit2box": "^0.2.1",
-    "vue-i18n": "^8.21.0",
-    "vue-meta": "^2.4.0",
-    "vue-router": "^3.2.0",
-    "vuex": "^3.5.1",
-    "vuex-persist": "^2.2.0"
+    "vue": "^3.0.0-beta.1",
+    "vue-i18n": "^9.0.0-beta.2",
+    "vue-router": "^4.0.0-alpha.6",
+    "vuex": "^4.0.0-alpha.1",
+    "vuex-persist": "^3.1.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
@@ -34,12 +29,12 @@
     "@vue/cli-plugin-pwa": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.0.0-beta.1",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^6.2.2",
+    "eslint-plugin-vue": "^7.0.0-alpha.0",
     "node-sass": "^4.14.1",
-    "sass-loader": "^10.0.2",
-    "vue-template-compiler": "^2.6.11"
+    "sass-loader": "^10.0.2"
   },
   "eslintConfig": {
     "root": true,
@@ -47,7 +42,7 @@
       "node": true
     },
     "extends": [
-      "plugin:vue/essential",
+      "plugin:vue/vue3-essential",
       "eslint:recommended"
     ],
     "parserOptions": {

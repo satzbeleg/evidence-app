@@ -5,6 +5,7 @@
       <div class="card-content">
         <div class="content center">
           <div v-fit2box="sentText" class="fixed-box" ></div>
+          <!-- <div class="fixed-box">{{ sentText }}</div>  -->
         </div>
       </div>
     </div>
@@ -14,9 +15,9 @@
 
 <script>
 import s from './enums.js';
+import { defineComponent } from 'vue'; 
 
-
-export default {
+export default defineComponent({
   name: "BestWorstItem",
 
   props: {
@@ -25,10 +26,15 @@ export default {
     sentId: String, // SentenceID
     sentText: String,  // SentenceText
   },
-  
+
+  // setup(props){
+  //   console.log(props)
+  //   return { ...toRefs(props) }
+  // },
+
   methods: {
     onClick(evt){
-      this.$emit('itemSelected', evt, this.itemPos, this.itemState)
+      this.$emit('item-selected', evt, this.itemPos, this.itemState)
     },
   },
 
@@ -41,7 +47,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 

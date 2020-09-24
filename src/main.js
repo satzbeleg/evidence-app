@@ -1,49 +1,34 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-
-/** fontawesome */
-import { library } from '@fortawesome/fontawesome-svg-core';
-import { fas } from '@fortawesome/free-solid-svg-icons';
-library.add(fas);
-
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-Vue.component('vue-fontawesome', FontAwesomeIcon);
-
-/** load Buefy for Vue */
-import Buefy from 'buefy';
-//import 'buefy/dist/buefy.css'; // must be deactivated if SCSS is used
-Vue.use(Buefy, {
-  defaultIconComponent: 'vue-fontawesome',
-  defaultIconPack: 'fas',
-});
-
 /** PWA */
 import './registerServiceWorker';
 
-/** Meta data */
-import VueMeta from 'vue-meta';
-Vue.use(VueMeta, {
-  keyName: 'head'
+
+/** Load packages */
+import { createApp, h } from 'vue';
+import App from './App.vue';
+
+/** Add everything together */
+const app = createApp({
+  render: () => h(App)
 });
 
-/** i18n */
-import i18n from '@/translations';
+/** Vue Router */
+import router from './router';
+app.use(router);
+// router.isReady().then(() => app.use(router));
 
 /** Vuex state management */
 import store from './store';
+app.use(store);
+// store.isReady().then(() => app.use(store));
+
+/** i18n */
+import i18n from '@/translations';
+app.use(i18n);
 
 /** v-fit-text-to-box */
-import Fit2Box from 'vue-fit2box';
-//import Fit2Box from '@/directives/fit2box';
-Vue.directive('fit2box', Fit2Box);
+// import Fit2Box from 'vue-fit2box';
+import Fit2Box from '@/directives/fit2box';
+app.directive('fit2box', Fit2Box);
 
-/** misc */
-Vue.config.productionTip = false;
-
-new Vue({
-  store,
-  i18n,
-  router,
-  render: h => h(App)
-}).$mount('#app');
+/** Mount the app */
+app.mount('#app');

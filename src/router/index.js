@@ -1,10 +1,5 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import VueMeta from 'vue-meta';
-
-Vue.use(VueRouter);
-Vue.use(VueMeta);
-
+// import Vue from 'vue';
+import { createRouter, createWebHashHistory } from 'vue-router';
 
 /** Routes */
 const routes = [{
@@ -47,22 +42,23 @@ const routes = [{
 ];
 
 
-const router = new VueRouter({
+const router = createRouter({
+  history: createWebHashHistory(),
   routes
 });
 
 
 /** check if route requires auth */
-import store from "../store";
-router.beforeEach((to, from, next) => {
-  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const isAuthenticated = store.getters['login/isAuthenticated'];
-  if (requiresAuth && !isAuthenticated) {
-    next("/login");
-  } else {
-    next();
-  }
-});
+// import store from "../store";
+// router.beforeEach((to, from, next) => {
+//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+//   const isAuthenticated = store.getters['login/isAuthenticated'];
+//   if (requiresAuth && !isAuthenticated) {
+//     next("/login");
+//   } else {
+//     next();
+//   }
+// });
 
 
 export default router;

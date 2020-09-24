@@ -1,6 +1,7 @@
 <template>
-  <div class="field darkmode-toogle">
-    <b-switch v-model="isDarkMode">{{ label }}</b-switch>
+  <div class="field">
+    <input id="darkmode-toogle" class="switch is-rounded" type="checkbox"  v-model="isDarkMode">
+    <label for="darkmode-toogle">{{ label }}</label>
   </div>
 </template>
 

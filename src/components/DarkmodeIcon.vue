@@ -1,8 +1,8 @@
 <template>
   <div class="darkmode-icon">
     <a class="button" v-on:click='toggleTheme()'>
-      <b-icon v-if="isDarkMode" pack="fas" icon="moon"></b-icon>
-      <b-icon v-else pack="fas" icon="adjust"></b-icon>
+      <span class="icon" v-if="isDarkMode"><i class="fas fa-moon"></i></span>
+      <span class="icon" v-else><i class="fas fa-adjust"></i></span>
     </a>
   </div>
 </template>
