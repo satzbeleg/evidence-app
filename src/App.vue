@@ -9,7 +9,7 @@
 <script>
 import '@fortawesome/fontawesome-free/css/all.css';
 import '@fortawesome/fontawesome-free/js/all.js';
-import TheNavbar from '@/components/TheNavbar.vue';
+import TheNavbar from '@/components/layout/TheNavbar.vue';
 import useConnToast from '@/functions/conn-toast.js';
 
 export default {

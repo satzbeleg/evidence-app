@@ -14,7 +14,7 @@
 
 
 <script>
-import DarkmodeToggle from '@/components/DarkmodeToggle.vue';
+import DarkmodeToggle from '@/components/settings/DarkmodeToggle.vue';
 import { useI18n } from 'vue-i18n';
 
 

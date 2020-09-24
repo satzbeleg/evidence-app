@@ -1,6 +1,6 @@
 import Vuex from 'vuex';
-import login from './modules/login.js';
-import settings from './modules/settings';
+import auth from './auth';
+import settings from './settings';
 
 
 /** Sync Vuex states with browser's localStorage */
@@ -16,7 +16,7 @@ const vuexStorage = new VuexPersist({
 
 const store = Vuex.createStore({
   modules: {
-    login: login,
+    auth: auth,
     settings: settings,
   },
   plugins: [vuexStorage.plugin]

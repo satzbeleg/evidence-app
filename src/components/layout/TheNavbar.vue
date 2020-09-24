@@ -4,7 +4,7 @@
 
     <div class="navbar-brand">
       <router-link class="navbar-item" :to="{ path: '/' }">
-        <img src="../assets/logo.png" alt="general app logo" />
+        <img src="../../assets/logo.png" alt="general app logo" />
       </router-link>
 
       <!-- language switcher -->
@@ -131,7 +131,7 @@
 <script>
 // import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
-import DarkmodeIcon from "@/components/DarkmodeIcon.vue";
+import DarkmodeIcon from "@/components/settings/DarkmodeIcon.vue";
 import { defineComponent, ref } from 'vue';
 
 
