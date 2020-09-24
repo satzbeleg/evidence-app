@@ -9,8 +9,9 @@
 
       <!-- language switcher -->
       <div class="navbar-item">
-        <div class="dropdown is-hoverable">
-          <div class="dropdown-trigger">
+        <div class="dropdown" 
+             v-on:click="showLangDrop = !showLangDrop" v-bind:class="{ 'is-active': showLangDrop }">
+          <div class="dropdown-trigger" >
             <button class="button is-light" type="button" aria-haspopup="true" aria-controls="dropdown-menu">
               <span>
                 <template v-if="locale == 'de'">Deutsch</template>
@@ -34,7 +35,8 @@
         <DarkmodeIcon />
       </div>
 
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="myNavbarMenu">
+      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="myNavbarMenu"
+         v-on:click="showNavBurger = !showNavBurger" v-bind:class="{ 'is-active' : showNavBurger }">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -43,7 +45,8 @@
     </div>
 
 
-    <div id="myNavbarMenu" class="navbar-menu">
+    <div id="myNavbarMenu" class="navbar-menu"
+         v-on:click="showNavBurger = !showNavBurger" v-bind:class="{ 'is-active' : showNavBurger }">
       <div class="navbar-start">
 
         <router-link class="navbar-item" :to="{ path: '/' }">
@@ -126,16 +129,20 @@
 
 
 <script>
-import '@/components/layout/navbar-toggle.js';
+// import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
 import DarkmodeIcon from "@/components/DarkmodeIcon.vue";
+import { defineComponent, ref } from 'vue';
 
-export default {
+
+export default defineComponent({
   name: "TheNavbar",
 
   setup(){
+    const showNavBurger = ref(false);
+    const showLangDrop = ref(false)
     const { t, locale } = useI18n();
-    return { t, locale }
+    return { t, locale, showNavBurger, showLangDrop }
   },
 
   components: {
@@ -149,7 +156,7 @@ export default {
       });
     },
   },
-};
+});
 </script>
 
 
