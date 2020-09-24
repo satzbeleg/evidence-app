@@ -19,16 +19,15 @@ export default {
     });
     el.resize_ob.observe(el);
   },
-  // unmounted: function(el) {
-  //   el.resize_ob.unobserve(el);
-  //   el.resize_ob = undefined;
-  // }
+  unmounted: function(el) {
+    el.resize_ob.unobserve(el);
+  }
 }
 
 function fitTextToBox(el) {
   const bh = el.clientHeight / 16.0; // approx to rem units
   const bw = el.clientWidth / 16.0;
-  console.log(bw, bh)
+  // console.log(bw, bh)
   const fh = 1;
   const fw = getTextWidth(el.textContent, `${fh}rem`);
   const scaleFont = 2.0 * Math.sqrt(bh * bw) / Math.sqrt(fw);
