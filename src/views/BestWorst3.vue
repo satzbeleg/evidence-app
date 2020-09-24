@@ -1,11 +1,16 @@
 <template>
   <section class="section">
     <div class="container is-centered">
-      <BestWorstChoices 
-        v-bind:items="data.current"
-        v-on:ranking-done="nextExample"
-        :key="data.counter"
-      />
+      <template v-if="data.current.length > 0">
+        <BestWorstChoices 
+          v-bind:items="data.current"
+          v-on:ranking-done="nextExample"
+          :key="data.counter"
+        />
+      </template>
+      <template v-else>
+        Queue is empty. Please reconnect to API to request more ranking examples.
+      </template>
     </div>
   </section>
 </template>
@@ -79,16 +84,20 @@ export default {
     });
 
     async function nextChoice(){
-      // const tmp = data.queue.shift().examples
-      // data.current = JSON.parse(JSON.stringify(tmp));
-      data.current = data.queue.shift().examples
+      // read 1st element, and delete it from queue (FIFO principle)
+      const tmp = data.queue.shift()
+      if (typeof tmp !== 'undefined' ){
+        data.current = tmp.examples
+      }else{
+        data.current = []
+      }
     }
 
     async function nextExample(history){
       data.ranked.push(JSON.parse(JSON.stringify(history)));
       nextChoice();
       data.counter++
-      console.log(data.counter, data.ranked)
+      // console.log(data.counter, data.ranked)
     }
 
     // created
