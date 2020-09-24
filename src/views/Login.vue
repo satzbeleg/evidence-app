@@ -84,7 +84,7 @@ export default {
   methods: {
     handleLogin(){
       const { username, password } = this;
-      this.$store.dispatch('login/authRequest', { username, password })
+      this.$store.dispatch('auth/login/authRequest', { username, password })
         .then(() => {
           this.$router.push('/')
         });
