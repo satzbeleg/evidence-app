@@ -50,11 +50,17 @@ CSS
     - ~~`yarn add @fortawesome/free-solid-svg-icons`~~
     - ~~`yarn add @fortawesome/vue-fontawesome`, see [here](https://github.com/FortAwesome/vue-fontawesome#installation)~~
     - CSS for vue3: `yarn add @fortawesome/fontawesome-free`
-
-
 - SASS/Themes
     - `yarn add node-sass --dev`
     - `yarn add sass-loader --dev`
+
+Optimizations
+
+- [Preload key requests](https://web.dev/uses-rel-preload): `yarn add @vue/preload-webpack-plugin`
+
+
+Misc
+
 - Data
     - Generate random UUIDs: `yarn add uuid`
 - Cosmetic CSS stuff:
