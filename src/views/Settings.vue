@@ -16,6 +16,7 @@
 <script>
 import DarkmodeToggle from '@/components/settings/DarkmodeToggle.vue';
 import { useI18n } from 'vue-i18n';
+import { watch } from "vue";
 
 
 export default {
@@ -27,7 +28,13 @@ export default {
 
   setup(){
     const { t, locale } = useI18n();
+
+    watch(() => {
+      document.title = t('settings.settings');
+    });
+    
     return { t, locale }
   },
+
 }
 </script>

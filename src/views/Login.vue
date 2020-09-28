@@ -63,6 +63,7 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
+import { watch } from "vue";
 
 
 export default {
@@ -70,6 +71,11 @@ export default {
 
   setup(){
     const { t, locale } = useI18n();
+
+    watch(() => {
+      document.title = t('auth.login_noun');
+    });
+
     return { t, locale }
   },
 

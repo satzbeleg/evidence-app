@@ -36,7 +36,7 @@ export default {
 
 <style>
 #app > .section {
-  padding-top: 4.5rem;
+  padding-top: 3.5rem;
 }
 </style>
 

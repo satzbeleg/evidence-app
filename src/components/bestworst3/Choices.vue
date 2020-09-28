@@ -32,8 +32,24 @@
       v-on:item-selected="onTransition"
     />
 
-    <button class="button" v-if="isFinalState" v-on:click.prevent="onSubmit">Ok</button>
-    <button class="button" v-else v-on:click.prevent="onAbort">Skip</button>
+    <div class="field is-grouped is-grouped-centered" style="max-width: 400px;">
+      <!-- Skip -->
+      <p class="control">
+      <button class="button is-rounded is-large mx-5 is-warning" v-on:click.prevent="onAbort">
+        <span class="icon"><i class="fas fa-forward"></i></span>
+      </button>
+      </p>
+  
+      <!-- Ok -->
+      <p class="control">
+      <button class="button is-rounded is-large mx-5" 
+              v-bind:class="{ 'is-success': isFinalState }" 
+              v-bind:disabled="!isFinalState"
+              v-on:click.prevent="onSubmit">
+        <span class="icon"><i class="fas fa-check"></i></span>
+      </button>
+      </p>
+    </div>
 
   </div>
 </template>
@@ -42,7 +58,7 @@
 <script>
 import ItemCard from './Item.vue';
 import s from './enums.js';
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, computed } from 'vue';
 
 export default defineComponent({
   name: "BestWorstChoices",
@@ -120,9 +136,9 @@ export default defineComponent({
       emit('ranking-done', Array.from(data.history))
     }
 
-    async function isFinalState(){  // damit der Submit/Ok Button auftaucht
+    const isFinalState = computed(() => {  // damit der Submit/Ok Button auftaucht
       return data.states.some((x) => x === s.WORST)
-    }
+    });
 
     return { data, logStates, onTransition, onSubmit, onAbort, isFinalState }
   }
