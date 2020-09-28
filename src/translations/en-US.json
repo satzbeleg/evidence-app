@@ -34,5 +34,8 @@
     "settings": "Settings",
     "appearance": "Appearance",
     "darkmode": "Dark theme"
+  },
+  "bestworst": {
+    "title": "Best Worst Scaling"
   }
 }

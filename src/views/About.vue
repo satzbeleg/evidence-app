@@ -107,10 +107,21 @@
 
 
 <script>
+import { useI18n } from 'vue-i18n';
+import { watch } from "vue";
+
+
 export default {
   name: "About",
-  metaInfo: {
-    title: 'About this app!'
+
+  setup(){
+    const { t } = useI18n();
+
+    watch(() => {
+      document.title = t('header.about');
+    });
+
+    return { t }
   }
 }
 </script>

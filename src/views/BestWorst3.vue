@@ -18,21 +18,24 @@
 
 <script>
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { reactive } from 'vue';
+import { reactive, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 
 export default {
   name: "BestWorstTwoActions",
-
-  metaInfo: {
-    title: "Best-Worst Ranking"
-  },
 
   components: {
     BestWorstChoices
   },
 
   setup(){
+    const { t } = useI18n();
+
+    watch(() => {
+      document.title = t('bestworst.title');
+    });
+
     const data = reactive({
       /** Array with unlabelled example sets. It's a FIFO queue */
       queue: [{

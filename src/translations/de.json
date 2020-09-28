@@ -25,5 +25,8 @@
     "settings": "Einstellungen",
     "appearance": "Aussehen",
     "darkmode": "Dunkler Modus"
+  },
+  "bestworst": {
+    "title": "BWS Ranking"
   }
 }

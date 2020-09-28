@@ -33,6 +33,7 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
+import { watch } from "vue";
 
 
 export default {
@@ -40,6 +41,11 @@ export default {
 
   setup(){
     const { t } = useI18n();
+
+    watch(() => {
+      document.title = t('home.welcome');
+    });
+
     return { t }
   }
 }
