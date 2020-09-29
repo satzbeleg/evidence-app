@@ -15,7 +15,7 @@
             <button class="button is-light" type="button" aria-haspopup="true" aria-controls="dropdown-menu">
               <span>
                 <template v-if="locale == 'de'">Deutsch</template>
-                <template v-if="locale == 'en-US'">English</template>
+                <template v-if="locale == 'en'">English</template>
               </span>
               <span class="icon"><i class="fas fa-caret-down"></i></span>
             </button>
@@ -24,7 +24,7 @@
           <div class="dropdown-menu" id="dropdown-menu" role="menu">
             <div class="dropdown-content" v-on:click="locale = $event.target.id">
               <a id="de" class="dropdown-item">Deutsch</a>
-              <a id="en-US" class="dropdown-item">English</a>
+              <a id="en" class="dropdown-item">English</a>
             </div>
           </div>
 

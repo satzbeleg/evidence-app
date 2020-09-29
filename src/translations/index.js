@@ -30,7 +30,7 @@ class CustomFormatter {
  * 2. Use the browser's language setting
  * 3. Select a hardcoded default language (e.g. 'de')
  */
-const default_locale = navigator.language || 'de';
+const default_locale = navigator.language.substring(0,2) || 'de';
 
 
 /** Register standard messages 
@@ -43,6 +43,6 @@ export default createI18n({
   formatter: new CustomFormatter({ default_locale }),
   messages: {
     'de': require('./de.json'),
-    'en-US': require('./en-US.json')
+    'en': require('./en.json')
   }
 })
