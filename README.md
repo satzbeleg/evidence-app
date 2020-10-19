@@ -1,8 +1,8 @@
 [![Netlify Status](https://api.netlify.com/api/v1/badges/0d1cca68-8b41-4097-8eb2-52f6db306ba8/deploy-status)](https://app.netlify.com/sites/goofy-hypatia-8bd9ad/deploys)
 
 
-# vue-app-template
-My boilerplate Vue.js repo for PWA Apps.
+# EVIDENCE App
+UI for the EVIDENCE project (BBAW/TUD)
 
 ## Project setup
 ```
@@ -12,7 +12,7 @@ yarn global add @vue/cli
 
 Useful commands:
 
-- Compiles and hot-reloads for development: `yarn serve`
+- Compiles and hot-reloads for development: `yarn serve --port 53080`
 - Compiles and minifies for production: `yarn build`
 - Lints and fixes files: `yarn lint`
 - Open Vue.js UI: `vue ui`
