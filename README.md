@@ -12,7 +12,7 @@ yarn global add @vue/cli
 
 Useful commands:
 
-- Compiles and hot-reloads for development: `yarn serve --port 53080`
+- Compiles and hot-reloads for development: `yarn serve`
 - Compiles and minifies for production: `yarn build`
 - Lints and fixes files: `yarn lint`
 - Open Vue.js UI: `vue ui`
