@@ -93,7 +93,7 @@
         <div class="navbar-item">
           <div class="field is-grouped is-grouped-multiline">
 
-            <p class="control" v-if="!this.$store.getters['login/isAuthenticated']">
+            <p class="control" v-if="!this.$store.getters['auth/login/isAuthenticated']">
               <router-link :to="{ path: '/register' }">
                 <a class="button is-info">
                   <strong>{{ t('auth.signup') }}</strong>
@@ -102,7 +102,7 @@
               </router-link>
             </p>
 
-            <p class="control" v-if="!this.$store.getters['login/isAuthenticated']">
+            <p class="control" v-if="!this.$store.getters['auth/login/isAuthenticated']">
               <router-link :to="{ path: '/login' }">
                 <a class="button is-primary">
                   <strong>{{ t('auth.login') }}</strong>
@@ -111,7 +111,7 @@
               </router-link>
             </p>
 
-            <p class="control" v-if="this.$store.getters['login/isAuthenticated']">
+            <p class="control" v-if="this.$store.getters['auth/login/isAuthenticated']">
               <a class="button is-danger" v-on:click="onLogout()">
                 <strong>{{ t('auth.logout') }}</strong>
                 <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
@@ -151,7 +151,7 @@ export default defineComponent({
 
   methods: {
     onLogout() {
-      this.$store.dispatch("login/authLogout").then(() => {
+      this.$store.dispatch("auth/login/authLogout").then(() => {
         this.$router.push("/login");
       });
     },
