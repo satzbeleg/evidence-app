@@ -21,6 +21,8 @@
     "login_noun": "Login",
     "login_cta": "Please login to proceed.",
     "signup": "Sign Up",
+    "signup_noun": "Sign Up",
+    "signup_cta": "Please register with username, email and password.",
     "logout": "Log Out",
     "remember": "Remember me",
     "email": "Email",

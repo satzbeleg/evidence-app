@@ -12,6 +12,8 @@
     "login_noun": "Anmeldung",
     "login_cta": "Bitte melden Sie sich an, um fortzufahren.",
     "signup": "Registrieren",
+    "signup_noun": "Registrierung",
+    "signup_cta": "Bitte registrieren Sie sich mit dem gewünschten Benutzernamen, Email und Passwort.",
     "logout": "Abmelden",
     "remember": "Merken",
     "email": "E-Mail",

@@ -16,6 +16,12 @@ const routes = [{
       import ( /* webpackPreload: true */ '../views/Login.vue')
   },
   {
+    path: '/signup',
+    name: 'SignUp',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/SignUp.vue')
+  },
+  {
     path: '/about',
     name: 'About',
     component: () =>
