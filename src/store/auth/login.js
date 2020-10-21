@@ -44,11 +44,14 @@ export default {
         params.append('password', creds.password)
 
         // start POST request. Pls note that FastAPI expect a query string
-        axios_evidence.post('v1/token', params)
+        axios_evidence.post('v1/auth/login', params)
           .then(resp => {
+            // old code
             state.commit('AUTH_SUCCESS', resp.data.access_token);  // store the JWT token in Vuex
-            // axios_evidence.defaults.headers.common['Authorization'] = resp.data.access_token;  // store token for all axios instances
-            state.dispatch('USER_REQUEST');  // ??? What was the plan with USER_REQUEST ???
+            //state.dispatch('USER_REQUEST');  // ??? What was the plan with USER_REQUEST ???
+            // new code
+            localStorage.setItem('auth_token', resp.data.access_token);
+            axios_evidence.defaults.headers.common['Authorization'] = resp.data.access_token;  // store token for all axios instances
             resolve(resp);
           })
           .catch(err => {
@@ -60,8 +63,11 @@ export default {
 
     authLogout: (state) => {
       return new Promise(resolve => {
+        // old code
         state.commit('AUTH_LOGOUT');  // delete JWT token in Vuex
-        // delete axios_evidence.defaults.headers.common['Authorization']; // Delete token for all axios instances
+        // new code
+        localStorage.removeItem('auth_token');
+        delete axios_evidence.defaults.headers.common['Authorization']; // Delete token for all axios instances
         resolve();
       });
     }
