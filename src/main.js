@@ -12,14 +12,12 @@ const app = createApp({
 });
 
 /** Vue Router */
-import router from './router';
+import router from '@/router';
 app.use(router);
-// router.isReady().then(() => app.use(router));
 
 /** Vuex state management */
-import store from './store';
+import store from '@/store';
 app.use(store);
-// store.isReady().then(() => app.use(store));
 
 /** i18n */
 import i18n from '@/translations';
