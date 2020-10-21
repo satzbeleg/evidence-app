@@ -33,14 +33,14 @@
               </p>
             </div>
             
-            <div class="field">
+            <!-- <div class="field">
               <p class="control">
                 <label class="checkbox">
                   <input type="checkbox" v-model="remember">
                   {{ t('auth.remember') }}
                 </label>
               </p>
-            </div> 
+            </div>  -->
 
             <div class="field">
               <p class="control">
@@ -83,7 +83,7 @@ export default {
     return {
       username: "",
       password: "",
-      remember: false
+      // remember: false
     };
   },
 
