@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-//import store from "@/store";
+import store from "@/store";
+//import Cookies from 'js-cookie';
 
 
 /** Routes */
@@ -58,9 +59,8 @@ const router = createRouter({
 /** check if route requires auth */
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  //const isAuthenticated = store.getters['auth/login/isAuthenticated'];
-  const isAuthenticated = !!localStorage.getItem('auth_token')
-  //console.log(requiresAuth, !isAuthenticated, store.getters['auth/login/getToken'], localStorage.getItem('auth_token'))
+  const isAuthenticated = store.getters['auth/login/isAuthenticated'];
+  //const isAuthenticated = !!Cookies.get('auth_token')
   if (requiresAuth && !isAuthenticated) {
     next({
       path: '/login',

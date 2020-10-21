@@ -1,11 +1,11 @@
 import axios_evidence from '@/api/axios-evidence';
+import Cookies from 'js-cookie';
 
 
 export default {
   namespaced: true,
 
   state: () => ({
-    token: '',
     status: '',
     hasLoadedOnce: false,
   }),
@@ -17,8 +17,9 @@ export default {
 
     AUTH_SUCCESS: (state, token) => {
       state.status = 'success';
-      state.token = token;
       state.hasLoadedOnce = true;
+      Cookies.set('auth_token', token, { expires: 7, sameSite: 'strict' }); //{ secure: true }
+      axios_evidence.defaults.headers.common['Authorization'] = token;
     },
 
     AUTH_ERROR: (state) => {
@@ -28,7 +29,8 @@ export default {
 
     AUTH_LOGOUT: (state) => {
       state.status = 'logout';
-      state.token = "";
+      Cookies.remove('auth_token');
+      delete axios_evidence.defaults.headers.common['Authorization'];
     }
   },
 
@@ -46,12 +48,7 @@ export default {
         // start POST request. Pls note that FastAPI expect a query string
         axios_evidence.post('v1/auth/login', params)
           .then(resp => {
-            // old code
-            state.commit('AUTH_SUCCESS', resp.data.access_token);  // store the JWT token in Vuex
-            //state.dispatch('USER_REQUEST');  // ??? What was the plan with USER_REQUEST ???
-            // new code
-            localStorage.setItem('auth_token', resp.data.access_token);
-            axios_evidence.defaults.headers.common['Authorization'] = resp.data.access_token;  // store token for all axios instances
+            state.commit('AUTH_SUCCESS', resp.data.access_token); // save JWT token in Cookie and axios
             resolve(resp);
           })
           .catch(err => {
@@ -63,24 +60,20 @@ export default {
 
     authLogout: (state) => {
       return new Promise(resolve => {
-        // old code
-        state.commit('AUTH_LOGOUT');  // delete JWT token in Vuex
-        // new code
-        localStorage.removeItem('auth_token');
-        delete axios_evidence.defaults.headers.common['Authorization']; // Delete token for all axios instances
+        state.commit('AUTH_LOGOUT'); // delete JWT token from Cookie and axios
         resolve();
       });
     }
   },
 
   getters: {
-    isAuthenticated: state => !!state.token,
-    authStatus: state => state.status,
-    getToken: state => state.token
+    isAuthenticated: () => !!Cookies.get('auth_token'),
+    authStatus: state => state.status
   }
 }
 
 /** Links
  * https://blog.sqreen.com/authentication-best-practices-vue/
  * https://github.com/stagerightlabs/vue-jwt-client/tree/master/src
+ * https://github.com/js-cookie/js-cookie
  */
