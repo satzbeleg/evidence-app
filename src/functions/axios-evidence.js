@@ -41,6 +41,7 @@ export const useApi = (token) => {
  */
 export const useLoginAuth = () => {
   // declare reactive variables
+  const jwtToken = ref(undefined);
   const authStatus = ref("not-loaded");
   const isLoading = ref(false);
   const failedLoginAttempts = ref(0);
@@ -61,12 +62,14 @@ export const useLoginAuth = () => {
       api.post('v1/auth/login', params)
         .then(resp => {
           authStatus.value = 'success';  // save JWT token in Cookie and axios
+          jwtToken.value = resp.data.access_token;
           Cookies.set('auth_token', resp.data.access_token, { expires: 7, sameSite: 'strict' }); //{ secure: true }
           //api.defaults.headers.common['Authorization'] = resp.data.access_token;
           resolve(resp);
         })
         .catch(err => {
           authStatus.value = 'error';
+          jwtToken.value = undefined;
           failedLoginAttempts.value += 1;
           reject(err);
         })
@@ -80,20 +83,24 @@ export const useLoginAuth = () => {
   const logout = () => {
     return new Promise(resolve => {
       authStatus.value = 'logout';  // delete JWT token from Cookie and axios
+      jwtToken.value = undefined;
       Cookies.remove('auth_token');
       //delete api.defaults.headers.common['Authorization'];
       resolve();
     });
   }
 
-  const getToken = computed(() => Cookies.get('auth_token'));
+  const tryRelogin = () => {
+      jwtToken.value = Cookies.get('auth_token');
+  }
+  tryRelogin();
 
-  const isAuthenticated = computed(() => !!getToken());
+  const isAuthenticated = computed(() => !!jwtToken.value);
 
   return { 
     login,
     logout,
-    getToken,
+    tryRelogin,
     isAuthenticated,
     authStatus,
     isLoading,
