@@ -1,6 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import store from "@/store";
-//import Cookies from 'js-cookie';
+import { useLoginAuth } from '@/functions/axios-evidence.js';
 
 
 /** Routes */
@@ -59,8 +58,7 @@ const router = createRouter({
 /** check if route requires auth */
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const isAuthenticated = store.getters['auth/login/isAuthenticated'];
-  //const isAuthenticated = !!Cookies.get('auth_token')
+  const { isAuthenticated } = useLoginAuth()
   if (requiresAuth && !isAuthenticated) {
     next({
       path: '/login',

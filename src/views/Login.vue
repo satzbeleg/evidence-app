@@ -9,7 +9,7 @@
           <hr class="login-hr">
           <p class="subtitle">{{ t('auth.login_cta') }}</p>
 
-          <form @submit.prevent="handleLogin" class="box form">
+          <form @submit.prevent="onLogin" class="box form">
 
             <div class="field">
               <label class="label">{{ t('auth.username') }}</label>
@@ -63,38 +63,38 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { watch } from "vue";
+import { defineComponent, ref, watch } from "vue";
+import router from '@/router';
+import { useLoginAuth } from '@/functions/axios-evidence.js';
 
 
-export default {
+export default defineComponent({
   name: "Login",
 
   setup(){
+    // multi-lingual support
     const { t, locale } = useI18n();
 
     watch(() => {
       document.title = t('auth.login_noun');
     });
 
-    return { t, locale }
-  },
+    // process submitted login request
+    const { login } = useLoginAuth(); 
+    const username = ref("");
+    const password = ref("");
 
-  data(){
-    return {
-      username: "",
-      password: "",
-      // remember: false
-    };
-  },
-
-  methods: {
-    handleLogin(){
-      const { username, password } = this;
-      this.$store.dispatch('auth/login/authRequest', { username, password })
-        .then(() => {
-          this.$router.push('/')
-        });
+    const onLogin = async () => {
+      try{
+        await login(username.value, password.value);
+        router.push('/');
+      }catch(err){
+        console.log(err);
+      }
     }
-  }
-}
+
+    return { t, locale, username, password, onLogin }
+  },
+
+})
 </script>

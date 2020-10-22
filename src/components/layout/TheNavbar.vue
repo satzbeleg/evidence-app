@@ -133,29 +133,39 @@
 import { useI18n } from 'vue-i18n';
 import DarkmodeIcon from "@/components/settings/DarkmodeIcon.vue";
 import { defineComponent, ref } from 'vue';
+import router from '@/router';
+import { useLoginAuth } from '@/functions/axios-evidence.js';
 
 
 export default defineComponent({
   name: "TheNavbar",
 
   setup(){
-    const showNavBurger = ref(false);
-    const showLangDrop = ref(false)
+    // multi-lingual support
     const { t, locale } = useI18n();
-    return { t, locale, showNavBurger, showLangDrop }
+
+    // reactive variables for navbar
+    const showNavBurger = ref(false);
+    const showLangDrop = ref(false);
+
+    // Logout Button
+    const { logout } = useLoginAuth(); 
+    const onLogout = async () => {
+      try{
+        await logout();
+        router.push("/login");
+      }catch(err){
+        console.log(err);
+      }
+    }
+
+    return { t, locale, showNavBurger, showLangDrop, onLogout }
   },
 
   components: {
     DarkmodeIcon,
-  },
+  }
 
-  methods: {
-    onLogout() {
-      this.$store.dispatch("auth/login/authLogout").then(() => {
-        this.$router.push("/login");
-      });
-    },
-  },
 });
 </script>
 
