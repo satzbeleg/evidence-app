@@ -1,15 +1,15 @@
 <template>
-  <section class="hero is-info is-fullheight-with-navbar" id="login">
+  <section class="hero is-warning is-fullheight-with-navbar" id="signup">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
         <div class="column is-5-tablet is-4-desktop is-3-widescreen">
 
-          <h3 class="title">{{ t('auth.login_noun') }}</h3>
-          <hr class="login-hr">
-          <p class="subtitle">{{ t('auth.login_cta') }}</p>
+          <h3 class="title">{{ t('auth.signup_noun') }}</h3>
+          <hr class="signup-hr">
+          <p class="subtitle">{{ t('auth.signup_cta') }}</p>
 
-          <form @submit.prevent="onLogin" class="box form">
+          <form @submit.prevent="handleSignup" class="box form">
 
             <div class="field">
               <label class="label">{{ t('auth.username') }}</label>
@@ -23,6 +23,17 @@
             </div>
 
             <div class="field">
+              <label class="label">{{ t('auth.email') }}</label>
+              <p class="control has-icons-left has-icons-right">
+                <span class="icon is-small is-left"><i class="fa fa-envelope"></i></span>
+                <input class="input" 
+                       type="email"
+                       v-model="email"
+                       v-bind:placeholder="t('auth.email')">
+              </p>
+            </div>
+
+            <div class="field">
               <label class="label">{{ t('auth.password') }}</label>
               <p class="control has-icons-left has-icons-right">
                 <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
@@ -32,21 +43,12 @@
                        v-bind:placeholder="t('auth.password_place')">
               </p>
             </div>
-            
-            <!-- <div class="field">
-              <p class="control">
-                <label class="checkbox">
-                  <input type="checkbox" v-model="remember">
-                  {{ t('auth.remember') }}
-                </label>
-              </p>
-            </div>  -->
 
             <div class="field">
               <p class="control">
-                <button class="button is-primary" type="submit">
-                  <strong>{{ t('auth.login') }}</strong>
-                  <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
+                <button class="button is-info" type="submit">
+                  <strong>{{ t('auth.signup') }}</strong>
+                  <span class="icon"><i class="fas fa-user-plus"></i></span>
                 </button>
               </p>
             </div>
@@ -63,38 +65,38 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { defineComponent, ref, watch } from "vue";
-import router from '@/router';
-import { useLoginAuth } from '@/functions/axios-evidence.js';
+import { watch } from "vue";
 
 
-export default defineComponent({
-  name: "Login",
+export default {
+  name: "Register",
 
   setup(){
-    // multi-lingual support
     const { t, locale } = useI18n();
 
     watch(() => {
-      document.title = t('auth.login_noun');
+      document.title = t('auth.signup_noun');
     });
 
-    // process submitted login request
-    const { login } = useLoginAuth(); 
-    const username = ref("");
-    const password = ref("");
-
-    const onLogin = async () => {
-      try{
-        await login(username.value, password.value);
-        router.push('/');
-      }catch(err){
-        console.log(err);
-      }
-    }
-
-    return { t, locale, username, password, onLogin }
+    return { t, locale }
   },
 
-})
+  data(){
+    return {
+      email: "",
+      username: "",
+      password: ""
+    };
+  },
+
+  methods: {
+    handleSignup(){
+      const { username, email, password } = this;
+      this.$store.dispatch('auth/signup/authSignUp', { username, email, password })
+        .then(() => {
+          this.$router.push('/')
+        });
+    }
+  }
+}
 </script>

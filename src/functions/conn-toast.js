@@ -1,4 +1,13 @@
-/** Connectivity Detection and Bulma Toast notification */
+/** Connectivity Detection and Bulma Toast notification 
+ * 
+ * USAGE
+ *  import useConnToast from '@/functions/conn-toast.js';
+ *  export default {
+ *    setup(){
+ *      useConnToast();
+ *    }
+ *  }
+ */
 import { toast } from "bulma-toast";
 import { onMounted, onUnmounted } from 'vue';
 

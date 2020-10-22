@@ -1,5 +1,4 @@
 import Vuex from 'vuex';
-import auth from './auth';
 import settings from './settings';
 
 
@@ -16,7 +15,6 @@ const vuexStorage = new VuexPersist({
 
 const store = Vuex.createStore({
   modules: {
-    auth: auth,
     settings: settings,
   },
   plugins: [vuexStorage.plugin]

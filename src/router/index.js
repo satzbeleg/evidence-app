@@ -1,5 +1,6 @@
-// import Vue from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { useLoginAuth } from '@/functions/axios-evidence.js';
+
 
 /** Routes */
 const routes = [{
@@ -13,6 +14,12 @@ const routes = [{
     name: 'Login',
     component: () =>
       import ( /* webpackPreload: true */ '../views/Login.vue')
+  },
+  {
+    path: '/signup',
+    name: 'SignUp',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/SignUp.vue')
   },
   {
     path: '/about',
@@ -49,16 +56,19 @@ const router = createRouter({
 
 
 /** check if route requires auth */
-// import store from "../store";
-// router.beforeEach((to, from, next) => {
-//   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-//   const isAuthenticated = store.getters['login/isAuthenticated'];
-//   if (requiresAuth && !isAuthenticated) {
-//     next("/login");
-//   } else {
-//     next();
-//   }
-// });
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
+  const { isAuthenticated } = useLoginAuth()  // we must use .value becoz it's a ref()
+  // console.log( isAuthenticated.value, isAuthenticated )
+  if (requiresAuth && !isAuthenticated.value) {
+    next({
+      path: '/login',
+      query: { redirect: to.fullPath }
+    });
+  } else {
+    next();
+  }
+});
 
 
 export default router;
