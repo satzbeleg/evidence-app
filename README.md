@@ -89,7 +89,7 @@ Misc
     +-- router          (Route to a specific view/page)
     +-- views           (Single view/page; have app/database logic)
     +-- components      (Are doing 1 thing; Receive data from view/page)
-    +-- mixins          (Shared JS code)
+    +-- functions       (Shared JS functions to call within "setup"; Replaces "mixins")
     +-- directives      (Directives plugins)
     +-- assets          (Media files used in components)
     +-- translations    (i18n locales)
