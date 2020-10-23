@@ -97,7 +97,7 @@ export default defineComponent({
     }
 
     async function onTransition(evt, itemPos, itemState){
-      console.log(`Execute the state transition here! ${itemPos}: ${itemState}`);
+      // console.log(`[INFO] Choices.vue, onTransition: Item ${itemPos} | State ${itemState}`);
       // set new state
       if(itemState === s.MIDDLE){  // the previous state was MIDDLE
         if(data.states.every((x) => x === s.MIDDLE)){ // are we still in the initial state? (i.e. all are MIDDLE)
