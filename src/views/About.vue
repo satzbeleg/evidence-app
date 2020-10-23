@@ -108,7 +108,7 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { watch } from "vue";
+import { watchEffect } from "vue";
 
 
 export default {
@@ -117,7 +117,7 @@ export default {
   setup(){
     const { t } = useI18n();
 
-    watch(() => {
+    watchEffect(() => {
       document.title = t('header.about');
     });
 
