@@ -1,5 +1,5 @@
 <template>
-  <a v-on:click="onClick" >
+  <a v-on:click="onClick">
     <div class="card is-quarter" v-bind:id="sentId" :class="stateCss">
       {{ itemPos }}: {{ itemState }}
       <div class="card-content">
@@ -27,10 +27,10 @@ export default defineComponent({
     sentText: String,  // SentenceText
   },
 
-  setup(props, { emit }){
+  setup(props, { emit } ){
 
     async function onClick(evt){
-      console.log("Item.vue: ", evt); // see Choices.vue: onTransition
+      // console.log("[INFO] Item.vue: ", evt); // see Choices.vue: onTransition
       emit('item-selected', evt, props.itemPos, props.itemState)
     }
 
