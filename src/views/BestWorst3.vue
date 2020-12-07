@@ -18,12 +18,12 @@
 
 <script>
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { reactive, watchEffect } from 'vue';
+import { defineComponent, reactive, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 
-export default {
-  name: "BestWorstTwoActions",
+export default defineComponent({
+  name: "BestWorst3",
 
   components: {
     BestWorstChoices
@@ -109,6 +109,6 @@ export default {
     return { data, nextChoice, nextExample }
   },
 
-}
+});
 </script>
 

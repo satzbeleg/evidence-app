@@ -1,5 +1,5 @@
 <template>
-  <a v-on:click="onClick" >
+  <a v-on:click="onClick">
     <div class="card is-quarter" v-bind:id="sentId" :class="stateCss">
       {{ itemPos }}: {{ itemState }}
       <div class="card-content">
@@ -15,7 +15,7 @@
 
 <script>
 import s from './enums.js';
-import { defineComponent } from 'vue'; 
+import { defineComponent, computed } from 'vue'; 
 
 export default defineComponent({
   name: "BestWorstItem",
@@ -27,26 +27,24 @@ export default defineComponent({
     sentText: String,  // SentenceText
   },
 
-  // setup(props){
-  //   console.log(props)
-  //   return { ...toRefs(props) }
-  // },
+  setup(props, { emit } ){
 
-  methods: {
-    onClick(evt){
-      this.$emit('item-selected', evt, this.itemPos, this.itemState)
-    },
-  },
+    async function onClick(evt){
+      // console.log("[INFO] Item.vue: ", evt); // see Choices.vue: onTransition
+      emit('item-selected', evt, props.itemPos, props.itemState)
+    }
 
-  computed: {
-    stateCss(){ // change CSS class for each state
-      switch(this.itemState){
+    const stateCss = computed(() => { // change CSS class for each state
+      switch(props.itemState){
         case s.BEST:  return "state-best";
         case s.WORST: return "state-worst";
         default: return "";
       }
-    }
-  }
+    })
+
+    return { onClick, stateCss }
+  },
+
 });
 </script>
 

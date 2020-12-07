@@ -89,7 +89,6 @@ Misc
     +-- App.vue
     +-- main.js
     +-- registerServiceWorker.js
-    +-- i18n.js
     +-- router          (Route to a specific view/page)
     +-- views           (Single view/page; have app/database logic)
     +-- components      (Are doing 1 thing; Receive data from view/page)
@@ -98,7 +97,6 @@ Misc
     +-- assets          (Media files used in components)
     +-- translations    (i18n locales)
     +-- store           (Vuex state management, SSOT)
-    +-- api             (abstractions for making API requests)
 ```
 
 Readings: 
