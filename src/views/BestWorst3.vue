@@ -18,7 +18,7 @@
 
 <script>
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { reactive, watch } from 'vue';
+import { reactive, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 
 
@@ -32,7 +32,7 @@ export default {
   setup(){
     const { t } = useI18n();
 
-    watch(() => {
+    watchEffect(() => {
       document.title = t('bestworst.title');
     });
 

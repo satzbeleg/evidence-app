@@ -63,7 +63,7 @@
 
 <script>
 import { useI18n } from 'vue-i18n';
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
 import { useLoginAuth } from '@/functions/axios-evidence.js';
 
@@ -75,7 +75,7 @@ export default defineComponent({
     // multi-lingual support
     const { t, locale } = useI18n();
 
-    watch(() => {
+    watchEffect(() => {
       document.title = t('auth.login_noun');
     });
 
