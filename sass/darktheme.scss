@@ -26,6 +26,13 @@ $white: hsl(0, 0%, 0%) !default;
 
 $primary: #ff8a65; // #ff8a65 #c75b39 #ffbb93
 
+/** bulma card settings
+ * https://bulma.io/documentation/components/card/#variables
+ */
+
+$card-shadow: 0 0.75em 1.5em -0.125em rgba($black, 0.1),
+0 0px 0 1px rgba($grey, 0.2);
+
 /** load all other dynamic css generators 
  */
 
