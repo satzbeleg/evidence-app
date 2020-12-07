@@ -10,12 +10,10 @@
       <div class="card">
         <div class="card-content">
           <h1 class="title is-4">
-            Best-Worst Scaling
+            {{ t('menu.bestworst3') }}
           </h1>
           <div class="content">
-            Es werden 4 Satzbeispiele angezeigt. 
-            Markiere zuerst das <strong>beste</strong> Satzbeispiel an.
-            Zum Schluß wähle noch das <strong>schlechteste</strong> Satzbeispiel aus.
+            {{ t('menu.bestworst3_text2') }}
           </div>
 
           <router-link :to="{ path: '/bestworst3' }">

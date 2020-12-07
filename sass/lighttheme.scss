@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+/** Initial variables
+ * - see bulma/sass/utilities/initial-variables.sass
+ * - see https://bulma.io/documentation/customize/variables/#initial-variables   
+ */
+
+
+/** Set the derived variables
+ * - Violet as primary color, see https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=ff8a65&secondary.color=673AB7
+ * - see https://bulma.io/documentation/customize/variables/#derived-variables
+ */
+
+$primary: #ff8a65; // #ff8a65 #c75b39 #ffbb93
+//$primary:#673ab7; // #673ab7 #9a67ea #320b86
+
+/** load all other dynamic css generators 
+ */
+
+@import "../node_modules/bulma/bulma.sass";
+//@import "../node_modules/buefy/src/scss/buefy";

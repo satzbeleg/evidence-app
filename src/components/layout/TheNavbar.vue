@@ -67,18 +67,18 @@
 
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
-            Satzbeispiele bewerten
+            {{ t('menu.evaluate') }}
           </a>
 
           <div class="navbar-dropdown">
 
             <router-link class="navbar-item" :to="{ path: '/bestworst3' }">
               <div class="media">
-                <span class="icon is-primary"><i class="fas fa-mobile-alt"></i></span>
+                <span class="icon is-primary"><i class="fas fa-random"></i></span>
                 <div class="media-content">
-                  <strong>Best-Worst Ranking</strong>
+                  <strong>{{ t('menu.bestworst3') }}</strong>
                   <br />
-                  <small>Wähle zuerst das beste Satzbeispiel und dann das schlechteste Beispiel aus.</small>
+                  <small>{{ t('menu.bestworst3_text') }}</small>
                 </div>
               </div>
             </router-link>

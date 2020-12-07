@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "css-build": "node-sass --omit-source-map-url sass/darktheme.scss public/css/darktheme.css"
+    "css-build": "node-sass --omit-source-map-url sass/darktheme.scss public/css/darktheme.css && node-sass --omit-source-map-url sass/lighttheme.scss public/css/lighttheme.css"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.14.0",

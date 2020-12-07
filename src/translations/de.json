@@ -30,5 +30,11 @@
   },
   "bestworst": {
     "title": "BWS Ranking"
+  },
+  "menu": {
+    "evaluate": "Bewerten",
+    "bestworst3": "Best-Worst Scaling",
+    "bestworst3_text": "Wähle das beste & schlechteste von vier Beispielen",
+    "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Markiere zuerst das beste Satzbeispiel an. Zum Schluß wähle noch das schlechteste Satzbeispiel aus."
   }
 }
