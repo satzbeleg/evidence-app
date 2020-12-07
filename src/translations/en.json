@@ -30,5 +30,11 @@
   },
   "bestworst": {
     "title": "Best Worst Scaling"
+  },
+  "menu": {
+    "evaluate": "Evaluate",
+    "bestworst3": "Best-Worst Scaling",
+    "bestworst3_text": "Select the best and worst out of four example",
+    "bestworst3_text2": "4 sentence examples are displayed. First mark the best sentence example. Finally, select the worst sentence example."
   }
 }
