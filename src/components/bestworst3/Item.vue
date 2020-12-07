@@ -1,7 +1,6 @@
 <template>
   <a v-on:click="onClick">
     <div class="card is-quarter" v-bind:id="sentId" :class="stateCss">
-      {{ itemPos }}: {{ itemState }}
       <div class="card-content">
         <div class="content center">
           <div v-fit2box="sentText" class="fixed-box" ></div>
@@ -76,11 +75,13 @@ export default defineComponent({
 
 /** style the card depending on the state */
 .state-best {
-  background: hsl(141, 71%, 48%);
+  background: hsl(141, 30%, 60%);
+  box-shadow: 0 0.25em 0.75em -0.125em, 0 0px 0 1px;
 }
 
 .state-worst {
-  background: hsl(348, 100%, 61%);
+  background: hsl(348, 30%, 60%);
+  box-shadow: 0 0.25em 0.75em -0.125em, 0 0px 0 1px;
 }
 </style>
 
