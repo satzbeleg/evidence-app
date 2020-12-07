@@ -75,13 +75,11 @@ export default defineComponent({
 
 /** style the card depending on the state */
 .state-best {
-  background: hsl(141, 30%, 60%);
-  color: darkgray;
+  background: hsl(141, 50%, 60%);
 }
 
 .state-worst {
   background: hsl(348, 30%, 60%);
-  color: darkgray;
 }
 </style>
 
