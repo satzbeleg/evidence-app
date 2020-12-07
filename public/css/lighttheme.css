@@ -6,6 +6,9 @@
  * - Violet as primary color, see https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=ff8a65&secondary.color=673AB7
  * - see https://bulma.io/documentation/customize/variables/#derived-variables
  */
+/** bulma card settings
+ * https://bulma.io/documentation/components/card/#variables
+ */
 /** load all other dynamic css generators 
  */
 /*! bulma.io v0.9.0 | MIT License | github.com/jgthms/bulma */
@@ -2984,7 +2987,7 @@ a.tag:hover {
 
 .card {
   background-color: white;
-  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
+  box-shadow: 0 0.75em 1.5em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(245, 245, 245, 0.2);
   color: #4a4a4a;
   max-width: 100%;
   position: relative; }

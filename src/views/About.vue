@@ -28,19 +28,19 @@
       <div class="content">
         <ul>
           <li>
-            <a target="_blank" href="https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander">
+            <a target="_blank" href="https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander">
               PD. Dr. Alexander Geyken
             </a>
             (Projektleiter, BBAW)
           </li>
           <li>
-            <a target="_blank" href="https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf">
+            <a target="_blank" href="https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf">
               Ulf Hamster 
             </a>
             (Wissenschaftlicher Mitarbeiter, BBAW)
           </li>
           <li>
-            <a target="_blank" href="https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp">
+            <a target="_blank" href="https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp">
               Ji-Ung Lee 
             </a>
             (Wissenschaftlicher Mitarbeiter, UKP)
@@ -88,12 +88,12 @@
       <div class="content">
         <ul>
           <li>
-            <a target="_blank" href="https://gepris.dfg.de/gepris/projekt/433249742">
+            <a target="_blank" href="https://web.archive.org/web/20201207165047/https://gepris.dfg.de/gepris/projekt/433249742?context=projekt&task=showDetail&id=433249742">
               GEPRIS, Projektnummer 433249742
             </a>
           </li>
           <li>
-            <a target="_blank" href="https://www.informatik.tu-darmstadt.de/ukp/research_6/current_projects/ukp_evidence/ukp_project_evidence.en.jsp">
+            <a target="_blank" href="https://web.archive.org/web/20201207164749/https://www.informatik.tu-darmstadt.de/ukp/research_6/current_projects/ukp_evidence/ukp_project_evidence.en.jsp">
               Projekt-Webseite des UKP
             </a>
           </li>
