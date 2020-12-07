@@ -1,6 +1,11 @@
 @charset "utf-8";
-// invert white/gray/dark
-// bulma/sass/utilities/initial-variables.sas
+
+/** Initial variables
+ * - invert white/gray/dark
+ * - see bulma/sass/utilities/initial-variables.sass
+ * - see https://bulma.io/documentation/customize/variables/#initial-variables   
+ */
+
 $black: hsl(0, 0%, 96%) !default;
 $black-bis: hsl(0, 0%, 93%) !default;
 $black-ter: hsl(0, 0%, 86%) !default;
@@ -13,6 +18,16 @@ $grey-lightest: hsl(0, 0%, 7%) !default;
 $white-ter: hsl(0, 0%, 4%) !default;
 $white-bis: hsl(0, 0%, 2%) !default;
 $white: hsl(0, 0%, 0%) !default;
-// load all other dynamic css generators
+
+/** Set the derived variables
+ * - Orange as primary color, see https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=ff8a65&secondary.color=673AB7
+ * - see https://bulma.io/documentation/customize/variables/#derived-variables
+ */
+
+$primary: #ff8a65; // #ff8a65 #c75b39 #ffbb93
+
+/** load all other dynamic css generators 
+ */
+
 @import "../node_modules/bulma/bulma.sass";
-@import "../node_modules/buefy/src/scss/buefy";
+//@import "../node_modules/buefy/src/scss/buefy";
