@@ -11,31 +11,38 @@ export default {
     },
 
     CHANGE_THEME: (state) => {
+      var elem = undefined;
       if (state.isDarkMode) {
         // enable darktheme.css
-        let elem = document.createElement("link");
+        elem = document.querySelector("#dark-theme");
+        if (!elem) {
+          elem = document.createElement("link");
+        }
         elem.setAttribute("id", "dark-theme");
         elem.setAttribute("rel", "stylesheet");
         elem.setAttribute("href", "/css/darktheme.css");
         document.querySelector("head").append(elem);
         // disable lighttheme.css
-        let elem2 = document.querySelector("#light-theme");
-        if (elem2) {
-          let parent = elem2.parentNode;
-          parent.removeChild(elem2);
+        elem = document.querySelector("#light-theme");
+        if (elem) {
+          let parent = elem.parentNode;
+          parent.removeChild(elem);
         }
       } else {
         // enable lighttheme.css
-        let elem = document.createElement("link");
+        elem = document.querySelector("#light-theme");
+        if (!elem) {
+          elem = document.createElement("link");
+        }
         elem.setAttribute("id", "light-theme");
         elem.setAttribute("rel", "stylesheet");
         elem.setAttribute("href", "/css/lighttheme.css");
         document.querySelector("head").append(elem);
         // disable darktheme.css
-        let elem2 = document.querySelector("#dark-theme");
-        if (elem2) {
-          let parent = elem2.parentNode;
-          parent.removeChild(elem2);
+        elem = document.querySelector("#dark-theme");
+        if (elem) {
+          let parent = elem.parentNode;
+          parent.removeChild(elem);
         }
       }
     },
