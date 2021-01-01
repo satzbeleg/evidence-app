@@ -23,6 +23,21 @@ Useful commands:
 Fixes:
 - "Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime": Run `npm rebuild node-sass`
 
+
+## Login bei lokaler Entwicklung: CORS Error
+Wenn REST API und Web App auf demselben Host laufen, dann wird es beim Login zu einem "CORS" Error kommen, z.B. 
+
+```
+Access to XMLHttpRequest at 'http://0.0.0.0:55017/v1/auth/login' 
+from origin 'http://localhost:8080' has been blocked by CORS policy: 
+Response to preflight request doesn't pass access control check: 
+No 'Access-Control-Allow-Origin' header is present on the requested resource.
+```
+
+Um CORS zu deaktivieren installiere das Chrome Plugin ["Moesif CORS"](https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc) oder das entsprechende [Firefox Plugin](https://addons.mozilla.org/en-US/firefox/addon/moesif-origin-cors-changer1/). Stelle im Plugin den Status auf **"off"**. 
+
+
+
 ## Used plugins
 Vue.js
 - Upgrade from Vue2 to Vue3: 
