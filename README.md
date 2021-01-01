@@ -5,7 +5,8 @@
 UI for the EVIDENCE project (BBAW/TUD)
 
 ## Project setup
-```
+
+```bash
 yarn install
 yarn global add @vue/cli
 ```

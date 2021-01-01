@@ -13,7 +13,7 @@ import Cookies from 'js-cookie';
 export const useApi = (token) => {
   // Creat an axios api instance. 
   const api = axios.create({
-    baseURL: process.env.VUE_APP_API_URL || 'http://0.0.0.0:53050',
+    baseURL: process.env.VUE_APP_API_URL || 'http://0.0.0.0:55017',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -61,7 +61,7 @@ export const useLoginAuth = () => {
       const { api } = useApi();
       api.post('v1/auth/login', params)
         .then(resp => {
-          authStatus.value = 'success';  // save JWT token in Cookie and axios
+          authStatus.value = 'success'; // save JWT token in Cookie and axios
           jwtToken.value = resp.data.access_token;
           Cookies.set('auth_token', resp.data.access_token, { expires: 7, sameSite: 'strict' }); //{ secure: true }
           //api.defaults.headers.common['Authorization'] = resp.data.access_token;
@@ -82,7 +82,7 @@ export const useLoginAuth = () => {
 
   const logout = () => {
     return new Promise(resolve => {
-      authStatus.value = 'logout';  // delete JWT token from Cookie and axios
+      authStatus.value = 'logout'; // delete JWT token from Cookie and axios
       jwtToken.value = undefined;
       Cookies.remove('auth_token');
       //delete api.defaults.headers.common['Authorization'];
@@ -91,13 +91,13 @@ export const useLoginAuth = () => {
   }
 
   const tryRelogin = () => {
-      jwtToken.value = Cookies.get('auth_token');
+    jwtToken.value = Cookies.get('auth_token');
   }
   tryRelogin();
 
   const isAuthenticated = computed(() => !!jwtToken.value);
 
-  return { 
+  return {
     login,
     logout,
     tryRelogin,
