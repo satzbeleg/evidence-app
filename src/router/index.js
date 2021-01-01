@@ -16,12 +16,6 @@ const routes = [{
       import ( /* webpackPreload: true */ '../views/Login.vue')
   },
   {
-    path: '/signup',
-    name: 'SignUp',
-    component: () =>
-      import ( /* webpackPreload: true */ '../views/SignUp.vue')
-  },
-  {
     path: '/about',
     name: 'About',
     component: () =>
@@ -58,8 +52,8 @@ const router = createRouter({
 /** check if route requires auth */
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-  const { isAuthenticated } = useLoginAuth()  // we must use .value becoz it's a ref()
-  // console.log( isAuthenticated.value, isAuthenticated )
+  const { isAuthenticated } = useLoginAuth() // we must use .value becoz it's a ref()
+    // console.log( isAuthenticated.value, isAuthenticated )
   if (requiresAuth && !isAuthenticated.value) {
     next({
       path: '/login',

@@ -24,6 +24,17 @@ Fixes:
 - "Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime": Run `npm rebuild node-sass`
 
 
+## Benutzerkonten (Sign Up)
+Benutzerkonten werden manuell von [Admin](mailto:hamster@bbaw.de) in der [SQL Datenbank](https://git.zdl.org/hamster/evidence-database) erstellt. 
+Dies ist eine Zwischenlösung bis die [DWDS Auth API](https://git.zdl.org/knaebel/dwds-oauth2) in Betrieb geht (Ansprechpartner: Frank Wiegand und Rene Knaebel).
+Daher wird auch kein Sign Up und PW-Wiederherstellung im Evidence Projekt implementiert.
+
+Testkonten
+
+- username: `test1` / password: `geheim1`  (Test User in REST API)
+- username: `test2` / password: `geheim2`  (Test User in Datenbank)
+
+
 ## Login bei lokaler Entwicklung: CORS Error
 Wenn REST API und Web App auf demselben Host laufen, dann wird es beim Login zu einem "CORS" Error kommen, z.B. 
 
