@@ -79,22 +79,24 @@ export default defineComponent({
     }
 
     // Fetch new data into queue
-    const replenishQueue = () => {
+    const replenishQueue = (orderquantity = 10) => {
+      //console.log("Start to replenish data.queue from database");
       return new Promise((resolve, reject) => {
         const { api } = useApi(Cookies.get('auth_token'));
-        api.get('v1/bestworst/random/4/5')
+        api.get(`v1/bestworst/random/4/${orderquantity}`)
         .then(resp => {
-          console.log("RESPONSE: ", resp);
+          //console.log("RESPONSE: ", resp);
           //data.queue.push({"set_id": "some-rnd-id-generated-5", "examples": resp.data});
           resp.data.forEach(exset => data.queue.push(exset));
           resolve(resp);
         })
         .catch(err => {
-          console.log("ERROR: ", err);
+          //console.log("ERROR: ", err);
           reject(err);
         })
         .finally(() => {
-          console.log("DONE: Yeah");
+          //console.log("DONE: Yeah");
+          console.log("Queue replenished up to ", data.queue.length, " examplesets");
         });
       });
     }
@@ -103,11 +105,9 @@ export default defineComponent({
     watch(
       () => data.queue.length,
       (stocklevel) => {
-        if (stocklevel <= 3){
+        const reorderpoint = 3;
+        if (stocklevel < reorderpoint){
           console.log("Queue is running low: ", stocklevel, " examplesets")
-          console.log("Start to replenish data.queue from database")
-          //data.queue = data.queue.concat(tmpdata.downloaded)
-          //tmpdata.downloaded.forEach(ex => data.queue.push(ex))
           replenishQueue();
         }
       }
