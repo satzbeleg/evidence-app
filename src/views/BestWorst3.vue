@@ -44,12 +44,13 @@ export default defineComponent({
 
       // The current BWS-exampleset displayed inside the app
       current: [],
+      current_setid: undefined,
 
       // Use to trigger component re-rendering with :key
       counter: 1,
 
       // Move this to Vuex lateron
-      ranked: [],
+      evaluated: [],
     });
 
     async function nextChoice(){
@@ -60,19 +61,27 @@ export default defineComponent({
       // read 1st element, and delete it from queue (FIFO principle)
       const tmp = data.queue.shift()
       if (typeof tmp !== 'undefined' ){
-        data.current = tmp.examples
+        data.current = tmp.examples;
+        data.current_setid = tmp.set_id;
       }else{
-        data.current = []
+        data.current = [];
+        data.current_setid = undefined;
       }
     }
 
     async function nextExample(history){
-      data.ranked.push(JSON.parse(JSON.stringify(history)));
+      // TODO: We need to store more data
+      data.evaluated.push({
+        'set_id': data.current_setid,
+        'examples': JSON.parse(JSON.stringify(data.current)),
+        'evaluations': JSON.parse(JSON.stringify(history))
+      });
+
       nextChoice();
       data.counter++; // enforce rerendering via :key
       // save results in bulk
       if(data.counter > 3){ // timeout
-        console.log(data.counter, data.ranked)
+        console.log(data.counter, data.evaluated)
         data.counter = 1
       }
       // 
@@ -107,8 +116,51 @@ export default defineComponent({
       (stocklevel) => {
         const reorderpoint = 3;
         if (stocklevel < reorderpoint){
-          console.log("Queue is running low: ", stocklevel, " examplesets")
+          console.log(`Queue is running low: ${stocklevel} examplesets`);
           replenishQueue();
+        }
+      }
+    );
+
+    // save evaluation
+    const saveEvaluations = () => {
+      var num_evals = data.evaluated.length;
+      var num_stored = 0;
+      console.log(`Try to save ${num_evals} example sets from data.evaluated in the DB.`);
+
+      return new Promise((resolve, reject) => {
+        const { api } = useApi(Cookies.get('auth_token'));
+        console.log(data.evaluated)
+        api.post(`v1/bestworst/evaluations`, data.evaluated)
+        .then(resp => {
+          //console.log("RESPONSE: ", resp);
+          //data.queue.push({"set_id": "some-rnd-id-generated-5", "examples": resp.data});
+          console.log("response: ", resp.data['stored-setids']);
+          resp.data['stored-setids'].forEach(setid => {
+            const idx = data.evaluated.findIndex(elem => elem['set_id'] == setid);
+            data.evaluated.splice(idx, 1);
+          });
+          num_stored = num_evals - data.evaluated.length
+          resolve(resp);
+        })
+        .catch(err => {
+          //console.log("ERROR: ", err);
+          reject(err);
+        })
+        .finally(() => {
+          //console.log("DONE: Yeah");
+          console.log(`Stored example sets: ${num_stored}`);
+        });
+      });
+    }
+
+    // trigger AJAX to post evaluated BWS-exampleset
+    watch(
+      () => data.evaluated.length,
+      (num_evaluated) => {
+        if (num_evaluated > 0){
+          console.log(`Number of evaluated BWS-examplesets ready to save: ${num_evaluated}`);
+          saveEvaluations();
         }
       }
     )
