@@ -1,10 +1,10 @@
 <template>
   <section class="section">
-    <div class="container is-centered">
+    <div class="container is-centered">      
       <template v-if="data.current.length > 0">
         <BestWorstChoices 
           v-bind:items="data.current"
-          v-on:ranking-done="nextExample"
+          v-on:ranking-done="nextExampleSet"
           :key="data.counter"
         />
       </template>
@@ -18,8 +18,12 @@
 
 <script>
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { defineComponent, reactive, watchEffect } from 'vue';
+import { defineComponent, reactive, watchEffect, watch, computed, unref } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { useApi } from '@/functions/axios-evidence.js';
+import Cookies from 'js-cookie';
+import { useStore } from 'vuex';
+// import { useSettings } from '@/functions/settings.js';
 
 
 export default defineComponent({
@@ -30,83 +34,135 @@ export default defineComponent({
   },
 
   setup(){
+    // multi-lingual settings
     const { t } = useI18n();
 
     watchEffect(() => {
       document.title = t('bestworst.title');
     });
 
-    const data = reactive({
-      /** Array with unlabelled example sets. It's a FIFO queue */
-      queue: [{
-          "set_id": "some-rnd-id-generated-1",
-          "examples": [
-            { "id": "23", "text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." },
-            { "id": "34", "text": "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat." },
-            { "id": "45", "text": "Duis aute irure dolor in  reprehenderit in voluptate velit esse cillum sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur." },
-            { "id": "56", "text": "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum." }
-          ]
-        },
-        {
-          "set_id": "some-rnd-id-generated-2",
-          "examples": [
-            { "id": "121", "text": "Es gibt im Moment in diese Mannschaft, oh, einige Spieler vergessen ihnen Profi was sie sind. Ich lese nicht sehr viele Zeitungen, aber ich habe gehört viele Situationen. Erstens: wir haben nicht offensiv gespielt. Es gibt keine deutsche Mannschaft spielt offensiv und die Name offensiv wie Bayern. Letzte Spiel hatten wir in Platz drei Spitzen: Elber, Jancka und dann Zickler. Wir müssen nicht vergessen Zickler. Zickler ist eine Spitzen mehr, Mehmet eh mehr Basler. Ist klar diese Wörter, ist möglich verstehen, was ich hab gesagt? Danke. Offensiv, offensiv ist wie machen wir in Platz." },
-            { "id": "122", "text": "Er konnte die Aufforderung stehen zu bleiben schon hören. Gehetzt sah er sich um. Plötzlich erblickte er den schmalen Durchgang. Blitzartig drehte er sich nach rechts und verschwand zwischen den beiden Gebäuden." },
-            { "id": "123", "text": "Ich habe gesehen auch zwei Tage die Training. Ein Trainer ist nicht ein Idiot! Ein Trainer sei sehen was passieren in Platz. In diese Spiel es waren zwei, drei diese Spieler waren schwach wie eine Flasche leer! Haben Sie gesehen Mittwoch, welche Mannschaft hat gespielt Mittwoch? Hat gespielt Mehmet oder gespielt Basler oder hat gespielt Trapattoni? Diese Spieler beklagen mehr als sie spielen!" },
-            { "id": "124", "text": "Seit 1975 fehlen in den meisten Testtexten die Zahlen, weswegen nach TypoGb. 204 § ab dem Jahr 2034 Zahlen in 86 der Texte zur Pflicht werden. Nichteinhaltung wird mit bis zu 245 € oder 368 $ bestraft." }
-          ]
-        },
-        {
-          "set_id": "some-rnd-id-generated-3",
-          "examples": [
-            { "id": "291", "text": "Eine wunderbare Heiterkeit hat meine ganze Seele eingenommen, gleich den süßen Frühlingsmorgen, die ich mit ganzem Herzen genieße." },
-            { "id": "292", "text": "Li Europan lingues es membres del sam familie. Lor separat existentie es un myth. Por scientie, musica, sport etc, litot Europa usa li sam vocabular." },
-            { "id": "293", "text": "Zwei flinke Boxer jagen die quirlige Eva und ihren Mops durch Sylt." },
-            { "id": "294", "text": "Überall dieselbe alte Leier." },
-          ]
-        },
-        {
-          "set_id": "some-rnd-id-generated-4",
-          "examples": [
-            { "id": "391", "text": "lkfgakjlkdkgl." },
-            { "id": "392", "text": "kfdlmfdlgmkfdfl" },
-            { "id": "393", "text": "dsafdasggfg" },
-            { "id": "394", "text": "dsafdsg" },
-          ]
-        }
-      ],
+    // Load bestworst3 UI settings from Vuex
+    // const { reorderpoint, orderquantity } = useSettings();
+    const store = useStore();
+    const reorderpoint = computed(() => store.getters['settings/bestworst3/getR']);
+    const orderquantity = computed(() => store.getters['settings/bestworst3/getQ']);
+    console.log(unref(reorderpoint), unref(orderquantity))
 
-      // 
+    // reactive data of this component
+    const data = reactive({
+      // Array with unlabelled example sets. It's a FIFO queue
+      queue: [],
+
+      // The current BWS-exampleset displayed inside the app
       current: [],
+      current_setid: undefined,
 
       // Use to trigger component re-rendering with :key
       counter: 1,
 
-      // Move this to Vuex lateron
-      ranked: [],
+      // Post this to the REST API (see saveEvaluations)
+      evaluated: [],
     });
 
-    async function nextChoice(){
-      // read 1st element, and delete it from queue (FIFO principle)
+    // Replenish data.queue from database (load new example sets into queue)
+    //const replenishQueue = (orderquantity = 10) => {
+    const replenishQueue = () => {
+      return new Promise((resolve, reject) => {
+        const { api } = useApi(Cookies.get('auth_token'));
+        api.get(`v1/bestworst/random/4/${unref(orderquantity)}`)
+        .then(response => {
+          // copy all example sets
+          response.data.forEach(exset => data.queue.push(exset));
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        })
+        .finally(() => {
+          console.log(`Queue replenished to ${data.queue.length} examplesets`);
+        });
+      });
+    }
+
+    // Pull new current example set from queue
+    async function pullFromQueue(){
+      // Trigger initial replenishment if the data.queue is empty
+      if (data.queue.length == 0){
+        await replenishQueue();  // wait till finished
+      }
+      // Read the 1st element, and delete it from queue (FIFO principle)
       const tmp = data.queue.shift()
       if (typeof tmp !== 'undefined' ){
-        data.current = tmp.examples
+        data.current = tmp.examples;
+        data.current_setid = tmp.set_id;
       }else{
-        data.current = []
+        data.current = [];
+        data.current_setid = undefined;
       }
     }
 
-    async function nextExample(history){
-      data.ranked.push(JSON.parse(JSON.stringify(history)));
-      nextChoice();
-      data.counter++
-      // console.log(data.counter, data.ranked)
+    // Store evaluation results, pull next example set from queue, trigger re-rendering
+    async function nextExampleSet(history){
+      // Store latest evaluation
+      data.evaluated.push({
+        'set_id': data.current_setid,
+        'examples': JSON.parse(JSON.stringify(data.current)),
+        'evaluations': JSON.parse(JSON.stringify(history))
+      });
+      // Load the next example set
+      pullFromQueue();
+      // enforce rerendering via :key
+      data.counter++;
     }
 
-    // created
-    nextChoice()
+    // trigger AJAX request to replenish the queue
+    watch(
+      () => data.queue.length,
+      (stocklevel) => {
+        //const reorderpoint = 3;
+        if (stocklevel < reorderpoint.value){
+          console.log(`Queue is running low: ${stocklevel} examplesets`);
+          replenishQueue();
+        }
+      }
+    );
 
-    return { data, nextChoice, nextExample }
+    // save evaluated sets into the databse
+    const saveEvaluations = () => {
+      return new Promise((resolve, reject) => {
+        const { api } = useApi(Cookies.get('auth_token'));
+        api.post(`v1/bestworst/evaluations`, data.evaluated)
+        .then(response => {
+          // delete evaluated sets if API confirms its storage
+          response.data['stored-setids'].forEach(setid => {
+            const idx = data.evaluated.findIndex(elem => elem['set_id'] == setid);
+            data.evaluated.splice(idx, 1);
+          });
+          // console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        })
+        .finally(() => {});
+      });
+    }
+
+    // trigger AJAX to post evaluated BWS-exampleset
+    watch(
+      () => data.evaluated.length,
+      (num_evaluated) => {
+        if (num_evaluated > 0){
+          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
+          saveEvaluations();
+        }
+      }
+    )
+
+    // load initial current BWS-exampleset
+    pullFromQueue();
+
+    return { data, pullFromQueue, nextExampleSet, reorderpoint, orderquantity }
   },
 
 });

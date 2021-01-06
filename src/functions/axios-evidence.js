@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios from 'axios';
 
 import { ref, computed } from 'vue';
 import Cookies from 'js-cookie';

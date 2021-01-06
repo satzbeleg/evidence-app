@@ -8,7 +8,7 @@ services:
     ports:
       - "55018:8080"
     networks:
-      evidence-frontend-backend:
+      evidence-frontend-network:
         ipv4_address: 172.20.253.17
 
 networks:
