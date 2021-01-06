@@ -4,7 +4,7 @@
       <template v-if="data.current.length > 0">
         <BestWorstChoices 
           v-bind:items="data.current"
-          v-on:ranking-done="nextExample"
+          v-on:ranking-done="nextExampleSet"
           :key="data.counter"
         />
       </template>
@@ -49,16 +49,17 @@ export default defineComponent({
       // Use to trigger component re-rendering with :key
       counter: 1,
 
-      // Move this to Vuex lateron
+      // Post this to the REST API (see saveEvaluations)
       evaluated: [],
     });
 
-    async function nextChoice(){
+    // Pull new current example set from queue
+    async function pullFromQueue(){
       // Trigger initial replenishment if the data.queue is empty
       if (data.queue.length == 0){
         await replenishQueue();  // wait till finished
       }
-      // read 1st element, and delete it from queue (FIFO principle)
+      // Read the 1st element, and delete it from queue (FIFO principle)
       const tmp = data.queue.shift()
       if (typeof tmp !== 'undefined' ){
         data.current = tmp.examples;
@@ -69,22 +70,18 @@ export default defineComponent({
       }
     }
 
-    async function nextExample(history){
-      // TODO: We need to store more data
+    // Store evaluation results, pull next example set from queue, trigger re-rendering
+    async function nextExampleSet(history){
+      // Store latest evaluation
       data.evaluated.push({
         'set_id': data.current_setid,
         'examples': JSON.parse(JSON.stringify(data.current)),
         'evaluations': JSON.parse(JSON.stringify(history))
       });
-
-      nextChoice();
-      data.counter++; // enforce rerendering via :key
-      // save results in bulk
-      if(data.counter > 3){ // timeout
-        console.log(data.counter, data.evaluated)
-        data.counter = 1
-      }
-      // 
+      // Load the next example set
+      pullFromQueue();
+      // enforce rerendering via :key
+      data.counter++;
     }
 
     // Fetch new data into queue
@@ -94,17 +91,13 @@ export default defineComponent({
         const { api } = useApi(Cookies.get('auth_token'));
         api.get(`v1/bestworst/random/4/${orderquantity}`)
         .then(resp => {
-          //console.log("RESPONSE: ", resp);
-          //data.queue.push({"set_id": "some-rnd-id-generated-5", "examples": resp.data});
           resp.data.forEach(exset => data.queue.push(exset));
           resolve(resp);
         })
         .catch(err => {
-          //console.log("ERROR: ", err);
           reject(err);
         })
         .finally(() => {
-          //console.log("DONE: Yeah");
           console.log("Queue replenished up to ", data.queue.length, " examplesets");
         });
       });
@@ -133,9 +126,7 @@ export default defineComponent({
         console.log(data.evaluated)
         api.post(`v1/bestworst/evaluations`, data.evaluated)
         .then(resp => {
-          //console.log("RESPONSE: ", resp);
-          //data.queue.push({"set_id": "some-rnd-id-generated-5", "examples": resp.data});
-          console.log("response: ", resp.data['stored-setids']);
+          //console.log("response: ", resp.data['stored-setids']);
           resp.data['stored-setids'].forEach(setid => {
             const idx = data.evaluated.findIndex(elem => elem['set_id'] == setid);
             data.evaluated.splice(idx, 1);
@@ -144,11 +135,9 @@ export default defineComponent({
           resolve(resp);
         })
         .catch(err => {
-          //console.log("ERROR: ", err);
           reject(err);
         })
         .finally(() => {
-          //console.log("DONE: Yeah");
           console.log(`Stored example sets: ${num_stored}`);
         });
       });
@@ -166,9 +155,9 @@ export default defineComponent({
     )
 
     // load initial current BWS-exampleset
-    nextChoice();
+    pullFromQueue();
 
-    return { data, nextChoice, nextExample }
+    return { data, pullFromQueue, nextExampleSet }
   },
 
 });
