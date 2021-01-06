@@ -1,6 +1,6 @@
 <template>
   <section class="section">
-    <div class="container is-centered">
+    <div class="container is-centered">      
       <template v-if="data.current.length > 0">
         <BestWorstChoices 
           v-bind:items="data.current"
@@ -18,10 +18,12 @@
 
 <script>
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { defineComponent, reactive, watchEffect, watch } from 'vue';
+import { defineComponent, reactive, watchEffect, watch, computed, unref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi } from '@/functions/axios-evidence.js';
 import Cookies from 'js-cookie';
+import { useStore } from 'vuex';
+// import { useSettings } from '@/functions/settings.js';
 
 
 export default defineComponent({
@@ -32,12 +34,21 @@ export default defineComponent({
   },
 
   setup(){
+    // multi-lingual settings
     const { t } = useI18n();
 
     watchEffect(() => {
       document.title = t('bestworst.title');
     });
 
+    // Load bestworst3 UI settings from Vuex
+    // const { reorderpoint, orderquantity } = useSettings();
+    const store = useStore();
+    const reorderpoint = computed(() => store.getters['settings/bestworst3/getR']);
+    const orderquantity = computed(() => store.getters['settings/bestworst3/getQ']);
+    console.log(unref(reorderpoint), unref(orderquantity))
+
+    // reactive data of this component
     const data = reactive({
       // Array with unlabelled example sets. It's a FIFO queue
       queue: [],
@@ -52,6 +63,26 @@ export default defineComponent({
       // Post this to the REST API (see saveEvaluations)
       evaluated: [],
     });
+
+    // Replenish data.queue from database (load new example sets into queue)
+    //const replenishQueue = (orderquantity = 10) => {
+    const replenishQueue = () => {
+      return new Promise((resolve, reject) => {
+        const { api } = useApi(Cookies.get('auth_token'));
+        api.get(`v1/bestworst/random/4/${unref(orderquantity)}`)
+        .then(response => {
+          // copy all example sets
+          response.data.forEach(exset => data.queue.push(exset));
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        })
+        .finally(() => {
+          console.log(`Queue replenished to ${data.queue.length} examplesets`);
+        });
+      });
+    }
 
     // Pull new current example set from queue
     async function pullFromQueue(){
@@ -84,62 +115,36 @@ export default defineComponent({
       data.counter++;
     }
 
-    // Fetch new data into queue
-    const replenishQueue = (orderquantity = 10) => {
-      //console.log("Start to replenish data.queue from database");
-      return new Promise((resolve, reject) => {
-        const { api } = useApi(Cookies.get('auth_token'));
-        api.get(`v1/bestworst/random/4/${orderquantity}`)
-        .then(resp => {
-          resp.data.forEach(exset => data.queue.push(exset));
-          resolve(resp);
-        })
-        .catch(err => {
-          reject(err);
-        })
-        .finally(() => {
-          console.log("Queue replenished up to ", data.queue.length, " examplesets");
-        });
-      });
-    }
-
     // trigger AJAX request to replenish the queue
     watch(
       () => data.queue.length,
       (stocklevel) => {
-        const reorderpoint = 3;
-        if (stocklevel < reorderpoint){
+        //const reorderpoint = 3;
+        if (stocklevel < reorderpoint.value){
           console.log(`Queue is running low: ${stocklevel} examplesets`);
           replenishQueue();
         }
       }
     );
 
-    // save evaluation
+    // save evaluated sets into the databse
     const saveEvaluations = () => {
-      var num_evals = data.evaluated.length;
-      var num_stored = 0;
-      console.log(`Try to save ${num_evals} example sets from data.evaluated in the DB.`);
-
       return new Promise((resolve, reject) => {
         const { api } = useApi(Cookies.get('auth_token'));
-        console.log(data.evaluated)
         api.post(`v1/bestworst/evaluations`, data.evaluated)
-        .then(resp => {
-          //console.log("response: ", resp.data['stored-setids']);
-          resp.data['stored-setids'].forEach(setid => {
+        .then(response => {
+          // delete evaluated sets if API confirms its storage
+          response.data['stored-setids'].forEach(setid => {
             const idx = data.evaluated.findIndex(elem => elem['set_id'] == setid);
             data.evaluated.splice(idx, 1);
           });
-          num_stored = num_evals - data.evaluated.length
-          resolve(resp);
+          // console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
+          resolve(response);
         })
-        .catch(err => {
-          reject(err);
+        .catch(error => {
+          reject(error);
         })
-        .finally(() => {
-          console.log(`Stored example sets: ${num_stored}`);
-        });
+        .finally(() => {});
       });
     }
 
@@ -148,7 +153,7 @@ export default defineComponent({
       () => data.evaluated.length,
       (num_evaluated) => {
         if (num_evaluated > 0){
-          console.log(`Number of evaluated BWS-examplesets ready to save: ${num_evaluated}`);
+          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
           saveEvaluations();
         }
       }
@@ -157,7 +162,7 @@ export default defineComponent({
     // load initial current BWS-exampleset
     pullFromQueue();
 
-    return { data, pullFromQueue, nextExampleSet }
+    return { data, pullFromQueue, nextExampleSet, reorderpoint, orderquantity }
   },
 
 });
