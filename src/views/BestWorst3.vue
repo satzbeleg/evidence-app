@@ -103,11 +103,14 @@ export default defineComponent({
 
     // Store evaluation results, pull next example set from queue, trigger re-rendering
     async function nextExampleSet(history){
+      // Map states with SentenceIDs (Don't send raw examples `data.current` back to API)
+      var state_sentid = {}
+      data.current.forEach((ex, i) => state_sentid[i] = ex.id)
       // Store latest evaluation
       data.evaluated.push({
-        'set_id': data.current_setid,
-        'examples': JSON.parse(JSON.stringify(data.current)),
-        'evaluations': JSON.parse(JSON.stringify(history))
+        'set_id': data.current_setid,  // Only required for App/API-Sync
+        'evaluations': JSON.parse(JSON.stringify(history)),  // to be stored in DB
+        'state_sentid': state_sentid  // to be stored in DB
       });
       // Load the next example set
       pullFromQueue();
