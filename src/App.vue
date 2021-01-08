@@ -31,6 +31,7 @@ export default {
 @import "~bulma/sass/utilities/_all";
 @import "~bulma";
 @import '~bulma-switch';
+@import '~bulma-slider';
 </style>
 
 

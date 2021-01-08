@@ -2019,6 +2019,11 @@ builtin-status-codes@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
 
+bulma-slider@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/bulma-slider/-/bulma-slider-2.0.4.tgz#c10359dc9e26c357b6718ca827083b611177e453"
+  integrity sha512-JKuU/vp2si5I2rWiHBKaaYWBRECNY1Ow7yNFjxlHdUnPLowNee02K6QYd/ORGEesFPAHXOt+mKPZTEYFhKmviQ==
+
 bulma-switch@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/bulma-switch/-/bulma-switch-2.0.0.tgz#7a187cd1bb8073e9a542478d936b89315f1ffcd8"
