@@ -5,7 +5,11 @@
       <h1 class="title">{{ t('settings.settings') }}</h1>
 
       <h2 class="subtitle">{{ t('settings.appearance') }}</h2>
-      <DarkmodeToggle v-bind:label="t('settings.darkmode')" />
+      <div class="field">
+        <input id="darkmode-toogle" class="switch is-rounded" type="checkbox"   
+               v-model="darkmodetheme">
+        <label for="darkmode-toogle">{{ label }}</label>
+      </div>
 
 
       <h2 class="subtitle">Offline and Sync Settings</h2>
@@ -29,18 +33,17 @@
 
 
 <script>
-import DarkmodeToggle from '@/components/settings/DarkmodeToggle.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
-import { useSettings } from '@/functions/settings.js';
+import { useSettings, useDarkmodeToggle } from '@/functions/settings.js';
 
 
 export default {
   name: "Settings",
 
-  components: {
+  /*components: {
     DarkmodeToggle
-  },
+  },*/
 
   setup(){
     const { t, locale } = useI18n();
@@ -51,9 +54,11 @@ export default {
 
     // load settings (vuex replacement)
     const { reorderpoint, orderquantity } = useSettings();
+    const { darkmodetheme } = useDarkmodeToggle();
     
     return { 
       t, locale,
+      darkmodetheme,
       reorderpoint, orderquantity
     }
   },
