@@ -15,10 +15,6 @@ const app = createApp({
 import router from '@/router';
 app.use(router);
 
-/** Vuex state management */
-import store from '@/store';
-app.use(store);
-
 /** i18n */
 import i18n from '@/translations';
 app.use(i18n);
