@@ -17,14 +17,11 @@
     "bulma-toast": "^2.0.3",
     "core-js": "^3.6.5",
     "js-cookie": "^2.2.1",
-    "localforage": "^1.9.0",
     "messageformat": "^2.3.0",
     "register-service-worker": "^1.7.1",
     "vue": "^3.0.2",
     "vue-i18n": "^9.0.0-beta.2",
-    "vue-router": "^4.0.0-alpha.6",
-    "vuex": "^4.0.0-alpha.1",
-    "vuex-persist": "^3.1.0"
+    "vue-router": "^4.0.0-alpha.6"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",

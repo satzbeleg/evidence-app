@@ -18,12 +18,11 @@
 
 <script>
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { defineComponent, reactive, watchEffect, watch, computed, unref } from 'vue';
+import { defineComponent, reactive, watchEffect, watch, unref } from 'vue'; // computed 
 import { useI18n } from 'vue-i18n';
 import { useApi } from '@/functions/axios-evidence.js';
 import Cookies from 'js-cookie';
-import { useStore } from 'vuex';
-// import { useSettings } from '@/functions/settings.js';
+import { useSettings } from '@/functions/settings.js';
 
 
 export default defineComponent({
@@ -41,12 +40,9 @@ export default defineComponent({
       document.title = t('bestworst.title');
     });
 
-    // Load bestworst3 UI settings from Vuex
-    // const { reorderpoint, orderquantity } = useSettings();
-    const store = useStore();
-    const reorderpoint = computed(() => store.getters['settings/bestworst3/getR']);
-    const orderquantity = computed(() => store.getters['settings/bestworst3/getQ']);
-    console.log(unref(reorderpoint), unref(orderquantity))
+    // Load bestworst3 UI settings
+    const { reorderpoint, orderquantity, loadSettings } = useSettings();
+    
 
     // reactive data of this component
     const data = reactive({
@@ -88,6 +84,7 @@ export default defineComponent({
     async function pullFromQueue(){
       // Trigger initial replenishment if the data.queue is empty
       if (data.queue.length == 0){
+        await loadSettings();  // wait till settings are loaded
         await replenishQueue();  // wait till finished
       }
       // Read the 1st element, and delete it from queue (FIFO principle)
@@ -103,11 +100,14 @@ export default defineComponent({
 
     // Store evaluation results, pull next example set from queue, trigger re-rendering
     async function nextExampleSet(history){
+      // Map states with SentenceIDs (Don't send raw examples `data.current` back to API)
+      var state_sentid = {}
+      data.current.forEach((ex, i) => state_sentid[i] = ex.id)
       // Store latest evaluation
       data.evaluated.push({
-        'set_id': data.current_setid,
-        'examples': JSON.parse(JSON.stringify(data.current)),
-        'evaluations': JSON.parse(JSON.stringify(history))
+        'set_id': data.current_setid,  // Only required for App/API-Sync
+        'evaluations': JSON.parse(JSON.stringify(history)),  // to be stored in DB
+        'state_sentid': state_sentid  // to be stored in DB
       });
       // Load the next example set
       pullFromQueue();

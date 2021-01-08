@@ -122,7 +122,7 @@
 <script>
 // import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
-import DarkmodeIcon from "@/components/settings/DarkmodeIcon.vue";
+import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import { useLoginAuth } from '@/functions/axios-evidence.js';

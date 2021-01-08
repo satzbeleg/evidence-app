@@ -56,11 +56,6 @@ Vue.js
 - [Vue Router](https://router.vuejs.org/): 
     - vue2: `yarn add vue-router` 
     - vue3: https://github.com/vuejs/vue-router-next (Version 4.0.0)
-- [Vuex State Management](https://vuex.vuejs.org/)
-    - vue2: `yarn add vuex`
-    - vue3: Install Version 4.0.0
-    - Sync Vuex states with the browser's localForage API: `yarn add vuex-persist`
-    - localForage (IndexedDB) instead of ~~LocalStorage~~: `yarn add localforage`
 - [Multi-Lang i18n support](https://kazupon.github.io/vue-i18n/): 
     - vue2: `yarn add vue-i18n`
     - vue3: https://github.com/intlify/vue-i18n-next (Version 9.0.0)
@@ -123,11 +118,9 @@ Misc
     +-- directives      (Directives plugins)
     +-- assets          (Media files used in components)
     +-- translations    (i18n locales)
-    +-- store           (Vuex state management, SSOT)
 ```
 
 Readings: 
 
 - [How to Structure a Vue.js Project](https://itnext.io/how-to-structure-a-vue-js-project-29e4ddc1aeeb)
-- [Application Structure for Vuex](https://vuex.vuejs.org/guide/structure.html)
 
