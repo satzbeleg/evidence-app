@@ -7,7 +7,8 @@ const routes = [{
     path: '/',
     name: 'Home',
     component: () =>
-      import ( /* webpackPreload: true */ '../views/Home.vue')
+      import ( /* webpackPreload: true */ '../views/Home.vue'),
+    redirect: '/bestworst3' // REDIRECT FROM HOME(!)
   },
   {
     path: '/login',
@@ -32,7 +33,8 @@ const routes = [{
     path: '/bestworst3',
     name: 'Best-Worst-Scaling with 2 Actions (xstate)',
     component: () =>
-      import ( /* webpackPreload: true */ '../views/BestWorst3.vue')
+      import ( /* webpackPreload: true */ '../views/BestWorst3.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/demo-fit2box',

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { ref, computed } from 'vue';
 import Cookies from 'js-cookie';
 
-
 /**
  * @param {String} endpoint 
  *    The REST API endpoint for the request
@@ -38,6 +37,15 @@ export const useApi = (token) => {
  *    Flag if an API request is still in progress
  * @param {Number} failedLoginAttempts
  *    Counter for failed login attempts
+ * 
+ * EXAMPLE:
+ * --------
+import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
+import router from '@/router';
+const { getToken } = useLoginAuth();
+const token = getToken();
+if (typeof token == 'undefined') {router.push("/login");}
+const { api } = useApi(getToken());
  */
 export const useLoginAuth = () => {
   // declare reactive variables
@@ -90,17 +98,18 @@ export const useLoginAuth = () => {
     });
   }
 
-  const tryRelogin = () => {
+  const getToken = () => {
     jwtToken.value = Cookies.get('auth_token');
+    return jwtToken.value;
   }
-  tryRelogin();
+  getToken();
 
   const isAuthenticated = computed(() => !!jwtToken.value);
 
   return {
     login,
     logout,
-    tryRelogin,
+    getToken,
     isAuthenticated,
     authStatus,
     isLoading,

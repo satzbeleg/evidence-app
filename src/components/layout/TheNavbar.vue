@@ -49,13 +49,19 @@
          v-on:click="showNavBurger = !showNavBurger" v-bind:class="{ 'is-active' : showNavBurger }">
       <div class="navbar-start">
 
+        <!-- DISABLE HOME ICON
         <router-link class="navbar-item" :to="{ path: '/' }">
-          <span class="icon has-text-info"><i class="fas fa-home"></i></span>
+          <span class="icon has-text-primary"><i class="fas fa-home"></i></span>
           <span>{{ t('header.home') }}</span>
+        </router-link>
+        -->
+        <router-link class="navbar-item" :to="{ path: '/' }">
+          <span class="icon has-text-success"><i class="fas fa-play"></i></span>
+          <span>Start</span>
         </router-link>
 
         <router-link class="navbar-item" :to="{ path: '/about' }">
-          <span class="icon has-text-primary"><i class="fas fa-user"></i></span>
+          <span class="icon has-text-info"><i class="fas fa-user"></i></span>
           <span>{{ t('header.about') }}</span>
         </router-link>
 

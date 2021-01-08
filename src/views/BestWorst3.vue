@@ -20,8 +20,7 @@
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
 import { defineComponent, reactive, watchEffect, watch, unref } from 'vue'; // computed 
 import { useI18n } from 'vue-i18n';
-import { useApi } from '@/functions/axios-evidence.js';
-import Cookies from 'js-cookie';
+import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
 import { useSettings } from '@/functions/settings.js';
 
 
@@ -64,7 +63,8 @@ export default defineComponent({
     //const replenishQueue = (orderquantity = 10) => {
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
-        const { api } = useApi(Cookies.get('auth_token'));
+        const { getToken } = useLoginAuth();
+        const { api } = useApi(getToken());
         api.get(`v1/bestworst/random/4/${unref(orderquantity)}`)
         .then(response => {
           // copy all example sets
@@ -130,7 +130,8 @@ export default defineComponent({
     // save evaluated sets into the databse
     const saveEvaluations = () => {
       return new Promise((resolve, reject) => {
-        const { api } = useApi(Cookies.get('auth_token'));
+        const { getToken } = useLoginAuth();
+        const { api } = useApi(getToken());
         api.post(`v1/bestworst/evaluations`, data.evaluated)
         .then(response => {
           // delete evaluated sets if API confirms its storage

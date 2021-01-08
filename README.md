@@ -71,6 +71,7 @@ CSS
     - Bulma CSS for vue3: `yarn add bulma`
     - Bulma Ext., Switch Toggle: `yarn add bulma-switch`, see [here](https://wikiki.github.io/form/switch/)
     - Bulma Ext., Toast: `yarn add bulma-toast`, see [here](https://rfoel.github.io/bulma-toast/)
+    - Bulma Ext., Sliders: `yarn add bulma-slider`, see [here](https://github.com/Wikiki/bulma-slider)
 - Fontawesome 5:
     - ~~`yarn add @fortawesome/fontawesome-svg-core`~~
     - ~~`yarn add @fortawesome/free-solid-svg-icons`~~
