@@ -32,6 +32,7 @@
 import DarkmodeToggle from '@/components/settings/DarkmodeToggle.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
+import { useSettings } from '@/functions/settings.js';
 
 
 export default {
@@ -47,20 +48,14 @@ export default {
     watchEffect(() => {
       document.title = t('settings.settings');
     });
+
+    // load settings (vuex replacement)
+    const { reorderpoint, orderquantity } = useSettings();
     
-    return { t, locale }
-  },
-
-  computed: {
-    reorderpoint: {
-      get(){return this.$store.getters['settings/bestworst3/getR'];},
-      set(newval){this.$store.commit("settings/bestworst3/setR", newval);}
-    },
-    orderquantity: {
-      get(){return this.$store.getters['settings/bestworst3/getQ'];},
-      set(newval){this.$store.commit("settings/bestworst3/setQ", newval);}
+    return { 
+      t, locale,
+      reorderpoint, orderquantity
     }
-  }
-
+  },
 }
 </script>
