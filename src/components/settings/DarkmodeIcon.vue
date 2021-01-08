@@ -1,7 +1,7 @@
 <template>
   <div class="darkmode-icon">
-    <a class="button" v-on:click='toggleTheme()'>
-      <span class="icon" v-if="isDarkMode"><i class="fas fa-moon"></i></span>
+    <a class="button" v-on:click="toggleTheme()">
+      <span class="icon" v-if="darkmodetheme"><i class="fas fa-moon"></i></span>
       <span class="icon" v-else><i class="fas fa-adjust"></i></span>
     </a>
   </div>
@@ -9,21 +9,19 @@
 
 
 <script>
+import { useDarkmodeToggle } from '@/functions/settings.js';
+
 export default {
   name: "DarkmodeIcon",
 
-  computed: {
-    isDarkMode(){
-      this.$store.dispatch("settings/darkmode/enforceTheme");
-      return this.$store.getters['settings/darkmode/isdark'];
-    }
-  },
+  setup(){
+    const { darkmodetheme } = useDarkmodeToggle();
 
-  methods: {
-    toggleTheme(){
-      this.$store.dispatch("settings/darkmode/toggleTheme");
+    const toggleTheme = () => {
+      darkmodetheme.value = !darkmodetheme.value
     }
+
+    return { darkmodetheme, toggleTheme }
   }
-
 }
 </script>
