@@ -65,6 +65,7 @@
 import { useI18n } from 'vue-i18n';
 import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
+import { useRoute } from 'vue-router';
 import { useLoginAuth } from '@/functions/axios-evidence.js';
 
 
@@ -84,10 +85,13 @@ export default defineComponent({
     const username = ref("");
     const password = ref("");
 
+    // read URL query string
+    const route = useRoute();
+
     const onLogin = async () => {
       try{
         await login(username.value, password.value);
-        router.push('/');
+        router.push(route.query.redirect || '/');
       }catch(err){
         console.log(err);
       }
