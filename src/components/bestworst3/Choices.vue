@@ -74,6 +74,8 @@ export default defineComponent({
     }
   },
 
+  emits: ['ranking-done'],
+
   setup(props, { emit }){
 
     const data = reactive({

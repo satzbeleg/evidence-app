@@ -26,6 +26,8 @@ export default defineComponent({
     sentText: String,  // SentenceText
   },
 
+  emits: ['item-selected'],
+
   setup(props, { emit } ){
 
     async function onClick(evt){
