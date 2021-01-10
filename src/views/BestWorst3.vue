@@ -101,13 +101,15 @@ export default defineComponent({
     // Store evaluation results, pull next example set from queue, trigger re-rendering
     async function nextExampleSet(history){
       // Map states with SentenceIDs (Don't send raw examples `data.current` back to API)
-      var state_sentid = {}
-      data.current.forEach((ex, i) => state_sentid[i] = ex.id)
+      var state_sentid_map = {}
+      data.current.forEach((ex, i) => state_sentid_map[i] = ex.id)
       // Store latest evaluation
       data.evaluated.push({
-        'set_id': data.current_setid,  // Only required for App/API-Sync
-        'evaluations': JSON.parse(JSON.stringify(history)),  // to be stored in DB
-        'state_sentid': state_sentid  // to be stored in DB
+        'set-id': data.current_setid,  // Only required for App/API-Sync
+        'ui-name': 'bestworst3',
+        'lemmata': [],
+        'event-history': JSON.parse(JSON.stringify(history)),  // to be stored in DB
+        'state-sentid-map': state_sentid_map  // to be stored in DB
       });
       // Load the next example set
       pullFromQueue();
@@ -136,7 +138,7 @@ export default defineComponent({
         .then(response => {
           // delete evaluated sets if API confirms its storage
           response.data['stored-setids'].forEach(setid => {
-            const idx = data.evaluated.findIndex(elem => elem['set_id'] == setid);
+            const idx = data.evaluated.findIndex(elem => elem['set-id'] == setid);
             data.evaluated.splice(idx, 1);
           });
           // console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
