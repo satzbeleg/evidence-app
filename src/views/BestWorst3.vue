@@ -1,6 +1,7 @@
 <template>
-  <section class="section">
-    <div class="container is-centered">      
+  <section class="section">    
+    <div class="container is-centered">
+      <!-- BWS UI -->
       <template v-if="data.current.length > 0">
         <BestWorstChoices 
           v-bind:items="data.current"
@@ -41,7 +42,6 @@ export default defineComponent({
 
     // Load bestworst3 UI settings
     const { reorderpoint, orderquantity, loadSettings } = useSettings();
-    
 
     // reactive data of this component
     const data = reactive({
@@ -51,6 +51,7 @@ export default defineComponent({
       // The current BWS-exampleset displayed inside the app
       current: [],
       current_setid: undefined,
+      current_lemmata: undefined,
 
       // Use to trigger component re-rendering with :key
       counter: 1,
@@ -90,11 +91,14 @@ export default defineComponent({
       // Read the 1st element, and delete it from queue (FIFO principle)
       const tmp = data.queue.shift()
       if (typeof tmp !== 'undefined' ){
+        //console.log(tmp)
         data.current = tmp.examples;
         data.current_setid = tmp.set_id;
+        data.current_lemmata = tmp.lemmata;
       }else{
         data.current = [];
         data.current_setid = undefined;
+        data.current_lemmata = undefined;
       }
     }
 
@@ -107,7 +111,7 @@ export default defineComponent({
       data.evaluated.push({
         'set-id': data.current_setid,  // Only required for App/API-Sync
         'ui-name': 'bestworst3',
-        'lemmata': [],
+        'lemmata': data.current_lemmata,
         'event-history': JSON.parse(JSON.stringify(history)),  // to be stored in DB
         'state-sentid-map': state_sentid_map  // to be stored in DB
       });
@@ -165,7 +169,10 @@ export default defineComponent({
     // load initial current BWS-exampleset
     pullFromQueue();
 
-    return { data, pullFromQueue, nextExampleSet, reorderpoint, orderquantity }
+    return { 
+      data, pullFromQueue, nextExampleSet,
+      reorderpoint, orderquantity
+    }
   },
 
 });
