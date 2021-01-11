@@ -133,17 +133,19 @@ Suchmaske für Lemmata.
 
 ```vue
 <template>
-...
-  <LemmaSearch v-bind:keywords="mylemmata" 
-               v-on:search-for-new-lemmata="triggerSearch" />
-...
+  ...
+    <LemmaSearch v-bind:keywords="mylemmata" 
+                 v-on:search-for-new-lemmata="triggerSearch" />
+  ...
 </template>
-```
 
-```vue
 <script>
 import LemmaSearch from "@/components/layout/LemmaSearch.vue";
 import { ref } from "vue";
+...
+components: {
+  LemmaSearch
+},
 ...
 setup(){
   const mylemmata = ref('Stichwort1, Mehr Worte')
@@ -154,5 +156,25 @@ setup(){
   ...
   return { triggerSearch, mylemmata }
 }
+</script>
+```
+
+
+### components/layout/LanguageSwitcher.vue
+
+```vue
+<template>
+  ...
+  <LanguageSwitcher />
+  ...
+</template>
+
+<script>
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
+...
+components: {
+  LanguageSwitcher
+},
+...
 </script>
 ```

@@ -9,26 +9,7 @@
 
       <!-- language switcher -->
       <div class="navbar-item">
-        <div class="dropdown" 
-             v-on:click="showLangDrop = !showLangDrop" v-bind:class="{ 'is-active': showLangDrop }">
-          <div class="dropdown-trigger" >
-            <button class="button is-light" type="button" aria-haspopup="true" aria-controls="dropdown-menu">
-              <span>
-                <template v-if="locale == 'de'">Deutsch</template>
-                <template v-if="locale == 'en'">English</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down"></i></span>
-            </button>
-          </div>
-        
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content" v-on:click="locale = $event.target.id">
-              <a id="de" class="dropdown-item">Deutsch</a>
-              <a id="en" class="dropdown-item">English</a>
-            </div>
-          </div>
-
-        </div>
+        <LanguageSwitcher />
       </div>
 
       <div class="navbar-item">
@@ -36,9 +17,8 @@
       </div>
 
       <div class="navbar-item">
-        <LemmaSearch 
-          v-bind:keywords="'Stichwort1, Mehr Wort'" 
-          v-on:search-for-new-lemmata="triggerSearch" />
+        <LemmaSearch v-bind:keywords="'Stichwort1, Mehr Wort'" 
+                     v-on:search-for-new-lemmata="triggerSearch" />
       </div>
 
 
@@ -127,6 +107,7 @@
 
       </div>
     </div>
+    
 
   </nav>
 </template>
@@ -135,6 +116,7 @@
 <script>
 // import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
 import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
 import LemmaSearch from "@/components/layout/LemmaSearch.vue";
 import { defineComponent, ref } from 'vue';
@@ -146,6 +128,7 @@ export default defineComponent({
   name: "TheNavbar",
 
   components: {
+    LanguageSwitcher,
     DarkmodeIcon,
     LemmaSearch
   },
@@ -156,7 +139,7 @@ export default defineComponent({
 
     // reactive variables for navbar
     const showNavBurger = ref(false);
-    const showLangDrop = ref(false);
+    // const showLangDrop = ref(false);
 
     // Logout Button
     const { logout, isAuthenticated } = useLoginAuth();
@@ -175,7 +158,8 @@ export default defineComponent({
 
     return { 
       t, locale, 
-      showNavBurger, showLangDrop, onLogout, isAuthenticated, 
+      showNavBurger, 
+      onLogout, isAuthenticated, 
       triggerSearch 
     }
   }

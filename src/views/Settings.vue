@@ -10,6 +10,9 @@
                v-model="darkmodetheme">
         <label for="darkmode-toogle">Darkmode</label>
       </div>
+      <div class="field">
+        <LanguageSwitcher />
+      </div>
 
 
       <h2 class="subtitle is-4">Offline and Sync Settings</h2>
@@ -48,17 +51,18 @@
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
 import { useSettings, useDarkmodeToggle } from '@/functions/settings.js';
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
 
 
 export default {
   name: "Settings",
 
-  /*components: {
-    DarkmodeToggle
-  },*/
+  components: {
+    LanguageSwitcher
+  },
 
   setup(){
-    const { t, locale } = useI18n();
+    const { t } = useI18n();
 
     watchEffect(() => {
       document.title = t('settings.settings');
@@ -69,8 +73,8 @@ export default {
     const { darkmodetheme } = useDarkmodeToggle();
     
     return { 
-      t, locale,
-      darkmodetheme,
+      t,
+      darkmodetheme, 
       reorderpoint, orderquantity
     }
   },
