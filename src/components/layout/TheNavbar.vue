@@ -7,18 +7,18 @@
         <img src="../../assets/logo.png" alt="general app logo" />
       </router-link>
 
-      <!-- language switcher -->
-      <div class="navbar-item">
+
+      <div class="navbar-item" v-if="with_lemmata_search">
+        <LemmaSearch v-bind:keywords="'Stichwort1, Mehr Wort'" 
+                     v-on:search-for-new-lemmata="triggerSearch" />
+      </div>
+
+      <div class="navbar-item" v-if="with_lang_switch">
         <LanguageSwitcher />
       </div>
 
-      <div class="navbar-item">
+      <div class="navbar-item" v-if="with_darkmode_icon">
         <DarkmodeIcon />
-      </div>
-
-      <div class="navbar-item">
-        <LemmaSearch v-bind:keywords="'Stichwort1, Mehr Wort'" 
-                     v-on:search-for-new-lemmata="triggerSearch" />
       </div>
 
 
@@ -128,9 +128,24 @@ export default defineComponent({
   name: "TheNavbar",
 
   components: {
+    LemmaSearch,
     LanguageSwitcher,
-    DarkmodeIcon,
-    LemmaSearch
+    DarkmodeIcon
+  },
+
+  props: {
+    with_lemmata_search: {
+      type: Boolean,
+      default: false
+    },
+    with_lang_switch: {
+      type: Boolean,
+      default: false
+    },
+    with_darkmode_icon: {
+      type: Boolean,
+      default: false
+    }
   },
 
   setup(){

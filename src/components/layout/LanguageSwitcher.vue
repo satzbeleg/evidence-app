@@ -34,14 +34,9 @@ export default defineComponent({
 
   setup(){
     // multi-lingual support
-    const { t, locale } = useI18n();
+    const { t } = useI18n();
     const { language } = useSettings();
-
-    // set default
-    if( typeof language.value == "undefined"){
-      language.value = locale.value
-    }
-
+  
     // reactive variables to toggle menu
     const showLangDrop = ref(false);
 

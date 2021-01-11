@@ -1,4 +1,8 @@
 <template>
+  <TheNavbar v-bind:with_lang_switch="false"
+             v-bind:with_darkmode_icon="false"
+             v-bind:with_lemmata_search="true" />
+
   <section class="section">    
     <div class="container is-centered">
       <!-- BWS UI -->
@@ -18,6 +22,7 @@
 
 
 <script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
 import { defineComponent, reactive, watchEffect, watch, unref } from 'vue'; // computed 
 import { useI18n } from 'vue-i18n';
@@ -29,6 +34,7 @@ export default defineComponent({
   name: "BestWorst3",
 
   components: {
+    TheNavbar,
     BestWorstChoices
   },
 

@@ -1,4 +1,8 @@
 <template>
+  <TheNavbar v-bind:with_lang_switch="false"
+             v-bind:with_darkmode_icon="false"
+             v-bind:with_lemmata_search="false" />
+
   <section class="section" id="settings">
     <div class="container">
       <!-- put the following into components ... -->
@@ -48,6 +52,7 @@
 
 
 <script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
 import { useSettings, useDarkmodeToggle } from '@/functions/settings.js';
@@ -58,6 +63,7 @@ export default {
   name: "Settings",
 
   components: {
+    TheNavbar,
     LanguageSwitcher
   },
 

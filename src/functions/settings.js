@@ -1,6 +1,7 @@
 import { ref, watch, watchEffect } from 'vue';
 import { useApi } from '@/functions/axios-evidence.js';
 import Cookies from 'js-cookie';
+import { useI18n } from 'vue-i18n';
 
 
 /** Sync Setting Variables with REST API
@@ -28,6 +29,8 @@ export const useSettings = () => {
   const reorderpoint = ref();
   const orderquantity = ref();
 
+  // `locale` is updated by language!
+  const { locale } = useI18n();
 
   // download user settings from database
   const loadSettings = () => {
@@ -36,7 +39,7 @@ export const useSettings = () => {
       api.get(`v1/user/settings`)
         .then(response => {
           darkmodetheme.value = response.data['darkmodetheme'] || false;
-          language.value = response.data['language'] || 'de';
+          language.value = response.data['language'] || locale.value;
           reorderpoint.value = response.data['reorderpoint'] || 3;
           orderquantity.value = response.data['orderquantity'] || 10;
           resolve(response);
@@ -50,6 +53,15 @@ export const useSettings = () => {
   // force to load data initially
   loadSettings();
 
+
+  // Sync `language` and `locale`
+  if (typeof language.value == "undefined") {
+    language.value = locale.value
+  }
+  watch(
+    () => language.value,
+    (lang) => { locale.value = lang }
+  )
 
   // save user settings to database
   const saveSettings = () => {
