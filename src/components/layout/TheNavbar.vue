@@ -35,6 +35,13 @@
         <DarkmodeIcon />
       </div>
 
+      <div class="navbar-item">
+        <LemmaSearch 
+          v-bind:keywords="'Stichwort1, Mehr Wort'" 
+          v-on:search-for-new-lemmata="triggerSearch" />
+      </div>
+
+
       <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="myNavbarMenu"
          v-on:click="showNavBurger = !showNavBurger" v-bind:class="{ 'is-active' : showNavBurger }">
         <span aria-hidden="true"></span>
@@ -129,6 +136,7 @@
 // import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
 import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
+import LemmaSearch from "@/components/layout/LemmaSearch.vue";
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import { useLoginAuth } from '@/functions/axios-evidence.js';
@@ -136,6 +144,11 @@ import { useLoginAuth } from '@/functions/axios-evidence.js';
 
 export default defineComponent({
   name: "TheNavbar",
+
+  components: {
+    DarkmodeIcon,
+    LemmaSearch
+  },
 
   setup(){
     // multi-lingual support
@@ -156,11 +169,15 @@ export default defineComponent({
       }
     }
 
-    return { t, locale, showNavBurger, showLangDrop, onLogout, isAuthenticated }
-  },
+    async function triggerSearch(keywords){
+      console.log('Lemma Search clicked: ', keywords)
+    }
 
-  components: {
-    DarkmodeIcon,
+    return { 
+      t, locale, 
+      showNavBurger, showLangDrop, onLogout, isAuthenticated, 
+      triggerSearch 
+    }
   }
 
 });
