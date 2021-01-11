@@ -1,8 +1,10 @@
 <template>
-  <!-- Keyword Search Field/Button -->
+  <!-- Keyword Search Field/Button 
+    class `has-addons-fullwidth` doesn't work here
+  -->
   <div class="field has-addons">
-    <div class="control has-icons-left has-icons-right">
-    <span class="icon is-small is-left"><i class="fas fa-search"></i></span>
+    <div class="control">  <!-- has-icons-left -->
+      <!-- <span class="icon is-small is-left"><i class="fas fa-search"></i></span> -->
       <input class="input" type="text" 
              v-bind:value="keywords"
              placeholder="lemma1, lemma2, ...">
@@ -45,3 +47,9 @@ export default defineComponent({
   }
 })
 </script>
+
+
+<style scoped>
+/*.field {max-width: 480px; width: 240px;}*/
+/*.field {max-width: 450px; width:80%;}*/
+</style>
