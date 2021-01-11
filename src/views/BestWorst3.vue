@@ -1,7 +1,11 @@
 <template>
-  <TheNavbar v-bind:with_lang_switch="false"
-             v-bind:with_darkmode_icon="false"
-             v-bind:with_lemmata_search="true" />
+  <template v-if="data.current_lemmata">
+    <TheNavbar v-bind:with_lang_switch="false"
+              v-bind:with_darkmode_icon="false"
+              v-bind:with_lemmata_search="true"
+              v-bind:lemma_keywords="data.current_lemmata"
+              :key="data.counter" />
+  </template>
 
   <section class="section">    
     <div class="container is-centered">
@@ -57,7 +61,7 @@ export default defineComponent({
       // The current BWS-exampleset displayed inside the app
       current: [],
       current_setid: undefined,
-      current_lemmata: undefined,
+      current_lemmata: undefined, //'Hello world,cool',
 
       // Use to trigger component re-rendering with :key
       counter: 1,
@@ -100,7 +104,7 @@ export default defineComponent({
         //console.log(tmp)
         data.current = tmp.examples;
         data.current_setid = tmp.set_id;
-        data.current_lemmata = tmp.lemmata;
+        data.current_lemmata = tmp.lemmata.join(", ");
       }else{
         data.current = [];
         data.current_setid = undefined;

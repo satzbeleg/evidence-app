@@ -9,7 +9,7 @@
 
 
       <div class="navbar-item" v-if="with_lemmata_search">
-        <LemmaSearch v-bind:keywords="'Stichwort1, Mehr Wort'" 
+        <LemmaSearch v-bind:initial_keywords="lemma_keywords" 
                      v-on:search-for-new-lemmata="triggerSearch" />
       </div>
 
@@ -138,6 +138,10 @@ export default defineComponent({
       type: Boolean,
       default: false
     },
+    lemma_keywords: {
+      type: String,
+      default: undefined
+    },
     with_lang_switch: {
       type: Boolean,
       default: false
@@ -147,6 +151,8 @@ export default defineComponent({
       default: false
     }
   },
+
+  //emits: ['search-for-new-lemmata'],
 
   setup(){
     // multi-lingual support
@@ -168,7 +174,8 @@ export default defineComponent({
     }
 
     async function triggerSearch(keywords){
-      console.log('Lemma Search clicked: ', keywords)
+      console.log('NavBar:', keywords)
+      console.log("EMIT SOMETHING!")
     }
 
     return { 
