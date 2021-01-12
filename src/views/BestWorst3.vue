@@ -1,11 +1,10 @@
 <template>
-  <template v-if="data.current_lemmata">
-    <TheNavbar v-bind:with_lang_switch="false"
-              v-bind:with_darkmode_icon="false"
-              v-bind:with_lemmata_search="true"
-              v-bind:lemma_keywords="data.current_lemmata"
-              :key="data.counter" />
-  </template>
+  <TheNavbar v-bind:with_lang_switch="false"
+             v-bind:with_darkmode_icon="false"
+             v-bind:with_lemmata_search="true"
+             v-bind:lemma_keywords="data.current_lemmata"
+             v-on:search-lemmata-navbar="onSearchLemmata"
+             :key="data.counter" />
 
   <section class="section">    
     <div class="container is-centered">
@@ -28,7 +27,7 @@
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { defineComponent, reactive, watchEffect, watch, unref } from 'vue'; // computed 
+import { defineComponent, reactive, watchEffect, watch, unref, ref } from 'vue'; // computed 
 import { useI18n } from 'vue-i18n';
 import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
 import { useSettings } from '@/functions/settings.js';
@@ -50,8 +49,12 @@ export default defineComponent({
       document.title = t('bestworst.title');
     });
 
+
     // Load bestworst3 UI settings
     const { reorderpoint, orderquantity, loadSettings } = useSettings();
+
+    // Search string for lemmata/keywords
+    const searchlemmata = ref('');
 
     // reactive data of this component
     const data = reactive({
@@ -74,9 +77,19 @@ export default defineComponent({
     //const replenishQueue = (orderquantity = 10) => {
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
+        // preprocess lemmata/keyword search for POST request
+        var params = {}
+        if (typeof searchlemmata.value == "string"){
+          if (searchlemmata.value.length > 0){
+            params = {"lemmata": searchlemmata.value.split(',').map(s => s.trim())}
+          }
+        }
+        console.log(params)
+        // load other functions and objects
         const { getToken } = useLoginAuth();
         const { api } = useApi(getToken());
-        api.get(`v1/bestworst/random/4/${unref(orderquantity)}`)
+        // start API requrest
+        api.post(`v1/bestworst/random/4/${unref(orderquantity)}`, params)
         .then(response => {
           // copy all example sets
           response.data.forEach(exset => data.queue.push(exset));
@@ -143,6 +156,7 @@ export default defineComponent({
       }
     );
 
+
     // save evaluated sets into the databse
     const saveEvaluations = () => {
       return new Promise((resolve, reject) => {
@@ -174,14 +188,33 @@ export default defineComponent({
           saveEvaluations();
         }
       }
-    )
+    );
+
+
+    // get search field string to parent component
+    const onSearchLemmata = async(keywords) => {
+      // reset `searchlemmata`
+      searchlemmata.value = keywords
+      //console.log('Bestworst:', searchlemmata.value)
+      
+      // delete current example set in UI
+      data.current = [];
+      data.current_setid = undefined;
+      data.current_lemmata = undefined;
+      // this will trigger the watcher to call `replenishQueue` (POST requests)
+      data.queue = [];  
+      // force to load next example in UI
+      await pullFromQueue();
+    }
+
 
     // load initial current BWS-exampleset
     pullFromQueue();
 
     return { 
       data, pullFromQueue, nextExampleSet,
-      reorderpoint, orderquantity
+      reorderpoint, orderquantity,
+      onSearchLemmata
     }
   },
 

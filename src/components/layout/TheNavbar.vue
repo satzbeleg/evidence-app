@@ -10,7 +10,7 @@
 
       <div class="navbar-item" v-if="with_lemmata_search">
         <LemmaSearch v-bind:initial_keywords="lemma_keywords" 
-                     v-on:search-for-new-lemmata="triggerSearch" />
+                     v-on:search-lemmata-field="onSearchLemmata" />
       </div>
 
       <div class="navbar-item" v-if="with_lang_switch">
@@ -152,9 +152,11 @@ export default defineComponent({
     }
   },
 
-  //emits: ['search-for-new-lemmata'],
+  emits: [
+    'search-lemmata-navbar'
+  ],
 
-  setup(){
+  setup(props, {emit}){
     // multi-lingual support
     const { t, locale } = useI18n();
 
@@ -173,16 +175,16 @@ export default defineComponent({
       }
     }
 
-    async function triggerSearch(keywords){
-      console.log('NavBar:', keywords)
-      console.log("EMIT SOMETHING!")
+    // forward search field string to parent component
+    const onSearchLemmata = async(keywords) => {
+      //console.log('NavBar:', keywords)
+      emit('search-lemmata-navbar', keywords)
     }
 
     return { 
       t, locale, 
-      showNavBurger, 
-      onLogout, isAuthenticated, 
-      triggerSearch 
+      showNavBurger, onSearchLemmata,
+      onLogout, isAuthenticated
     }
   }
 

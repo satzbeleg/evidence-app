@@ -12,7 +12,7 @@
 
     <div class="control">
       <button class="button is-primary" type="submit" 
-              v-on:click.prevent="onSearch">
+              v-on:click.prevent="onSearchLemmata">
         <i class="fas fa-search"></i>
         <strong class="is-hidden-mobile">&nbsp;Search</strong>
       </button>
@@ -35,19 +35,21 @@ export default defineComponent({
     }
   },
 
-  emits: ['search-for-new-lemmata'],
+  emits: [
+    'search-lemmata-field'
+  ],
 
   setup(props, {emit}){
     // set initial value if available
     const keywords = ref(props.initial_keywords)
 
-    // forward `keyword` variable up the chain
-    const onSearch = async() => {
-      console.log("LemmaSearch keywords=", keywords.value)
-      emit('search-for-new-lemmata', keywords.value);
+    // forward search field string to parent component
+    const onSearchLemmata = async() => {
+      //console.log("LemmaSearch keywords:", keywords.value)
+      emit('search-lemmata-field', keywords.value);
     }
 
-    return { keywords, onSearch }
+    return { keywords, onSearchLemmata }
   }
 })
 </script>
