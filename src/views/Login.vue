@@ -1,4 +1,8 @@
 <template>
+  <TheNavbar v-bind:with_lang_switch="true"
+             v-bind:with_darkmode_icon="true"
+             v-bind:with_lemmata_search="false" />
+
   <section class="hero has-background-success is-fullheight-with-navbar" id="login">
     <div class="hero-body">
       <div class="container">
@@ -62,6 +66,7 @@
 
 
 <script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
@@ -71,6 +76,10 @@ import { useLoginAuth } from '@/functions/axios-evidence.js';
 
 export default defineComponent({
   name: "Login",
+
+  components: {
+    TheNavbar
+  },
 
   setup(){
     // multi-lingual support

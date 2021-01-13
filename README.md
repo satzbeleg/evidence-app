@@ -125,3 +125,56 @@ Readings:
 
 - [How to Structure a Vue.js Project](https://itnext.io/how-to-structure-a-vue-js-project-29e4ddc1aeeb)
 
+
+## Usage
+
+### components/layout/LemmaSearch.vue
+Suchmaske für Lemmata.
+
+```vue
+<template>
+  ...
+    <LemmaSearch v-bind:keywords="mylemmata" 
+                 v-on:search-for-new-lemmata="triggerSearch" />
+  ...
+</template>
+
+<script>
+import LemmaSearch from "@/components/layout/LemmaSearch.vue";
+import { ref } from "vue";
+...
+components: {
+  LemmaSearch
+},
+...
+setup(){
+  const mylemmata = ref('Stichwort1, Mehr Worte')
+  ...
+  async function triggerSearch(keywords){
+    console.log('Lemma Search clicked: ', keywords)
+  }
+  ...
+  return { triggerSearch, mylemmata }
+}
+</script>
+```
+
+
+### components/layout/LanguageSwitcher.vue
+
+```vue
+<template>
+  ...
+  <LanguageSwitcher />
+  ...
+</template>
+
+<script>
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
+...
+components: {
+  LanguageSwitcher
+},
+...
+</script>
+```

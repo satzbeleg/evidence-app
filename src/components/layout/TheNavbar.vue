@@ -7,33 +7,20 @@
         <img src="../../assets/logo.png" alt="general app logo" />
       </router-link>
 
-      <!-- language switcher -->
-      <div class="navbar-item">
-        <div class="dropdown" 
-             v-on:click="showLangDrop = !showLangDrop" v-bind:class="{ 'is-active': showLangDrop }">
-          <div class="dropdown-trigger" >
-            <button class="button is-light" type="button" aria-haspopup="true" aria-controls="dropdown-menu">
-              <span>
-                <template v-if="locale == 'de'">Deutsch</template>
-                <template v-if="locale == 'en'">English</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down"></i></span>
-            </button>
-          </div>
-        
-          <div class="dropdown-menu" id="dropdown-menu" role="menu">
-            <div class="dropdown-content" v-on:click="locale = $event.target.id">
-              <a id="de" class="dropdown-item">Deutsch</a>
-              <a id="en" class="dropdown-item">English</a>
-            </div>
-          </div>
 
-        </div>
+      <div class="navbar-item" v-if="with_lemmata_search">
+        <LemmaSearch v-bind:initial_keywords="lemma_keywords" 
+                     v-on:search-lemmata-field="onSearchLemmata" />
       </div>
 
-      <div class="navbar-item">
+      <div class="navbar-item" v-if="with_lang_switch">
+        <LanguageSwitcher />
+      </div>
+
+      <div class="navbar-item" v-if="with_darkmode_icon">
         <DarkmodeIcon />
       </div>
+
 
       <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="myNavbarMenu"
          v-on:click="showNavBurger = !showNavBurger" v-bind:class="{ 'is-active' : showNavBurger }">
@@ -120,6 +107,7 @@
 
       </div>
     </div>
+    
 
   </nav>
 </template>
@@ -128,7 +116,9 @@
 <script>
 // import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
 import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
+import LemmaSearch from "@/components/layout/LemmaSearch.vue";
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import { useLoginAuth } from '@/functions/axios-evidence.js';
@@ -137,13 +127,42 @@ import { useLoginAuth } from '@/functions/axios-evidence.js';
 export default defineComponent({
   name: "TheNavbar",
 
-  setup(){
+  components: {
+    LemmaSearch,
+    LanguageSwitcher,
+    DarkmodeIcon
+  },
+
+  props: {
+    with_lemmata_search: {
+      type: Boolean,
+      default: false
+    },
+    lemma_keywords: {
+      type: String,
+      default: undefined
+    },
+    with_lang_switch: {
+      type: Boolean,
+      default: false
+    },
+    with_darkmode_icon: {
+      type: Boolean,
+      default: false
+    }
+  },
+
+  emits: [
+    'search-lemmata-navbar'
+  ],
+
+  setup(props, {emit}){
     // multi-lingual support
     const { t, locale } = useI18n();
 
     // reactive variables for navbar
     const showNavBurger = ref(false);
-    const showLangDrop = ref(false);
+    // const showLangDrop = ref(false);
 
     // Logout Button
     const { logout, isAuthenticated } = useLoginAuth();
@@ -156,11 +175,17 @@ export default defineComponent({
       }
     }
 
-    return { t, locale, showNavBurger, showLangDrop, onLogout, isAuthenticated }
-  },
+    // forward search field string to parent component
+    const onSearchLemmata = async(keywords) => {
+      //console.log('NavBar:', keywords)
+      emit('search-lemmata-navbar', keywords)
+    }
 
-  components: {
-    DarkmodeIcon,
+    return { 
+      t, locale, 
+      showNavBurger, onSearchLemmata,
+      onLogout, isAuthenticated
+    }
   }
 
 });

@@ -1,13 +1,24 @@
 <template>
+  <TheNavbar v-bind:with_lang_switch="true"
+             v-bind:with_darkmode_icon="true"
+             v-bind:with_lemmata_search="false" />
+
   <div style="margin: 100px">
     <div v-fit2box="mytext" class="mybox"></div>
     <button @click="nextExample">Next</button>
   </div>
 </template>
 
+
 <script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
+
 export default {
   name: "DemoFit2Box",
+
+  components: {
+    TheNavbar
+  },
 
   // store
   data() {  

@@ -1,4 +1,8 @@
 <template>
+  <TheNavbar v-bind:with_lang_switch="false"
+             v-bind:with_darkmode_icon="true"
+             v-bind:with_lemmata_search="false" />
+
   <section class="section" id="about">
     <div class="container">
       <!-- put the following into components ... -->
@@ -107,12 +111,17 @@
 
 
 <script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
 
 
 export default {
   name: "About",
+
+  components: {
+    TheNavbar
+  },
 
   setup(){
     const { t } = useI18n();

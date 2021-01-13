@@ -1,4 +1,8 @@
 <template>
+  <TheNavbar v-bind:with_lang_switch="false"
+             v-bind:with_darkmode_icon="false"
+             v-bind:with_lemmata_search="false" />
+
   <section class="section" id="settings">
     <div class="container">
       <!-- put the following into components ... -->
@@ -9,6 +13,9 @@
         <input id="darkmode-toogle" class="switch is-rounded" type="checkbox"   
                v-model="darkmodetheme">
         <label for="darkmode-toogle">Darkmode</label>
+      </div>
+      <div class="field">
+        <LanguageSwitcher />
       </div>
 
 
@@ -45,20 +52,23 @@
 
 
 <script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
 import { useSettings, useDarkmodeToggle } from '@/functions/settings.js';
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
 
 
 export default {
   name: "Settings",
 
-  /*components: {
-    DarkmodeToggle
-  },*/
+  components: {
+    TheNavbar,
+    LanguageSwitcher
+  },
 
   setup(){
-    const { t, locale } = useI18n();
+    const { t } = useI18n();
 
     watchEffect(() => {
       document.title = t('settings.settings');
@@ -69,8 +79,8 @@ export default {
     const { darkmodetheme } = useDarkmodeToggle();
     
     return { 
-      t, locale,
-      darkmodetheme,
+      t,
+      darkmodetheme, 
       reorderpoint, orderquantity
     }
   },
