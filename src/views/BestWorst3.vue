@@ -89,7 +89,8 @@ export default defineComponent({
         const { getToken } = useLoginAuth();
         const { api } = useApi(getToken());
         // start API requrest
-        api.post(`v1/bestworst/random/4/${unref(orderquantity)}`, params)
+        //api.post(`v1/bestworst/random/4/${unref(orderquantity)}`, params)
+        api.post(`v1/bestworst/samples/4/${unref(orderquantity)}`, params)
         .then(response => {
           // copy all example sets
           response.data.forEach(exset => data.queue.push(exset));
@@ -134,7 +135,7 @@ export default defineComponent({
       data.evaluated.push({
         'set-id': data.current_setid,  // Only required for App/API-Sync
         'ui-name': 'bestworst3',
-        'lemmata': data.current_lemmata,
+        'lemmata': data.current_lemmata.split(',').map(s => s.trim()),
         'event-history': JSON.parse(JSON.stringify(history)),  // to be stored in DB
         'state-sentid-map': state_sentid_map  // to be stored in DB
       });
