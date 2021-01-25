@@ -23,6 +23,12 @@ Useful commands:
 Fixes:
 - "Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime": Run `npm rebuild node-sass`
 
+## .env.local
+
+```
+NODE_ENV=local
+VUE_APP_API_URL=http://0.0.0.0:55017
+```
 
 ## Benutzerkonten (Sign Up)
 Benutzerkonten werden manuell von [Admin](mailto:hamster@bbaw.de) in der [SQL Datenbank](https://git.zdl.org/hamster/evidence-database) erstellt. 
