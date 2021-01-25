@@ -22,8 +22,10 @@
       </div>
 
 
-      <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="myNavbarMenu"
-         v-on:click="showNavBurger = !showNavBurger" v-bind:class="{ 'is-active' : showNavBurger }">
+      <a role="button" class="navbar-burger burger" 
+          aria-label="menu" aria-expanded="false" data-target="myNavbarMenu"
+          v-on:click="showNavBurger = !showNavBurger" 
+          v-bind:class="{ 'is-active' : showNavBurger }">
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
         <span aria-hidden="true"></span>
@@ -33,15 +35,10 @@
 
 
     <div id="myNavbarMenu" class="navbar-menu"
-         v-on:click="showNavBurger = !showNavBurger" v-bind:class="{ 'is-active' : showNavBurger }">
+         v-on:click="showNavBurger = !showNavBurger" 
+         v-bind:class="{ 'is-active' : showNavBurger }">
       <div class="navbar-start">
 
-        <!-- DISABLE HOME ICON
-        <router-link class="navbar-item" :to="{ path: '/' }">
-          <span class="icon has-text-primary"><i class="fas fa-home"></i></span>
-          <span>{{ t('header.home') }}</span>
-        </router-link>
-        -->
         <router-link class="navbar-item" :to="{ path: '/' }">
           <span class="icon has-text-success"><i class="fas fa-play"></i></span>
           <span>Start</span>
@@ -162,7 +159,6 @@ export default defineComponent({
 
     // reactive variables for navbar
     const showNavBurger = ref(false);
-    // const showLangDrop = ref(false);
 
     // Logout Button
     const { logout, isAuthenticated } = useLoginAuth();
