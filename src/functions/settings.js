@@ -28,6 +28,8 @@ export const useSettings = () => {
   // settings/bestworst3
   const reorderpoint = ref();
   const orderquantity = ref();
+  const sampling_numtop = ref();
+  const sampling_offset = ref();
 
   // `locale` is updated by language!
   const { locale } = useI18n();
@@ -42,6 +44,8 @@ export const useSettings = () => {
           language.value = response.data['language'] || locale.value;
           reorderpoint.value = response.data['reorderpoint'] || 3;
           orderquantity.value = response.data['orderquantity'] || 10;
+          sampling_numtop.value = response.data['sampling-numtop'] || 100;
+          sampling_offset.value = response.data['sampling-offset'] || 0;
           resolve(response);
         })
         .catch(error => {
@@ -72,7 +76,9 @@ export const useSettings = () => {
           'darkmodetheme': darkmodetheme.value,
           'language': language.value,
           'reorderpoint': reorderpoint.value,
-          'orderquantity': orderquantity.value
+          'orderquantity': orderquantity.value,
+          'sampling-numtop': sampling_numtop.value,
+          'sampling-offset': sampling_offset.value
         })
         .then(response => {
           console.log("SAVED");
@@ -96,7 +102,9 @@ export const useSettings = () => {
     darkmodetheme,
     language,
     reorderpoint,
-    orderquantity
+    orderquantity,
+    sampling_numtop,
+    sampling_offset
   }
 }
 

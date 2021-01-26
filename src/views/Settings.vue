@@ -45,6 +45,34 @@
 
       </div>
       </div>
+
+
+      <h2 class="subtitle is-4">Sampling Settings</h2>
+      <div class="columns">
+      <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+    
+      <div class="field">
+        <label for="simpling-numtop">
+          Sample from the Top-X scored
+        </label>
+        <input id="simpling-numtop" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="sampling_numtop" step="10" min="10" max="1000">
+        <output for="simpling-numtop">{{ sampling_numtop }}</output>
+      </div>
+
+      <div class="field">
+        <label for="simpling-offset">
+          Offset, i.e. [1+offset, top+offset] scores
+        </label>
+        <input id="simpling-offset" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="sampling_offset" step="100" min="0" max="10000">
+        <output for="simpling-offset">{{ sampling_offset }}</output>
+      </div>
+
+      </div>
+      </div>
       <!-- put the above into components ... -->
     </div>
   </section>
@@ -75,13 +103,14 @@ export default {
     });
 
     // load settings (vuex replacement)
-    const { reorderpoint, orderquantity } = useSettings();
+    const { reorderpoint, orderquantity, sampling_numtop, sampling_offset } = useSettings();
     const { darkmodetheme } = useDarkmodeToggle();
     
     return { 
       t,
       darkmodetheme, 
-      reorderpoint, orderquantity
+      reorderpoint, orderquantity,
+      sampling_numtop, sampling_offset
     }
   },
 }
