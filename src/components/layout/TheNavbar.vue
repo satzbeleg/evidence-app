@@ -3,7 +3,7 @@
   <nav class="navbar is-fixed-top is-spaced has-shadow" role="navigation" aria-label="main navigation">
 
     <div class="navbar-brand">
-      <router-link class="navbar-item" :to="{ path: '/' }">
+      <router-link class="navbar-item is-hidden-mobile" :to="{ path: '/' }">
         <img src="../../assets/logo.png" alt="general app logo" />
       </router-link>
 

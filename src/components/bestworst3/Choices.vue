@@ -32,7 +32,7 @@
       v-on:item-selected="onTransition"
     />
 
-    <div class="field is-grouped is-grouped-centered" style="max-width: 400px;">
+    <div class="field is-grouped is-grouped-centered">  <!-- style="max-width: 400px;" -->
       <!-- Skip -->
       <p class="control">
       <button class="button is-rounded is-large mx-5 is-warning" v-on:click.prevent="onAbort">

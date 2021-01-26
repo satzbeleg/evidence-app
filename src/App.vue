@@ -30,8 +30,8 @@ export default {
 
 
 <style>
-#app > .section {
+/*#app > .section {
   padding-top: 3.5rem;
-}
+}*/
 </style>
 

@@ -52,9 +52,9 @@ export default defineComponent({
 
 <style scoped>
 .card {
-  margin-bottom: 2.5vh; /* min(2vh, 25px); */
-  height: 16.5vh; /* min(17vh, 180px); */
-  max-width: 400px;
+  margin-bottom: min(2vh, 25px); /* min(2vh, 25px); */
+  height: 15vh; /* min(17vh, 180px); */
+  /*max-width: 400px;*/
 }
 
 .center {
@@ -69,9 +69,9 @@ export default defineComponent({
 }
 
 .fixed-box {
-  padding-top: 2.5vh; /* min(3vh, 25px); */
-  height: 16.5vh; /* min(17vh, 180px); */
-  max-width: 400px;
+  padding-top: min(2vh, 25px); /* min(3vh, 25px); */
+  height: 15vh; /* min(17vh, 180px); */
+  /* max-width: 400px; */
 }
 
 

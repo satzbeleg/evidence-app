@@ -7,18 +7,27 @@
              :key="data.counter" />
 
   <section class="section">    
-    <div class="container is-centered">
-      <!-- BWS UI -->
+    <div class="container is-centered" style="max-width: 720px;">
+
       <template v-if="data.current.length > 0">
+        <!-- BWS UI -->
         <BestWorstChoices 
           v-bind:items="data.current"
           v-on:ranking-done="nextExampleSet"
           :key="data.counter"
         />
+        <!-- progress bar -->
+        <progress class="progress is-info mt-5" 
+                  v-bind:value="data.queue.length" 
+                  v-bind:max="reorderpoint + orderquantity">
+          {{ data.queue.length }}
+        </progress>
       </template>
+
       <template v-else>
         Queue is empty. Please reconnect to API to request more ranking examples.
       </template>
+
     </div>
   </section>
 </template>
