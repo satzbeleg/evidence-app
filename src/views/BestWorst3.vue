@@ -52,7 +52,10 @@ export default defineComponent({
 
 
     // Load bestworst3 UI settings
-    const { reorderpoint, orderquantity, loadSettings } = useSettings();
+    const { 
+      loadSettings, reorderpoint, orderquantity,
+      sampling_numtop, sampling_offset 
+    } = useSettings();
 
     // Search string for lemmata/keywords
     const searchlemmata = ref('');
@@ -90,8 +93,7 @@ export default defineComponent({
         const { getToken } = useLoginAuth();
         const { api } = useApi(getToken());
         // start API requrest
-        //api.post(`v1/bestworst/random/4/${unref(orderquantity)}`, params)
-        api.post(`v1/bestworst/samples/4/${unref(orderquantity)}`, params)
+        api.post(`v1/bestworst/samples/4/${unref(orderquantity)}/${unref(sampling_numtop)}/${unref(sampling_offset)}`, params)
         .then(response => {
           // copy all example sets
           response.data.forEach(exset => data.queue.push(exset));
