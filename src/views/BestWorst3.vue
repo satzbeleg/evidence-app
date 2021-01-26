@@ -31,6 +31,7 @@ import { defineComponent, reactive, watchEffect, watch, unref, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
 import { useSettings } from '@/functions/settings.js';
+import { traverseObject } from '@/functions/traverse-objects.js';
 
 
 export default defineComponent({
@@ -137,7 +138,12 @@ export default defineComponent({
         'ui-name': 'bestworst3',
         'lemmata': data.current_lemmata.split(',').map(s => s.trim()),
         'event-history': JSON.parse(JSON.stringify(history)),  // to be stored in DB
-        'state-sentid-map': state_sentid_map  // to be stored in DB
+        'state-sentid-map': state_sentid_map,  // to be stored in DB
+        'tracking-data': {
+          'window': traverseObject(window, 0),
+          'screen': traverseObject(window.screen, 1),
+          'navigator': traverseObject(window.navigator, 1)
+        }
       });
       // Load the next example set
       pullFromQueue();
