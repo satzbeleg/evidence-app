@@ -26,6 +26,7 @@ export default {
 @import "~bulma";
 @import '~bulma-switch';
 @import '~bulma-slider';
+@import '~bulma-pageloader';
 </style>
 
 
