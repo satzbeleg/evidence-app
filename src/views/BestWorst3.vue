@@ -25,7 +25,9 @@
       </template>
 
       <template v-else>
-        Queue is empty. Please reconnect to API to request more ranking examples.
+        <PageLoader 
+          v-bind:status="data.current.length == 0"
+          v-bind:messages="['Queue is empty!', message_suggestion]" />
       </template>
 
     </div>
@@ -35,6 +37,7 @@
 
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
+import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
 import { defineComponent, reactive, watchEffect, watch, unref, ref } from 'vue'; // computed 
 import { useI18n } from 'vue-i18n';
@@ -48,6 +51,7 @@ export default defineComponent({
 
   components: {
     TheNavbar,
+    PageLoader,
     BestWorstChoices
   },
 
@@ -67,7 +71,7 @@ export default defineComponent({
     } = useSettings();
 
     // Search string for lemmata/keywords
-    const searchlemmata = ref('');
+    const searchlemmata = ref("");
 
     // reactive data of this component
     const data = reactive({
@@ -86,6 +90,8 @@ export default defineComponent({
       evaluated: [],
     });
 
+    const message_suggestion = ref("Not connected! Please login.");
+
     // Replenish data.queue from database (load new example sets into queue)
     //const replenishQueue = (orderquantity = 10) => {
     const replenishQueue = () => {
@@ -101,14 +107,26 @@ export default defineComponent({
         // load other functions and objects
         const { getToken } = useLoginAuth();
         const { api } = useApi(getToken());
-        // start API requrest
+        // start API request
+        message_suggestion.value = "Loading new example sets ...";
         api.post(`v1/bestworst/samples/4/${unref(orderquantity)}/${unref(sampling_numtop)}/${unref(sampling_offset)}`, params)
         .then(response => {
-          // copy all example sets
-          response.data.forEach(exset => data.queue.push(exset));
+          // Is there any error message returned?
+          if ('status' in response.data){
+            if ('msg' in response.data){
+              message_suggestion.value = response.data['msg'];
+            }
+          }else if (typeof response.data == "object"){
+            // copy all example sets
+            response.data.forEach(exset => data.queue.push(exset));
+          }else{
+            message_suggestion.value = "API returned unexpected data.";
+          }
           resolve(response);
         })
         .catch(error => {
+          // message to user
+          message_suggestion.value = "Unknown Error!";
           reject(error);
         })
         .finally(() => {
@@ -232,7 +250,8 @@ export default defineComponent({
     return { 
       data, pullFromQueue, nextExampleSet,
       reorderpoint, orderquantity,
-      onSearchLemmata
+      onSearchLemmata,
+      message_suggestion
     }
   },
 

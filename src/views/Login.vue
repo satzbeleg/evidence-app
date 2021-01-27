@@ -3,7 +3,7 @@
              v-bind:with_darkmode_icon="true"
              v-bind:with_lemmata_search="false" />
 
-  <section class="hero has-background-success is-fullheight-with-navbar" id="login">
+  <section class="hero has-background-info is-fullheight-with-navbar" id="login">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
