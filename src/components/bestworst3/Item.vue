@@ -86,8 +86,10 @@ export default defineComponent({
 .state-worst {
   background: hsl(348, 30%, 60%);
 }
+</style>
 
-/** For lemma spans */
+<style>
+/** For lemma spans; Must be global setting...*/
 .reset-to-parent-font-height {
   font-size: inherit !important;
 }
