@@ -4,7 +4,7 @@
       <div class="card-content">
         <div class="content center">
           <div v-fit2box="sentText" class="fixed-box" 
-               v-html="highlightSpans(sentText, lemmaSpans, 'b')"></div>
+               v-html="highlightSpans(sentText, lemmaSpans, 'span', 'tag is-success is-light reset-to-parent-font-height')"></div>
         </div>
       </div>
     </div>
@@ -84,6 +84,11 @@ export default defineComponent({
 
 .state-worst {
   background: hsl(348, 30%, 60%);
+}
+
+/** For lemma spans */
+.reset-to-parent-font-height {
+  font-size: inherit !important;
 }
 </style>
 
