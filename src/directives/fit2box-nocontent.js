@@ -22,8 +22,8 @@ export default {
 }
 
 function fitTextToBox(el) {
-  const bh = el.clientHeight / 18.0; // approx to rem units
-  const bw = el.clientWidth / 18.0;
+  const bh = el.clientHeight / 17.0; // approx to rem units
+  const bw = el.clientWidth / 17.0;
   // console.log(bw, bh)
   const fh = 1;
   const fw = getTextWidth(el.textContent, `${fh}rem`);
