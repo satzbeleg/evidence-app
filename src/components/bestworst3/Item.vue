@@ -3,8 +3,9 @@
     <div class="card is-quarter" v-bind:id="sentId" :class="stateCss">
       <div class="card-content">
         <div class="content center">
-          <div v-fit2box="sentText" class="fixed-box" 
-               v-html="highlightSpans(sentText, lemmaSpans, 'span', 'tag is-success is-light reset-to-parent-font-height')"></div>
+          <div v-fit2box="sentText" class="fixed-box">
+            <div v-html="highlightSpans(sentText, lemmaSpans, 'span', 'tag is-success is-light reset-to-parent-font-height')"></div>
+          </div>
         </div>
       </div>
     </div>
