@@ -5,6 +5,7 @@
       v-bind:itemState="data.states[0]"
       v-bind:sentId="items[0].id"
       v-bind:sentText="items[0].text"
+      v-bind:lemmaSpans="items[0].spans"
       v-on:item-selected="onTransition"
     />
 
@@ -13,6 +14,7 @@
       v-bind:itemState="data.states[1]"
       v-bind:sentId="items[1].id"
       v-bind:sentText="items[1].text"
+      v-bind:lemmaSpans="items[1].spans"
       v-on:item-selected="onTransition"
     />
 
@@ -21,6 +23,7 @@
       v-bind:itemState="data.states[2]"
       v-bind:sentId="items[2].id"
       v-bind:sentText="items[2].text"
+      v-bind:lemmaSpans="items[2].spans"
       v-on:item-selected="onTransition"
     />
 
@@ -29,6 +32,7 @@
       v-bind:itemState="data.states[3]"
       v-bind:sentId="items[3].id"
       v-bind:sentText="items[3].text"
+      v-bind:lemmaSpans="items[3].spans"
       v-on:item-selected="onTransition"
     />
 
