@@ -3,8 +3,9 @@
     <div class="card is-quarter" v-bind:id="sentId" :class="stateCss">
       <div class="card-content">
         <div class="content center">
-          <div v-fit2box="sentText" class="fixed-box" ></div>
-          <!-- <div class="fixed-box">{{ sentText }}</div>  -->
+          <div v-fit2box="sentText" class="fixed-box">
+            <div v-html="highlightSpans(sentText, lemmaSpans, 'span', 'tag is-success is-light is-rounded reset-to-parent-font-height')"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -15,6 +16,7 @@
 <script>
 import s from './enums.js';
 import { defineComponent, computed } from 'vue'; 
+import { highlightSpans } from '@/functions/highlight-spans.js';
 
 export default defineComponent({
   name: "BestWorstItem",
@@ -24,6 +26,7 @@ export default defineComponent({
     itemState: Number, // item's states: [middle, best, worst]
     sentId: String, // SentenceID
     sentText: String,  // SentenceText
+    lemmaSpans: Array
   },
 
   emits: ['item-selected'],
@@ -41,9 +44,9 @@ export default defineComponent({
         case s.WORST: return "state-worst";
         default: return "";
       }
-    })
+    });
 
-    return { onClick, stateCss }
+    return { onClick, stateCss, highlightSpans }
   },
 
 });
@@ -82,6 +85,14 @@ export default defineComponent({
 
 .state-worst {
   background: hsl(348, 30%, 60%);
+}
+</style>
+
+<style>
+/** For lemma spans; Must be global setting...*/
+.reset-to-parent-font-height {
+  font-size: inherit !important;
+  height: inherit !important;
 }
 </style>
 
