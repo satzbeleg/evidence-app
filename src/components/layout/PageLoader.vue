@@ -35,7 +35,7 @@ export default defineComponent({
   top: 3.25rem;
 }
 @media screen and (min-width: 1024px){
-  .pageloader {top: 5.75rem;}
+  .pageloader {top: 87.9375px;}
 }
 
 /** message settings */

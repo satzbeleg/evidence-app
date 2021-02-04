@@ -102,7 +102,7 @@ export default {
       document.title = t('settings.settings');
     });
 
-    // load settings (vuex replacement)
+    // load settings
     const { reorderpoint, orderquantity, sampling_numtop, sampling_offset } = useSettings();
     const { darkmodetheme } = useDarkmodeToggle();
     
