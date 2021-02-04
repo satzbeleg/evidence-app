@@ -39,7 +39,7 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { defineComponent, reactive, watchEffect, watch, unref, ref } from 'vue'; // computed 
+import { defineComponent, reactive, watchEffect, watch, unref, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
 import { useSettings } from '@/functions/settings.js';
