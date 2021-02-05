@@ -30,6 +30,11 @@ NODE_ENV=local
 VUE_APP_API_URL=http://0.0.0.0:55017
 ```
 
+Oder
+
+* `VUE_APP_API_URL=http://riker.bbaw.de:55017`
+* `VUE_APP_API_URL=https://riker.bbaw.de`
+
 ## Benutzerkonten (Sign Up)
 Benutzerkonten werden manuell von [Admin](mailto:hamster@bbaw.de) in der [SQL Datenbank](https://git.zdl.org/hamster/evidence-database) erstellt. 
 Dies ist eine Zwischenlösung bis die [DWDS Auth API](https://git.zdl.org/knaebel/dwds-oauth2) in Betrieb geht (Ansprechpartner: Frank Wiegand und Rene Knaebel).
