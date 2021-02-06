@@ -248,7 +248,7 @@ export default defineComponent({
     pullFromQueue();
 
     // compute max for progressba
-    const maxprogress = computed(() => reorderpoint.value + orderquantity.value);
+    const maxprogress = computed(() => parseInt(reorderpoint.value) + parseInt(orderquantity.value));
 
     return { 
       data, pullFromQueue, nextExampleSet,
