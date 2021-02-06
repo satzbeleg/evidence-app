@@ -19,8 +19,8 @@
               <label class="label">{{ t('auth.username') }}</label>
               <p class="control has-icons-left has-icons-right">
                 <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
-                <input class="input" 
-                       type="text"
+                <input class="input" type="text" 
+                       autocorrect="off" autocapitalize="off" spellcheck="false"
                        v-model="username"
                        v-bind:placeholder="t('auth.username_place')">
               </p>
