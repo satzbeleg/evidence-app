@@ -19,7 +19,7 @@
         <!-- progress bar -->
         <progress class="progress is-info mt-5" 
                   v-bind:value="data.queue.length" 
-                  v-bind:max="reorderpoint + orderquantity">
+                  v-bind:max="maxprogress">
           {{ data.queue.length }}
         </progress>
       </template>
@@ -39,7 +39,7 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
-import { defineComponent, reactive, watchEffect, watch, unref, ref } from 'vue';
+import { defineComponent, reactive, watchEffect, watch, unref, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
 import { useSettings } from '@/functions/settings.js';
@@ -247,9 +247,12 @@ export default defineComponent({
     // load initial current BWS-exampleset
     pullFromQueue();
 
+    // compute max for progressba
+    const maxprogress = computed(() => reorderpoint.value + orderquantity.value);
+
     return { 
       data, pullFromQueue, nextExampleSet,
-      reorderpoint, orderquantity,
+      maxprogress,
       onSearchLemmata,
       message_suggestion
     }
