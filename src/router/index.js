@@ -36,12 +36,6 @@ const routes = [{
       import ( /* webpackPreload: true */ '../views/BestWorst3.vue'),
     meta: { requiresAuth: true }
   },
-  {
-    path: '/demo-fit2box',
-    name: 'Demo für vue-fit2box',
-    component: () =>
-      import ( /* webpackPreload: true */ '../views/DemoFit2Box.vue')
-  },
 ];
 
 
