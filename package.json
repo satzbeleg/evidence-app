@@ -10,7 +10,7 @@
     "new-icons": "npx vue-pwa-asset-generator -a src/assets/logo.png -o public/img/icons --no-manifest && mv public/img/icons/favicon.ico public/favicon.ico"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.14.0",
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@vue/preload-webpack-plugin": "^1.1.2",
     "axios": "^0.21.1",
     "bulma": "^0.9.0",
@@ -18,14 +18,14 @@
     "bulma-slider": "^2.0.4",
     "bulma-switch": "^2.0.0",
     "bulma-toast": "^2.0.3",
-    "core-js": "^3.6.5",
+    "core-js": "^3.10.0",
     "js-cookie": "^2.2.1",
     "messageformat": "^2.3.0",
     "register-service-worker": "^1.7.1",
-    "vue": "^3.0.2",
+    "vue": "^3.0.10",
     "vue-fit2box": "1.0.0",
-    "vue-i18n": "^9.0.0",
-    "vue-router": "^4.0.0-alpha.6"
+    "vue-i18n": "^9.0.0-beta.2",
+    "vue-router": "^4.0.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
