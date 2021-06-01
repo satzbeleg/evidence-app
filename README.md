@@ -171,3 +171,13 @@ export default {
   }
 }
 ```
+
+
+## Docker starten
+
+```sh
+# Host Server's Port Settings
+export WEBAPP_HOST_PORT=55018
+
+docker compose up --build
+```

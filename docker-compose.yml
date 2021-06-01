@@ -6,11 +6,22 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "55018:8080"
+      - "${WEBAPP_HOST_PORT}:8080"  # 55018
     networks:
       evidence-frontend-network:
         ipv4_address: 172.20.253.17
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
 
 networks:
   evidence-frontend-network:
-    external: true
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.20.253.16/29
+          ip_range: 172.20.253.20/30
