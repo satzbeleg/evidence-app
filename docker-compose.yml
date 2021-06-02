@@ -1,7 +1,8 @@
 version: '3'
 
 services:
-  evidence-app:
+  evidence-webapp:
+    container_name: evidence-webapp
     build: 
       context: .
       dockerfile: Dockerfile
@@ -19,6 +20,7 @@ services:
 
 networks:
   evidence-frontend-network:
+    name: evidence-frontend-network
     driver: bridge
     ipam:
       driver: default
