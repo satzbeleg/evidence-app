@@ -173,7 +173,8 @@ export default {
 ```
 
 
-## Docker starten
+## Run the Web APP in a docker container
+The file `docker-compose.yml` contains an **configuration example** how to deploy the REST API as docker container. It is recommended to add this repository as git submodule to an deployment repository with a central Docker Compose configuration that suits your needs. 
 
 ```sh
 # Host Server's Port Settings
