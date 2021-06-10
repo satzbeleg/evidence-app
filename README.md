@@ -32,15 +32,9 @@ Oder
 * `RESTAPI_URL=http://evidence.bbaw.de:55017`
 * `RESTAPI_URL=https://evidence.bbaw.de`
 
-## Benutzerkonten (Sign Up)
-Benutzerkonten werden manuell von [Admin](mailto:hamster@bbaw.de) in der [SQL Datenbank](https://git.zdl.org/hamster/evidence-database) erstellt. 
-Dies ist eine Zwischenlösung bis die [DWDS Auth API](https://git.zdl.org/knaebel/dwds-oauth2) in Betrieb geht (Ansprechpartner: Frank Wiegand und Rene Knaebel).
-Daher wird auch kein Sign Up und PW-Wiederherstellung im Evidence Projekt implementiert.
-
-Testkonten
-
-- username: `test1` / password: `geheim1`  (Test User in REST API)
-- username: `test2` / password: `geheim2`  (Test User in Datenbank)
+## Testkonten
+- username: `testuser1` / password: `secret`  (Test User in REST API)
+- username: `testuser2` / password: `secret`  (Test User in REST API)
 
 
 ## Login bei lokaler Entwicklung: CORS Error
@@ -175,7 +169,7 @@ The file `docker-compose.yml` contains an **configuration example** how to deplo
 
 ```sh
 # Host Server's Port Settings
-export WEBAPP_HOST_PORT=55018
+export WEBAPP_HOSTPORT=55018
 
-docker compose up --build
+docker compose -p evidence -f network.yml -f webapp.yml up --build
 ```

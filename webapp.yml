@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+  evidence-webapp:
+    container_name: evidence-webapp
+    build: 
+      context: ${WEBAPP_PATH:-.}/
+      dockerfile: Dockerfile
+    ports:
+      - "${WEBAPP_HOSTPORT}:8080"  # 55018
+    networks:
+      evidence-network:
+        ipv4_address: 172.20.253.1
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 10s
+        max_attempts: 5
+        #window: 300s
