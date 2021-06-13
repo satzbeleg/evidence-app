@@ -1,7 +1,6 @@
 import axios from 'axios';
-
-import { ref, computed } from 'vue';
 import Cookies from 'js-cookie';
+import { ref, computed } from 'vue';
 
 /**
  * @param {String} endpoint 
@@ -40,12 +39,12 @@ export const useApi = (token) => {
  * 
  * EXAMPLE:
  * --------
-import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
-import router from '@/router';
-const { getToken } = useLoginAuth();
-const token = getToken();
-if (typeof token == 'undefined') {router.push("/login");}
-const { api } = useApi(getToken());
+    import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
+    import router from '@/router';
+    const { getToken } = useLoginAuth();
+    const token = getToken();
+    if (typeof token == 'undefined') {router.push("/login");}
+    const { api } = useApi(getToken());
  */
 export const useLoginAuth = () => {
   // declare reactive variables
