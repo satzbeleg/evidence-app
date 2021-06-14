@@ -84,7 +84,7 @@
           <div class="field is-grouped is-grouped-multiline">
 
             <p class="control" v-if="!isAuthenticated">
-              <router-link :to="{ path: '/login' }">
+              <router-link :to="{ path: '/auth/login' }">
                 <a class="button is-primary">
                   <strong>{{ t('auth.login') }}</strong>
                   <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
@@ -165,7 +165,7 @@ export default defineComponent({
     const onLogout = async () => {
       try{
         await logout();
-        router.push("/login");
+        router.push("/auth/login");
       }catch(err){
         console.log(err);
       }

@@ -8,14 +8,39 @@ const routes = [{
     name: 'Home',
     component: () =>
       import ( /* webpackPreload: true */ '../views/Home.vue'),
-    redirect: '/bestworst3' // REDIRECT FROM HOME(!)
+    //redirect: '/bestworst3' // REDIRECT FROM HOME(!)
   },
   {
-    path: '/login',
+    path: '/auth/login-legacy',
+    name: 'Login via REST API',  // Login via main REST API demo accounts
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/auth-legacy/Login.vue')
+  },
+  {
+    path: '/auth/signup', 
+    name: 'Sign Up',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/auth/Signup.vue')
+  },
+  {
+    path: '/auth/login',
     name: 'Login',
     component: () =>
-      import ( /* webpackPreload: true */ '../views/Login.vue')
+      import ( /* webpackPreload: true */ '../views/auth/Login.vue')
   },
+  {
+    path: '/auth/verify',
+    name: 'Verify your email address',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/auth/Verify.vue')
+  },
+  {
+    path: '/auth/recovery',
+    name: 'Recover your account',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/auth/Recovery.vue')
+  },
+  // /auth/settings
   {
     path: '/about',
     name: 'About',
@@ -52,7 +77,7 @@ router.beforeEach((to, from, next) => {
     // console.log( isAuthenticated.value, isAuthenticated )
   if (requiresAuth && !isAuthenticated.value) {
     next({
-      path: '/login',
+      path: '/auth/login',
       query: { redirect: to.fullPath }
     });
   } else {
