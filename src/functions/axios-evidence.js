@@ -66,7 +66,7 @@ export const useLoginAuth = () => {
 
       // start POST request
       const { api } = useApi();
-      api.post('v1/auth/login', params)
+      api.post('v1/auth-legacy/login', params)
         .then(resp => {
           authStatus.value = 'success'; // save JWT token in Cookie and axios
           jwtToken.value = resp.data.access_token;
