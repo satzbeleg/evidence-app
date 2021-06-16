@@ -13,12 +13,14 @@ Useful commands:
 - Compiles and hot-reloads for development: `yarn serve`
 - Compiles and minifies for production: `yarn build`
 - Compile SASS: `yarn css-build`
+- Update Icons: `yarn new-icons`
 - Lints and fixes files: `yarn lint`
 - Open Vue.js UI: `vue ui`
 - VS Code extension: [Vetur](https://github.com/vuejs/vetur)
 
 Fixes:
 - "Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime": Run `npm rebuild node-sass`
+- node-gpy erors: Delete `rm -rf ~/.node-gyp`
 
 ## .env.local
 
@@ -173,3 +175,10 @@ export WEBAPP_HOSTPORT=55018
 
 docker compose -p evidence -f network.yml -f webapp.yml up --build
 ```
+
+
+## 
+```
+yarn serve --port 55018
+```
+
