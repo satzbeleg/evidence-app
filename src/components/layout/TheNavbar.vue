@@ -84,6 +84,15 @@
           <div class="field is-grouped is-grouped-multiline">
 
             <p class="control" v-if="!isAuthenticated">
+              <router-link :to="{ path: '/auth/signup' }">
+                <a class="button is-info">
+                  <strong>{{ t('auth.signup') }}</strong>
+                  <span class="icon"><i class="fas fa-user-plus"></i></span>
+                </a>
+              </router-link>
+            </p>
+
+            <p class="control" v-if="!isAuthenticated">
               <router-link :to="{ path: '/auth/login' }">
                 <a class="button is-primary">
                   <strong>{{ t('auth.login') }}</strong>
