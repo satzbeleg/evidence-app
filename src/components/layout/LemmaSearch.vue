@@ -5,13 +5,13 @@
   <div class="field has-addons has-addons-fullwidth">
     <div class="control">  <!-- has-icons-left -->
       <!-- <span class="icon is-small is-left"><i class="fas fa-search"></i></span> -->
-      <input class="input" type="text" 
+      <input class="input is-rounded" type="text" 
              v-model="keywords"
              placeholder="lemma1, lemma2, ...">
     </div>
 
     <div class="control">
-      <button class="button is-primary" type="submit" 
+      <button class="button is-rounded is-primary" type="submit" 
               v-on:click.prevent="onSearchLemmata">
         <i class="fas fa-search"></i>
         <strong class="is-hidden-mobile">&nbsp;Search</strong>

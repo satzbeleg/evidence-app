@@ -1,6 +1,3 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/0d1cca68-8b41-4097-8eb2-52f6db306ba8/deploy-status)](https://app.netlify.com/sites/goofy-hypatia-8bd9ad/deploys)
-
-
 # EVIDENCE App
 UI for the EVIDENCE project (BBAW/TUD)
 
@@ -16,34 +13,30 @@ Useful commands:
 - Compiles and hot-reloads for development: `yarn serve`
 - Compiles and minifies for production: `yarn build`
 - Compile SASS: `yarn css-build`
+- Update Icons: `yarn new-icons`
 - Lints and fixes files: `yarn lint`
 - Open Vue.js UI: `vue ui`
 - VS Code extension: [Vetur](https://github.com/vuejs/vetur)
 
 Fixes:
 - "Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime": Run `npm rebuild node-sass`
+- node-gpy erors: Delete `rm -rf ~/.node-gyp`
 
 ## .env.local
 
 ```
 NODE_ENV=local
-VUE_APP_API_URL=http://0.0.0.0:55017
+REST_PUBLIC_URL=http://0.0.0.0:55017
 ```
 
 Oder
 
-* `VUE_APP_API_URL=http://riker.bbaw.de:55017`
-* `VUE_APP_API_URL=https://riker.bbaw.de`
+* `REST_PUBLIC_URL=http://evidence.bbaw.de:55017`
+* `REST_PUBLIC_URL=https://evidence.bbaw.de`
 
-## Benutzerkonten (Sign Up)
-Benutzerkonten werden manuell von [Admin](mailto:hamster@bbaw.de) in der [SQL Datenbank](https://git.zdl.org/hamster/evidence-database) erstellt. 
-Dies ist eine Zwischenlösung bis die [DWDS Auth API](https://git.zdl.org/knaebel/dwds-oauth2) in Betrieb geht (Ansprechpartner: Frank Wiegand und Rene Knaebel).
-Daher wird auch kein Sign Up und PW-Wiederherstellung im Evidence Projekt implementiert.
-
-Testkonten
-
-- username: `test1` / password: `geheim1`  (Test User in REST API)
-- username: `test2` / password: `geheim2`  (Test User in Datenbank)
+## Testkonten
+- username: `testuser1` / password: `secret`  (Test User in REST API)
+- username: `testuser2` / password: `secret`  (Test User in REST API)
 
 
 ## Login bei lokaler Entwicklung: CORS Error
@@ -171,3 +164,23 @@ export default {
   }
 }
 ```
+
+
+## Run the Web APP in a docker container
+The file `docker-compose.yml` contains an **configuration example** how to deploy the REST API as docker container. It is recommended to add this repository as git submodule to an deployment repository with a central Docker Compose configuration that suits your needs. 
+
+```sh
+# Host Server's Port Settings
+export WEBAPP_HOSTPORT=55018
+
+# Start containers
+# - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
+docker compose -p evidence -f network.yml -f webapp.yml up --build
+```
+
+
+## 
+```
+yarn serve --port 55018
+```
+

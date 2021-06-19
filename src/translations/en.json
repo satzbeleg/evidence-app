@@ -13,11 +13,17 @@
     "login_cta": "Please login to proceed.",
     "signup": "Sign Up",
     "signup_noun": "Sign Up",
-    "signup_cta": "Please register with username, email and password.",
+    "signup_cta": "Please register with email and password.",
+    "recover": "Reset",
+    "recover_noun": "Reset Password",
+    "recover_cta": "Request a new password for your Email.",
+    "verify": "Verify",
+    "verify_noun": "Verify Email",
+    "verify_cta": "Verify your email address.",
     "logout": "Log Out",
     "remember": "Remember me",
     "email": "Email",
-    "email_place": "avery@doe.com",
+    "email_place": "avery at doe.com",
     "password": "Password",
     "password_place": "Your Password",
     "username": "Username",
@@ -26,6 +32,7 @@
   "settings": {
     "settings": "Settings",
     "appearance": "Appearance",
+    "language": "Language",
     "darkmode": "Dark theme"
   },
   "bestworst": {

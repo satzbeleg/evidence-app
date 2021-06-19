@@ -14,6 +14,8 @@
                v-model="darkmodetheme">
         <label for="darkmode-toogle">Darkmode</label>
       </div>
+
+      <h2 class="subtitle is-4">{{ t('settings.language') }}</h2>
       <div class="field">
         <LanguageSwitcher />
       </div>

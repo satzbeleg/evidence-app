@@ -1,7 +1,8 @@
 import axios from 'axios';
-
-import { ref, computed } from 'vue';
 import Cookies from 'js-cookie';
+import { ref, computed } from 'vue';
+//import { useRoute } from 'vue-router';
+
 
 /**
  * @param {String} endpoint 
@@ -12,7 +13,7 @@ import Cookies from 'js-cookie';
 export const useApi = (token) => {
   // Creat an axios api instance. 
   const api = axios.create({
-    baseURL: process.env.VUE_APP_API_URL || 'http://0.0.0.0:55017',
+    baseURL: process.env.REST_PUBLIC_URL || 'http://0.0.0.0:55017',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -27,35 +28,29 @@ export const useApi = (token) => {
 
 
 /**
- * @param {String} authStatus
- *    There are 4 states: 
- *      - 'not-loaded' (initial state)
- *      - 'success' (Login successful, JWT token returned)
- *      - 'error'
- *      - 'logout'
- * @param {Boolean} isLoading
- *    Flag if an API request is still in progress
- * @param {Number} failedLoginAttempts
- *    Counter for failed login attempts
+ * Manage the Access Token
  * 
  * EXAMPLE:
  * --------
-import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
-import router from '@/router';
-const { getToken } = useLoginAuth();
-const token = getToken();
-if (typeof token == 'undefined') {router.push("/login");}
-const { api } = useApi(getToken());
+    import { useApi, useAuth } from '@/functions/axios-evidence.js';
+    import router from '@/router';
+    const { getToken } = useAuth();
+    const token = getToken();
+    if (typeof token == 'undefined') {router.push("/login");}
+    const { api } = useApi(getToken());
  */
-export const useLoginAuth = () => {
+export const useAuth = () => {
   // declare reactive variables
   const jwtToken = ref(undefined);
   const authStatus = ref("not-loaded");
   const isLoading = ref(false);
   const failedLoginAttempts = ref(0);
+  const verificationStatus = ref("");
 
-
-  const login = (username, password) => {
+  /** 
+   * Legacy Login based on username/password
+   */
+  const loginLegacy = (username, password) => {
     return new Promise((resolve, reject) => {
       // Auth Request started
       isLoading.value = true;
@@ -63,6 +58,42 @@ export const useLoginAuth = () => {
       // convert JSON object into query string bcoz FastAPI expects query string
       const params = new URLSearchParams();
       params.append('username', username);
+      params.append('password', password);
+
+      // start POST request
+      const { api } = useApi();
+      api.post('v1/auth-legacy/login', params)
+        .then(resp => {
+          authStatus.value = 'success'; // save JWT token in Cookie and axios
+          jwtToken.value = resp.data.access_token;
+          Cookies.set('auth_token', resp.data.access_token, { expires: 7, sameSite: 'strict' }); //{ secure: true }
+          //api.defaults.headers.common['Authorization'] = resp.data.access_token;
+          resolve(resp);
+        })
+        .catch(err => {
+          authStatus.value = 'error';
+          jwtToken.value = undefined;
+          failedLoginAttempts.value += 1;
+          reject(err);
+        })
+        .finally(() => {
+          isLoading.value = false
+        });
+      // fin.
+    });
+  }
+
+  /**
+   * Email/Password based Authentication
+   */
+  const loginEmail = (email, password) => {
+    return new Promise((resolve, reject) => {
+      // Auth Request started
+      isLoading.value = true;
+
+      // convert JSON object into query string bcoz FastAPI expects query string
+      const params = new URLSearchParams();
+      params.append('username', email);
       params.append('password', password);
 
       // start POST request
@@ -88,6 +119,69 @@ export const useLoginAuth = () => {
     });
   }
 
+  /**
+   * Email/Password based Authentication
+   */
+   const signupEmail = (email, password) => {
+    return new Promise((resolve, reject) => {
+      // Auth Request started
+      isLoading.value = true;
+
+      // convert JSON object into query string bcoz FastAPI expects query string
+      const params = new URLSearchParams();
+      params.append('username', email);
+      params.append('password', password);
+
+      // start POST request
+      const { api } = useApi();
+      api.post('v1/auth/register', params)
+        .then(resp => {
+          console.log(resp)
+          resolve(resp);
+        })
+        .catch(err => {
+          console.log(err)
+          reject(err);
+        })
+        .finally(() => {
+        });
+      // fin.
+    });
+  }
+
+  /**
+   * Email Verification
+   */
+   const verifyEmail = (verifyToken) => {
+    return new Promise((resolve, reject) => {
+      // get the verfication token from dynamic routing
+      console.log("Verify Token: ", verifyToken);
+      //console.log(verificationStatus.value);
+
+      // start GET request
+      const { api } = useApi();
+      api.get('v1/auth/verify/' + verifyToken)
+        .then(resp => {
+          verificationStatus.value = resp.status;
+          console.log(resp)
+          resolve(resp);
+        })
+        .catch(err => {
+          verificationStatus.value = "api-not-reachable";
+          console.log(err)
+          reject(err);
+        })
+        .finally(() => {
+        });
+      // fin.
+      console.log(verificationStatus.value);
+    });
+  }
+
+
+  /**
+   * Logout -- Delete Access Token 
+   */
   const logout = () => {
     return new Promise(resolve => {
       authStatus.value = 'logout'; // delete JWT token from Cookie and axios
@@ -107,12 +201,15 @@ export const useLoginAuth = () => {
   const isAuthenticated = computed(() => !!jwtToken.value);
 
   return {
-    login,
+    loginLegacy,
+    loginEmail,
     logout,
     getToken,
     isAuthenticated,
     authStatus,
     isLoading,
-    failedLoginAttempts
+    failedLoginAttempts,
+    signupEmail,
+    verifyEmail
   }
 }

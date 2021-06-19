@@ -13,11 +13,17 @@
     "login_cta": "Bitte melden Sie sich an, um fortzufahren.",
     "signup": "Registrieren",
     "signup_noun": "Registrierung",
-    "signup_cta": "Bitte registrieren Sie sich mit dem gewünschten Benutzernamen, Email und Passwort.",
+    "signup_cta": "Bitte registrieren Sie sich mit Ihrer E-Mail-Adresse und gewünschten Passwort.",
+    "recover": "Zurücksetzen",
+    "recover_noun": "Passwort Zurücksetzen",
+    "recover_cta": "Fordern Sie neues Passwort für Ihre E-Mail-Adresse an.",
+    "verify": "Bestätige",
+    "verify_noun": "Bestätige E-Mail",
+    "verify_cta": "Bestätige die angegebene E-Mail-Adresse.",
     "logout": "Abmelden",
     "remember": "Merken",
     "email": "E-Mail",
-    "email_place": "alex@musterbeispiel.de",
+    "email_place": "alex at musterbeispiel.de",
     "password": "Passwort",
     "password_place": "Ihr Passwort",
     "username": "Benutzername",
@@ -26,6 +32,7 @@
   "settings": {
     "settings": "Einstellungen",
     "appearance": "Aussehen",
+    "language": "Sprache",
     "darkmode": "Dunkler Modus"
   },
   "bestworst": {

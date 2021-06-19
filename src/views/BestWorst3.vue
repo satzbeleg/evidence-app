@@ -41,7 +41,7 @@ import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst3/Choices.vue';
 import { defineComponent, reactive, watchEffect, watch, unref, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useApi, useLoginAuth } from '@/functions/axios-evidence.js';
+import { useApi, useAuth } from '@/functions/axios-evidence.js';
 import { useSettings } from '@/functions/settings.js';
 import { traverseObject } from '@/functions/traverse-objects.js';
 
@@ -105,7 +105,7 @@ export default defineComponent({
         }
         console.log(params)
         // load other functions and objects
-        const { getToken } = useLoginAuth();
+        const { getToken } = useAuth();
         const { api } = useApi(getToken());
         // start API request
         message_suggestion.value = "Loading new example sets ...";
@@ -196,7 +196,7 @@ export default defineComponent({
     // save evaluated sets into the databse
     const saveEvaluations = () => {
       return new Promise((resolve, reject) => {
-        const { getToken } = useLoginAuth();
+        const { getToken } = useAuth();
         const { api } = useApi(getToken());
         api.post(`v1/bestworst/evaluations`, data.evaluated)
         .then(response => {

@@ -84,8 +84,17 @@
           <div class="field is-grouped is-grouped-multiline">
 
             <p class="control" v-if="!isAuthenticated">
-              <router-link :to="{ path: '/login' }">
-                <a class="button is-primary">
+              <router-link :to="{ path: '/auth/signup' }">
+                <a class="button is-rounded is-info">
+                  <strong>{{ t('auth.signup') }}</strong>
+                  <span class="icon"><i class="fas fa-user-plus"></i></span>
+                </a>
+              </router-link>
+            </p>
+
+            <p class="control" v-if="!isAuthenticated">
+              <router-link :to="{ path: '/auth/login' }">
+                <a class="button is-rounded is-primary">
                   <strong>{{ t('auth.login') }}</strong>
                   <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
                 </a>
@@ -93,7 +102,7 @@
             </p>
 
             <p class="control" v-if="isAuthenticated">
-              <a class="button is-danger" v-on:click="onLogout()">
+              <a class="button is-rounded is-danger" v-on:click="onLogout()">
                 <strong>{{ t('auth.logout') }}</strong>
                 <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
               </a>
@@ -118,7 +127,7 @@ import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
 import LemmaSearch from "@/components/layout/LemmaSearch.vue";
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
-import { useLoginAuth } from '@/functions/axios-evidence.js';
+import { useAuth } from '@/functions/axios-evidence.js';
 
 
 export default defineComponent({
@@ -161,11 +170,11 @@ export default defineComponent({
     const showNavBurger = ref(false);
 
     // Logout Button
-    const { logout, isAuthenticated } = useLoginAuth();
+    const { logout, isAuthenticated } = useAuth();
     const onLogout = async () => {
       try{
         await logout();
-        router.push("/login");
+        router.push("/auth/login");
       }catch(err){
         console.log(err);
       }

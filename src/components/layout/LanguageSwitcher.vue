@@ -3,7 +3,7 @@
        v-on:click="showLangDrop = !showLangDrop"
        v-bind:class="{ 'is-active': showLangDrop }">
     <div class="dropdown-trigger">
-      <button class="button is-light" type="button"
+      <button class="button is-rounded is-light" type="button"
               aria-haspopup="true" aria-controls="dropdown-menu">
         <span>
           <template v-if="language == 'de'">Deutsch</template>
