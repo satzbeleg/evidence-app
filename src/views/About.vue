@@ -61,7 +61,7 @@
           <p class="subtitle is-6">Ubiquitous Knowledge Processing (UKP) Lab</p> -->
           <figure>
             <img style="width: 256px;" 
-              src="https://www.informatik.tu-darmstadt.de/media/ukp/logo/ukp_logo_182x0.png"
+              src="http://web.archive.org/web/20201207164752if_/https://www.informatik.tu-darmstadt.de/media/ukp/logo/ukp_logo_182x0.png"
               alt="Ubiquitous Knowledge Processing (UKP) Lab, Techische Universität Darmstadt">
           </figure>
         </a>
@@ -71,7 +71,7 @@
           <!-- <p class="title is-6">Deutsche Forschungsgemeinschaft (DFG)</p> -->
           <figure>
             <img style="width: 256px;" 
-              src="https://www.dfg.de/includes/images/layout/dfg_logo_schriftzug.svg"
+              src="http://web.archive.org/web/20210612151857if_/https://www.dfg.de/includes/images/layout/dfg_logo_schriftzug.svg"
               alt="Deutsche Forschungsgemeinschaft (DFG)">
           </figure>
         </a>
@@ -82,7 +82,7 @@
           <p class="subtitle is-6">Ubiquitous Knowledge Processing (UKP) Lab</p> -->
           <figure>
             <img style="width: 256px;" 
-              src="https://www.bbaw.de/typo3conf/ext/bbaw/Resources/Public/Images/Berlin-Brandenburgische_Akademie_der_Wissenschaften.svg"
+              src="http://web.archive.org/web/20210613014610if_/https://www.bbaw.de/typo3conf/ext/bbaw/Resources/Public/Images/Berlin-Brandenburgische_Akademie_der_Wissenschaften.svg"
               alt="Berlin-Brandenburg Academy of Sciences and Humanities (BBAW)">
           </figure>
         </a>
