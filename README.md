@@ -173,6 +173,8 @@ The file `docker-compose.yml` contains an **configuration example** how to deplo
 # Host Server's Port Settings
 export WEBAPP_HOSTPORT=55018
 
+# Start containers
+# - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
 docker compose -p evidence -f network.yml -f webapp.yml up --build
 ```
 
