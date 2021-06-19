@@ -85,7 +85,7 @@
 
             <p class="control" v-if="!isAuthenticated">
               <router-link :to="{ path: '/auth/signup' }">
-                <a class="button is-info">
+                <a class="button is-rounded is-info">
                   <strong>{{ t('auth.signup') }}</strong>
                   <span class="icon"><i class="fas fa-user-plus"></i></span>
                 </a>
@@ -94,7 +94,7 @@
 
             <p class="control" v-if="!isAuthenticated">
               <router-link :to="{ path: '/auth/login' }">
-                <a class="button is-primary">
+                <a class="button is-rounded is-primary">
                   <strong>{{ t('auth.login') }}</strong>
                   <span class="icon"><i class="fas fa-sign-in-alt"></i></span>
                 </a>
@@ -102,7 +102,7 @@
             </p>
 
             <p class="control" v-if="isAuthenticated">
-              <a class="button is-danger" v-on:click="onLogout()">
+              <a class="button is-rounded is-danger" v-on:click="onLogout()">
                 <strong>{{ t('auth.logout') }}</strong>
                 <span class="icon"><i class="fas fa-sign-out-alt"></i></span>
               </a>
