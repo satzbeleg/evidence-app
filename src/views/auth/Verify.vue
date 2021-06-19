@@ -3,31 +3,21 @@
              v-bind:with_darkmode_icon="true"
              v-bind:with_lemmata_search="false" />
 
-  <section class="hero is-info is-fullheight-with-navbar" id="login">
+  <section id="verify" class="hero is-fullheight-with-navbar" 
+           :class="{ 'is-info': status=='waiting', 'is-success': status=='success', 'is-danger': status=='failed' }">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
-          <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+          <div class="column is-5-tablet is-4-desktop is-3-widescreen has-text-centered">
 
             <div v-if="error" class="error">{{ error.message }}</div>
 
             <h3 class="title">{{ t('auth.verify_noun') }}</h3>
             <hr class="login-hr">
-            <p class="subtitle">{{ t('auth.verify_cta') }}</p>
 
-            <form @submit.prevent="onVerify" class="box form">
-
-              <div class="field">
-                <label class="label">{{ t('auth.email') }}</label>
-                <p class="control has-icons-left has-icons-right">
-                  <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
-                  <input class="input is-rounded" type="text" 
-                        autocorrect="off" autocapitalize="off" spellcheck="false"
-                        v-model="email"
-                        v-bind:placeholder="t('auth.email_place')">
-                </p>
-              </div>
-            
+            <template v-if="status == 'waiting'">
+            <p class="subtitle">Push the button to verify your E-Mail.</p>
+            <form @submit.prevent="pushVerifyButton($route.params.verifyToken)" class="form">
               <div class="field">
                 <p class="control">
                   <button class="button is-rounded is-primary" type="submit">
@@ -35,9 +25,23 @@
                     <span class="icon"><i class="fas fa-check-circle"></i></span>
                   </button>
                 </p>
-              </div>
-        
+              </div>        
             </form>
+            </template>
+
+            <template v-if="status == 'success'">
+              <p class="subtitle">
+                Verification was successful.<br>
+                Proceed to the <router-link :to="{ path: '/auth/login' }"><u>Login page</u></router-link>.
+              </p>
+            </template>
+
+            <template v-if="status == 'failed'">
+              <p class="subtitle">
+                Verification failed.<br>
+                Try to <router-link :to="{ path: '/auth/signup' }"><u>Sign Up</u></router-link> again.
+              </p>
+            </template>
 
           </div>
         </div>
@@ -50,10 +54,8 @@
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
-import { defineComponent, ref, watchEffect } from "vue";
-import router from '@/router';
-import { useRoute } from 'vue-router';
-//import { useLoginAuth } from '@/functions/axios-evidence.js';
+import { ref, defineComponent, watchEffect } from "vue";
+import { useAuth } from '@/functions/axios-evidence.js';
 
 
 export default defineComponent({
@@ -68,26 +70,22 @@ export default defineComponent({
     const { t, locale } = useI18n();
 
     watchEffect(() => {
-      document.title = t('auth.login_noun');
+      document.title = t('auth.verify_noun');
     });
 
-    // process submitted login request
-    //const { login } = useLoginAuth(); 
-    const email = ref("");
+    const { verifyEmail } = useAuth(); 
+    const status = ref("waiting");
 
-    // read URL query string
-    const route = useRoute();
-
-    const onVerify = async () => {
+    const pushVerifyButton = async (verifyToken) => {
       try{
-        //await login(username.value, password.value);
-        router.push(route.query.redirect || '/');
-      }catch(err){
-        console.log(err);
+        await verifyEmail(verifyToken);
+        status.value = "success"
+      }catch{
+        status.value = "failed"
       }
     }
 
-    return { t, locale, email, onVerify }
+    return { t, locale, status, pushVerifyButton }
   },
 
 })

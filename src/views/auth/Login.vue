@@ -3,7 +3,7 @@
              v-bind:with_darkmode_icon="true"
              v-bind:with_lemmata_search="false" />
 
-  <section class="hero is-warning is-fullheight-with-navbar" id="login">
+  <section class="hero is-info is-fullheight-with-navbar" id="login">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
@@ -69,7 +69,7 @@ import { useI18n } from 'vue-i18n';
 import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
 import { useRoute } from 'vue-router';
-//import { useLoginAuth } from '@/functions/axios-evidence.js';
+import { useAuth } from '@/functions/axios-evidence.js';
 
 
 export default defineComponent({
@@ -88,7 +88,7 @@ export default defineComponent({
     });
 
     // process submitted login request
-    //const { login } = useLoginAuth(); 
+    const { loginEmail } = useAuth(); 
     const email = ref("");
     const password = ref("");
 
@@ -97,7 +97,7 @@ export default defineComponent({
 
     const onLogin = async () => {
       try{
-        //await login(username.value, password.value);
+        await loginEmail(email.value, password.value);
         router.push(route.query.redirect || '/');
       }catch(err){
         console.log(err);

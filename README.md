@@ -26,13 +26,13 @@ Fixes:
 
 ```
 NODE_ENV=local
-RESTAPI_URL=http://0.0.0.0:55017
+REST_PUBLIC_URL=http://0.0.0.0:55017
 ```
 
 Oder
 
-* `RESTAPI_URL=http://evidence.bbaw.de:55017`
-* `RESTAPI_URL=https://evidence.bbaw.de`
+* `REST_PUBLIC_URL=http://evidence.bbaw.de:55017`
+* `REST_PUBLIC_URL=https://evidence.bbaw.de`
 
 ## Testkonten
 - username: `testuser1` / password: `secret`  (Test User in REST API)

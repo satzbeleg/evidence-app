@@ -3,7 +3,7 @@
              v-bind:with_darkmode_icon="true"
              v-bind:with_lemmata_search="false" />
 
-  <section class="hero is-success is-fullheight-with-navbar" id="login">
+  <section class="hero is-info is-fullheight-with-navbar" id="login">
     <div class="hero-body">
       <div class="container">
         <div class="columns is-centered">
@@ -68,8 +68,7 @@ import { useI18n } from 'vue-i18n';
 import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
 import { useRoute } from 'vue-router';
-//import { useLoginAuth } from '@/functions/axios-kratos.js';
-import { Configuration, PublicApi } from "@ory/kratos-client";
+import { useAuth } from '@/functions/axios-evidence.js';
 
 export default defineComponent({
   name: "SignUp",
@@ -87,7 +86,7 @@ export default defineComponent({
     });
 
     // process submitted login request
-    //const { login } = useLoginAuth(); 
+    const { signupEmail } = useAuth(); 
     const email = ref("");
     const password = ref("");
 
@@ -96,7 +95,7 @@ export default defineComponent({
 
     const onSignup = async () => {
       try{
-        //await login(username.value, password.value);
+        await signupEmail(email.value, password.value);
         router.push(route.query.redirect || '/');
       }catch(err){
         console.log(err);

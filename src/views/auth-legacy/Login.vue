@@ -62,7 +62,7 @@ import { useI18n } from 'vue-i18n';
 import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
 import { useRoute } from 'vue-router';
-import { useLoginAuth } from '@/functions/axios-evidence.js';
+import { useAuth } from '@/functions/axios-evidence.js';
 
 
 export default defineComponent({
@@ -81,7 +81,7 @@ export default defineComponent({
     });
 
     // process submitted login request
-    const { login } = useLoginAuth(); 
+    const { loginLegacy } = useAuth(); 
     const username = ref("");
     const password = ref("");
 
@@ -90,7 +90,7 @@ export default defineComponent({
 
     const onLogin = async () => {
       try{
-        await login(username.value, password.value);
+        await loginLegacy(username.value, password.value);
         router.push(route.query.redirect || '/');
       }catch(err){
         console.log(err);

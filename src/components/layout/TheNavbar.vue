@@ -118,7 +118,7 @@ import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
 import LemmaSearch from "@/components/layout/LemmaSearch.vue";
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
-import { useLoginAuth } from '@/functions/axios-evidence.js';
+import { useAuth } from '@/functions/axios-evidence.js';
 
 
 export default defineComponent({
@@ -161,7 +161,7 @@ export default defineComponent({
     const showNavBurger = ref(false);
 
     // Logout Button
-    const { logout, isAuthenticated } = useLoginAuth();
+    const { logout, isAuthenticated } = useAuth();
     const onLogout = async () => {
       try{
         await logout();
