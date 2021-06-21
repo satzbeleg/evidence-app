@@ -27,6 +27,21 @@ export const useApi = (token) => {
 }
 
 
+export const useGapi = () => {
+  // Check if GAPI is available in the browser
+  const isGapiAvailable = computed(() => typeof window.gapi != "undefined");
+
+  // SignOut
+  const gapiSignOut = () => {
+    var auth2 = window.gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+
+  return { isGapiAvailable, gapiSignOut }
+}
+
 /**
  * Manage the Access Token
  * 
@@ -122,7 +137,7 @@ export const useAuth = () => {
   /**
    * Email/Password based Authentication
    */
-   const signupEmail = (email, password) => {
+  const signupEmail = (email, password) => {
     return new Promise((resolve, reject) => {
       // Auth Request started
       isLoading.value = true;
@@ -188,6 +203,10 @@ export const useAuth = () => {
       jwtToken.value = undefined;
       Cookies.remove('auth_token');
       //delete api.defaults.headers.common['Authorization'];
+      const { isGapiAvailable, gapiSignOut } = useGapi();
+      if ( isGapiAvailable.value ){
+        gapiSignOut();
+      }
       resolve();
     });
   }
