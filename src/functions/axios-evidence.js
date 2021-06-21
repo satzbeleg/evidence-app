@@ -1,8 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ref, computed } from 'vue';
-//import { useRoute } from 'vue-router';
-
 
 /**
  * @param {String} endpoint 
@@ -13,7 +11,7 @@ import { ref, computed } from 'vue';
 export const useApi = (token) => {
   // Creat an axios api instance. 
   const api = axios.create({
-    baseURL: process.env.REST_PUBLIC_URL || 'http://0.0.0.0:55017',
+    baseURL: process.env.VUE_APP_REST_PUBLIC_URL || 'http://0.0.0.0:55017',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -26,6 +24,25 @@ export const useApi = (token) => {
   return { api }
 }
 
+/**
+ * Google OAuth 2.0 API Javascript Client
+ * - Check if GAPI was mounted to DOM window
+ * - Google Logout 
+ */
+export const useGapi = () => {
+  // Check if GAPI is available in the browser
+  const isGapiAvailable = computed(() => typeof window.gapi != "undefined");
+
+  // SignOut
+  const gapiSignOut = () => {
+    var auth2 = window.gapi.auth2.getAuthInstance();
+    auth2.signOut().then(() => {
+      console.log('Google User signed out.');
+    });
+  }
+
+  return { isGapiAvailable, gapiSignOut }
+}
 
 /**
  * Manage the Access Token
@@ -122,7 +139,7 @@ export const useAuth = () => {
   /**
    * Email/Password based Authentication
    */
-   const signupEmail = (email, password) => {
+  const signupEmail = (email, password) => {
     return new Promise((resolve, reject) => {
       // Auth Request started
       isLoading.value = true;
@@ -178,6 +195,52 @@ export const useAuth = () => {
     });
   }
 
+  /**
+   * Google OAuth 2.0 API Javascript Client
+   * - Reads Google users a) Google ID, and b) Gmail, 
+   *     and upsert user (i.e. add user to database if not exist) 
+   * - Our REST API will issue an access token
+   * 
+   * USAGE:
+   *    const { gapiSignIn } = useAuth(); 
+   *    window.onSignIn = gapiSignIn;
+   */
+  const gapiSignIn = async (googleUser) => {
+    return new Promise((resolve, reject) => {
+      // Auth Request started
+      isLoading.value = true;
+
+      // Read Google users' ID and Email
+      var profile = googleUser.getBasicProfile();
+
+      // start POST request
+      const { api } = useApi();
+      const { gapiSignOut } = useGapi();
+      api.post('v1/auth/google-signin', {
+        'gid': profile.getId(),
+        'email': profile.getEmail()
+      })
+        .then(resp => {
+          authStatus.value = 'success'; // save JWT token in Cookie and axios
+          jwtToken.value = resp.data.access_token;
+          Cookies.set('auth_token', resp.data.access_token, { expires: 7, sameSite: 'strict' });
+          resolve(resp);
+        })
+        .catch(err => {
+          authStatus.value = 'error';
+          jwtToken.value = undefined;
+          failedLoginAttempts.value += 1;
+          gapiSignOut();
+          reject(err);
+        })
+        .finally(() => {
+          isLoading.value = false
+        });
+      // fin.
+    });
+  }
+  // window.onSignIn = gapiSignIn;
+
 
   /**
    * Logout -- Delete Access Token 
@@ -188,6 +251,10 @@ export const useAuth = () => {
       jwtToken.value = undefined;
       Cookies.remove('auth_token');
       //delete api.defaults.headers.common['Authorization'];
+      const { isGapiAvailable, gapiSignOut } = useGapi();
+      if ( isGapiAvailable.value ){
+        gapiSignOut();
+      }
       resolve();
     });
   }
@@ -210,6 +277,7 @@ export const useAuth = () => {
     isLoading,
     failedLoginAttempts,
     signupEmail,
-    verifyEmail
+    verifyEmail,
+    gapiSignIn
   }
 }

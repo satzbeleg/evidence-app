@@ -27,7 +27,8 @@
     "password": "Password",
     "password_place": "Your Password",
     "username": "Username",
-    "username_place": "Your Username"
+    "username_place": "Your Username",
+    "google_signin_cookie_warning": "The Google SignIn Button will only work if 3rd party Cookies are enabled in your browser."
   },
   "settings": {
     "settings": "Settings",

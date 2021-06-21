@@ -27,6 +27,7 @@ Fixes:
 ```
 NODE_ENV=local
 REST_PUBLIC_URL=http://0.0.0.0:55017
+GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
 Oder

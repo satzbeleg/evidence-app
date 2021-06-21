@@ -55,6 +55,10 @@
               <router-link :to="{ path: '/auth/recovery' }">Reset password </router-link>
             </span>
 
+            <GoogleSigninButton v-bind:alwaysDisplay="false"
+                                v-bind:upperSeperator="true"
+                                v-bind:showCookieWarning="true" />
+
           </div>
         </div>
       </div>
@@ -70,13 +74,15 @@ import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import { useAuth } from '@/functions/axios-evidence.js';
+import GoogleSigninButton from '@/components/auth/GoogleSigninButton.vue';
 
 
 export default defineComponent({
   name: "Login",
 
   components: {
-    TheNavbar
+    TheNavbar,
+    GoogleSigninButton
   },
 
   setup(){
@@ -88,7 +94,7 @@ export default defineComponent({
     });
 
     // process submitted login request
-    const { loginEmail } = useAuth(); 
+    const { loginEmail, gapiSignIn } = useAuth(); 
     const email = ref("");
     const password = ref("");
 
@@ -98,6 +104,15 @@ export default defineComponent({
     const onLogin = async () => {
       try{
         await loginEmail(email.value, password.value);
+        router.push(route.query.redirect || '/');
+      }catch(err){
+        console.log(err);
+      }
+    }    
+
+    window.onSignIn = async (googleUser) => {
+      try{
+        await gapiSignIn(googleUser);
         router.push(route.query.redirect || '/');
       }catch(err){
         console.log(err);
