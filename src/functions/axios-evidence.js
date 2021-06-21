@@ -13,7 +13,7 @@ import { ref, computed } from 'vue';
 export const useApi = (token) => {
   // Creat an axios api instance. 
   const api = axios.create({
-    baseURL: process.env.REST_PUBLIC_URL || 'http://0.0.0.0:55017',
+    baseURL: process.env.VUE_APP_REST_PUBLIC_URL || 'http://0.0.0.0:55017',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded',
