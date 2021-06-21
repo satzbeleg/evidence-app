@@ -27,7 +27,8 @@
     "password": "Passwort",
     "password_place": "Ihr Passwort",
     "username": "Benutzername",
-    "username_place": "Ihr Benutzername"
+    "username_place": "Ihr Benutzername",
+    "google_signin_cookie_warning": "Die Anmeldung via Google funktioniert nur, wenn in Ihrem Browser Cookies von Drittanbietern aktiviert ist."
   },
   "settings": {
     "settings": "Einstellungen",
