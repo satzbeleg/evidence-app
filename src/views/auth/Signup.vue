@@ -93,8 +93,7 @@ export default defineComponent({
     });
 
     // process submitted login request
-    const { gapiSignIn, signupEmail } = useAuth(); 
-    window.onSignIn = gapiSignIn;
+    const { signupEmail, gapiSignIn } = useAuth(); 
     const email = ref("");
     const password = ref("");
 
@@ -104,6 +103,15 @@ export default defineComponent({
     const onSignup = async () => {
       try{
         await signupEmail(email.value, password.value);
+        router.push(route.query.redirect || '/');
+      }catch(err){
+        console.log(err);
+      }
+    }
+  
+    window.onSignIn = async (googleUser) => {
+      try{
+        await gapiSignIn(googleUser);
         router.push(route.query.redirect || '/');
       }catch(err){
         console.log(err);

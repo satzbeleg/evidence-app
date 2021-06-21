@@ -1,8 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ref, computed } from 'vue';
-//import { useRoute } from 'vue-router';
-
 
 /**
  * @param {String} endpoint 
@@ -213,15 +211,15 @@ export const useAuth = () => {
       isLoading.value = true;
 
       // Read Google users' ID and Email
-      const params = new URLSearchParams();
       var profile = googleUser.getBasicProfile();
-      params.append('gid', profile.getId());
-      params.append('email', profile.getEmail());
 
       // start POST request
       const { api } = useApi();
       const { gapiSignOut } = useGapi();
-      api.post('v1/auth/google-signin', params)
+      api.post('v1/auth/google-signin', {
+        'gid': profile.getId(),
+        'email': profile.getEmail()
+      })
         .then(resp => {
           authStatus.value = 'success'; // save JWT token in Cookie and axios
           jwtToken.value = resp.data.access_token;
