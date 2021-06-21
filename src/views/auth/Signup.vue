@@ -54,6 +54,10 @@
               <router-link :to="{ path: '/auth/login' }">Already have an account? Log in instead</router-link>
             </span>
 
+            <GoogleSigninButton v-bind:alwaysDisplay="false"
+                                v-bind:upperSeperator="true"
+                                v-bind:showCookieWarning="true" />
+
           </div>
         </div>
       </div>
@@ -69,12 +73,15 @@ import { defineComponent, ref, watchEffect } from "vue";
 import router from '@/router';
 import { useRoute } from 'vue-router';
 import { useAuth } from '@/functions/axios-evidence.js';
+import GoogleSigninButton from '@/components/auth/GoogleSigninButton.vue';
+
 
 export default defineComponent({
   name: "SignUp",
 
   components: {
-    TheNavbar
+    TheNavbar,
+    GoogleSigninButton
   },
 
   setup(){
@@ -86,7 +93,8 @@ export default defineComponent({
     });
 
     // process submitted login request
-    const { signupEmail } = useAuth(); 
+    const { gapiSignIn, signupEmail } = useAuth(); 
+    window.onSignIn = gapiSignIn;
     const email = ref("");
     const password = ref("");
 
