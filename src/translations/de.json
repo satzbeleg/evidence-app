@@ -44,5 +44,60 @@
     "bestworst3": "Best-Worst Scaling",
     "bestworst3_text": "Wähle das beste & schlechteste von vier Beispielen",
     "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Markiere zuerst das beste Satzbeispiel an. Zum Schluß wähle noch das schlechteste Satzbeispiel aus."
+  },
+  "about": {
+    "title": "EVIDENCE: Computerunterstützte interaktive Extraktion guter Wörterbuchbeispiele aus großen Korpora",
+    "motivation": {
+      "heading": "Motivation",
+      "text": "In vielen Wörterbüchern unterstützen Korpusbelege die lexikographische Beschreibung eines Wortes. Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt."
+    },
+    "goals": {
+      "heading": "Ziele",
+      "text": "Um Lexikograph*innen in ihrem Entscheidungsprozess zu unterstützen, soll ein System zur Extraktion, Klassifizierung und Bewertung von Korpusbelegen entwickelt werden und in das lexikalische Informationssystem des DWDS integriert werden. Das Empfehlungssystem schlägt für jedes Lemma eine Gruppe von Satzbelegen vor, die jeweils als hochwertig angesehene werden und zusammen eine hohe Vielfalt und Facetten und Nuancen des Wortgebrauchs aufweisen. Das Empfehlungssystem soll so weit entwickelt werden, dass die externen Nutzer des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen."
+    },
+    "method": {
+      "heading": "Methodik",
+      "text": "Die Applikation dient vor allem zur Beurteilung hinsichtlich der Güte und Vielfalt der Satzbelege. Zur Bewertung der Güte wird Best-Worst-Scaling Verfahren eingesetzt. Den Annotatoren werden vier Satzbelege angezeigt von denen sie den besten und den schlechtesten Satzbeleg auswählen. Die resultierenden Ranglisten werden als Zielvariablen in einem Überwachten Lernverfahren eingesetzt. Zur Bewertung der Vielfalt von Satzbelegen für ein bestimmtes Lemma müssen Benutzer anhand von Schiebereglern angeben inwiefern sie Güte gegenüber Vielfalt abwägen und welche Arten von Vielfalt präferiert werden (z.B. unterschiedliche Satzstrukturen, Semantik, Quellenhinweise). Mit einem Quadratischen Optimierungsverfahren werden anhand dieser Parameter die angezeigten Saztbelege neusortiert bis der Benutzer mit der angezeigten Auswahl zufrieden ist."
+    },
+    "team": {
+      "heading": "Mitarbeiter",
+      "member1": {
+        "name": "Prof. Dr. Iryna Gurevych",
+        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
+        "role": "Projektleiterin am Standort Darmstadt",
+        "www": "https://web.archive.org/web/20210422143659/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/head_ukp/index.en.jsp"
+      },
+      "member2": {
+        "name": "PD Dr. Alex Geyken",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Projektleiter am Standort Berlin",
+        "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
+      },
+      "member3": {
+        "name": "Dr. Lothar Lemmnitzer",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Experte Lexikographie",
+        "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
+      },
+      "member4": {
+        "name": "Ji-Ung Lee",
+        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
+        "role": "Wissenschaftlicher Mitarbeiter",
+        "www": "https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp"
+      },
+      "member5": {
+        "name": "Ulf Hamster",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Wissenschaftlicher Mitarbeiter, Softwareentwicklung",
+        "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
+      }
+    },
+    "partners": {
+      "heading": "Projektpartner"
+    },
+    "funding": {
+      "heading": "Finanzierung",
+      "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
+    }
   }
 }
