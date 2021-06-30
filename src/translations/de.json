@@ -99,5 +99,17 @@
       "heading": "Finanzierung",
       "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
     }
+  },
+  "privacy": {
+    "title": "Datenschutz"
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen"
+  },
+  "consent": {
+    "title": "Informierte Einwilligung"
+  },
+  "imprint": {
+    "title": "Impressum"
   }
 }

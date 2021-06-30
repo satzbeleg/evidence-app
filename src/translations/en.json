@@ -99,5 +99,17 @@
       "heading": "Funding",
       "text": "This work was funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 433249742. Project duration: 2020-2023."
     }
+  },
+  "privacy": {
+    "title": "Privacy policy"
+  },
+  "terms": {
+    "title": "Terms of use"
+  },
+  "consent": {
+    "title": "Informed Consent"
+  },
+  "imprint": {
+    "title": "Imprint"
   }
 }
