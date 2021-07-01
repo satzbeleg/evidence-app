@@ -18,3 +18,29 @@
     </div>
   </section>
 </template>
+
+
+<script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
+import { useI18n } from 'vue-i18n';
+import { watchEffect } from "vue";
+
+
+export default {
+  name: "Terms of Use",
+
+  components: {
+    TheNavbar
+  },
+
+  setup(){
+    const { t } = useI18n();
+
+    watchEffect(() => {
+      document.title = t('terms.title');
+    });
+
+    return { t }
+  }
+}
+</script>

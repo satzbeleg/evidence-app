@@ -46,7 +46,7 @@
     "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Markiere zuerst das beste Satzbeispiel an. Zum Schluß wähle noch das schlechteste Satzbeispiel aus."
   },
   "about": {
-    "title": "EVIDENCE: Computerunterstützte interaktive Extraktion guter Wörterbuchbeispiele aus großen Korpora",
+    "title": "Über das EVIDENCE Projekt",
     "motivation": {
       "heading": "Motivation",
       "text": "In vielen Wörterbüchern unterstützen Korpusbelege die lexikographische Beschreibung eines Wortes. Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt."
@@ -100,16 +100,24 @@
       "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
     }
   },
+  "tips": {
+    "title": "Tipps zur Bedienung",
+    "menu_description": "Wie benutzt man diese App?"
+  },
   "privacy": {
-    "title": "Datenschutz"
+    "title": "Datenschutz",
+    "menu_description": "Datenschutzhinweise für Forschungsprojekte"
   },
   "terms": {
-    "title": "Nutzungsbedingungen"
+    "title": "Nutzungsbedingungen",
+    "menu_description": "Die allgemeinen Nutzungsbedingungen dieser Anwendung"
   },
   "consent": {
-    "title": "Informierte Einwilligung"
+    "title": "Informierte Einwilligung",
+    "menu_description": "Sind Sie damit einverstanden, dass Ihre Daten veröffentlicht werden?"
   },
   "imprint": {
-    "title": "Impressum"
+    "title": "Impressum",
+    "menu_description": "Wer ist verantwortlich für die Inhalte?"
   }
 }

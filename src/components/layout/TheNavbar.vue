@@ -44,17 +44,13 @@
           <span>Start</span>
         </router-link>
 
-        <router-link class="navbar-item" :to="{ path: '/about' }">
-          <span class="icon has-text-info"><i class="fas fa-user"></i></span>
-          <span>{{ t('header.about') }}</span>
-        </router-link>
-
         <router-link class="navbar-item" :to="{ path: '/settings' }">
           <span class="icon has-text-dark"><i class="fas fa-cog"></i></span>
           <span>{{ t('settings.settings') }}</span>
         </router-link>
 
 
+        <!-- start submenu -->
         <div class="navbar-item has-dropdown is-hoverable">
           <a class="navbar-link">
             {{ t('menu.evaluate') }}
@@ -76,6 +72,92 @@
 
           </div>
         </div>
+        <!-- end submenu -->
+
+        <!-- start submenu -->
+        <div class="navbar-item has-dropdown is-hoverable">
+          <a class="navbar-link">
+            <span>{{ t('header.about') }}</span>
+          </a>
+
+          <div class="navbar-dropdown">
+
+            <router-link class="navbar-item" :to="{ path: '/info/about' }">
+              <div class="media">
+                <span class="icon has-text-info"><i class="fas fa-university"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('about.title') }}</strong>
+                  <br />
+                  <small>{{ t('about.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/legal/consent' }">
+              <div class="media">
+                <span class="icon has-text-success"><i class="fas fa-handshake"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('consent.title') }}</strong>
+                  <br />
+                  <small>{{ t('consent.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/info/tips' }">
+              <div class="media">
+                <span class="icon has-text-warning"><i class="fas fa-question-circle"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('tips.title') }}</strong>
+                  <br />
+                  <small>{{ t('tips.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/legal/terms' }">
+              <div class="media">
+                <span class="icon"><i class="fas fa-balance-scale"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('terms.title') }}</strong>
+                  <br />
+                  <small>{{ t('terms.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/legal/privacy' }">
+              <div class="media">
+                <span class="icon"><i class="fas fa-user-secret"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('privacy.title') }}</strong>
+                  <br />
+                  <small>{{ t('privacy.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/legal/imprint' }">
+              <div class="media">
+                <span class="icon"><i class="fas fa-stamp"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('imprint.title') }}</strong>
+                  <br />
+                  <small>{{ t('imprint.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+          </div>
+        </div>
+        <!-- end submenu -->
+
       </div>
     
     
