@@ -90,12 +90,17 @@ export default defineComponent({
       evaluated: [],
     });
 
+    const isReplenishing = ref(false);
+    const isSaving = ref(false);
+
     const message_suggestion = ref("Not connected! Please login.");
 
+
     // Replenish data.queue from database (load new example sets into queue)
-    //const replenishQueue = (orderquantity = 10) => {
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
+        // Replensihing started
+        isReplenishing.value = true;
         // preprocess lemmata/keyword search for POST request
         var params = {}
         if (typeof searchlemmata.value == "string"){
@@ -103,7 +108,6 @@ export default defineComponent({
             params = {"lemmata": searchlemmata.value.split(',').map(s => s.trim())}
           }
         }
-        console.log(params)
         // load other functions and objects
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
@@ -130,6 +134,7 @@ export default defineComponent({
           reject(error);
         })
         .finally(() => {
+          isReplenishing.value = false;
           console.log(`Queue replenished to ${data.queue.length} examplesets`);
         });
       });
@@ -164,7 +169,7 @@ export default defineComponent({
       // Store latest evaluation
       data.evaluated.push({
         'set-id': data.current_setid,  // Only required for App/API-Sync
-        'ui-name': 'bestworst4',
+        'ui-name': 'bestworst3',
         'lemmata': data.current_lemmata.split(',').map(s => s.trim()),
         'event-history': JSON.parse(JSON.stringify(history)),  // to be stored in DB
         'state-sentid-map': state_sentid_map,  // to be stored in DB
@@ -175,7 +180,9 @@ export default defineComponent({
         }
       });
       // Load the next example set
-      pullFromQueue();
+      if (!isReplenishing.value){
+        await pullFromQueue();
+      }
       // enforce rerendering via :key
       data.counter++;
     }
@@ -196,6 +203,7 @@ export default defineComponent({
     // save evaluated sets into the databse
     const saveEvaluations = () => {
       return new Promise((resolve, reject) => {
+        isSaving.value = true;
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
         api.post(`v1/bestworst/evaluations`, data.evaluated)
@@ -205,13 +213,15 @@ export default defineComponent({
             const idx = data.evaluated.findIndex(elem => elem['set-id'] == setid);
             data.evaluated.splice(idx, 1);
           });
-          // console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
+          console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
           resolve(response);
         })
         .catch(error => {
           reject(error);
         })
-        .finally(() => {});
+        .finally(() => {
+          isSaving.value = false;
+        });
       });
     }
 
@@ -221,7 +231,9 @@ export default defineComponent({
       (num_evaluated) => {
         if (num_evaluated > 0){
           console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          saveEvaluations();
+          if(!isSaving.value){
+            saveEvaluations();
+          }
         }
       }
     );
