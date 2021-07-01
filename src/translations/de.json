@@ -32,6 +32,7 @@
   },
   "settings": {
     "settings": "Einstellungen",
+    "general": "Allgemeine Einstellungen",
     "appearance": "Aussehen",
     "language": "Sprache",
     "darkmode": "Dunkler Modus"
