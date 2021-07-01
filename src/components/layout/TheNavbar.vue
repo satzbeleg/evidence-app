@@ -39,7 +39,7 @@
          v-bind:class="{ 'is-active' : showNavBurger }">
       <div class="navbar-start">
 
-        <router-link class="navbar-item" :to="{ path: '/' }">
+        <router-link class="navbar-item" :to="{ path: '/bestworst4' }">
           <span class="icon has-text-success"><i class="fas fa-play"></i></span>
           <span>Start</span>
         </router-link>
@@ -62,9 +62,21 @@
               <div class="media">
                 <span class="icon is-primary"><i class="fas fa-random"></i></span>
                 <div class="media-content">
-                  <strong>{{ t('menu.bestworst3') }}</strong>
+                  <strong>Best-Worst Scaling</strong>
                   <br />
-                  <small>{{ t('menu.bestworst3_text') }}</small>
+                  <small>Best-Worst Scaling UI v3</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/bestworst4' }">
+              <div class="media">
+                <span class="icon has-text-success"><i class="fas fa-undo-alt"></i></span>
+                <div class="media-content">
+                  <strong>Interactive Best-Worst Scaling</strong>
+                  <br />
+                  <small>Best-Worst Scaling UI v4</small>
                 </div>
               </div>
             </router-link>

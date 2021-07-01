@@ -87,9 +87,16 @@ const routes = [{
   },
   {
     path: '/bestworst3',
-    name: 'Best-Worst-Scaling with 2 Actions (xstate)',
+    name: 'Best-Worst-Scaling v3',
     component: () =>
-      import ( /* webpackPreload: true */ '../views/BestWorst3.vue'),
+      import ( /* webpackPreload: true */ '../views/bestworst/BestWorst3.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/bestworst4',
+    name: 'Best-Worst-Scaling v4',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/bestworst/BestWorst4.vue'),
     meta: { requiresAuth: true }
   },
 ];

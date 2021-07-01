@@ -32,6 +32,7 @@
   },
   "settings": {
     "settings": "Einstellungen",
+    "general": "Allgemeine Einstellungen",
     "appearance": "Aussehen",
     "language": "Sprache",
     "darkmode": "Dunkler Modus"
@@ -47,6 +48,7 @@
   },
   "about": {
     "title": "Über das EVIDENCE Projekt",
+    "menu_description": "Worum geht es im Forschungsprojekt?",
     "motivation": {
       "heading": "Motivation",
       "text": "In vielen Wörterbüchern unterstützen Korpusbelege die lexikographische Beschreibung eines Wortes. Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt."

@@ -23,7 +23,6 @@
           {{ data.queue.length }}
         </progress>
       </template>
-
       <template v-else>
         <PageLoader 
           v-bind:status="data.current.length == 0"
@@ -38,7 +37,7 @@
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
-import BestWorstChoices from '@/components/bestworst3/Choices.vue';
+import BestWorstChoices from '@/components/bestworst/Choices.vue';
 import { defineComponent, reactive, watchEffect, watch, unref, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
@@ -90,12 +89,17 @@ export default defineComponent({
       evaluated: [],
     });
 
+    const isReplenishing = ref(false);
+    const isSaving = ref(false);
+
     const message_suggestion = ref("Not connected! Please login.");
 
+
     // Replenish data.queue from database (load new example sets into queue)
-    //const replenishQueue = (orderquantity = 10) => {
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
+        // Replensihing started
+        isReplenishing.value = true;
         // preprocess lemmata/keyword search for POST request
         var params = {}
         if (typeof searchlemmata.value == "string"){
@@ -103,7 +107,6 @@ export default defineComponent({
             params = {"lemmata": searchlemmata.value.split(',').map(s => s.trim())}
           }
         }
-        console.log(params)
         // load other functions and objects
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
@@ -130,6 +133,7 @@ export default defineComponent({
           reject(error);
         })
         .finally(() => {
+          isReplenishing.value = false;
           console.log(`Queue replenished to ${data.queue.length} examplesets`);
         });
       });
@@ -158,6 +162,16 @@ export default defineComponent({
 
     // Store evaluation results, pull next example set from queue, trigger re-rendering
     async function nextExampleSet(history){
+      // abort if the setId still exists in data.evaluated, i.e. the current setId
+      // was not saved yet but the user keeps pushing the submit buttons (i.e. calling
+      // the `nextExampleSet` function)
+      data.evaluated.forEach(elem => {
+        if (elem['set-id'] === data.current_setid){
+          console.log(`The set-id='${elem['set-id']}' cannot be stored twice`);
+          return;
+        }
+      });
+      //console.log(data.evaluated)
       // Map states with SentenceIDs (Don't send raw examples `data.current` back to API)
       var state_sentid_map = {}
       data.current.forEach((ex, i) => state_sentid_map[i] = ex.id)
@@ -175,7 +189,9 @@ export default defineComponent({
         }
       });
       // Load the next example set
-      pullFromQueue();
+      if (!isReplenishing.value){
+        await pullFromQueue();
+      }
       // enforce rerendering via :key
       data.counter++;
     }
@@ -196,22 +212,27 @@ export default defineComponent({
     // save evaluated sets into the databse
     const saveEvaluations = () => {
       return new Promise((resolve, reject) => {
+        isSaving.value = true;
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
         api.post(`v1/bestworst/evaluations`, data.evaluated)
         .then(response => {
           // delete evaluated sets if API confirms its storage
           response.data['stored-setids'].forEach(setid => {
-            const idx = data.evaluated.findIndex(elem => elem['set-id'] == setid);
-            data.evaluated.splice(idx, 1);
+            var idx = -1;
+            while(( idx = data.evaluated.findIndex(elem => elem['set-id'] == setid) ) !== -1){
+              data.evaluated.splice(idx, 1);
+            }
           });
-          // console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
+          console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
           resolve(response);
         })
         .catch(error => {
           reject(error);
         })
-        .finally(() => {});
+        .finally(() => {
+          isSaving.value = false;
+        });
       });
     }
 
@@ -221,7 +242,9 @@ export default defineComponent({
       (num_evaluated) => {
         if (num_evaluated > 0){
           console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          saveEvaluations();
+          if(!isSaving.value){
+            saveEvaluations();
+          }
         }
       }
     );

@@ -32,6 +32,7 @@
   },
   "settings": {
     "settings": "Settings",
+    "general": "General Settings",
     "appearance": "Appearance",
     "language": "Language",
     "darkmode": "Dark theme"
