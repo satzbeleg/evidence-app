@@ -48,6 +48,7 @@
           <li>übertragene Datenmenge</li>
           <li>Meldung, ob der Zugriff/Abruf erfolgreich war</li>
         </ul>
+        </p>
         <p>
         Zweck der Datenerhebung ist der verpflichtende Schutz vor Angriffen des Netzwerks, die Verbesserung des Angebots sowie die Erstellung von Nutzungsstatistiken. Diese Daten werden eine Woche gespeichert.
         </p>
@@ -132,4 +133,30 @@
     </div>
   </section>
 </template>
+
+
+<script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
+import { useI18n } from 'vue-i18n';
+import { watchEffect } from "vue";
+
+
+export default {
+  name: "Privacy Policy",
+
+  components: {
+    TheNavbar
+  },
+
+  setup(){
+    const { t } = useI18n();
+
+    watchEffect(() => {
+      document.title = t('privacy.title');
+    });
+
+    return { t }
+  }
+}
+</script>
 

@@ -43,10 +43,40 @@ const routes = [{
   },
   // /auth/settings
   {
-    path: '/about',
+    path: '/info/about',
     name: 'About',
     component: () =>
-      import ( /* webpackPreload: true */ '../views/About.vue')
+      import ( /* webpackPreload: true */ '../views/info/About.vue')
+  },
+  {
+    path: '/info/tips',
+    name: 'Tips',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/info/Tips.vue')
+  },
+  {
+    path: '/legal/imprint',
+    name: 'Imprint',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/legal/Imprint.vue')
+  },
+  {
+    path: '/legal/terms',
+    name: 'Terms of use',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/legal/Terms.vue')
+  },
+  {
+    path: '/legal/privacy',
+    name: 'Privacy Policy',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/legal/Privacy.vue')
+  },
+  {
+    path: '/legal/consent',
+    name: 'Informed Constent',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/legal/Consent.vue')
   },
   {
     path: '/settings',

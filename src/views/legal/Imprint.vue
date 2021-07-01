@@ -19,7 +19,7 @@
         </p>
         <p>
         Projektleister am Standort Berlin: Dr. Alexander Geyken 
-        <p>
+        </p>
       </div>
 
       <h2 class="subtitle is-5">Vertreter</h2>
@@ -59,3 +59,29 @@
     </div>
   </section>
 </template>
+
+
+<script>
+import TheNavbar from '@/components/layout/TheNavbar.vue';
+import { useI18n } from 'vue-i18n';
+import { watchEffect } from "vue";
+
+
+export default {
+  name: "Imprint",
+
+  components: {
+    TheNavbar
+  },
+
+  setup(){
+    const { t } = useI18n();
+
+    watchEffect(() => {
+      document.title = t('imprint.title');
+    });
+
+    return { t }
+  }
+}
+</script>
