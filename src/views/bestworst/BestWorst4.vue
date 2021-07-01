@@ -23,7 +23,6 @@
           {{ data.queue.length }}
         </progress>
       </template>
-
       <template v-else>
         <PageLoader 
           v-bind:status="data.current.length == 0"
@@ -163,6 +162,16 @@ export default defineComponent({
 
     // Store evaluation results, pull next example set from queue, trigger re-rendering
     async function nextExampleSet(history){
+      // abort if the setId still exists in data.evaluated, i.e. the current setId
+      // was not saved yet but the user keeps pushing the submit buttons (i.e. calling
+      // the `nextExampleSet` function)
+      data.evaluated.forEach(elem => {
+        if (elem['set-id'] === data.current_setid){
+          console.log(`The set-id='${elem['set-id']}' cannot be stored twice`);
+          return;
+        }
+      });
+      //console.log(data.evaluated)
       // Map states with SentenceIDs (Don't send raw examples `data.current` back to API)
       var state_sentid_map = {}
       data.current.forEach((ex, i) => state_sentid_map[i] = ex.id)
@@ -210,8 +219,10 @@ export default defineComponent({
         .then(response => {
           // delete evaluated sets if API confirms its storage
           response.data['stored-setids'].forEach(setid => {
-            const idx = data.evaluated.findIndex(elem => elem['set-id'] == setid);
-            data.evaluated.splice(idx, 1);
+            var idx = -1;
+            while(( idx = data.evaluated.findIndex(elem => elem['set-id'] == setid) ) !== -1){
+              data.evaluated.splice(idx, 1);
+            }
           });
           console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
           resolve(response);
