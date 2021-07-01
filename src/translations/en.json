@@ -46,7 +46,8 @@
     "bestworst3_text2": "4 sentence examples are displayed. First mark the best sentence example. Finally, select the worst sentence example."
   },
   "about": {
-    "title": "EVIDENCE: Computer-assisted Interactive Extraction of Dictionary Examples from Large Corpora",
+    "title": "About the EVIDENCE Project",
+    "menu_description": "What is the project about?",
     "motivation": {
       "heading": "Motivation",
       "text": "In many dictionaries, corpus references support the lexicographical description of a word. The selection of suitable and helpful sentence examples is a challenge because the operationalization of broad criteria such as 'quality' and 'appropriateness' of sentence examples into metrics is not trivial and professional lexicographers do not always achieve a unanimous judgment which sentence examples fits best in the description of a lemma."
@@ -100,16 +101,24 @@
       "text": "This work was funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 433249742. Project duration: 2020-2023."
     }
   },
+  "tips": {
+    "title": "Tips for Good Experiences",
+    "menu_description": "How to use this app?"
+  },
   "privacy": {
-    "title": "Privacy policy"
+    "title": "Privacy policy",
+    "menu_description": "Data protection information for research projects"
   },
   "terms": {
-    "title": "Terms of use"
+    "title": "Terms of use",
+    "menu_description": "The general terms of using this application"
   },
   "consent": {
-    "title": "Informed Consent"
+    "title": "Informed Consent",
+    "menu_description": "Do you agree to share and publish your data?"
   },
   "imprint": {
-    "title": "Imprint"
+    "title": "Imprint",
+    "menu_description": "Who is responsible for the content?"
   }
 }

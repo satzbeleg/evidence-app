@@ -86,9 +86,9 @@
               <div class="media">
                 <span class="icon has-text-info"><i class="fas fa-university"></i></span>
                 <div class="media-content">
-                  <strong>About the EVIDENCE Project</strong>
+                  <strong>{{ t('about.title') }}</strong>
                   <br />
-                  <small>What is the project about?</small>
+                  <small>{{ t('about.menu_description') }}</small>
                 </div>
               </div>
             </router-link>
@@ -98,9 +98,9 @@
               <div class="media">
                 <span class="icon has-text-success"><i class="fas fa-handshake"></i></span>
                 <div class="media-content">
-                  <strong>Informed Consent</strong>
+                  <strong>{{ t('consent.title') }}</strong>
                   <br />
-                  <small>Are you Ok with sharing and publishing your data?</small>
+                  <small>{{ t('consent.menu_description') }}</small>
                 </div>
               </div>
             </router-link>
@@ -110,9 +110,9 @@
               <div class="media">
                 <span class="icon has-text-warning"><i class="fas fa-question-circle"></i></span>
                 <div class="media-content">
-                  <strong>Tips for Good Experiences</strong>
+                  <strong>{{ t('tips.title') }}</strong>
                   <br />
-                  <small>How to use this app?</small>
+                  <small>{{ t('tips.menu_description') }}</small>
                 </div>
               </div>
             </router-link>
@@ -122,9 +122,9 @@
               <div class="media">
                 <span class="icon"><i class="fas fa-balance-scale"></i></span>
                 <div class="media-content">
-                  <strong>Terms of Use</strong>
+                  <strong>{{ t('terms.title') }}</strong>
                   <br />
-                  <small>The general terms of using this application</small>
+                  <small>{{ t('terms.menu_description') }}</small>
                 </div>
               </div>
             </router-link>
@@ -134,9 +134,9 @@
               <div class="media">
                 <span class="icon"><i class="fas fa-user-secret"></i></span>
                 <div class="media-content">
-                  <strong>Privacy Policy</strong>
+                  <strong>{{ t('privacy.title') }}</strong>
                   <br />
-                  <small>The general terms of using this application</small>
+                  <small>{{ t('privacy.menu_description') }}</small>
                 </div>
               </div>
             </router-link>
@@ -146,9 +146,9 @@
               <div class="media">
                 <span class="icon"><i class="fas fa-stamp"></i></span>
                 <div class="media-content">
-                  <strong>Imprint</strong>
+                  <strong>{{ t('imprint.title') }}</strong>
                   <br />
-                  <small>Who is responsible for this application?</small>
+                  <small>{{ t('imprint.menu_description') }}</small>
                 </div>
               </div>
             </router-link>
