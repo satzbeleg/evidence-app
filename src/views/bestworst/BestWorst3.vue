@@ -38,7 +38,7 @@
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
-import BestWorstChoices from '@/components/bestworst3/Choices.vue';
+import BestWorstChoices from '@/components/bestworst/Choices.vue';
 import { defineComponent, reactive, watchEffect, watch, unref, ref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
