@@ -16,13 +16,8 @@
           v-on:ranking-done="nextExampleSet"
           :key="data.counter"
         />
-        <!-- progress bar -->
-        <progress class="progress is-info mt-5" 
-                  v-bind:value="data.queue.length" 
-                  v-bind:max="maxprogress">
-          {{ data.queue.length }}
-        </progress>
       </template>
+
       <template v-else>
         <PageLoader 
           v-bind:status="data.current.length == 0"
@@ -38,12 +33,14 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst/Choices.vue';
-import { defineComponent, reactive, watchEffect, watch, unref, ref, computed } from 'vue';
+import { defineComponent, reactive, watchEffect, ref } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
-import { useApi, useAuth } from '@/functions/axios-evidence.js';
-import { useSettings } from '@/functions/settings.js';
-import { traverseObject } from '@/functions/traverse-objects.js';
-
+//import { useApi, useAuth } from '@/functions/axios-evidence.js';
+//import { useSettings } from '@/functions/settings.js';
+//import { traverseObject } from '@/functions/traverse-objects.js';
+//import { counting } from 'bwsample';
+//import { ranking } from 'bwsample';
+import { useInteractivity } from '@/components/bestworst/interactivity.js';
 
 export default defineComponent({
   name: "BestWorst4",
@@ -62,13 +59,6 @@ export default defineComponent({
       document.title = t('bestworst.title');
     });
 
-
-    // Load bestworst3 UI settings
-    const { 
-      loadSettings, reorderpoint, orderquantity,
-      sampling_numtop, sampling_offset 
-    } = useSettings();
-
     // Search string for lemmata/keywords
     const searchlemmata = ref("");
 
@@ -76,206 +66,107 @@ export default defineComponent({
     const data = reactive({
       // Array with unlabelled example sets. It's a FIFO queue
       queue: [],
-
       // The current BWS-exampleset displayed inside the app
       current: [],
       current_setid: undefined,
       current_lemmata: undefined, //'Hello world,cool',
-
       // Use to trigger component re-rendering with :key
       counter: 1,
-
       // Post this to the REST API (see saveEvaluations)
       evaluated: [],
     });
 
-    const isReplenishing = ref(false);
-    const isSaving = ref(false);
-
+    // AJAX status flags and messages
+    //const isLoadingExamples = ref(false);
+    //const isSavingEvaluated = ref(false);
     const message_suggestion = ref("Not connected! Please login.");
 
+    // Load bestworst4 UI settings
+    //const jsdfkj = ref(false);
+    // const { 
+    //   loadSettings, orderquantity,
+    //   sampling_numtop, sampling_offset 
+    // } = useSettings();
 
-    // Replenish data.queue from database (load new example sets into queue)
-    const replenishQueue = () => {
-      return new Promise((resolve, reject) => {
-        // Replensihing started
-        isReplenishing.value = true;
-        // preprocess lemmata/keyword search for POST request
-        var params = {}
-        if (typeof searchlemmata.value == "string"){
-          if (searchlemmata.value.length > 0){
-            params = {"lemmata": searchlemmata.value.split(',').map(s => s.trim())}
-          }
-        }
-        // load other functions and objects
-        const { getToken } = useAuth();
-        const { api } = useApi(getToken());
-        // start API request
-        message_suggestion.value = "Loading new example sets ...";
-        api.post(`v1/bestworst/samples/4/${unref(orderquantity)}/${unref(sampling_numtop)}/${unref(sampling_offset)}`, params)
-        .then(response => {
-          // Is there any error message returned?
-          if ('status' in response.data){
-            if ('msg' in response.data){
-              message_suggestion.value = response.data['msg'];
-            }
-          }else if (typeof response.data == "object"){
-            // copy all example sets
-            response.data.forEach(exset => data.queue.push(exset));
-          }else{
-            message_suggestion.value = "API returned unexpected data.";
-          }
-          resolve(response);
-        })
-        .catch(error => {
-          // message to user
-          message_suggestion.value = "Unknown Error!";
-          reject(error);
-        })
-        .finally(() => {
-          isReplenishing.value = false;
-          console.log(`Queue replenished to ${data.queue.length} examplesets`);
-        });
-      });
-    }
-
-    // Pull new current example set from queue
-    async function pullFromQueue(){
-      // Trigger initial replenishment if the data.queue is empty
-      if (data.queue.length == 0){
-        await loadSettings();  // wait till settings are loaded
-        await replenishQueue();  // wait till finished
-      }
-      // Read the 1st element, and delete it from queue (FIFO principle)
-      const tmp = data.queue.shift()
-      if (typeof tmp !== 'undefined' ){
-        //console.log(tmp)
-        data.current = tmp.examples;
-        data.current_setid = tmp.set_id;
-        data.current_lemmata = tmp.lemmata.join(", ");
-      }else{
-        data.current = [];
-        data.current_setid = undefined;
-        data.current_lemmata = undefined;
-      }
-    }
+    //
 
     // Store evaluation results, pull next example set from queue, trigger re-rendering
+    /**
+     * nextExampleSet
+     * 
+     * This function contains the main procedure of the BWS UI v4.
+     * 0. Store the newly evaluated BWS set 
+     * 1. Drop sentence examples from the pool
+     * 2. Add new sentence example to the pool from the API
+     * 3. Sample new BWS sets from the pool
+     * 4. Update the pairs matrix
+     * 5. Re-train the model
+     * 6. Predict new model scores
+     */
     async function nextExampleSet(history){
-      // abort if the setId still exists in data.evaluated, i.e. the current setId
-      // was not saved yet but the user keeps pushing the submit buttons (i.e. calling
-      // the `nextExampleSet` function)
-      data.evaluated.forEach(elem => {
-        if (elem['set-id'] === data.current_setid){
-          console.log(`The set-id='${elem['set-id']}' cannot be stored twice`);
-          return;
-        }
-      });
-      //console.log(data.evaluated)
-      // Map states with SentenceIDs (Don't send raw examples `data.current` back to API)
-      var state_sentid_map = {}
-      data.current.forEach((ex, i) => state_sentid_map[i] = ex.id)
-      // Store latest evaluation
-      data.evaluated.push({
-        'set-id': data.current_setid,  // Only required for App/API-Sync
-        'ui-name': 'bestworst3',
-        'lemmata': data.current_lemmata.split(',').map(s => s.trim()),
-        'event-history': JSON.parse(JSON.stringify(history)),  // to be stored in DB
-        'state-sentid-map': state_sentid_map,  // to be stored in DB
-        'tracking-data': {
-          'window': traverseObject(window, 0),
-          'screen': traverseObject(window.screen, 1),
-          'navigator': traverseObject(window.navigator, 1)
-        }
-      });
-      // Load the next example set
-      if (!isReplenishing.value){
-        await pullFromQueue();
-      }
+      console.log("History:", history)
       // enforce rerendering via :key
       data.counter++;
     }
-
-    // trigger AJAX request to replenish the queue
-    watch(
-      () => data.queue.length,
-      (stocklevel) => {
-        //const reorderpoint = 3;
-        if (stocklevel < reorderpoint.value){
-          console.log(`Queue is running low: ${stocklevel} examplesets`);
-          replenishQueue();
-        }
-      }
-    );
-
-
-    // save evaluated sets into the databse
-    const saveEvaluations = () => {
-      return new Promise((resolve, reject) => {
-        isSaving.value = true;
-        const { getToken } = useAuth();
-        const { api } = useApi(getToken());
-        api.post(`v1/bestworst/evaluations`, data.evaluated)
-        .then(response => {
-          // delete evaluated sets if API confirms its storage
-          response.data['stored-setids'].forEach(setid => {
-            var idx = -1;
-            while(( idx = data.evaluated.findIndex(elem => elem['set-id'] == setid) ) !== -1){
-              data.evaluated.splice(idx, 1);
-            }
-          });
-          console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
-        })
-        .finally(() => {
-          isSaving.value = false;
-        });
-      });
-    }
-
-    // trigger AJAX to post evaluated BWS-exampleset
-    watch(
-      () => data.evaluated.length,
-      (num_evaluated) => {
-        if (num_evaluated > 0){
-          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          if(!isSaving.value){
-            saveEvaluations();
-          }
-        }
-      }
-    );
 
 
     // get search field string to parent component
     const onSearchLemmata = async(keywords) => {
       // reset `searchlemmata`
-      searchlemmata.value = keywords
-      //console.log('Bestworst:', searchlemmata.value)
-      
+      searchlemmata.value = keywords      
       // delete current example set in UI
       data.current = [];
       data.current_setid = undefined;
       data.current_lemmata = undefined;
-      // this will trigger the watcher to call `replenishQueue` (POST requests)
       data.queue = [];  
       // force to load next example in UI
-      await pullFromQueue();
+      //await addExamplesToPool();
     }
-
-
     // load initial current BWS-exampleset
-    pullFromQueue();
+    //addExamplesToPool();
 
-    // compute max for progressba
-    const maxprogress = computed(() => parseInt(reorderpoint.value) + parseInt(orderquantity.value));
+
+
+
+    // const stateids = ['abc', 'def', 'ghi', 'jkl'];
+    // const combostates = [0, 0, 2, 1];
+    // var [cnt, bw, bn, nw] = counting.direct_extract(stateids, combostates);
+    // console.log(cnt, bw, bn, nw)
+    // var [positions, sortedids, metrics, info] = ranking.maximize_hoaglinapprox(cnt);
+    // console.log(positions, sortedids, metrics, info)
+
+    const { 
+      pool, pairs, 
+      sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
+      computeTrainingScores, smoothing_method, ema_alpha
+    } = useInteractivity();
+
+    console.log("Pairs:", pairs)
+    console.log("Pool:", pool)
+    // console.log(JSON.parse(JSON.stringify(pool)))
+
+    // (1) Drop examples from pool
+
+    // (2) Add examples to pool
+
+    // (3) Sample 1,2,3... BWS sets from pool
+    var sampled_bwssets = sampleBwsSets(
+      pool, num_items_per_set.value, num_preload_bwssets.value, 
+      item_sampling_method.value, false);
+    console.log("BWS samples:", sampled_bwssets);
+
+    // (4) Update pairs comparison matrix
+
+    // (5) Compute the new target scores
+    computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
+
+    // (6) Re-train the ML model
+    
+    // (7) Predict the new model scores for the whole pool
 
     return { 
-      data, pullFromQueue, nextExampleSet,
-      maxprogress,
+      data, 
+      nextExampleSet,
       onSearchLemmata,
       message_suggestion
     }
