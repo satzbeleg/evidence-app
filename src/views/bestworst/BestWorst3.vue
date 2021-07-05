@@ -89,11 +89,10 @@ export default defineComponent({
       evaluated: [],
     });
 
+    // AJAX status flags and messages
     const isReplenishing = ref(false);
     const isSaving = ref(false);
-
     const message_suggestion = ref("Not connected! Please login.");
-
 
     // Replenish data.queue from database (load new example sets into queue)
     const replenishQueue = () => {
@@ -274,7 +273,9 @@ export default defineComponent({
     const maxprogress = computed(() => parseInt(reorderpoint.value) + parseInt(orderquantity.value));
 
     return { 
-      data, pullFromQueue, nextExampleSet,
+      data, 
+      pullFromQueue,  // <= is this needed?
+      nextExampleSet,
       maxprogress,
       onSearchLemmata,
       message_suggestion
