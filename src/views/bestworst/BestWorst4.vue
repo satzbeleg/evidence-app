@@ -81,15 +81,6 @@ export default defineComponent({
     //const isSavingEvaluated = ref(false);
     const message_suggestion = ref("Not connected! Please login.");
 
-    // Load bestworst4 UI settings
-    //const jsdfkj = ref(false);
-    // const { 
-    //   loadSettings, orderquantity,
-    //   sampling_numtop, sampling_offset 
-    // } = useSettings();
-
-    //
-
     // Store evaluation results, pull next example set from queue, trigger re-rendering
     /**
      * nextExampleSet
@@ -145,6 +136,7 @@ export default defineComponent({
     console.log("Pool:", pool)
     // console.log(JSON.parse(JSON.stringify(pool)))
 
+
     // (1) Drop examples from pool
 
     // (2) Add examples to pool
@@ -155,13 +147,17 @@ export default defineComponent({
       item_sampling_method.value, false);
     console.log("BWS samples:", sampled_bwssets);
 
+    // => In der App anzeigen =>
+
+    // => Ergebnisse verarbeiten =>
+
     // (4) Update pairs comparison matrix
 
     // (5) Compute the new target scores
     computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
 
     // (6) Re-train the ML model
-    
+
     // (7) Predict the new model scores for the whole pool
 
     return { 
