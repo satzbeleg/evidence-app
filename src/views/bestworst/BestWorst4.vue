@@ -128,6 +128,7 @@ export default defineComponent({
 
     const { 
       pool, pairs, 
+      dropExamplesFromPool, drop_config, min_pool_size,
       sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
       computeTrainingScores, smoothing_method, ema_alpha
     } = useInteractivity();
@@ -138,6 +139,7 @@ export default defineComponent({
 
 
     // (1) Drop examples from pool
+    dropExamplesFromPool(pairs, pool, min_pool_size.value, drop_config);
 
     // (2) Add examples to pool
 

@@ -79,9 +79,9 @@ const deletionCriteriaDisplays = (pool,
         del_ids.push(avail_ids.pop())
       }
     }
-  }
-  if (debug){
-    console.log("Selected for deletion:", del_ids);
+    if (debug){console.log("Selected for deletion:", del_ids);}
+  }else{
+    if (debug){console.log(`max_displays=${max_displays} is not an integer`);}
   }
 }
 
@@ -99,9 +99,9 @@ const deletionCriteriaConvergence = (pool,
         del_ids.push(avail_ids.pop())
       }
     }
-  }
-  if (debug){
-    console.log("Selected for deletion:", del_ids);
+    if (debug){console.log("Selected for deletion:", del_ids);}
+  }else{
+    if (debug){console.log(`eps_score_change=${eps_score_change} is not a number`);}
   }
 }
 
@@ -168,9 +168,9 @@ const deletionCriteriaDistribution = (pool,
         //console.log("Del:", j, num_del, excess_proba)
       }
     }
-  }
-  if (debug){
-    console.log("Selected for deletion:", del_ids);
+    if (debug){console.log("Selected for deletion:", del_ids);}
+  }else{
+    if (debug){console.log(`target_probas and/or bin_edges are not arrays`);}
   }
 }
 
@@ -432,13 +432,13 @@ export const useInteractivity = () => {
 
   // (1) Drop examples from pool
   const min_pool_size = ref(3);
-  var cfg = {
+  const drop_config = reactive({
     "target_probas": [0.1, 0.2, 0.3, 0.4],
     "bin_edges": [.0, .25, .5, .75, 1.],
-    "max_displays": 1,
+    //"max_displays": 1,
     "eps_score_change": 1e-1
-  }
-  dropExamplesFromPool(pairs, pool, min_pool_size.value, cfg);
+  })
+  //dropExamplesFromPool(pairs, pool, min_pool_size.value, cfg);
 
   // (2) Add examples to pool
   //addExamplesToPool();
@@ -471,7 +471,7 @@ export const useInteractivity = () => {
   return { 
     pool, 
     pairs,
-    dropExamplesFromPool, min_pool_size,
+    dropExamplesFromPool, drop_config, min_pool_size,
     sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
     computeTrainingScores, smoothing_method, ema_alpha
   }
