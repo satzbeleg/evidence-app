@@ -378,6 +378,7 @@ export const useInteractivity = () => {
 
   // Informational variables
   const debug = ref(true);
+  const errorMessage = ref("");
 
   // Variables for (1)
   const deletedPool = reactive({});
@@ -389,6 +390,10 @@ export const useInteractivity = () => {
     "eps_score_change": 1e-1,
     "drop_pairs": false
   })
+
+  // Variables for (2)
+  const max_pool_size = ref(10);
+
 
   // DEMO: fake paired comparisons (DELETE THIS LATER!)
   counting.incr_lil(pairs, "abc", "ghi");
@@ -550,8 +555,43 @@ export const useInteractivity = () => {
     }
   );
 
-  // (2) Add examples to pool
-  //addExamplesToPool();
+
+  /**
+   * (2) Add examples to pool
+   */
+  const addExamplesToPool = () => {
+    return new Promise((resolve, reject) => {
+      const max_additions = max_pool_size - Object.keys(pool).length;
+      if (max_additions > 0){
+        const { getToken } = useAuth();
+        const { api } = useApi(getToken());
+        api.post(`v1/interactivity/examples/${max_additions}`, {})
+          .then(response => {
+            if ('msg' in response.data){
+              errorMessage.value = response.data['msg'];
+            } else {
+              response.data.forEach(row => {
+                pool[row.id] = {
+                  "text": row.text,
+                  "features": row.features,
+                  "training_score_history": [undefined],
+                  "model_score_history": [row.score],
+                  "displayed": [false]
+                }
+              })
+            }
+            if(debug.value){console.log(response)}
+            resolve(response);
+          })
+          .catch(error => {
+            if(debug.value){console.log(error)}
+            reject(error);
+          })
+          .finally(() => {        
+          });
+      }  
+    });
+  }
 
 
   // (3) Sample 1,2,3... BWS sets from pool
@@ -581,7 +621,9 @@ export const useInteractivity = () => {
   return { 
     pool, 
     pairs,
+    errorMessage,
     dropExamplesFromPool,
+    addExamplesToPool,
     sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
     computeTrainingScores, smoothing_method, ema_alpha
   }
