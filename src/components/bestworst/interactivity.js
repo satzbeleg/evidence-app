@@ -349,14 +349,15 @@ const computeTrainingScores = (pairs,
 
   if (smoothing_method === "last") {
     // add the new training score as last value
-    sortedids.forEach((key, idx) => {
+    Object.keys(pool).forEach(key => {
+      var idx = sortedids.indexOf(key);
       pool[key].training_score_history.push(scores[idx]);
     });
 
   } else if (smoothing_method === "ema") {
     // add the Exponential MA as the new training score
-    sortedids.forEach((key, idx) => {
-      console.log(key)
+    Object.keys(pool).forEach(key => {
+      var idx = sortedids.indexOf(key);
       var idx_last = pool[key].training_score_history.length - 1
       var prev = pool[key].training_score_history[idx_last];
       if (prev === undefined) {
@@ -385,7 +386,7 @@ export const useInteractivity = () => {
     "bin_edges": [.0, .25, .5, .75, 1.],
     "max_displays": 1,
     "eps_score_change": 1e-1,
-    "drop_pairs": true
+    "drop_pairs": false
   })
 
   // DEMO: fake paired comparisons (DELETE THIS LATER!)
