@@ -185,14 +185,29 @@ const deletionCriteriaDistribution = (pool,
  *  "bin_edges": [.0, .25, .5, .75, 1.],
  *  "max_displays": 10,
  *  "eps_score_change": 1e-6,
+ *  "drop_pairs": false
  * }
+ * 
+ * Explanations
+ * - `cfg.drop_pairs`: If the flag is enabled, the all columns and rows of 
+ *    the deleted IDs are removed from the paired comparision matrix `pairs`.
+ *      - Pros: The memory footprint of `pairs` is limited.
+ *      - Con: The training scores are affected.
+ *    Dropped pairs are NOT sent to API for backup in `dropExamplesFromPool`
+ *    because it would be repeated unnecessarily as the pairs (per use) can 
+ *    be computed from the raw evaluations already sent to the server. 
  */
- const dropExamplesFromPool = (pairs, pool, min_pool_size, cfg, debug=true) => {
+ const dropExamplesFromPool = (cfg, 
+                               pool, 
+                               min_pool_size=0, 
+                               pairs=undefined, 
+                               debug=true) => {
   // save IDs to be deletion
   var del_ids = [];
   var avail_ids = Object.keys(pool);
   const max_deletions = avail_ids.length - min_pool_size;
 
+  // identify IDs that should be deleted
   if ( max_deletions > 0 ){
     // (a) Drop examples with overrepresented model scores
     deletionCriteriaDistribution(
@@ -207,28 +222,36 @@ const deletionCriteriaDistribution = (pool,
     del_ids = del_ids.slice(0, max_deletions);
   }
 
-  console.log("huhu1:", pool )
+  if (debug){
+    console.log("Deleted data:", deletedData);
+  }
 
-  var deletedPool = {}
-  Object.entries(pool).forEach(([key, val]) => {
-    if ( del_ids.includes(key) ){
-      deletedPool[key] = val;
-      delete pool[key];
+  // (Optional) Delete IDs from paired comparision matrix
+  del_ids.forEach(key => {
+    if (pairs && cfg.drop_pairs){
       delete pairs[key];
       for(var key2 in pairs){
         delete pairs[key2][key]
-      }
+      }  
     }
-  })
-  console.log("huhu2:", pool)
-  console.log("huhu2:", pairs)
-  console.log("huhu2:", deletedPool)
+  });
+
+  // Copy pool data to buffer
+  var deletedData = {}  // API buffer
+  del_ids.forEach(key => {
+      deletedData[key] = {
+        "training_score_history": pool[key].training_score_history,
+        "model_score_history": pool[key].model_score_history,
+        "displayed": pool[key].displayed
+      };
+      delete pool[key];
+  });
 
   // return new Promise((resolve, reject) => {
   //   // load other functions and objects
   //   const { getToken } = useAuth();
   //   const { api } = useApi(getToken());
-  //   api.post(`v1/bestworst/evaluations`, del_ids)
+  //   api.post(`v1/bestworst/evaluations`, deletedData)
   //     .then(response => {})
   //     .catch(error => {})
   //     .finally(() => {});
@@ -435,10 +458,11 @@ export const useInteractivity = () => {
   const drop_config = reactive({
     "target_probas": [0.1, 0.2, 0.3, 0.4],
     "bin_edges": [.0, .25, .5, .75, 1.],
-    //"max_displays": 1,
-    "eps_score_change": 1e-1
+    "max_displays": 1,
+    "eps_score_change": 1e-1,
+    "drop_pairs": true
   })
-  //dropExamplesFromPool(pairs, pool, min_pool_size.value, cfg);
+  //dropExamplesFromPool(drop_config, pool, min_pool_size.value, pairs);
 
   // (2) Add examples to pool
   //addExamplesToPool();

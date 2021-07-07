@@ -139,7 +139,7 @@ export default defineComponent({
 
 
     // (1) Drop examples from pool
-    dropExamplesFromPool(pairs, pool, min_pool_size.value, drop_config);
+    dropExamplesFromPool(drop_config, pool, min_pool_size.value, pairs);
 
     // (2) Add examples to pool
 
