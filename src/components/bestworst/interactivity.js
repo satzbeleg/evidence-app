@@ -270,10 +270,7 @@ const sampleBwsSets = (pool,
   }
 
   // (B) Copy all keys (IDs) from pool
-  var all_ids = [];
-  Object.keys(pool).forEach(key => {
-    all_ids.push(key);
-  });
+  var all_ids = Object.keys(pool);
 
   if (debug) {
     console.log(`Current pool size: ${all_ids.length}`);
