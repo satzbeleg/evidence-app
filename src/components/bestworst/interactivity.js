@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue';
 import { sampling, counting, ranking } from 'bwsample';
-// import { useApi, useAuth } from '@/functions/axios-evidence.js';
+import { useApi, useAuth } from '@/functions/axios-evidence.js';
 
 
 const getLast = (arr) => {
@@ -28,13 +28,15 @@ const getLastAbsChange = (arr) => {
 }
 
 /**
- * see `dropExamplesFromPool` 
+ * Computes the Density (PDF) for a given histogram bin
  * 
- * const data = Array.from({length: 40}, () => Math.random())
- * const bin_edges = [.1, .25, .5, .75, 9.].sort()
- * const probas = histogram(data, bin_edges)
+ * Example:
+ * --------
+ *    const data = Array.from({length: 40}, () => Math.random())
+ *    const bin_edges = [.1, .25, .5, .75, 9.].sort()
+ *    const probas = histpdf(data, bin_edges)
  */
-const histogram = (data, bin_edges) => {
+const histpdf = (data, bin_edges) => {
   const num_bins = bin_edges.length - 1;
   var count = Array.from({length: num_bins}, () => 0);
   var i;
@@ -65,8 +67,21 @@ const histogram = (data, bin_edges) => {
   return probas;
 }
 
-// dropExamplesFromPool
-// Drop if example reached `max_displays`
+
+/**
+ * Filter IDs from the `pool` that have been shown to the user at 
+ * least `max_displays` times. Move these IDs to the deletion list.
+ * 
+ * @param {JSON}      pool          see `useInteractivity`
+ * @param {Array[ID]} avail_ids     List with unprocessed IDs
+ * @param {Array[ID]} del_ids       List with IDs to be deleted
+ * @param {Int}       max_displays  Maximum number of times an example should be displayed to the user
+ * @param {Bool}      debug         (Optional) Flag to print logging info
+ * 
+ * Notes:
+ * ------
+ *  - This function is only used in `useInteractity/dropExamplesFromPool`
+ */
 const deletionCriteriaDisplays = (pool, 
                                   avail_ids, 
                                   del_ids, 
@@ -85,13 +100,26 @@ const deletionCriteriaDisplays = (pool,
   }
 }
 
-// dropExamplesFromPool
-// Drop if example's model scores converged `|delta score|<eps_score_change`
-const deletionCriteriaConvergence = (pool, 
-                                     avail_ids, 
-                                     del_ids, 
-                                     eps_score_change, 
-                                     debug=false) => {
+
+/**
+ * Filter IDs from the `pool` if its model scores converged, i.e. 
+ * `|delta score|<eps_score_change`. Move these IDs to the deletion list.
+ * 
+ * @param {JSON}      pool          see `useInteractivity`
+ * @param {Array[ID]} avail_ids     List with unprocessed IDs
+ * @param {Array[ID]} del_ids       List with IDs to be deleted
+ * @param {Float}     eps_score_change   Abort criteria for model score changes
+ * @param {Bool}      debug         (Optional) Flag to print logging info
+ * 
+ * Notes:
+ * ------
+ *  - This function is only used in `useInteractity/dropExamplesFromPool`
+ */
+ const deletionCriteriaConvergence = (pool, 
+                                      avail_ids, 
+                                      del_ids, 
+                                      eps_score_change, 
+                                      debug=false) => {
   if (Number.isFinite(eps_score_change)){
     var i = avail_ids.length;
     while( i-- ){
@@ -105,8 +133,23 @@ const deletionCriteriaConvergence = (pool,
   }
 }
 
-// dropExamplesFromPool
-// Drop examples with overrepresented model scores
+
+/**
+ * Filter IDs if their training scores are overrepresented in the pool.
+ * The purpose is to maintain a balanced training set. Move these IDs to 
+ * the deletion list.
+ * 
+ * @param {JSON}      pool          see `useInteractivity`
+ * @param {Array[ID]} avail_ids     List with unprocessed IDs
+ * @param {Array[ID]} del_ids       List with IDs to be deleted
+ * @param {Array}     bin_edges     The bin edges of the histogram, e.g. [0.0, ..., 1.0]
+ * @param {Array}     target_probas The desired densities for each bin
+ * @param {Bool}      debug         (Optional) Flag to print logging info
+ * 
+ * Notes:
+ * ------
+ *  - This function is only used in `useInteractity/dropExamplesFromPool`
+ */
 const deletionCriteriaDistribution = (pool, 
                                       avail_ids, 
                                       del_ids, 
@@ -121,11 +164,11 @@ const deletionCriteriaDistribution = (pool,
     // copy model scores into Array
     var model_scores = [];
     avail_ids.forEach(key => {
-      model_scores.push( pool[key]["last_model_score"] );
+      model_scores.push( pool[key]["last_training_score"] );
     });
     // estimate the empirical distribution
-    const empirical_probas = histogram(model_scores, bin_edges);
-    //console.log(empirical_probas, target_probas)
+    const empirical_probas = histpdf(model_scores, bin_edges);
+    // console.log(empirical_probas, target_probas)
 
     // If the empirical proba exceeds the desired proba in a certain bin
     // then randomly pick IDs with model scores of this bin
@@ -140,7 +183,7 @@ const deletionCriteriaDistribution = (pool,
         disp = [];
         conv = [];
         avail_ids.forEach(key => {
-          var s = pool[key]["last_model_score"];
+          var s = pool[key]["last_training_score"];
           var crit1 = (j === 0) ? true : bin_edges[j] < s;
           var crit2 = (j === bin_edges.length - 1) ? true : s <= bin_edges[j+1];
           if( crit1 && crit2 ){
@@ -174,90 +217,7 @@ const deletionCriteriaDistribution = (pool,
   }
 }
 
-/**
- * (1) Drop examples from pool
- * 
- * @param {JSON} pool 
- * @param {JSON} cfg 
- * 
- * cfg = {
- *  "target_probas": [0.1, 0.2, 0.3, 0.4],
- *  "bin_edges": [.0, .25, .5, .75, 1.],
- *  "max_displays": 10,
- *  "eps_score_change": 1e-6,
- *  "drop_pairs": false
- * }
- * 
- * Explanations
- * - `cfg.drop_pairs`: If the flag is enabled, the all columns and rows of 
- *    the deleted IDs are removed from the paired comparision matrix `pairs`.
- *      - Pros: The memory footprint of `pairs` is limited.
- *      - Con: The training scores are affected.
- *    Dropped pairs are NOT sent to API for backup in `dropExamplesFromPool`
- *    because it would be repeated unnecessarily as the pairs (per use) can 
- *    be computed from the raw evaluations already sent to the server. 
- */
- const dropExamplesFromPool = (cfg, 
-                               pool, 
-                               min_pool_size=0, 
-                               pairs=undefined, 
-                               debug=true) => {
-  // save IDs to be deletion
-  var del_ids = [];
-  var avail_ids = Object.keys(pool);
-  const max_deletions = avail_ids.length - min_pool_size;
 
-  // identify IDs that should be deleted
-  if ( max_deletions > 0 ){
-    // (a) Drop examples with overrepresented model scores
-    deletionCriteriaDistribution(
-      pool, avail_ids, del_ids, cfg.bin_edges, cfg.target_probas, debug);
-    // (b) Drop if example reached `max_displays`
-    deletionCriteriaDisplays(
-      pool, avail_ids, del_ids, cfg.max_displays, debug);
-    // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
-    deletionCriteriaConvergence(
-      pool, avail_ids, del_ids, cfg.eps_score_change, debug);
-    // Restrict deletions
-    del_ids = del_ids.slice(0, max_deletions);
-  }
-
-  if (debug){
-    console.log("Deleted data:", deletedData);
-  }
-
-  // (Optional) Delete IDs from paired comparision matrix
-  del_ids.forEach(key => {
-    if (pairs && cfg.drop_pairs){
-      delete pairs[key];
-      for(var key2 in pairs){
-        delete pairs[key2][key]
-      }  
-    }
-  });
-
-  // Copy pool data to buffer
-  var deletedData = {}  // API buffer
-  del_ids.forEach(key => {
-      deletedData[key] = {
-        "training_score_history": pool[key].training_score_history,
-        "model_score_history": pool[key].model_score_history,
-        "displayed": pool[key].displayed
-      };
-      delete pool[key];
-  });
-
-  // return new Promise((resolve, reject) => {
-  //   // load other functions and objects
-  //   const { getToken } = useAuth();
-  //   const { api } = useApi(getToken());
-  //   api.post(`v1/bestworst/evaluations`, deletedData)
-  //     .then(response => {})
-  //     .catch(error => {})
-  //     .finally(() => {});
-  // });
-
-}
 
 // (2) Add examples to pool
 // - Ajax Call to load new sentence examples
@@ -414,10 +374,22 @@ const computeTrainingScores = (pairs,
 
 
 export const useInteractivity = () => {
-  // initialize data variables
+  // Initialize data variables
   const pool = reactive({});   // key-value database for each sentences
   const pairs = reactive({});  // sparse LIL matrix with paired comparisons
-  // const dropped = reactive({});
+
+  // Informational variables
+  const debug = ref(true);
+
+  // Variables for (1)
+  const min_pool_size = ref(3);
+  const drop_config = reactive({
+    "target_probas": [0.1, 0.2, 0.3, 0.4],
+    "bin_edges": [.0, .25, .5, .75, 1.],
+    "max_displays": 1,
+    "eps_score_change": 1e-1,
+    "drop_pairs": true
+  })
 
   // DEMO: fake paired comparisons (DELETE THIS LATER!)
   counting.incr_lil(pairs, "abc", "ghi");
@@ -445,6 +417,8 @@ export const useInteractivity = () => {
       // Number of times an item was displayed
       pool[key]["num_displayed"] = pool[key].displayed.reduce(
         (a,b) => Number(a) + Number(b), 0);
+      // Last training score
+      pool[key]["last_training_score"] = getLast(pool[key].training_score_history);
       // Last model score
       pool[key]["last_model_score"] = getLast(pool[key].model_score_history);
       // Model score change
@@ -453,16 +427,108 @@ export const useInteractivity = () => {
   }
   updateCurrentPoolMetrics(pool);
 
-  // (1) Drop examples from pool
-  const min_pool_size = ref(3);
-  const drop_config = reactive({
-    "target_probas": [0.1, 0.2, 0.3, 0.4],
-    "bin_edges": [.0, .25, .5, .75, 1.],
-    "max_displays": 1,
-    "eps_score_change": 1e-1,
-    "drop_pairs": true
-  })
-  //dropExamplesFromPool(drop_config, pool, min_pool_size.value, pairs);
+  
+  /**
+   * (1) Drop examples from pool
+   * 
+   * Global Variables:
+   * -----------------
+   * @param {JSON}  drop_config 
+   * @param {JSON}  pool 
+   * @param {Int}   min_pool_size 
+   * @param {JSON}  pairs 
+   * @param {Bool}  debug 
+   * 
+   * drop_config = {
+   *  "target_probas": [0.1, 0.2, 0.3, 0.4],
+   *  "bin_edges": [.0, .25, .5, .75, 1.],
+   *  "max_displays": 10,
+   *  "eps_score_change": 1e-6,
+   *  "drop_pairs": false
+   * }
+   * 
+   * Required Functions:
+   * -------------------
+   *  - deletionCriteriaDistribution
+   *  - deletionCriteriaDisplays
+   *  - deletionCriteriaConvergence
+   * 
+   * Explanations:
+   * -------------
+   * - `drop_config.drop_pairs`: If the flag is enabled, the all columns and 
+   *    rows of the deleted IDs are removed from the paired comparision matrix
+   *    `pairs`.
+   *      - Pros: The memory footprint of `pairs` is limited.
+   *      - Con: The training scores are affected.
+   *    Dropped pairs are NOT sent to API for backup in `dropExamplesFromPool`
+   *    because it would be repeated unnecessarily as the pairs (per use) can 
+   *    be computed from the raw evaluations already sent to the server. 
+   */
+  const dropExamplesFromPool = () => {
+    // save IDs to be deletion
+    var del_ids = [];
+    var avail_ids = Object.keys(pool);
+    const max_deletions = avail_ids.length - min_pool_size.value;
+
+    // identify IDs that should be deleted
+    if ( max_deletions > 0 ){
+      // (a) Drop examples with overrepresented training scores
+      deletionCriteriaDistribution(
+        pool, avail_ids, del_ids, drop_config.bin_edges, drop_config.target_probas, debug.value);
+      // (b) Drop if example reached `max_displays`
+      deletionCriteriaDisplays(
+        pool, avail_ids, del_ids, drop_config.max_displays, debug.value);
+      // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
+      deletionCriteriaConvergence(
+        pool, avail_ids, del_ids, drop_config.eps_score_change, debug.value);
+      // Restrict deletions
+      del_ids = del_ids.slice(0, max_deletions);
+    }
+
+    // (Optional) Delete IDs from paired comparision matrix
+    del_ids.forEach(key => {
+      if (drop_config.drop_pairs){
+        delete pairs[key];
+        for(var key2 in pairs){
+          delete pairs[key2][key]
+        }  
+      }
+    });
+
+    // Copy pool data to buffer
+    var deletedData = {}  // API buffer
+    del_ids.forEach(key => {
+        deletedData[key] = {
+          "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
+          "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
+          "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
+        };
+        delete pool[key];
+    });
+
+    if (debug.value){
+      console.log("Deleted data:", deletedData);
+    }
+
+    // Start asynchronous AJAX request to backup deleted examples
+    return new Promise((resolve, reject) => {
+      // load other functions and objects
+      const { getToken } = useAuth();
+      const { api } = useApi(getToken());
+      // Start API request
+      api.post(`v1/interactivity/deleted-episodes`, deletedData)
+        .then(response => {
+          if(debug.value){console.log(response)}
+          resolve(response);
+        })
+        .catch(error => {
+          if(debug.value){console.log(error)}
+          reject(error);
+        })
+        .finally(() => {        
+        });
+    });
+  }
 
   // (2) Add examples to pool
   //addExamplesToPool();
@@ -495,7 +561,7 @@ export const useInteractivity = () => {
   return { 
     pool, 
     pairs,
-    dropExamplesFromPool, drop_config, min_pool_size,
+    dropExamplesFromPool,
     sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
     computeTrainingScores, smoothing_method, ema_alpha
   }
