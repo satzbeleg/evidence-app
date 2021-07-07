@@ -1,4 +1,4 @@
-import { reactive, ref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { sampling, counting, ranking } from 'bwsample';
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
 
@@ -380,6 +380,7 @@ export const useInteractivity = () => {
   const debug = ref(true);
 
   // Variables for (1)
+  const deletedPool = reactive({});
   const min_pool_size = ref(3);
   const drop_config = reactive({
     "target_probas": [0.1, 0.2, 0.3, 0.4],
@@ -494,28 +495,36 @@ export const useInteractivity = () => {
     });
 
     // Copy pool data to buffer
-    var deletedData = {}  // API buffer
+    // var deletedData = {}  // API buffer
     del_ids.forEach(key => {
-        deletedData[key] = {
-          "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
-          "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
-          "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
-        };
-        delete pool[key];
+      deletedPool[key] = {
+        "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
+        "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
+        "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
+      };
+      delete pool[key];
     });
 
     if (debug.value){
-      console.log("Deleted data:", deletedData);
+      console.log("Deleted data:", JSON.parse(JSON.stringify(deletedPool)) );
     }
+  }
 
-    // Start asynchronous AJAX request to backup deleted examples
+  /**
+   * (1b) Send deleted pool data to API/DB
+   * Start asynchronous AJAX request to backup deleted examples
+   */
+  const saveDeletedPool = () => {
     return new Promise((resolve, reject) => {
       // load other functions and objects
       const { getToken } = useAuth();
       const { api } = useApi(getToken());
       // Start API request
-      api.post(`v1/interactivity/deleted-episodes`, deletedData)
+      api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
         .then(response => {
+          response.data['stored-ids'].forEach(key => {
+            delete deletedPool[key];
+          })
           if(debug.value){console.log(response)}
           resolve(response);
         })
@@ -527,6 +536,19 @@ export const useInteractivity = () => {
         });
     });
   }
+
+  /**
+   * (1c) watch `deletedPool` to trigger sync with API/DB
+   */
+  watch(
+    () => Object.keys(deletedPool).length,
+    (num_deleted_examples) => {
+      if (num_deleted_examples > 0){
+        if(debug.value){console.log(`try to store ${num_deleted_examples} deleted example(s)`)}
+        saveDeletedPool();
+      }
+    }
+  );
 
   // (2) Add examples to pool
   //addExamplesToPool();
