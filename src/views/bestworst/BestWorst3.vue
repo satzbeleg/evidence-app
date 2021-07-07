@@ -114,10 +114,8 @@ export default defineComponent({
         api.post(`v1/bestworst/samples/4/${unref(orderquantity)}/${unref(sampling_numtop)}/${unref(sampling_offset)}`, params)
         .then(response => {
           // Is there any error message returned?
-          if ('status' in response.data){
-            if ('msg' in response.data){
-              message_suggestion.value = response.data['msg'];
-            }
+          if ('msg' in response.data){
+            message_suggestion.value = response.data['msg'];
           }else if (typeof response.data == "object"){
             // copy all example sets
             response.data.forEach(exset => data.queue.push(exset));
