@@ -94,7 +94,7 @@ const deletionCriteriaDisplays = (pool,
         del_ids.push(avail_ids.pop())
       }
     }
-    if (debug){console.log("Selected for deletion:", del_ids);}
+    if (debug){console.log("Selected for deletion (Max Displays):", del_ids);}
   }else{
     if (debug){console.log(`max_displays=${max_displays} is not an integer`);}
   }
@@ -127,7 +127,7 @@ const deletionCriteriaDisplays = (pool,
         del_ids.push(avail_ids.pop())
       }
     }
-    if (debug){console.log("Selected for deletion:", del_ids);}
+    if (debug){console.log("Selected for deletion (Covergence):", del_ids);}
   }else{
     if (debug){console.log(`eps_score_change=${eps_score_change} is not a number`);}
   }
@@ -211,7 +211,7 @@ const deletionCriteriaDistribution = (pool,
         //console.log("Del:", j, num_del, excess_proba)
       }
     }
-    if (debug){console.log("Selected for deletion:", del_ids);}
+    if (debug){console.log("Selected for deletion (Distribution):", del_ids);}
   }else{
     if (debug){console.log(`target_probas and/or bin_edges are not arrays`);}
   }
@@ -237,90 +237,6 @@ const deletionCriteriaDistribution = (pool,
 //   });
 // }
 
-/**
- * (3) Sample 1,2,3... BWS sets from pool
- * 
- * @param {JSON}  pool 
- * @param {Int}   num_items 
- * @param {Int}   num_preload 
- * @param {Sting} item_sampling_method 
- * @param {Bool}  debug 
- * 
- * Example:
- *  // load settings
- *  const num_items_per_set = ref(4);
- *  const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
- *  const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
- *  const debug = false;
- *  // run the code
- *  var sampled_bwssets = sampleBwsSets(
- *    pool, num_items_per_set.value, num_preload_bwssets.value, method.value, debug);
- */
-const sampleBwsSets = (pool,
-                       num_items,
-                       num_preload,
-                       item_sampling_method = "newer-unstable",
-                       debug = false) => {
-  // (A) Compute the number of sentence examples to sample from pool
-  var num_examples = Math.max(num_preload, 1) * Math.max(1, num_items - 1);
-  num_examples = Math.max(num_items, num_examples);
-
-  if (debug) {
-    console.log(`Num of items to sample from pool: ${num_examples}`)
-  }
-
-  // (B) Copy all keys (IDs) from pool
-  var all_ids = Object.keys(pool);
-
-  if (debug) {
-    console.log(`Current pool size: ${all_ids.length}`);
-  }
-
-  // (C) Sort ID Array (all_ids) so that items to pick are at the beginning of the array
-  // You must specify the item sampling `method`
-  if (item_sampling_method === "random") {
-    // Draw random sentence examples from pool (Baseline)
-    all_ids.sort(() => (Math.random() > .5) ? 1 : -1);  // shuffle
-
-  } else if (item_sampling_method === "exploit") {
-    // Prefer the items with highest model scores
-    all_ids.sort((key1, key2) => {
-      if (pool[key1].last_model_score < pool[key2].last_model_score) return 1;
-      if (pool[key1].last_model_score > pool[key2].last_model_score) return -1;
-      return 0;
-    });
-
-  } else if (item_sampling_method === "newer-unstable") {
-    // Prefer the least displayed sentence examples, and 
-    // most fluctuating model scores
-    all_ids.sort((key1, key2) => {
-      // prefer the least displayed items (ascending)
-      if (pool[key1].num_displayed < pool[key2].num_displayed) return -1;
-      if (pool[key1].num_displayed > pool[key2].num_displayed) return 1;
-      // if same number of displays, prefer most fluctating model scores (descending)
-      if (pool[key1].change_model_score < pool[key2].change_model_score) return 1;
-      if (pool[key1].change_model_score > pool[key2].change_model_score) return -1;
-      return 0;
-    });
-  }
-  // (D) Pick the first `num_examples` items of the sorted ids
-  var sampled_ids = all_ids.slice(0, num_examples);
-
-  if (debug) {
-    console.log(`sampled_ids.length=${sampled_ids.length}`);
-    console.log("Sampled IDs:", sampled_ids);
-  }
-
-  // (E) Generate BWS set samples (Sorry for the naming confusion)
-  var sampled_bwssets = sampling.sample(sampled_ids, num_items, "overlap", false);
-
-  if (debug) {
-    console.log("BWS samples:", sampled_bwssets);
-  }
-
-  // done
-  return sampled_bwssets;
-}
 
 
 /**
@@ -377,22 +293,35 @@ export const useInteractivity = () => {
   const pairs = reactive({});  // sparse LIL matrix with paired comparisons
 
   // Informational variables
+  const hasConsented = ref(false);  // Flag if data will be sent to the API
   const debug = ref(true);
   const errorMessage = ref("");
 
-  // Variables for (1)
+  // Variables for (1) and (2)
   const deletedPool = reactive({});
-  const min_pool_size = ref(3);
-  const drop_config = reactive({
-    "target_probas": [0.1, 0.2, 0.3, 0.4],
-    "bin_edges": [.0, .25, .5, .75, 1.],
-    "max_displays": 1,
-    "eps_score_change": 1e-1,
-    "drop_pairs": false
-  })
 
-  // Variables for (2)
+  const min_pool_size = ref(3);
   const max_pool_size = ref(10);
+
+  const useDropDistribution = ref(true);
+  const useAddDistribution = ref(false);  // NOT USED SO FAR
+  const target_probas = reactive({value: [0.1, 0.2, 0.3, 0.4]});
+  const bin_edges = reactive({value: [.0, .25, .5, .75, 1.]});
+
+  const useExcludeMaxDisplay = ref(true);  // NOT USED SO FAR
+  const useDropMaxDisplay = ref(false);
+  const max_displays = ref(1);
+
+  const useDropConverge = ref(false);
+  const eps_score_change = ref(1e-6);
+
+  const useDropPairs = ref(false);
+
+
+  // Variables for (3) 
+  const num_items_per_set = ref(3);
+  const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
+  const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
 
 
   // DEMO: fake paired comparisons (DELETE THIS LATER!)
@@ -437,19 +366,24 @@ export const useInteractivity = () => {
    * 
    * Global Variables:
    * -----------------
-   * @param {JSON}  drop_config 
    * @param {JSON}  pool 
-   * @param {Int}   min_pool_size 
    * @param {JSON}  pairs 
    * @param {Bool}  debug 
+   * @param {Int}   min_pool_size 
+   * @param {Array} target_probas
+   * @param {Array} bin_edges
+   * @param {Int}   max_displays
+   * @param {Float} eps_score_change
+   * @param {Bool}  useDropPairs
    * 
-   * drop_config = {
-   *  "target_probas": [0.1, 0.2, 0.3, 0.4],
-   *  "bin_edges": [.0, .25, .5, .75, 1.],
-   *  "max_displays": 10,
-   *  "eps_score_change": 1e-6,
-   *  "drop_pairs": false
-   * }
+   * Examples:
+   * ---------
+   * const min_pool_size = ref(10);
+   * const target_probas = reactive({value: [0.1, 0.2, 0.3, 0.4]});
+   * const bin_edges = reactive({value: [.0, .25, .5, .75, 1.]});
+   * const max_displays = ref(1);
+   * const eps_score_change = ref(1e-1);
+   * const useDropPairs = ref(false);
    * 
    * Required Functions:
    * -------------------
@@ -459,7 +393,7 @@ export const useInteractivity = () => {
    * 
    * Explanations:
    * -------------
-   * - `drop_config.drop_pairs`: If the flag is enabled, the all columns and 
+   * - `drop_config.useDropPairs`: If the flag is enabled, the all columns and 
    *    rows of the deleted IDs are removed from the paired comparision matrix
    *    `pairs`.
    *      - Pros: The memory footprint of `pairs` is limited.
@@ -477,21 +411,27 @@ export const useInteractivity = () => {
     // identify IDs that should be deleted
     if ( max_deletions > 0 ){
       // (a) Drop examples with overrepresented training scores
-      deletionCriteriaDistribution(
-        pool, avail_ids, del_ids, drop_config.bin_edges, drop_config.target_probas, debug.value);
+      if (useDropDistribution.value){
+        deletionCriteriaDistribution(
+          pool, avail_ids, del_ids, bin_edges.value, target_probas.value, debug.value);
+      }
       // (b) Drop if example reached `max_displays`
-      deletionCriteriaDisplays(
-        pool, avail_ids, del_ids, drop_config.max_displays, debug.value);
+      if (useDropMaxDisplay.value){
+        deletionCriteriaDisplays(
+          pool, avail_ids, del_ids, max_displays.value, debug.value);
+      }
       // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
-      deletionCriteriaConvergence(
-        pool, avail_ids, del_ids, drop_config.eps_score_change, debug.value);
+      if (useDropConverge.value){
+        deletionCriteriaConvergence(
+          pool, avail_ids, del_ids, eps_score_change.value, debug.value);
+      }
       // Restrict deletions
       del_ids = del_ids.slice(0, max_deletions);
     }
 
     // (Optional) Delete IDs from paired comparision matrix
     del_ids.forEach(key => {
-      if (drop_config.drop_pairs){
+      if (useDropPairs.value){
         delete pairs[key];
         for(var key2 in pairs){
           delete pairs[key2][key]
@@ -517,28 +457,37 @@ export const useInteractivity = () => {
 
   /**
    * (1b) Send deleted pool data to API/DB
-   * Start asynchronous AJAX request to backup deleted examples
+   * - Start asynchronous AJAX request to backup deleted examples
+   * - Storing app data to the API/DB works only if `hasConsented` is true
    */
   const saveDeletedPool = () => {
     return new Promise((resolve, reject) => {
-      // load other functions and objects
-      const { getToken } = useAuth();
-      const { api } = useApi(getToken());
-      // Start API request
-      api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
-        .then(response => {
-          response.data['stored-ids'].forEach(key => {
-            delete deletedPool[key];
+      if (hasConsented.value){
+        // load other functions and objects
+        const { getToken } = useAuth();
+        const { api } = useApi(getToken());
+        // Start API request
+        api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
+          .then(response => {
+            response.data['stored-ids'].forEach(key => {
+              delete deletedPool[key];
+            })
+            if(debug.value){console.log(response)}
+            resolve(response);
           })
-          if(debug.value){console.log(response)}
-          resolve(response);
-        })
-        .catch(error => {
-          if(debug.value){console.log(error)}
-          reject(error);
-        })
-        .finally(() => {        
+          .catch(error => {
+            if(debug.value){console.log(error)}
+            reject(error);
+          })
+          .finally(() => {        
+          });
+      }else{
+        // just delete the data permanently
+        Object.keys(deletedPool).forEach(key => {
+          delete deletedPool[key];
         });
+        if(debug.value){console.log("Dropped pool examples permanently because hasConsent=false.")}
+      }
     });
   }
 
@@ -558,14 +507,28 @@ export const useInteractivity = () => {
 
   /**
    * (2) Add examples to pool
+   * 
+   * Global Variables:
+   * -----------------
+   * @param {JSON}    pool 
+   * @param {String}  errorMessage
+   * @param {Int}     max_pool_size
+   * @param {Int}     max_displays
    */
   const addExamplesToPool = () => {
     return new Promise((resolve, reject) => {
-      const max_additions = max_pool_size - Object.keys(pool).length;
+      const max_additions = max_pool_size.value - Object.keys(pool).length;
       if (max_additions > 0){
+        // settings
+        var params = {
+          "exclude_deleted_ids": true,
+          "max_displays": max_displays.value,
+        }
+        // load API conn
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
-        api.post(`v1/interactivity/examples/${max_additions}`, {})
+        // start AJAX call
+        api.post(`v1/interactivity/examples/${max_additions}`, params)
           .then(response => {
             if ('msg' in response.data){
               errorMessage.value = response.data['msg'];
@@ -594,14 +557,90 @@ export const useInteractivity = () => {
   }
 
 
-  // (3) Sample 1,2,3... BWS sets from pool
-  const num_items_per_set = ref(3);
-  const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
-  const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
-  // var sampled_bwssets = sampleBwsSets(
-  //   pool, num_items_per_set.value, num_preload_bwssets.value, 
-  //   item_sampling_method.value, false);
-  // console.log("BWS samples:", sampled_bwssets);
+  /**
+   * (3) Sample 1,2,3... BWS sets from pool
+   * 
+   * Global Variables:
+   * -----------------
+   * @param {JSON}  pool 
+   * @param {Int}   num_items_per_set 
+   * @param {Int}   num_preload_bwssets 
+   * @param {Sting} item_sampling_method 
+   * @param {Bool}  debug 
+   * 
+   * Example:
+   * --------
+   *  // load settings
+   *  const num_items_per_set = ref(4);
+   *  const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
+   *  const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
+   *  const debug = false;
+   *  // run the code
+   *  var sampled_bwssets = sampleBwsSets();
+   */
+  const sampleBwsSets = () => {
+    // (A) Compute the number of sentence examples to sample from pool
+    var num_examples = Math.max(num_preload_bwssets.value, 1) * Math.max(1, num_items_per_set.value - 1);
+    num_examples = Math.max(num_items_per_set.value, num_examples);
+
+    if (debug.value) {
+      console.log(`Num of items to sample from pool: ${num_examples}`)
+    }
+
+    // (B) Copy all keys (IDs) from pool
+    console.log(pool)
+    var all_ids = Object.keys(pool);
+
+    if (debug.value) {
+      console.log(`Current pool size: ${all_ids.length}`);
+    }
+
+    // (C) Sort ID Array (all_ids) so that items to pick are at the beginning of the array
+    // You must specify the item sampling `method`
+    if (item_sampling_method.value === "random") {
+      // Draw random sentence examples from pool (Baseline)
+      all_ids.sort(() => (Math.random() > .5) ? 1 : -1);  // shuffle
+
+    } else if (item_sampling_method.value === "exploit") {
+      // Prefer the items with highest model scores
+      all_ids.sort((key1, key2) => {
+        if (pool[key1].last_model_score < pool[key2].last_model_score) return 1;
+        if (pool[key1].last_model_score > pool[key2].last_model_score) return -1;
+        return 0;
+      });
+
+    } else if (item_sampling_method.value === "newer-unstable") {
+      // Prefer the least displayed sentence examples, and 
+      // most fluctuating model scores
+      all_ids.sort((key1, key2) => {
+        // prefer the least displayed items (ascending)
+        if (pool[key1].num_displayed < pool[key2].num_displayed) return -1;
+        if (pool[key1].num_displayed > pool[key2].num_displayed) return 1;
+        // if same number of displays, prefer most fluctating model scores (descending)
+        if (pool[key1].change_model_score < pool[key2].change_model_score) return 1;
+        if (pool[key1].change_model_score > pool[key2].change_model_score) return -1;
+        return 0;
+      });
+    }
+    // (D) Pick the first `num_examples` items of the sorted ids
+    var sampled_ids = all_ids.slice(0, num_examples);
+
+    if (debug.value) {
+      console.log(`sampled_ids.length=${sampled_ids.length}`);
+      console.log("Sampled IDs:", sampled_ids);
+    }
+
+    // (E) Generate BWS set samples (Sorry for the naming confusion)
+    var sampled_bwssets = sampling.sample(
+      sampled_ids, num_items_per_set.value, "overlap", false);
+
+    if (debug.value) {
+      console.log("BWS samples:", sampled_bwssets);
+    }
+
+    // done
+    return sampled_bwssets;
+  }
 
 
   // (4) Update pairs comparison matrix
@@ -621,9 +660,15 @@ export const useInteractivity = () => {
   return { 
     pool, 
     pairs,
+    hasConsented,
     errorMessage,
-    dropExamplesFromPool,
-    addExamplesToPool,
+    debug,
+    dropExamplesFromPool, addExamplesToPool,
+      min_pool_size, max_pool_size,
+      useDropDistribution, useAddDistribution, bin_edges, target_probas, 
+      useExcludeMaxDisplay, useDropMaxDisplay, max_displays, 
+      useDropConverge, eps_score_change,
+      useDropPairs,
     sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
     computeTrainingScores, smoothing_method, ema_alpha
   }
