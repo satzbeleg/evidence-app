@@ -129,7 +129,7 @@ export default defineComponent({
     const { 
       pool, pairs, 
       dropExamplesFromPool,
-      sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
+      sampleBwsSets, 
       computeTrainingScores, smoothing_method, ema_alpha
     } = useInteractivity();
 
@@ -144,9 +144,7 @@ export default defineComponent({
     // (2) Add examples to pool
 
     // (3) Sample 1,2,3... BWS sets from pool
-    var sampled_bwssets = sampleBwsSets(
-      pool, num_items_per_set.value, num_preload_bwssets.value, 
-      item_sampling_method.value, false);
+    var sampled_bwssets = sampleBwsSets();
     console.log("BWS samples:", sampled_bwssets);
 
     // => In der App anzeigen =>
