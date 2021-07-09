@@ -128,7 +128,7 @@ export default defineComponent({
             pullFromQueue(); // load data
             console.log("New current BWS set loaded")
           }
-          console.log("After API Call:", data)
+          // console.log("After API Call:", data)
         });
       });
     }

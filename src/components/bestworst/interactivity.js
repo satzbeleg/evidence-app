@@ -321,7 +321,7 @@ export const useInteractivity = () => {
   
 
   // Settings for (3) 
-  const num_items_per_set = ref(3);
+  const num_items_per_set = ref(4);
   const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
   const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
   const bws_sampling_method = ref("overlap")
@@ -335,6 +335,7 @@ export const useInteractivity = () => {
   // DEMO: fake sentence examples (DELETE THIS LATER!)
   for(var key of ["abc", "ghi", "def", "jkl"]){
     pool[key] = {
+      text: `lalilu ${key}`,
       features: Array.from({length: 567}, () => Math.random()),
       training_score_history: [undefined, 0.7 + 0.3 * Math.random()],
       model_score_history: [0.5 + 0.1 * Math.random(), 0.6 + 0.1 * Math.random()],

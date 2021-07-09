@@ -33,14 +33,17 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst/Choices.vue';
-import { defineComponent, reactive, watchEffect, ref } from 'vue'; // unref, watch, computed
+import { defineComponent, watchEffect, watch } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
-//import { useSettings } from '@/functions/settings.js';
+import { useSettings } from '@/functions/settings.js';
 //import { traverseObject } from '@/functions/traverse-objects.js';
 //import { counting } from 'bwsample';
 //import { ranking } from 'bwsample';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
+import { useBwsQueue } from '@/components/bestworst/queue.js';
+import { v4 as uuid4 } from 'uuid';
+
 
 export default defineComponent({
   name: "BestWorst4",
@@ -59,65 +62,133 @@ export default defineComponent({
       document.title = t('bestworst.title');
     });
 
-    // Search string for lemmata/keywords
-    const searchlemmata = ref("");
 
-    // reactive data of this component
-    const data = reactive({
-      // Array with unlabelled example sets. It's a FIFO queue
-      queue: [],
-      // The current BWS-exampleset displayed inside the app
-      current: [],
-      current_setid: undefined,
-      current_lemmata: undefined, //'Hello world,cool',
-      // Use to trigger component re-rendering with :key
-      counter: 1,
-      // Post this to the REST API (see saveEvaluations)
-      evaluated: [],
+    // Load bestworst3 UI settings
+    const { 
+      loadSettings, reorderpoint 
+    } = useSettings();
+    loadSettings();
+
+
+    // Load reactive variables for BWS Queue
+    const { 
+      uispec, searchlemmata, data, 
+      isReplenishing, message_suggestion,
+      isSaving, saveEvaluations,
+      pullFromQueue, nextExampleSet, 
+      resetQueue
+    } = useBwsQueue();
+
+    // configure UI meta info
+    uispec["name"] = "bestworst4";
+
+    // Load Interactivity Settings
+    const { 
+      pool, pairs, 
+      // dropExamplesFromPool,
+      sampleBwsSets, 
+      // computeTrainingScores, smoothing_method, ema_alpha
+    } = useInteractivity();
+
+    /**
+     * (1) Specify Replenishment from local `pool`
+     * 
+     * Global variables from queue.js
+     * ------------------------------
+     * @param {String} searchlemmata
+     * @param {JSON}   data
+     * @param {Boolan} isReplenishing
+     * @param {String} message_suggestion
+     * Function: pullFromQueue
+     * 
+     * Global variables from interactivity.js
+     * --------------------------------------
+     * 
+     */
+    const replenishQueue = () => {
+      return new Promise((resolve, reject) => {
+        try{
+          console.log(isReplenishing, isSaving, message_suggestion, pullFromQueue);
+          // (3) Sample 1,2,3... BWS sets from pool
+          var sampled_bwssets = sampleBwsSets();
+          // => In der App anzeigen =>
+          sampled_bwssets.forEach(exset => {
+            var examples = []
+            exset.forEach(key => {
+              examples.push({
+                "id": key,
+                "text": pool[key].text,
+                "spans": pool[key].span
+              });
+            });
+            data.queue.push({
+              set_id: uuid4(),
+              lemmata: ["comma", "sep", "list"],
+              examples: examples
+            })
+          });
+          // Force moving a BWS set to UI
+          if (data.current.length === 0){
+            pullFromQueue(); // load data
+            console.log("New current BWS set loaded")
+          }
+          resolve();
+        }catch(msg){
+          reject(msg)
+        }
+      });
+    }
+
+    /** 
+     * (1b) Trigger AJAX request to replenish the queue
+     */
+    watch(
+      () => data.queue.length,
+      (stocklevel) => {
+        if (stocklevel < reorderpoint.value){
+          console.log(`Queue is running low: ${stocklevel} examplesets`);
+          replenishQueue();
+        }
+      }
+    );
+
+
+    /**
+     * (2) Trigger AJAX to post evaluated BWS-exampleset
+     */
+    watch(
+      () => data.evaluated.length,
+      (num_evaluated) => {
+        if (num_evaluated > 0 && !isSaving.value){
+          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
+          saveEvaluations();
+        }
     });
 
-    // AJAX status flags and messages
-    //const isLoadingExamples = ref(false);
-    //const isSavingEvaluated = ref(false);
-    const message_suggestion = ref("Not connected! Please login.");
-
-    // Store evaluation results, pull next example set from queue, trigger re-rendering
     /**
-     * nextExampleSet
-     * 
-     * This function contains the main procedure of the BWS UI v4.
-     * 0. Store the newly evaluated BWS set 
-     * 1. Drop sentence examples from the pool
-     * 2. Add new sentence example to the pool from the API
-     * 3. Sample new BWS sets from the pool
-     * 4. Update the pairs matrix
-     * 5. Re-train the model
-     * 6. Predict new model scores
+     * (3) Store the new Lemma, Reset the Queue data, Load new data
      */
-    async function nextExampleSet(history){
-      console.log("History:", history)
-      // enforce rerendering via :key
-      data.counter++;
-    }
-
-
-    // get search field string to parent component
     const onSearchLemmata = async(keywords) => {
+      // delete current example set in UI, and the whole queue.
+      resetQueue();
       // reset `searchlemmata`
-      searchlemmata.value = keywords      
-      // delete current example set in UI
-      data.current = [];
-      data.current_setid = undefined;
-      data.current_lemmata = undefined;
-      data.queue = [];  
+      searchlemmata.value = keywords
       // force to load next example in UI
-      //await addExamplesToPool();
+      await replenishQueue();
+      //await addExamplesToPool(data.current_lemmata, true);
+      //var sampled_bwssets = sampleBwsSets();
     }
+
+
+    /**
+     * (3b) Load initial current BWS-exampleset
+     */
+    replenishQueue();
+
+
+    // ---------------- TINKERING ------------------
     // load initial current BWS-exampleset
     //addExamplesToPool();
-
-
-
 
     // const stateids = ['abc', 'def', 'ghi', 'jkl'];
     // const combostates = [0, 0, 2, 1];
@@ -126,12 +197,7 @@ export default defineComponent({
     // var [positions, sortedids, metrics, info] = ranking.maximize_hoaglinapprox(cnt);
     // console.log(positions, sortedids, metrics, info)
 
-    const { 
-      pool, pairs, 
-      dropExamplesFromPool,
-      sampleBwsSets, 
-      computeTrainingScores, smoothing_method, ema_alpha
-    } = useInteractivity();
+
 
     console.log("Pairs:", pairs)
     console.log("Pool:", pool)
@@ -139,22 +205,37 @@ export default defineComponent({
 
 
     // (1) Drop examples from pool
-    dropExamplesFromPool();
+    // dropExamplesFromPool();
 
     // (2) Add examples to pool
 
     // (3) Sample 1,2,3... BWS sets from pool
-    var sampled_bwssets = sampleBwsSets();
-    console.log("BWS samples:", sampled_bwssets);
+    // var sampled_bwssets = sampleBwsSets();
+    // console.log("BWS samples 2:", sampled_bwssets);
 
-    // => In der App anzeigen =>
+    // // => In der App anzeigen =>
+    // sampled_bwssets.forEach(exset => {
+    //   var examples = []
+    //   exset.forEach(key => {
+    //     examples.push({
+    //       "id": key,
+    //       "text": pool[key].text,
+    //       "spans": pool[key].span
+    //     });
+    //   });
+    //   data.queue.push({
+    //     set_id: "random-uuid-alkla",
+    //     lemmata: "comma,sep,list",
+    //     examples: examples
+    //   })
+    // })
 
     // => Ergebnisse verarbeiten =>
 
     // (4) Update pairs comparison matrix
 
     // (5) Compute the new target scores
-    computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
+    // computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
 
     // (6) Re-train the ML model
 
