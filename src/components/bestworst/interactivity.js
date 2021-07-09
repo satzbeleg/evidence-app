@@ -291,17 +291,19 @@ export const useInteractivity = () => {
   // Initialize data variables
   const pool = reactive({});   // key-value database for each sentences
   const pairs = reactive({});  // sparse LIL matrix with paired comparisons
+  const isPoolInitiallyLoaded = ref(false);  // For `useInitialLoadOnly`. Reset in `onSearchLemmata`
 
   // Informational variables
   const hasConsented = ref(false);  // Flag if data will be sent to the API
   const debug = ref(true);
   const errorMessage = ref("");
 
-  // Variables for (1) and (2)
+  // Settings for (1) and (2)
   const deletedPool = reactive({});
 
   const min_pool_size = ref(3);
   const max_pool_size = ref(10);
+  const useInitialLoadOnly = ref(true);
 
   const useDropDistribution = ref(true);
   const useAddDistribution = ref(false);  // NOT USED SO FAR
@@ -316,12 +318,13 @@ export const useInteractivity = () => {
   const eps_score_change = ref(1e-6);
 
   const useDropPairs = ref(false);
+  
 
-
-  // Variables for (3) 
+  // Settings for (3) 
   const num_items_per_set = ref(3);
   const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
   const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
+  const bws_sampling_method = ref("overlap")
 
 
   // DEMO: fake paired comparisons (DELETE THIS LATER!)
@@ -515,8 +518,13 @@ export const useInteractivity = () => {
    * @param {Int}     max_pool_size
    * @param {Int}     max_displays
    */
-  const addExamplesToPool = () => {
+  const addExamplesToPool = (lemmata, reset=false) => {
     return new Promise((resolve, reject) => {
+      // rest `pool`, `pairs`, etc. when a new lemma is submitted
+      if (reset){
+        resetPool();
+      }
+      // replenish pool with sentence examples
       const max_additions = max_pool_size.value - Object.keys(pool).length;
       if (max_additions > 0){
         // settings
@@ -555,6 +563,20 @@ export const useInteractivity = () => {
       }  
     });
   }
+
+  /**
+   * (2b) Reset the pool
+   * - Call this function if a new lemma search was submitted (e.g. in `onSearchLemmata`)
+   */
+  const resetPool = () => {
+    // set the initial loading flag to false
+    isPoolInitiallyLoaded.value = false;
+    // delete pool data
+    Object.keys(pool).forEach(key => {delete pool[key];});
+    // delete pairs matrix
+    Object.keys(pairs).forEach(key => {delete pairs[key];});
+  }
+
 
 
   /**
@@ -658,18 +680,22 @@ export const useInteractivity = () => {
 
   // Go to (1)
   return { 
-    pool, 
-    pairs,
     hasConsented,
     errorMessage,
     debug,
+    resetPool,
+      pool, 
+      pairs,
     dropExamplesFromPool, addExamplesToPool,
+      useInitialLoadOnly,
       min_pool_size, max_pool_size,
       useDropDistribution, useAddDistribution, bin_edges, target_probas, 
       useExcludeMaxDisplay, useDropMaxDisplay, max_displays, 
       useDropConverge, eps_score_change,
       useDropPairs,
-    sampleBwsSets, num_items_per_set, num_preload_bwssets, item_sampling_method,
-    computeTrainingScores, smoothing_method, ema_alpha
+    sampleBwsSets, 
+      num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method,
+    computeTrainingScores, 
+      smoothing_method, ema_alpha
   }
 }

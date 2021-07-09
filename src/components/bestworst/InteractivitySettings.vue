@@ -77,6 +77,29 @@
     </div>
   </div>
 
+  <h2 class="subtitle is-4">Only Load An Initial Pool Once</h2>
+  <div class="content">
+    <p>
+      This option disable the automatic replenishment of the pool after examples were dropped.
+      There are three scenarios.
+      a) The pool never changes, i.e. no pool deletions, no pool additions.
+      b) The pool shrinks, i.e. pool deletions but no pool additions.
+      c) The pool renew itself, i.e. pool deletions and pool additions.
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+      <div class="field">
+        <input id="interactivity-add-only-initially-toogle" 
+               class="switch is-rounded" type="checkbox"   
+               v-model="useInitialLoadOnly">
+        <label for="interactivity-add-only-initially-toogle">
+          Only load an initial fixed pool / No pool additions lateron (Default: On)
+        </label>
+      </div>
+    </div>
+  </div>
+
   <h2 class="subtitle is-4">Drop and/or Add Examples by Training Score Distribution</h2>
   <div class="content">
     <p>
@@ -205,13 +228,107 @@
     </div>
   </div>
 
-  <h2 class="subtitle is-4">Sample BWS sets from Local Pool</h2>
+  <h2 class="subtitle is-4">Drop Examples from Local Paired Comparison Matrix</h2>
+  <div class="content">
+    <p>
+      When examples are dropped from the pool, 
+      also delete the rows and columns of paired comparison matrix.
+    </p>
+  </div>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
       <div class="field">
+        <input id="interactivity-drop-pairs-toogle" 
+               class="switch is-rounded" type="checkbox"   
+               v-model="useDropPairs">
+        <label for="interactivity-drop-pairs-toogle">
+          Drop examples from local pairs matrix
+        </label>
       </div>
+    </div>
+  </div>
+
+
+  <h2 class="subtitle is-4">Sample BWS sets from Local Pool</h2>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
       <div class="field">
+        <label for="interactivity-num_items_per_set">
+          Number of items per BWS set (Default: 4)
+        </label>
+        <input id="interactivity-num_items_per_set" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="num_items_per_set" step="1" min="3" max="5">
+        <output for="interactivity-num_items_per_set">{{ num_items_per_set }}</output>
       </div>
+
+      <div class="field">
+        <label for="interactivity-num_preload_bwssets">
+          Number of BWS sets to sample (to label before re-training)
+        </label>
+        <input id="interactivity-num_preload_bwssets" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="num_preload_bwssets" step="1" min="1" max="20">
+        <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
+      </div>
+
+      <div class="field">
+        <div class="dropdown" id="interactivity-bws_sampling_method"
+             v-on:click="showDropdownBwsSamplingMethod = !showDropdownBwsSamplingMethod"
+             v-bind:class="{ 'is-active': showDropdownBwsSamplingMethod }">
+          <div class="dropdown-trigger">
+            <button class="button is-rounded is-light" type="button"
+                    aria-haspopup="true" 
+                    aria-controls="dropdown-bws_sampling_method">
+              <span>
+                <template v-if="bws_sampling_method == 'overlap'">overlap</template>
+                <template v-if="bws_sampling_method == 'twice'">twice</template>
+              </span>
+              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-bws_sampling_method" role="menu">
+            <div class="dropdown-content" v-on:click="bws_sampling_method = $event.target.id">
+              <a id="overlap" class="dropdown-item">overlap</a>
+              <a id="twice" class="dropdown-item">twice</a>
+            </div>
+          </div>
+        </div>
+        <label for="interactivity-bws_sampling_method">
+          BWS sampling method
+        </label>
+      </div>
+
+      <div class="field">
+        <div class="dropdown" id="interactivity-item_sampling_method" 
+             v-on:click="showDropdownItemSamplingMethod = !showDropdownItemSamplingMethod"
+             v-bind:class="{ 'is-active': showDropdownItemSamplingMethod }">
+          <div class="dropdown-trigger">
+            <button class="button is-rounded is-light" type="button"
+                    aria-haspopup="true" 
+                    aria-controls="dropdown-item_sampling_method">
+              <span>
+                <template v-if="item_sampling_method == 'random'">random</template>
+                <template v-if="item_sampling_method == 'exploit'">exploit</template>
+                <template v-if="item_sampling_method == 'newer-unstable'">newer-unstable</template>
+              </span>
+              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-item_sampling_method" role="menu">
+            <div class="dropdown-content" v-on:click="item_sampling_method = $event.target.id">
+              <a id="random" class="dropdown-item">random</a>
+              <a id="exploit" class="dropdown-item">exploit</a>
+              <a id="newer-unstable" class="dropdown-item">newer-unstable</a>
+            </div>
+          </div>
+        </div>
+        <label for="interactivity-item_sampling_method">
+          Sampling example items 
+        </label>
+      </div>
+
     </div>
   </div>
 
@@ -247,16 +364,23 @@ export default defineComponent({
   name: "InteractivitySettings",
 
   setup(){
+    // i18n data
     const { t } = useI18n();
 
+    // Dropdown menus
+    const showDropdownItemSamplingMethod = ref(false);
+    const showDropdownBwsSamplingMethod = ref(false);
+
+    // Settings for bestworst v4 (interactivity)
     const { 
       hasConsented, debug,
       min_pool_size, max_pool_size, 
+        useInitialLoadOnly,
         useDropDistribution, useAddDistribution, bin_edges, target_probas, 
         useExcludeMaxDisplay, useDropMaxDisplay, max_displays, 
         useDropConverge, eps_score_change,
         useDropPairs,
-      // num_items_per_set, num_preload_bwssets, item_sampling_method,
+      num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method
     } = useInteractivity();
 
     watch(min_pool_size, (minsz) => {
@@ -284,15 +408,20 @@ export default defineComponent({
       eps_score_change.value = Number.parseFloat(txt);
     });
 
+
     return { 
       t,
       hasConsented, debug,
       min_pool_size, max_pool_size, 
+        useInitialLoadOnly,
         useDropDistribution, useAddDistribution, bin_edges_text, target_probas_text, 
         useExcludeMaxDisplay, useDropMaxDisplay, max_displays, 
         useDropConverge, eps_score_change_text,
-        useDropPairs
+        useDropPairs,
+      num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method,
+        showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod
     }
   }
 });
 </script>
+
