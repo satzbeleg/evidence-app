@@ -63,7 +63,7 @@ export default defineComponent({
     });
 
 
-    // Load bestworst3 UI settings
+    // (a) Load bestworst3 UI settings
     const { 
       loadSettings, 
       reorderpoint, orderquantity,
@@ -71,10 +71,11 @@ export default defineComponent({
     } = useSettings();
     loadSettings();
 
-    // Load reactive variables for BWS Queue
+    // (0b) Load reactive variables for BWS Queue
     const { 
       uispec, searchlemmata, data, 
-      isReplenishing, isSaving, message_suggestion,
+      isReplenishing, message_suggestion,
+      isSaving, saveEvaluations,
       pullFromQueue, nextExampleSet, 
       resetQueue
     } = useBwsQueue();
@@ -83,7 +84,9 @@ export default defineComponent({
     uispec["name"] = "bestworst3";
 
 
-    // Replenish data.queue from database (load new example sets into queue)
+    /**
+     * (1) Replenish data.queue from database (load new example sets into queue)
+     */
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
         // Replensihing started
@@ -131,7 +134,9 @@ export default defineComponent({
     }
 
 
-    // trigger AJAX request to replenish the queue
+    /** 
+     * (1b) Trigger AJAX request to replenish the queue
+     */
     watch(
       () => data.queue.length,
       (stocklevel) => {
@@ -142,50 +147,22 @@ export default defineComponent({
       }
     );
 
-
-    // save evaluated sets into the databse
-    const saveEvaluations = () => {
-      return new Promise((resolve, reject) => {
-        isSaving.value = true;
-        const { getToken } = useAuth();
-        const { api } = useApi(getToken());
-        api.post(`v1/bestworst/evaluations`, data.evaluated)
-        .then(response => {
-          // delete evaluated sets if API confirms its storage
-          response.data['stored-setids'].forEach(setid => {
-            var idx = -1;
-            while(( idx = data.evaluated.findIndex(elem => elem['set-id'] == setid) ) !== -1){
-              data.evaluated.splice(idx, 1);
-            }
-          });
-          console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
-          resolve(response);
-        })
-        .catch(error => {
-          reject(error);
-        })
-        .finally(() => {
-          isSaving.value = false;
-        });
-      });
-    }
-
-    // trigger AJAX to post evaluated BWS-exampleset
+    /**
+     * (2) Trigger AJAX to post evaluated BWS-exampleset
+     */
     watch(
       () => data.evaluated.length,
       (num_evaluated) => {
-        if (num_evaluated > 0){
+        if (num_evaluated > 0 && !isSaving.value){
           console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          if(!isSaving.value){
-            saveEvaluations();
-          }
+          saveEvaluations();
         }
       }
     );
 
 
     /**
-     * Store the new Lemma, Reset the Queue data, Load new data
+     * (3) Store the new Lemma, Reset the Queue data, Load new data
      */
     const onSearchLemmata = async(keywords) => {
       // delete current example set in UI, and the whole queue.
@@ -197,7 +174,9 @@ export default defineComponent({
     }
 
 
-    // load initial current BWS-exampleset
+    /**
+     * (3b) Load initial current BWS-exampleset
+     */
     replenishQueue();
 
 

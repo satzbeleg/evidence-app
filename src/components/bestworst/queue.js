@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue';
 import { traverseObject } from '@/functions/traverse-objects.js';
-
+import { useApi, useAuth } from '@/functions/axios-evidence.js';
 
 export const useBwsQueue = () => {
   // UI-name
@@ -107,7 +107,46 @@ export const useBwsQueue = () => {
     data.counter++;
   }
 
+  /**
+   * Save evaluated sets into the database
+   * 
+   * Example:
+   * --------
+   *    const { isSaving, saveEvaluations } = useBwsQueue();
+   *    watch( () => data.evaluated.length, 
+   *      (num_evaluated) => {
+   *        if (num_evaluated > 0 && !isSaving.value){
+   *          saveEvaluations();
+   *        }
+   *    });
+   */
+  const saveEvaluations = () => {
+    return new Promise((resolve, reject) => {
+      isSaving.value = true;
+      const { getToken } = useAuth();
+      const { api } = useApi(getToken());
+      api.post(`v1/bestworst/evaluations`, data.evaluated)
+      .then(response => {
+        // delete evaluated sets if API confirms its storage
+        response.data['stored-setids'].forEach(setid => {
+          var idx = -1;
+          while(( idx = data.evaluated.findIndex(elem => elem['set-id'] == setid) ) !== -1){
+            data.evaluated.splice(idx, 1);
+          }
+        });
+        console.log(`Stored example sets: ${response.data['stored-setids'].length}`);
+        resolve(response);
+      })
+      .catch(error => {
+        reject(error);
+      })
+      .finally(() => {
+        isSaving.value = false;
+      });
+    });
+  }
 
+  
   /**
    * Reset Queue
    */
@@ -129,6 +168,7 @@ export const useBwsQueue = () => {
     isReplenishing, isSaving, message_suggestion,
     pullFromQueue,
     nextExampleSet,
+    saveEvaluations,
     resetQueue
   }
 }
