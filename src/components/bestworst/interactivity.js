@@ -471,7 +471,7 @@ export const useInteractivity = () => {
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
         // Start API request
-        api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
+        api.post(`v1/interactivity/deleted`, JSON.parse(JSON.stringify(deletedPool)) )
           .then(response => {
             response.data['stored-ids'].forEach(key => {
               delete deletedPool[key];
@@ -526,18 +526,18 @@ export const useInteractivity = () => {
         resetPool();
       }
       // replenish pool with sentence examples
-      const max_additions = max_pool_size.value - Object.keys(pool).length;
-      if (max_additions > 0){
+      const num_additions = max_pool_size.value - Object.keys(pool).length;
+      if (num_additions > 0){
         // settings
         var params = {
-          "exclude_deleted_ids": true,
+          //"exclude_deleted_ids": true,
           "max_displays": max_displays.value,
         }
         // load API conn
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
         // start AJAX call
-        api.post(`v1/interactivity/examples/${max_additions}`, params)
+        api.post(`v1/interactivity/examples/${num_additions}`, params)
           .then(response => {
             if ('msg' in response.data){
               errorMessage.value = response.data['msg'];
@@ -545,6 +545,8 @@ export const useInteractivity = () => {
               response.data.forEach(row => {
                 pool[row.id] = {
                   "text": row.text,
+                  "spans": row.spans,
+                  "context": row.context,
                   "features": row.features,
                   "training_score_history": [undefined],
                   "model_score_history": [row.score],
