@@ -84,8 +84,9 @@ export default defineComponent({
 
     // Load Interactivity Settings
     const { 
-      pool, pairs, 
-      // dropExamplesFromPool,
+      pool, pairs, resetPool,
+      dropExamplesFromPool,
+      addExamplesToPool,
       sampleBwsSets, 
       // computeTrainingScores, smoothing_method, ema_alpha
     } = useInteractivity();
@@ -108,7 +109,9 @@ export default defineComponent({
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
         try{
-          console.log(isReplenishing, isSaving, message_suggestion, pullFromQueue);
+          isReplenishing.value = true;
+          // (2) Add examples to pool
+          addExamplesToPool();
           // (3) Sample 1,2,3... BWS sets from pool
           var sampled_bwssets = sampleBwsSets();
           // => In der App anzeigen =>
@@ -127,6 +130,7 @@ export default defineComponent({
               examples: examples
             })
           });
+          isReplenishing.value = false;
           // Force moving a BWS set to UI
           if (data.current.length === 0){
             pullFromQueue(); // load data
@@ -134,6 +138,7 @@ export default defineComponent({
           }
           resolve();
         }catch(msg){
+          message_suggestion.value = "Unknown Error!";
           reject(msg)
         }
       });
@@ -169,6 +174,8 @@ export default defineComponent({
      * (3) Store the new Lemma, Reset the Queue data, Load new data
      */
     const onSearchLemmata = async(keywords) => {
+      // delete pool and pairs matrix
+      resetPool();
       // delete current example set in UI, and the whole queue.
       resetQueue();
       // reset `searchlemmata`
@@ -205,7 +212,7 @@ export default defineComponent({
 
 
     // (1) Drop examples from pool
-    // dropExamplesFromPool();
+    dropExamplesFromPool();
 
     // (2) Add examples to pool
 

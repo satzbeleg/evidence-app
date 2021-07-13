@@ -1,7 +1,7 @@
 import { reactive, ref, watch } from 'vue';
 import { sampling, counting, ranking } from 'bwsample';
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
-
+import { v4 as uuid4 } from 'uuid'; // nur für dev
 
 const getLast = (arr) => {
   if (arr.length  > 0){
@@ -294,7 +294,7 @@ export const useInteractivity = () => {
   const isPoolInitiallyLoaded = ref(false);  // For `useInitialLoadOnly`. Reset in `onSearchLemmata`
 
   // Informational variables
-  const hasConsented = ref(false);  // Flag if data will be sent to the API
+  const hasConsented = ref(true);  // Flag if data will be sent to the API
   const debug = ref(true);
   const errorMessage = ref("");
 
@@ -311,7 +311,7 @@ export const useInteractivity = () => {
   const bin_edges = reactive({value: [.0, .25, .5, .75, 1.]});
 
   const useExcludeMaxDisplay = ref(true);  // NOT USED SO FAR
-  const useDropMaxDisplay = ref(false);
+  const useDropMaxDisplay = ref(true);
   const max_displays = ref(1);
 
   const useDropConverge = ref(false);
@@ -333,7 +333,9 @@ export const useInteractivity = () => {
   Object.assign(pairs, {'abc': {'ghi': 1}, 'def': {'ghi': 1}, 'jkl': {'abc': 1, 'def': 1, 'ghi': 1}});
 
   // DEMO: fake sentence examples (DELETE THIS LATER!)
-  for(var key of ["abc", "ghi", "def", "jkl"]){
+  //for(var key of ["abc", "ghi", "def", "jkl"]){
+  for(var i=0; i<10; i++){
+    var key = uuid4()
     pool[key] = {
       text: `lalilu ${key}`,
       features: Array.from({length: 567}, () => Math.random()),
@@ -471,9 +473,9 @@ export const useInteractivity = () => {
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
         // Start API request
-        api.post(`v1/interactivity/deleted`, JSON.parse(JSON.stringify(deletedPool)) )
+        api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
           .then(response => {
-            response.data['stored-ids'].forEach(key => {
+            response.data['stored-sentids'].forEach(key => {
               delete deletedPool[key];
             })
             if(debug.value){console.log(response)}
@@ -537,7 +539,7 @@ export const useInteractivity = () => {
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
         // start AJAX call
-        api.post(`v1/interactivity/examples/${num_additions}`, params)
+        api.post(`v1/interactivity/training-examples/${num_additions}`, params)
           .then(response => {
             if ('msg' in response.data){
               errorMessage.value = response.data['msg'];
