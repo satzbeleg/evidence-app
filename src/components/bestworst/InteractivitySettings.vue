@@ -92,7 +92,7 @@
       <div class="field">
         <input id="interactivity-add-only-initially-toogle" 
                class="switch is-rounded" type="checkbox"   
-               v-model="useInitialLoadOnly">
+               v-model="flagInitialLoadOnly">
         <label for="interactivity-add-only-initially-toogle">
           Only load an initial fixed pool / No pool additions lateron (Default: On)
         </label>
@@ -116,7 +116,7 @@
       <div class="field">
         <input id="interactivity-drop-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="useDropDistribution">
+               v-model="flagDropDistribution">
         <label for="interactivity-drop-distribution-toogle">
           Drop examples from the pool by a target distribution (Default: Off)
         </label>
@@ -125,7 +125,7 @@
       <div class="field">
         <input id="interactivity-add-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="useAddDistribution">
+               v-model="flagAddDistribution">
         <label for="interactivity-add-distribution-toogle">
           Add examples to the pool by a target distribution (Default: Off)
         </label>
@@ -167,7 +167,7 @@
       <div class="field">
         <input id="interactivity-exclude-bwssampling-toogle" 
                class="switch is-rounded" type="checkbox"
-               v-model="useExcludeMaxDisplay">
+               v-model="flagExcludeMaxDisplay">
         <label for="interactivity-exclude-bwssampling-toogle">
           Exclude from BWS sampling if shown too often (Default: On)
         </label>
@@ -176,7 +176,7 @@
       <div class="field">
         <input id="interactivity-drop-display-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="useDropMaxDisplay">
+               v-model="flagDropMaxDisplay">
         <label for="interactivity-drop-display-toogle">
           Drop examples from the pool if shown too often (Default: Off)
         </label>
@@ -211,7 +211,7 @@
       <div class="field">
         <input id="interactivity-drop-converge-toogle" 
                class="switch is-rounded" type="checkbox"
-               v-model="useDropConverge">
+               v-model="flagDropConverge">
         <label for="interactivity-drop-converge-toogle">
           Drop examples from pool if model score converged (Default: Off)
         </label>
@@ -240,7 +240,7 @@
       <div class="field">
         <input id="interactivity-drop-pairs-toogle" 
                class="switch is-rounded" type="checkbox"   
-               v-model="useDropPairs">
+               v-model="flagDropPairs">
         <label for="interactivity-drop-pairs-toogle">
           Drop examples from local pairs matrix
         </label>
@@ -359,6 +359,7 @@
 import { useI18n } from 'vue-i18n';
 import { defineComponent, watch, ref } from 'vue';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
+import { useInteractivitySettings } from '@/components/bestworst/interactivity-settings.js';
 
 export default defineComponent({
   name: "InteractivitySettings",
@@ -374,14 +375,22 @@ export default defineComponent({
     // Settings for bestworst v4 (interactivity)
     const { 
       hasConsented, debug,
-      min_pool_size, max_pool_size, 
-        useInitialLoadOnly,
-        useDropDistribution, useAddDistribution, bin_edges, target_probas, 
-        useExcludeMaxDisplay, useDropMaxDisplay, max_displays, 
-        useDropConverge, eps_score_change,
-        useDropPairs,
-      num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method
     } = useInteractivity();
+
+    const {
+      // Settings for (1) and (2)
+      flagInitialLoadOnly,
+      min_pool_size, max_pool_size,
+      flagDropDistribution, flagAddDistribution, bin_edges, target_probas, 
+      // Settings for (1) and (3)
+      flagDropMaxDisplay, flagExcludeMaxDisplay, max_displays, 
+      // Settings for (1)
+      flagDropConverge, eps_score_change,
+      flagDropPairs,
+      // Settings for (3)
+      num_items_per_set, num_preload_bwssets, 
+        bws_sampling_method, item_sampling_method,
+    } = useInteractivitySettings();
 
     watch(min_pool_size, (minsz) => {
       max_pool_size.value = (max_pool_size.value <= parseInt(minsz)) ? (parseInt(minsz) + 1) : max_pool_size.value
@@ -413,11 +422,11 @@ export default defineComponent({
       t,
       hasConsented, debug,
       min_pool_size, max_pool_size, 
-        useInitialLoadOnly,
-        useDropDistribution, useAddDistribution, bin_edges_text, target_probas_text, 
-        useExcludeMaxDisplay, useDropMaxDisplay, max_displays, 
-        useDropConverge, eps_score_change_text,
-        useDropPairs,
+        flagInitialLoadOnly,
+        flagDropDistribution, flagAddDistribution, bin_edges_text, target_probas_text, 
+        flagExcludeMaxDisplay, flagDropMaxDisplay, max_displays, 
+        flagDropConverge, eps_score_change_text,
+        flagDropPairs,
       num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method,
         showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod
     }

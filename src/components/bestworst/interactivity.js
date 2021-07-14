@@ -1,7 +1,10 @@
 import { reactive, ref, watch } from 'vue';
-import { sampling, counting, ranking } from 'bwsample';
+import { sampling, ranking } from 'bwsample';  // counting
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
-import { v4 as uuid4 } from 'uuid'; // nur für dev
+// import { v4 as uuid4 } from 'uuid'; // nur für dev
+import { useInteractivitySettings } from '@/components/bestworst/interactivity-settings.js';
+import { useBwsQueue } from '@/components/bestworst/queue.js';
+
 
 const getLast = (arr) => {
   if (arr.length  > 0){
@@ -287,67 +290,57 @@ const computeTrainingScores = (pairs,
 }
 
 
+
+
 export const useInteractivity = () => {
   // Initialize data variables
   const pool = reactive({});   // key-value database for each sentences
   const pairs = reactive({});  // sparse LIL matrix with paired comparisons
-  const isPoolInitiallyLoaded = ref(false);  // For `useInitialLoadOnly`. Reset in `onSearchLemmata`
+  const isPoolInitiallyLoaded = ref(false);  // For `flagInitialLoadOnly`. Reset in `onSearchLemmata`
+  const deletedPool = reactive({});
 
   // Informational variables
   const hasConsented = ref(true);  // Flag if data will be sent to the API
   const debug = ref(true);
   const errorMessage = ref("");
 
-  // Settings for (1) and (2)
-  const deletedPool = reactive({});
-
-  const min_pool_size = ref(3);
-  const max_pool_size = ref(10);
-  const useInitialLoadOnly = ref(true);
-
-  const useDropDistribution = ref(true);
-  const useAddDistribution = ref(false);  // NOT USED SO FAR
-  const target_probas = reactive({value: [0.1, 0.2, 0.3, 0.4]});
-  const bin_edges = reactive({value: [.0, .25, .5, .75, 1.]});
-
-  const useExcludeMaxDisplay = ref(true);  // NOT USED SO FAR
-  const useDropMaxDisplay = ref(true);
-  const max_displays = ref(1);
-
-  const useDropConverge = ref(false);
-  const eps_score_change = ref(1e-6);
-
-  const useDropPairs = ref(false);
-  
-
-  // Settings for (3) 
-  const num_items_per_set = ref(4);
-  const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
-  const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
-  const bws_sampling_method = ref("overlap")
+  // Load Interactivity Settings
+  const {
+    // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
+    flagInitialLoadOnly,
+    min_pool_size, max_pool_size,
+    flagDropDistribution, flagAddDistribution, bin_edges, target_probas, 
+    // Settings for (1) and (3)
+    flagDropMaxDisplay, flagExcludeMaxDisplay, max_displays, 
+    // Settings for (1)
+    flagDropConverge, eps_score_change,
+    flagDropPairs,
+    // Settings for (3), e.g. sampleBwsSets
+    num_items_per_set, num_preload_bwssets, 
+      bws_sampling_method, item_sampling_method,
+    // Settings for (5), e.g. computeTrainingScores
+    // smoothing_method, ema_alpha
+  } = useInteractivitySettings();
 
 
   // DEMO: fake paired comparisons (DELETE THIS LATER!)
-  counting.incr_lil(pairs, "abc", "ghi");
-  counting.incr_lil(pairs, "abc", "ghi");
-  Object.assign(pairs, {'abc': {'ghi': 1}, 'def': {'ghi': 1}, 'jkl': {'abc': 1, 'def': 1, 'ghi': 1}});
+  // counting.incr_lil(pairs, "abc", "ghi");
+  // counting.incr_lil(pairs, "abc", "ghi");
+  // Object.assign(pairs, {'abc': {'ghi': 1}, 'def': {'ghi': 1}, 'jkl': {'abc': 1, 'def': 1, 'ghi': 1}});
 
   // DEMO: fake sentence examples (DELETE THIS LATER!)
   //for(var key of ["abc", "ghi", "def", "jkl"]){
-  for(var i=0; i<10; i++){
-    var key = uuid4()
-    pool[key] = {
-      text: `lalilu ${key}`,
-      features: Array.from({length: 567}, () => Math.random()),
-      training_score_history: [undefined, 0.7 + 0.3 * Math.random()],
-      model_score_history: [0.5 + 0.1 * Math.random(), 0.6 + 0.1 * Math.random()],
-      displayed: [false, false, true],
-    };
-  }
+  // for(var i=0; i<10; i++){
+  //   var key = uuid4()
+  //   pool[key] = {
+  //     text: `lalilu ${key}`,
+  //     features: Array.from({length: 567}, () => Math.random()),
+  //     training_score_history: [undefined, 0.7 + 0.3 * Math.random()],
+  //     model_score_history: [0.5 + 0.1 * Math.random(), 0.6 + 0.1 * Math.random()],
+  //     displayed: [false, false, true],
+  //   };
+  // }
 
-  // Object.entries(pool).forEach(([key, value]) => {
-  //   console.log(key, getLast(value.training_score_history) )
-  // })
   
   // Update current metrics
   // We are not using Vue computed to avoid quadratic recomputations
@@ -380,7 +373,7 @@ export const useInteractivity = () => {
    * @param {Array} bin_edges
    * @param {Int}   max_displays
    * @param {Float} eps_score_change
-   * @param {Bool}  useDropPairs
+   * @param {Bool}  flagDropPairs
    * 
    * Examples:
    * ---------
@@ -389,7 +382,7 @@ export const useInteractivity = () => {
    * const bin_edges = reactive({value: [.0, .25, .5, .75, 1.]});
    * const max_displays = ref(1);
    * const eps_score_change = ref(1e-1);
-   * const useDropPairs = ref(false);
+   * const flagDropPairs = ref(false);
    * 
    * Required Functions:
    * -------------------
@@ -399,7 +392,7 @@ export const useInteractivity = () => {
    * 
    * Explanations:
    * -------------
-   * - `drop_config.useDropPairs`: If the flag is enabled, the all columns and 
+   * - `drop_config.flagDropPairs`: If the flag is enabled, the all columns and 
    *    rows of the deleted IDs are removed from the paired comparision matrix
    *    `pairs`.
    *      - Pros: The memory footprint of `pairs` is limited.
@@ -417,17 +410,17 @@ export const useInteractivity = () => {
     // identify IDs that should be deleted
     if ( max_deletions > 0 ){
       // (a) Drop examples with overrepresented training scores
-      if (useDropDistribution.value){
+      if (flagDropDistribution.value){
         deletionCriteriaDistribution(
           pool, avail_ids, del_ids, bin_edges.value, target_probas.value, debug.value);
       }
       // (b) Drop if example reached `max_displays`
-      if (useDropMaxDisplay.value){
+      if (flagDropMaxDisplay.value){
         deletionCriteriaDisplays(
           pool, avail_ids, del_ids, max_displays.value, debug.value);
       }
       // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
-      if (useDropConverge.value){
+      if (flagDropConverge.value){
         deletionCriteriaConvergence(
           pool, avail_ids, del_ids, eps_score_change.value, debug.value);
       }
@@ -437,7 +430,7 @@ export const useInteractivity = () => {
 
     // (Optional) Delete IDs from paired comparision matrix
     del_ids.forEach(key => {
-      if (useDropPairs.value){
+      if (flagDropPairs.value){
         delete pairs[key];
         for(var key2 in pairs){
           delete pairs[key2][key]
@@ -512,7 +505,7 @@ export const useInteractivity = () => {
 
 
   /**
-   * (2) Add examples to pool
+   * (2a) Add examples to pool
    * 
    * Global Variables:
    * -----------------
@@ -520,26 +513,38 @@ export const useInteractivity = () => {
    * @param {String}  errorMessage
    * @param {Int}     max_pool_size
    * @param {Int}     max_displays
+   * 
+   * Example:
+   * --------
+   *  // watch `pool` to trigger sync with API/DB
+   *  watch( () => Object.keys(pool).length, (current_pool_size) => {
+   *    if (current_pool_size < max_pool_size.value){
+   *      if(debug.value){console.log(`Only examples ${current_pool_size} in pool.`)}
+   *        addExamplesToPool(searchlemmata.value);
+   *  }  });
    */
-  const addExamplesToPool = (lemmata, reset=false) => {
+  const addExamplesToPool = (lemmata) => {
+    // not implemented
+    if(debug.value){console.log("Not implemented: ", flagAddDistribution.value);}
+    if(debug.value){console.log("Not implemented: ", flagInitialLoadOnly.value);}
+
     return new Promise((resolve, reject) => {
-      // rest `pool`, `pairs`, etc. when a new lemma is submitted
-      if (reset){
-        resetPool();
-      }
       // replenish pool with sentence examples
       const num_additions = max_pool_size.value - Object.keys(pool).length;
-      if (num_additions > 0){
+
+      if (num_additions > 0  &&  !(flagInitialLoadOnly.value && isPoolInitiallyLoaded.value) ){
         // settings
         var params = {
+          "lemmata": lemmata.split(',').map(s => s.trim()),
           //"exclude_deleted_ids": true,
           "max_displays": max_displays.value,
         }
+
         // load API conn
         const { getToken } = useAuth();
         const { api } = useApi(getToken());
         // start AJAX call
-        api.post(`v1/interactivity/training-examples/${num_additions}`, params)
+        api.post(`v1/interactivity/training-examples/${num_additions}/100/0`, params)
           .then(response => {
             if ('msg' in response.data){
               errorMessage.value = response.data['msg'];
@@ -563,7 +568,9 @@ export const useInteractivity = () => {
             if(debug.value){console.log(error)}
             reject(error);
           })
-          .finally(() => {        
+          .finally(() => {
+            isPoolInitiallyLoaded.value = true;  // for `flagInitialLoadOnly`
+            updateCurrentPoolMetrics(pool);  // compute current metrics manually
           });
       }  
     });
@@ -582,6 +589,17 @@ export const useInteractivity = () => {
     Object.keys(pairs).forEach(key => {delete pairs[key];});
   }
 
+
+  /**
+   * (2c) watch `pool` to trigger sync with API/DB
+   */
+  const { searchlemmata } = useBwsQueue();
+  watch( () => Object.keys(pool).length, (current_pool_size) => {
+    if (current_pool_size < max_pool_size.value && searchlemmata.value){
+      if(debug.value){console.log(`Only examples ${current_pool_size} in pool.`)}
+      addExamplesToPool(searchlemmata.value);
+    }
+  });
 
 
   /**
@@ -606,6 +624,9 @@ export const useInteractivity = () => {
    *  var sampled_bwssets = sampleBwsSets();
    */
   const sampleBwsSets = () => {
+    // (0) Ensure that the metrics are recomputed
+    updateCurrentPoolMetrics(pool);
+
     // (A) Compute the number of sentence examples to sample from pool
     var num_examples = Math.max(num_preload_bwssets.value, 1) * Math.max(1, num_items_per_set.value - 1);
     num_examples = Math.max(num_items_per_set.value, num_examples);
@@ -614,12 +635,18 @@ export const useInteractivity = () => {
       console.log(`Num of items to sample from pool: ${num_examples}`)
     }
 
-    // (B) Copy all keys (IDs) from pool
-    console.log(pool)
-    var all_ids = Object.keys(pool);
-
-    if (debug.value) {
-      console.log(`Current pool size: ${all_ids.length}`);
+    // (B) Copy keys (IDs) from pool
+    var all_ids = [];
+    if (flagExcludeMaxDisplay){
+      // Remove IDs that have been shown too often
+      Object.keys(pool).forEach(key => {
+        if (pool[key].num_displayed < max_displays.value){
+          all_ids.push(key)
+        }
+      });
+    }else{
+      // just copy all IDs from pool
+      all_ids = Object.keys(pool);
     }
 
     // (C) Sort ID Array (all_ids) so that items to pick are at the beginning of the array
@@ -659,7 +686,7 @@ export const useInteractivity = () => {
 
     // (E) Generate BWS set samples (Sorry for the naming confusion)
     var sampled_bwssets = sampling.sample(
-      sampled_ids, num_items_per_set.value, "overlap", false);
+      sampled_ids, num_items_per_set.value, bws_sampling_method.value, false);
 
     if (debug.value) {
       console.log("BWS samples:", sampled_bwssets);
@@ -674,8 +701,8 @@ export const useInteractivity = () => {
 
 
   // (5) Compute the new target scores
-  const smoothing_method = ref("ema");
-  const ema_alpha = 0.7;
+  // const smoothing_method = ref("ema");
+  // const ema_alpha = 0.7;
   // computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
 
 
@@ -685,22 +712,12 @@ export const useInteractivity = () => {
 
   // Go to (1)
   return { 
-    hasConsented,
+    hasConsented,  // to general settings
+    debug,  // to general settings
     errorMessage,
-    debug,
-    resetPool,
-      pool, 
-      pairs,
+    pool, pairs, resetPool,
     dropExamplesFromPool, addExamplesToPool,
-      useInitialLoadOnly,
-      min_pool_size, max_pool_size,
-      useDropDistribution, useAddDistribution, bin_edges, target_probas, 
-      useExcludeMaxDisplay, useDropMaxDisplay, max_displays, 
-      useDropConverge, eps_score_change,
-      useDropPairs,
     sampleBwsSets, 
-      num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method,
     computeTrainingScores, 
-      smoothing_method, ema_alpha
   }
 }
