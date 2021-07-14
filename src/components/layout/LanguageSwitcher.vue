@@ -35,7 +35,8 @@ export default defineComponent({
   setup(){
     // multi-lingual support
     const { t } = useI18n();
-    const { language } = useGeneralSettings();
+    const { language, loadGeneralSettings } = useGeneralSettings();
+    loadGeneralSettings();
   
     // reactive variables to toggle menu
     const showLangDrop = ref(false);
