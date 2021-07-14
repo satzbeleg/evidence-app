@@ -106,12 +106,14 @@ export default defineComponent({
      * --------------------------------------
      * 
      */
-    const replenishQueue = () => {
+    const replenishQueue = async() => {
+      // (2) Add examples to pool
+      await addExamplesToPool(searchlemmata.value);
+      // console.log("start repl:", pool)
+
       return new Promise((resolve, reject) => {
         try{
           isReplenishing.value = true;
-          // (2) Add examples to pool
-          addExamplesToPool();
           // (3) Sample 1,2,3... BWS sets from pool
           var sampled_bwssets = sampleBwsSets();
           // => In der App anzeigen =>
@@ -126,7 +128,7 @@ export default defineComponent({
             });
             data.queue.push({
               set_id: uuid4(),
-              lemmata: ["comma", "sep", "list"],
+              lemmata: searchlemmata.value.split(',').map(s => s.trim()),
               examples: examples
             })
           });
