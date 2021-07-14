@@ -2,7 +2,7 @@ import { reactive, ref, watch } from 'vue';
 import { sampling, ranking } from 'bwsample';  // counting
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
 // import { v4 as uuid4 } from 'uuid'; // nur für dev
-import { useInteractivitySettings } from '@/components/bestworst/interactivity-settings.js';
+import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useBwsQueue } from '@/components/bestworst/queue.js';
 
 
@@ -320,7 +320,7 @@ export const useInteractivity = () => {
       bws_sampling_method, item_sampling_method,
     // Settings for (5), e.g. computeTrainingScores
     // smoothing_method, ema_alpha
-  } = useInteractivitySettings();
+  } = useBwsSettings();
 
 
   // DEMO: fake paired comparisons (DELETE THIS LATER!)

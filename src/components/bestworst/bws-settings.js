@@ -2,11 +2,23 @@ import { reactive, ref, watchEffect } from 'vue';
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
 
 
-export const useInteractivitySettings = () => {
+/** 
+ * Sync Interactivity UI Settings with REST API
+ * 
+ * EXAMPLE:
+ * --------
+    const { min_pool_size, loadBwsSettings } = useBwsSettings();
+    async function waitForSettings(){
+      await loadBwsSettings();
+      await forSomeThingElse();
+      console.log(`Min Pool Size: ${min_pool_size.value}`); 
+    }
+    waitForSettings();
+*/
+export const useBwsSettings = () => {
   /**
    * (A) Initialize reactive variables
    */
-  // Settings for (1) and (2)
   const min_pool_size = ref();
   const max_pool_size = ref();
   const flagInitialLoadOnly = ref();
@@ -38,9 +50,9 @@ export const useInteractivitySettings = () => {
 
 
   /**
-   * (B.1) download user settings from database
+   * (B.1) download user's settings from database
    */
-  const loadInteractivitySettings = () => {
+  const loadBwsSettings = () => {
     return new Promise((resolve, reject) => {
       const { getToken } = useAuth();
       const { api } = useApi(getToken());
@@ -79,12 +91,12 @@ export const useInteractivitySettings = () => {
   }
 
   // (B.2) force to load data initially
-  loadInteractivitySettings();
+  loadBwsSettings();
 
   /**
-   * (C.1) save user settings to database
+   * (C.1) save user's settings to database
    */
-  const saveInteractivitySettings = () => {
+  const saveBwsSettings = () => {
     return new Promise((resolve, reject) => {
       const { getToken } = useAuth();
       const { api } = useApi(getToken());
@@ -126,11 +138,11 @@ export const useInteractivitySettings = () => {
 
   // (C.2) Watch all changes
   watchEffect(() => {
-    saveInteractivitySettings();
+    saveBwsSettings();
   });
 
   return {
-    loadInteractivitySettings, saveInteractivitySettings,
+    loadBwsSettings, saveBwsSettings,
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
     flagInitialLoadOnly,
     min_pool_size, max_pool_size,

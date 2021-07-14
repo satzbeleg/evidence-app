@@ -85,7 +85,7 @@
       </div>
 
 
-      <InteractivitySettings />
+      <BwsSettings />
 
       <!-- put the above into components ... -->
     </div>
@@ -99,7 +99,7 @@ import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
 import { useSettings, useDarkmodeToggle } from '@/functions/settings.js';
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
-import InteractivitySettings from '@/components/bestworst/InteractivitySettings.vue';
+import BwsSettings from '@/components/bestworst/BwsSettings.vue';
 
 export default {
   name: "Settings",
@@ -107,7 +107,7 @@ export default {
   components: {
     TheNavbar,
     LanguageSwitcher,
-    InteractivitySettings
+    BwsSettings
   },
 
   setup(){

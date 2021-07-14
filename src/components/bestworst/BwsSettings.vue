@@ -359,10 +359,10 @@
 import { useI18n } from 'vue-i18n';
 import { defineComponent, watch, ref } from 'vue';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
-import { useInteractivitySettings } from '@/components/bestworst/interactivity-settings.js';
+import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 
 export default defineComponent({
-  name: "InteractivitySettings",
+  name: "BwsSettings",
 
   setup(){
     // i18n data
@@ -390,7 +390,7 @@ export default defineComponent({
       // Settings for (3)
       num_items_per_set, num_preload_bwssets, 
         bws_sampling_method, item_sampling_method,
-    } = useInteractivitySettings();
+    } = useBwsSettings();
 
     watch(min_pool_size, (minsz) => {
       max_pool_size.value = (max_pool_size.value <= parseInt(minsz)) ? (parseInt(minsz) + 1) : max_pool_size.value
