@@ -319,8 +319,8 @@ export const useInteractivity = () => {
     flagDropConverge, eps_score_change,
     flagDropPairs,
     // Settings for (3), e.g. sampleBwsSets
-    num_items_per_set, num_preload_bwssets, 
-      bws_sampling_method, item_sampling_method,
+    bwsset_num_items, num_preload_bwssets, 
+      bwsset_sampling_method, item_sampling_method,
     // Settings for (5), e.g. computeTrainingScores
     // smoothing_method, ema_alpha
     loadBwsSettings
@@ -594,7 +594,7 @@ export const useInteractivity = () => {
    * Global Variables:
    * -----------------
    * @param {JSON}  pool 
-   * @param {Int}   num_items_per_set 
+   * @param {Int}   bwsset_num_items 
    * @param {Int}   num_preload_bwssets 
    * @param {Sting} item_sampling_method 
    * @param {Bool}  debugVerbose 
@@ -602,7 +602,7 @@ export const useInteractivity = () => {
    * Example:
    * --------
    *  // load settings
-   *  const num_items_per_set = ref(4);
+   *  const bwsset_num_items = ref(4);
    *  const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
    *  const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
    *  const debugVerbose = false;
@@ -614,8 +614,8 @@ export const useInteractivity = () => {
     updateCurrentPoolMetrics(pool);
 
     // (A) Compute the number of sentence examples to sample from pool
-    var num_examples = Math.max(num_preload_bwssets.value, 1) * Math.max(1, num_items_per_set.value - 1);
-    num_examples = Math.max(num_items_per_set.value, num_examples);
+    var num_examples = Math.max(num_preload_bwssets.value, 1) * Math.max(1, bwsset_num_items.value - 1);
+    num_examples = Math.max(bwsset_num_items.value, num_examples);
 
     if (debugVerbose.value) {
       console.log(`Num of items to sample from pool: ${num_examples}`)
@@ -672,7 +672,7 @@ export const useInteractivity = () => {
 
     // (E) Generate BWS set samples (Sorry for the naming confusion)
     var sampled_bwssets = sampling.sample(
-      sampled_ids, num_items_per_set.value, bws_sampling_method.value, false);
+      sampled_ids, bwsset_num_items.value, bwsset_sampling_method.value, false);
 
     if (debugVerbose.value) {
       console.log("BWS samples:", sampled_bwssets);

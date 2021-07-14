@@ -66,8 +66,8 @@ export default defineComponent({
     // (a) Load bestworst3 UI settings
     const { 
       loadGeneralSettings, 
-      reorderpoint, orderquantity,
-      sampling_numtop, sampling_offset 
+      queue_reorderpoint, queue_orderquantity,
+      item_sampling_numtop, item_sampling_offset 
     } = useGeneralSettings();
     loadGeneralSettings();
 
@@ -103,7 +103,7 @@ export default defineComponent({
         const { api } = useApi(getToken());
         // start API request
         message_suggestion.value = "Loading new example sets ...";
-        api.post(`v1/bestworst/samples/4/${unref(orderquantity)}/${unref(sampling_numtop)}/${unref(sampling_offset)}`, params)
+        api.post(`v1/bestworst/samples/4/${unref(queue_orderquantity)}/${unref(item_sampling_numtop)}/${unref(item_sampling_offset)}`, params)
         .then(response => {
           // Is there any error message returned?
           if ('msg' in response.data){
@@ -140,7 +140,7 @@ export default defineComponent({
     watch(
       () => data.queue.length,
       (stocklevel) => {
-        if (stocklevel < reorderpoint.value){
+        if (stocklevel < queue_reorderpoint.value){
           console.log(`Queue is running low: ${stocklevel} examplesets`);
           replenishQueue();
         }
@@ -181,7 +181,7 @@ export default defineComponent({
 
 
     // compute max for progressba
-    const maxprogress = computed(() => parseInt(reorderpoint.value) + parseInt(orderquantity.value));
+    const maxprogress = computed(() => parseInt(queue_reorderpoint.value) + parseInt(queue_orderquantity.value));
 
 
     return { 

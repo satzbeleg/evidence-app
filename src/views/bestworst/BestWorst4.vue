@@ -36,7 +36,8 @@ import BestWorstChoices from '@/components/bestworst/Choices.vue';
 import { defineComponent, watchEffect, watch } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
-import { useGeneralSettings } from '@/components/settings/general-settings.js';
+// import { useGeneralSettings } from '@/components/settings/general-settings.js';
+import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 //import { traverseObject } from '@/functions/traverse-objects.js';
 //import { counting } from 'bwsample';
 //import { ranking } from 'bwsample';
@@ -64,10 +65,12 @@ export default defineComponent({
 
 
     // Load bestworst3 UI settings
-    const { 
-      loadGeneralSettings, reorderpoint 
-    } = useGeneralSettings();
-    loadGeneralSettings();
+    // const { loadGeneralSettings } = useGeneralSettings();
+    // loadGeneralSettings();
+
+    // Load BWS Settings
+    const { queue_reorderpoint, loadBwsSettings } = useBwsSettings();
+    loadBwsSettings();
 
 
     // Load reactive variables for BWS Queue
@@ -152,7 +155,7 @@ export default defineComponent({
     watch(
       () => data.queue.length,
       (stocklevel) => {
-        if (stocklevel < reorderpoint.value){
+        if (stocklevel < queue_reorderpoint.value){
           console.log(`Queue is running low: ${stocklevel} examplesets`);
           replenishQueue();
         }

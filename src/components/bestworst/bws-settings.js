@@ -20,10 +20,10 @@ export const useBwsSettings = () => {
    * (A) Initialize reactive variables
    */
   // Also used in bestworst3
-  const reorderpoint = ref();
-  const orderquantity = ref();
-  const sampling_numtop = ref();
-  const sampling_offset = ref();
+  const queue_reorderpoint = ref();
+  const queue_orderquantity = ref();
+  const item_sampling_numtop = ref();
+  const item_sampling_offset = ref();
 
   // bestworst4
   const min_pool_size = ref();
@@ -46,10 +46,10 @@ export const useBwsSettings = () => {
   
 
   // Settings for (3) 
-  const num_items_per_set = ref();
+  const bwsset_num_items = ref();
   const num_preload_bwssets = ref();   // settings: Number BWS sets to preload
   const item_sampling_method = ref(); // "random", "exploit", "newer-unstable"
-  const bws_sampling_method = ref() // overlap, twice
+  const bwsset_sampling_method = ref() // overlap, twice
 
   // Settings for (5) 
   const smoothing_method = ref();
@@ -66,31 +66,31 @@ export const useBwsSettings = () => {
       api.get(`v1/user/settings`)
         .then(response => {
           // also used in bestworst3
-          reorderpoint.value = response.data['reorderpoint'] || 3;
-          orderquantity.value = response.data['orderquantity'] || 10;
-          sampling_numtop.value = response.data['sampling-numtop'] || 100;
-          sampling_offset.value = response.data['sampling-offset'] || 0;
+          queue_reorderpoint.value = response.data['queue-reorderpoint'] || 3;
+          queue_orderquantity.value = response.data['queue-orderquantity'] || 10;
+          item_sampling_numtop.value = response.data['item-sampling-numtop'] || 100;
+          item_sampling_offset.value = response.data['item-sampling-offset'] || 0;
           // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
           flagInitialLoadOnly.value = response.data['flagInitialLoadOnly'] || true;
-          min_pool_size.value  = response.data['min_pool_size'] || 10;
-          max_pool_size.value = response.data['max_pool_size'] || 500;
+          min_pool_size.value  = response.data['min-pool-size'] || 10;
+          max_pool_size.value = response.data['max-pool-size'] || 500;
           flagDropDistribution.value = response.data['flagDropDistribution'] || false;
           flagAddDistribution.value = response.data['flagAddDistribution'] || false;
-          bin_edges.value = response.data['bin_edges'] || [.0, .25, .5, .75, 1.];
-          target_probas.value = response.data['target_probas'] || [.25, .25, .25, .25];
+          bin_edges.value = response.data['bin-edges'] || [.0, .25, .5, .75, 1.];
+          target_probas.value = response.data['target-probas'] || [.25, .25, .25, .25];
           // Settings for (1) and (3)
           flagDropMaxDisplay.value = response.data['flagDropMaxDisplay'] || false;
           flagExcludeMaxDisplay.value = response.data['flagExcludeMaxDisplay'] || true;
-          max_displays.value = response.data['max_displays'] || 3;
+          max_displays.value = response.data['max-displays'] || 3;
           // Settings for (1)
           flagDropConverge.value = response.data['flagDropConverge'] || false;
-          eps_score_change.value = response.data['eps_score_change'] || 1e-6;
+          eps_score_change.value = response.data['eps-score-change'] || 1e-6;
           flagDropPairs.value = response.data['flagDropPairs'] || false;
           // Settings for (3), e.g. sampleBwsSets
-          num_items_per_set.value = response.data['num_items_per_set'] || 4;
+          bwsset_num_items.value = response.data['bwsset-num-items'] || 4;
+          bwsset_sampling_method.value = response.data['bwsset-sampling-method'] || "overlap";
           num_preload_bwssets.value = response.data['num_preload_bwssets'] || 3;
-          bws_sampling_method.value = response.data['bws_sampling_method'] || "overlap";
-          item_sampling_method.value = response.data['item_sampling_method'] || "exploit";
+          item_sampling_method.value = response.data['item-sampling-method'] || "exploit";
           // Settings for (5), e.g. computeTrainingScores
           smoothing_method.value = response.data['smoothing_method'] || "ema";
           ema_alpha.value = response.data['ema_alpha'] || 0.7;
@@ -114,31 +114,31 @@ export const useBwsSettings = () => {
       const { api } = useApi(getToken());
       api.post(`v1/user/settings`, {
         // also used in bestworst3
-        'reorderpoint': reorderpoint.value,
-        'orderquantity': orderquantity.value,
-        'sampling-numtop': sampling_numtop.value,
-        'sampling-offset': sampling_offset.value,
+        'queue-reorderpoint': queue_reorderpoint.value,
+        'queue-orderquantity': queue_orderquantity.value,
+        'item-sampling-numtop': item_sampling_numtop.value,
+        'item-sampling-offset': item_sampling_offset.value,
         // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
         'flagInitialLoadOnly': flagInitialLoadOnly.value,
-        'min_pool_size': min_pool_size.value, 
-        'max_pool_size': max_pool_size.value,
+        'min-pool-size': min_pool_size.value, 
+        'max-pool-size': max_pool_size.value,
         'flagDropDistribution': flagDropDistribution.value, 
         'flagAddDistribution': flagAddDistribution.value, 
-        'bin_edges': bin_edges.value, 
-        'target_probas': target_probas.value, 
+        'bin-edges': bin_edges.value, 
+        'target-probas': target_probas.value, 
         // Settings for (1) and (3)
         'flagDropMaxDisplay': flagDropMaxDisplay.value, 
         'flagExcludeMaxDisplay': flagExcludeMaxDisplay.value, 
-        'max_displays': max_displays.value, 
+        'max-displays': max_displays.value, 
         // Settings for (1)
         'flagDropConverge': flagDropConverge.value, 
-        'eps_score_change': eps_score_change.value,
+        'eps-score-change': eps_score_change.value,
         'flagDropPairs': flagDropPairs.value,
         // Settings for (3), e.g. sampleBwsSets
-        'num_items_per_set': num_items_per_set.value, 
+        'bwsset-num-items': bwsset_num_items.value, 
+        'bwsset-sampling-method': bwsset_sampling_method.value, 
         'num_preload_bwssets': num_preload_bwssets.value, 
-        'bws_sampling_method': bws_sampling_method.value, 
-        'item_sampling_method': item_sampling_method.value,
+        'item-sampling-method': item_sampling_method.value,
         // Settings for (5), e.g. computeTrainingScores
         'smoothing_method': smoothing_method.value, 
         'ema_alpha': ema_alpha.value
@@ -161,10 +161,10 @@ export const useBwsSettings = () => {
   return {
     loadBwsSettings, saveBwsSettings,
     // also used in bestworst3
-    reorderpoint,
-    orderquantity,
-    sampling_numtop,
-    sampling_offset,
+    queue_reorderpoint,
+    queue_orderquantity,
+    item_sampling_numtop,
+    item_sampling_offset,
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
     flagInitialLoadOnly,
     min_pool_size, max_pool_size,
@@ -175,7 +175,7 @@ export const useBwsSettings = () => {
     flagDropConverge, eps_score_change,
     flagDropPairs,
     // Settings for (3), e.g. sampleBwsSets
-    num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method,
+    bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
     // Settings for (5), e.g. computeTrainingScores
     smoothing_method, ema_alpha
   }

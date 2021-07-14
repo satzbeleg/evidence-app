@@ -1,73 +1,252 @@
 <template>
   <h1 class="title is-3 is-spaced">Best-Worst Scaling</h1>
 
-      <h1 class="title is-3 is-spaced">BWS v3</h1>
-      <div class="content">
-        <p>
-          The following settings are only applicable for the Best-Worst Scaling UI v3.
-          The sampling occurs <b>inside the REST API</b>, when the app's inventory of example sets falls under a threshold.
-        </p>
-      </div>
-
-      <h2 class="subtitle is-4">Offline and Sync Settings</h2>
-      <div class="columns">
-      <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+  <h2 class="subtitle is-4">Offline Queue</h2>   <!-- Offline Warteschlange -->
+  <div class="content">
+    <p v-if="language == 'de'">
+      Die Benutzeroberfläche hat eine eigene Warteschlange mit vorgeladenen BWS-Gruppen. Sie funktioniert offline im Falle von Netzwerkunterbrechungen und füllt sich automatisch im Hintergrund auf.
+      Die Warteschlange ist ein Lagerhaltungsmodell mit fixen Meldebstand (reorder point) und fixer Bestellmenge (order quantity).
+    </p>
+    <p v-else>
+      The BWS UI has its own queue of preloaded BWS sets. It works offline in case of network interruptions, and replenishes the queue in the background. 
+      The queue follows a Fixed Quantity inventory model with a given reorder point and order quantity.
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
     
       <div class="field">
-        <label for="bestworst3-reorderpoint">
-          Minimum Offline Example Sets
+        <label class="label" for="queue-reorderpoint">
+          Minimum Number of Offline BWS Sets  <!-- (econ: reorder point) -->
         </label>
-        <input id="bestworst3-reorderpoint" 
+        <input id="queue-reorderpoint" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="reorderpoint" step="1" min="1" max="20">
-        <output for="bestworst3-reorderpoint">{{ reorderpoint }}</output>
+               type="range" v-model="queue_reorderpoint" step="1" min="1" max="20">
+        <output for="queue-reorderpoint">{{ queue_reorderpoint }}</output>
       </div>
 
       <div class="field">
-        <label for="bestworst3-orderquantity">
-          Number of Example Sets to Reload
+        <label class="label" for="queue-orderquantity">
+          Number of BWS Sets to Reload  <!-- (econ: order quantity) -->
         </label>
-        <input id="bestworst3-orderquantity" 
+        <input id="queue-orderquantity" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="orderquantity" step="5" min="10" max="50">
-        <output for="bestworst3-orderquantity">{{ orderquantity }}</output>
+               type="range" v-model="queue_orderquantity" step="5" min="10" max="50">
+        <output for="queue-orderquantity">{{ queue_orderquantity }}</output>
       </div>
 
-      </div>
-      </div>
+    </div>
+  </div>
 
 
-      <h2 class="subtitle is-4">Sampling Settings</h2>
-      <div class="columns">
-      <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+  <h2 class="subtitle is-4">Sampling of Sentence Examples from the Database</h2>  <!-- Stichprobe der Satzbelege aus der Datenbank -->
+  <div class="content">
+    <p v-if="language == 'de'">
+      In der Datenbank sind für gegebene Suchparameter (z.B. Lemma) i.d.R. eine sehr große Anzahl von Satzbelegen vorhanden, die nicht alle angezeigt werden können.
+      Abhängig vom aktuellen globalen Score werden die besten N Satzbelege betrachten, um eine Stichprobe zu entnehmen.
+      Desweiteren kann ein Offset für die nächstenbesten Satzbelege definiert werden, d.h. <code>[1+offset, N+offset]</code>. So können bspw. die bestbewerteten Satzbelege ausgeschlossen werden.
+      
+    </p>
+    <p v-else>
+      For given search parameters (e.g. Lemma) there is usually a very large number of sentence examples in the database, all of which cannot be displayed.
+      N sentence example with the best current globals score form a pool to sample from.
+      Furthermore, an offset can be defined for the next best sentence examples as pool, i.e. <code>[1+offset, N+offset]</code>. In this way, the best scored sentence example can be excluded.
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
     
       <div class="field">
-        <label for="sampling-numtop">
-          Sample from the Top-X scored
+        <label class="label" for="item-sampling-numtop">
+          Sample from N top scored sentences (Default: 100)
         </label>
-        <input id="sampling-numtop" 
+        <input id="item-sampling-numtop" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="sampling_numtop" step="10" min="10" max="10000">
-        <output for="sampling-numtop">{{ sampling_numtop }}</output>
+               type="range" v-model="item_sampling_numtop" step="10" min="10" max="10000">
+        <output for="item-sampling-numtop">{{ item_sampling_numtop }}</output>
       </div>
 
       <div class="field">
-        <label for="sampling-offset">
-          Offset, i.e. [1+offset, top+offset] scores
+        <label class="label" for="item-sampling-offset">
+          Offset (Default: 0)
         </label>
-        <input id="sampling-offset" 
+        <input id="item-sampling-offset" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="sampling_offset" step="100" min="0" max="100000">
-        <output for="sampling-offset">{{ sampling_offset }}</output>
+               type="range" v-model="item_sampling_offset" step="100" min="0" max="100000">
+        <output for="item-sampling-offset">{{ item_sampling_offset }}</output>
       </div>
 
-      </div>
-      </div>
+    </div>
+  </div>
 
 
-  <h2 class="subtitle is-4">Pool Size</h2>
+  <h2 class="subtitle is-4">BWS Sets Configuration</h2>  <!-- BWS-Gruppen Konfiguration -->
+  <div class="content">
+    <p v-if="language == 'de'">
+      In der BWS UI können 3 bis 5 Beispiele angezeigt werden. Die Anzahl sollte sich nach dem benötigten Arbeitsgedächtnis für die Bewertungsaufgabe richten, z.B. die Komplexität und Neuheit der Inhalte und Entscheidungskriterien, Fähigkeit sich auf alle angezeigten Beispielen gleichzeitig zu fokussieren, kognitive Erschöpfung (Siehe <a href="https://osf.io/qkxej/">Kap. 3</a>).
+      <br>
+      Um logische Inferenzregeln in der Datenanalyse anzuwenden, müssen BWS-Gruppen überlappend zusammengestellt werden. Zusätzlich kannst du sicherstellen, dass jeder Satzbeleg in mindestens zwei BWS-Gruppen vorkommt (Siehe <a href="https://osf.io/qkxej/">Kap. 5</a>).
+    </p>
+    <p v-else>
+      The BWS UI can display between 3 and 5 items. The number should depends on the required working memory for the judgement, e.g. the complexity and newness of the content and decision criterias, ability to focus attention on all items, cognitive exhaustion levels (see <a href="https://osf.io/qkxej/">Ch. 3</a>).
+      <br>
+      In order to apply logical inference rules in post-processing, BWS sets need to be sampled in an overlapping manner. Additionally you can ensure that each sentence example occurs in at least two BWS sets (see <a href="https://osf.io/qkxej/">Ch. 5</a>).
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="bwsset-num-items">
+          Items per BWS set (Default: 4)
+        </label>
+        <input id="bwsset-num-items" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="bwsset_num_items" step="1" min="3" max="5">
+        <output for="bwsset-num-items">{{ bwsset_num_items }}</output>
+      </div>
+
+      <div class="field">
+        <label class="label" for="bwsset-sampling-method">
+          BWS sampling method
+        </label>
+        <br>
+        <div class="dropdown" id="bwsset-sampling-method"
+             v-on:click="showDropdownBwsSamplingMethod = !showDropdownBwsSamplingMethod"
+             v-bind:class="{ 'is-active': showDropdownBwsSamplingMethod }">
+          <div class="dropdown-trigger">
+            <button class="button is-rounded is-light" type="button"
+                    aria-haspopup="true" 
+                    aria-controls="dropdown-bwsset-sampling-methodd">
+              <span>
+                <template v-if="bwsset_sampling_method == 'overlap'">overlap</template>
+                <template v-if="bwsset_sampling_method == 'twice'">twice</template>
+              </span>
+              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-bwsset-sampling-method" role="menu">
+            <div class="dropdown-content" v-on:click="bwsset_sampling_method = $event.target.id">
+              <a id="overlap" class="dropdown-item">overlap</a>
+              <a id="twice" class="dropdown-item">twice</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <h2 class="subtitle is-4">Sampling from Local Pool (v4)</h2>
+  <div class="content">
+    <p v-if="language == 'de'">
+      Vor dem erneuten Training des lokalen ML-Modells in der Interactivity BWS UI (v4), wird eine bestimmte Anzahl an BWS-Gruppen den Benutzer zur Bewertung vorgelegt.
+      <br>
+      Die Satzbelege können auf unterschiedliche Weise aus dem Pool ausgewählt werden, z.B. per Zufall
+    </p>
+    <p v-else>
+      Before re-training the local ML model in the Interactivity BWS UI (v4), a specific number of BWS groups is presented to the user for evaluation.
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="interactivity-num_preload_bwssets">
+          Number of BWS sets to evaluate before re-training (Default: 3)
+        </label>
+        <input id="interactivity-num_preload_bwssets" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="num_preload_bwssets" step="1" min="1" max="20">
+        <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
+      </div>
+
+      <div class="field">
+        <label class="label" for="interactivity-item_sampling_method">
+          Sampling Sentences from Pool (Default: exploit)
+        </label>
+        <div class="dropdown" id="interactivity-item_sampling_method" 
+             v-on:click="showDropdownItemSamplingMethod = !showDropdownItemSamplingMethod"
+             v-bind:class="{ 'is-active': showDropdownItemSamplingMethod }">
+          <div class="dropdown-trigger">
+            <button class="button is-rounded is-light" type="button"
+                    aria-haspopup="true" 
+                    aria-controls="dropdown-item_sampling_method">
+              <span>
+                <template v-if="item_sampling_method == 'random'">random</template>
+                <template v-if="item_sampling_method == 'exploit'">exploit</template>
+                <template v-if="item_sampling_method == 'newer-unstable'">newer-unstable</template>
+              </span>
+              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-item_sampling_method" role="menu">
+            <div class="dropdown-content" v-on:click="item_sampling_method = $event.target.id">
+              <a id="random" class="dropdown-item">random</a>
+              <a id="exploit" class="dropdown-item">exploit</a>
+              <a id="newer-unstable" class="dropdown-item">newer-unstable</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <h2 class="subtitle is-4">Drop and/or Hide Examples if shown too often</h2>
   <div class="content">
     <p>
+      We can specify a threshold of the maximum of times an examples is displayed to an user.
+      On a first level, the example is <b>excluded from the BWS sampling process</b>, 
+      i.e. the example remains in the pool but is not shown anymore -- 
+      This option would prevent replenishing the pool automatically 
+      (i.e. adding new examples from the database).
+      The second option is to <b>remove the example from the pool</b> for good.
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="max-displays">
+          Maximum number an example will be displayed
+        </label>
+        <input id="max-displays" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="max_displays" step="1" min="1" max="30">
+        <output for="max-displays">{{ max_displays }}</output>
+      </div>
+
+      <div class="field">
+        <input id="interactivity-exclude-bwssampling-toogle" 
+               class="switch is-rounded" type="checkbox"
+               v-model="flagExcludeMaxDisplay">
+        <label class="label" for="interactivity-exclude-bwssampling-toogle">
+          Exclude from BWS sampling if shown too often (Default: On)
+        </label>
+      </div>
+
+      <div class="field">
+        <input id="interactivity-drop-display-toogle" 
+               class="switch is-rounded" type="checkbox"  
+               v-model="flagDropMaxDisplay">
+        <label class="label" for="interactivity-drop-display-toogle">
+          Drop examples from the pool if shown too often (Default: Off)
+        </label>
+      </div>
+
+    </div>
+  </div>
+
+
+  <h2 class="subtitle is-4">Pool Size (v4)</h2>
+  <div class="content">
+    <p v-if="language == 'de'">
+      Die Poolgröße der lokal gespeicherten Satzbelege, Merkmalsvektoren, usw. muss eingeschränkt werden, da Endbenutzergeräte begrenzte Speicherkapazitäten haben.
+    </p>
+    <p v-else>
       The pool size of the locally stored sentences, feature vectors, annotation data, etc. must be constrained as end user devices have limited storage capacities.
     </p>
   </div>
@@ -75,17 +254,17 @@
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
       <div class="field">
-        <label for="interactivity-min_pool_size">
+        <label class="label" for="min-pool-size">
           Minimum Pool Size
         </label>
-        <input id="interactivity-min_pool_size" 
+        <input id="min-pool-size" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
                type="range" v-model="min_pool_size" step="10" min="10" max="1000">
-        <output for="interactivity-min_pool_size">{{ min_pool_size }}</output>
+        <output for="min-pool-size">{{ min_pool_size }}</output>
       </div>
 
       <div class="field">
-        <label for="interactivity-max_pool_size">
+        <label class="label" for="interactivity-max_pool_size">
           Maximum Pool Size
         </label>
         <input id="interactivity-max_pool_size" 
@@ -113,7 +292,7 @@
         <input id="interactivity-add-only-initially-toogle" 
                class="switch is-rounded" type="checkbox"   
                v-model="flagInitialLoadOnly">
-        <label for="interactivity-add-only-initially-toogle">
+        <label class="label" for="interactivity-add-only-initially-toogle">
           Only load an initial fixed pool / No pool additions lateron (Default: On)
         </label>
       </div>
@@ -134,10 +313,26 @@
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
       <div class="field">
+        <label class="label" for="interactivity-bin_edges">
+          Bin Edges
+        </label>
+        <input id="interactivity-bin_edges" 
+               class="input" type="text" v-model="bin_edges_text">
+      </div>
+
+      <div class="field">
+        <label class="label" for="interactivity-target_probas">
+          Target Densities for each bin
+        </label>
+        <input id="interactivity-target_probas" 
+               class="input" type="text" v-model="target_probas_text">
+      </div>
+
+      <div class="field">
         <input id="interactivity-drop-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
                v-model="flagDropDistribution">
-        <label for="interactivity-drop-distribution-toogle">
+        <label class="label" for="interactivity-drop-distribution-toogle">
           Drop examples from the pool by a target distribution (Default: Off)
         </label>
       </div>
@@ -146,70 +341,9 @@
         <input id="interactivity-add-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
                v-model="flagAddDistribution">
-        <label for="interactivity-add-distribution-toogle">
+        <label class="label" for="interactivity-add-distribution-toogle">
           Add examples to the pool by a target distribution (Default: Off)
         </label>
-      </div>
-
-      <div class="field">
-        <label for="interactivity-bin_edges">
-          Bin Edges
-        </label>
-        <input id="interactivity-bin_edges" 
-               class="input" type="text" v-model="bin_edges_text">
-      </div>
-
-      <div class="field">
-        <label for="interactivity-target_probas">
-          Target Densities for each bin
-        </label>
-        <input id="interactivity-target_probas" 
-               class="input" type="text" v-model="target_probas_text">
-      </div>
-
-    </div>
-  </div>
-
-  <h2 class="subtitle is-4">Drop and/or Hide Examples if shown too often</h2>
-  <div class="content">
-    <p>
-      We can specify a threshold of the maximum of times an examples is displayed to an user.
-      On a first level, the example is <b>excluded from the BWS sampling process</b>, 
-      i.e. the example remains in the pool but is not shown anymore -- 
-      This option would prevent replenishing the pool automatically 
-      (i.e. adding new examples from the database).
-      The second option is to <b>remove the example from the pool</b> for good.
-    </p>
-  </div>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-
-      <div class="field">
-        <input id="interactivity-exclude-bwssampling-toogle" 
-               class="switch is-rounded" type="checkbox"
-               v-model="flagExcludeMaxDisplay">
-        <label for="interactivity-exclude-bwssampling-toogle">
-          Exclude from BWS sampling if shown too often (Default: On)
-        </label>
-      </div>
-
-      <div class="field">
-        <input id="interactivity-drop-display-toogle" 
-               class="switch is-rounded" type="checkbox"  
-               v-model="flagDropMaxDisplay">
-        <label for="interactivity-drop-display-toogle">
-          Drop examples from the pool if shown too often (Default: Off)
-        </label>
-      </div>
-
-      <div class="field">
-        <label for="interactivity-max_displays">
-          Maximum number of times an sentence examples is shown to the user
-        </label>
-        <input id="interactivity-max_displays" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="max_displays" step="1" min="1" max="30">
-        <output for="interactivity-max_displays">{{ max_displays }}</output>
       </div>
 
     </div>
@@ -232,13 +366,13 @@
         <input id="interactivity-drop-converge-toogle" 
                class="switch is-rounded" type="checkbox"
                v-model="flagDropConverge">
-        <label for="interactivity-drop-converge-toogle">
+        <label class="label" for="interactivity-drop-converge-toogle">
           Drop examples from pool if model score converged (Default: Off)
         </label>
       </div>
 
       <div class="field">
-        <label for="interactivity-eps_score_change">
+        <label class="label" for="interactivity-eps_score_change">
           Termination criteria: Model score changes
         </label>
         <input id="interactivity-eps_score_change" 
@@ -261,7 +395,7 @@
         <input id="interactivity-drop-pairs-toogle" 
                class="switch is-rounded" type="checkbox"   
                v-model="flagDropPairs">
-        <label for="interactivity-drop-pairs-toogle">
+        <label class="label" for="interactivity-drop-pairs-toogle">
           Drop examples from local pairs matrix
         </label>
       </div>
@@ -269,88 +403,7 @@
   </div>
 
 
-  <h2 class="subtitle is-4">Sample BWS sets from Local Pool</h2>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
-      <div class="field">
-        <label for="interactivity-num_items_per_set">
-          Number of items per BWS set (Default: 4)
-        </label>
-        <input id="interactivity-num_items_per_set" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="num_items_per_set" step="1" min="3" max="5">
-        <output for="interactivity-num_items_per_set">{{ num_items_per_set }}</output>
-      </div>
-
-      <div class="field">
-        <label for="interactivity-num_preload_bwssets">
-          Number of BWS sets to sample (to label before re-training)
-        </label>
-        <input id="interactivity-num_preload_bwssets" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="num_preload_bwssets" step="1" min="1" max="20">
-        <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
-      </div>
-
-      <div class="field">
-        <div class="dropdown" id="interactivity-bws_sampling_method"
-             v-on:click="showDropdownBwsSamplingMethod = !showDropdownBwsSamplingMethod"
-             v-bind:class="{ 'is-active': showDropdownBwsSamplingMethod }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-bws_sampling_method">
-              <span>
-                <template v-if="bws_sampling_method == 'overlap'">overlap</template>
-                <template v-if="bws_sampling_method == 'twice'">twice</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-bws_sampling_method" role="menu">
-            <div class="dropdown-content" v-on:click="bws_sampling_method = $event.target.id">
-              <a id="overlap" class="dropdown-item">overlap</a>
-              <a id="twice" class="dropdown-item">twice</a>
-            </div>
-          </div>
-        </div>
-        <label for="interactivity-bws_sampling_method">
-          BWS sampling method
-        </label>
-      </div>
-
-      <div class="field">
-        <div class="dropdown" id="interactivity-item_sampling_method" 
-             v-on:click="showDropdownItemSamplingMethod = !showDropdownItemSamplingMethod"
-             v-bind:class="{ 'is-active': showDropdownItemSamplingMethod }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-item_sampling_method">
-              <span>
-                <template v-if="item_sampling_method == 'random'">random</template>
-                <template v-if="item_sampling_method == 'exploit'">exploit</template>
-                <template v-if="item_sampling_method == 'newer-unstable'">newer-unstable</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-item_sampling_method" role="menu">
-            <div class="dropdown-content" v-on:click="item_sampling_method = $event.target.id">
-              <a id="random" class="dropdown-item">random</a>
-              <a id="exploit" class="dropdown-item">exploit</a>
-              <a id="newer-unstable" class="dropdown-item">newer-unstable</a>
-            </div>
-          </div>
-        </div>
-        <label for="interactivity-item_sampling_method">
-          Sampling example items 
-        </label>
-      </div>
-
-    </div>
-  </div>
 
   <h2 class="subtitle is-4">Count Pairs and Update Training Scores</h2>
   <div class="columns">
@@ -380,6 +433,8 @@ import { useI18n } from 'vue-i18n';
 import { defineComponent, watch, ref } from 'vue';
 // import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
+import { useGeneralSettings } from '@/components/settings/general-settings.js';
+
 
 export default defineComponent({
   name: "BwsSettings",
@@ -387,6 +442,7 @@ export default defineComponent({
   setup(){
     // i18n data
     const { t } = useI18n();
+    const { language } = useGeneralSettings();
 
     // Dropdown menus
     const showDropdownItemSamplingMethod = ref(false);
@@ -394,8 +450,8 @@ export default defineComponent({
 
     const {
       // also used in bestworst3
-      reorderpoint, orderquantity, 
-      sampling_numtop, sampling_offset,
+      queue_reorderpoint, queue_orderquantity, 
+      item_sampling_numtop, item_sampling_offset,
       // Settings for (1) and (2)
       flagInitialLoadOnly,
       min_pool_size, max_pool_size,
@@ -406,8 +462,8 @@ export default defineComponent({
       flagDropConverge, eps_score_change,
       flagDropPairs,
       // Settings for (3)
-      num_items_per_set, num_preload_bwssets, 
-        bws_sampling_method, item_sampling_method,
+      bwsset_num_items, num_preload_bwssets, 
+        bwsset_sampling_method, item_sampling_method,
     } = useBwsSettings();
 
     watch(min_pool_size, (minsz) => {
@@ -437,16 +493,16 @@ export default defineComponent({
 
 
     return { 
-      t,
-      reorderpoint, orderquantity, 
-        sampling_numtop, sampling_offset,
+      t, language,
+      queue_reorderpoint, queue_orderquantity, 
+        item_sampling_numtop, item_sampling_offset,
       min_pool_size, max_pool_size, 
         flagInitialLoadOnly,
         flagDropDistribution, flagAddDistribution, bin_edges_text, target_probas_text, 
         flagExcludeMaxDisplay, flagDropMaxDisplay, max_displays, 
         flagDropConverge, eps_score_change_text,
         flagDropPairs,
-      num_items_per_set, num_preload_bwssets, bws_sampling_method, item_sampling_method,
+      bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
         showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod
     }
   }

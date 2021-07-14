@@ -32,7 +32,7 @@
         <input id="interactivity-debugVerbose-toogle" class="switch is-rounded" type="checkbox"   
                v-model="debugVerbose">
         <label for="interactivity-debugVerbose-toogle">
-          Print details to <tt>console.log</tt>
+          Print details to <code>console.log</code>
         </label>
       </div>
 
