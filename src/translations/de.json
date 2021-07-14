@@ -33,8 +33,8 @@
   "settings": {
     "settings": "Einstellungen",
     "general": "Allgemeine Einstellungen",
-    "appearance": "Aussehen",
-    "language": "Sprache",
+    "appearance": "Aussehen der Anwendungsoberfläche",
+    "language": "Sprache der Anwendungsoberfläche",
     "darkmode": "Dunkler Modus"
   },
   "bestworst": {

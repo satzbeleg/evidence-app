@@ -9,7 +9,7 @@
 
 
 <script>
-import { useDarkmodeToggle } from '@/functions/settings.js';
+import { useDarkmodeToggle } from '@/components/settings/darkmode-toggle.js';
 
 export default {
   name: "DarkmodeIcon",

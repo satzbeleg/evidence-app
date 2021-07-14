@@ -26,7 +26,7 @@
 <script>
 import { defineComponent, ref } from "vue";
 import { useI18n } from 'vue-i18n';
-import { useSettings } from '@/functions/settings.js';
+import { useGeneralSettings } from '@/components/settings/general-settings.js';
 
 
 export default defineComponent({
@@ -35,7 +35,8 @@ export default defineComponent({
   setup(){
     // multi-lingual support
     const { t } = useI18n();
-    const { language } = useSettings();
+    const { language, loadGeneralSettings } = useGeneralSettings();
+    loadGeneralSettings();
   
     // reactive variables to toggle menu
     const showLangDrop = ref(false);
