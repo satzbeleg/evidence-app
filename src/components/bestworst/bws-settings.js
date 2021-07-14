@@ -19,6 +19,13 @@ export const useBwsSettings = () => {
   /**
    * (A) Initialize reactive variables
    */
+  // Also used in bestworst3
+  const reorderpoint = ref();
+  const orderquantity = ref();
+  const sampling_numtop = ref();
+  const sampling_offset = ref();
+
+  // bestworst4
   const min_pool_size = ref();
   const max_pool_size = ref();
   const flagInitialLoadOnly = ref();
@@ -58,6 +65,11 @@ export const useBwsSettings = () => {
       const { api } = useApi(getToken());
       api.get(`v1/user/settings`)
         .then(response => {
+          // also used in bestworst3
+          reorderpoint.value = response.data['reorderpoint'] || 3;
+          orderquantity.value = response.data['orderquantity'] || 10;
+          sampling_numtop.value = response.data['sampling-numtop'] || 100;
+          sampling_offset.value = response.data['sampling-offset'] || 0;
           // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
           flagInitialLoadOnly.value = response.data['flagInitialLoadOnly'] || true;
           min_pool_size.value  = response.data['min_pool_size'] || 10;
@@ -101,6 +113,11 @@ export const useBwsSettings = () => {
       const { getToken } = useAuth();
       const { api } = useApi(getToken());
       api.post(`v1/user/settings`, {
+        // also used in bestworst3
+        'reorderpoint': reorderpoint.value,
+        'orderquantity': orderquantity.value,
+        'sampling-numtop': sampling_numtop.value,
+        'sampling-offset': sampling_offset.value,
         // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
         'flagInitialLoadOnly': flagInitialLoadOnly.value,
         'min_pool_size': min_pool_size.value, 
@@ -143,6 +160,11 @@ export const useBwsSettings = () => {
 
   return {
     loadBwsSettings, saveBwsSettings,
+    // also used in bestworst3
+    reorderpoint,
+    orderquantity,
+    sampling_numtop,
+    sampling_offset,
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
     flagInitialLoadOnly,
     min_pool_size, max_pool_size,

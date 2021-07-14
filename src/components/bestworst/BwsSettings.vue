@@ -1,7 +1,7 @@
 <template>
-  <h1 class="title is-3 is-spaced">BWS v4</h1>
+  <h1 class="title is-3 is-spaced">Best-Worst Scaling</h1>
 
-  <h2 class="subtitle is-4">Compliance</h2>
+  <h2 class="subtitle is-4">Data Donation</h2>
   <div class="content">
     <p>
       The following settings are only applicable for the <b>interactive</b> Best-Worst Scaling UI v4.
@@ -28,6 +28,69 @@
 
     </div>
   </div>
+
+      <h1 class="title is-3 is-spaced">BWS v3</h1>
+      <div class="content">
+        <p>
+          The following settings are only applicable for the Best-Worst Scaling UI v3.
+          The sampling occurs <b>inside the REST API</b>, when the app's inventory of example sets falls under a threshold.
+        </p>
+      </div>
+
+      <h2 class="subtitle is-4">Offline and Sync Settings</h2>
+      <div class="columns">
+      <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+    
+      <div class="field">
+        <label for="bestworst3-reorderpoint">
+          Minimum Offline Example Sets
+        </label>
+        <input id="bestworst3-reorderpoint" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="reorderpoint" step="1" min="1" max="20">
+        <output for="bestworst3-reorderpoint">{{ reorderpoint }}</output>
+      </div>
+
+      <div class="field">
+        <label for="bestworst3-orderquantity">
+          Number of Example Sets to Reload
+        </label>
+        <input id="bestworst3-orderquantity" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="orderquantity" step="5" min="10" max="50">
+        <output for="bestworst3-orderquantity">{{ orderquantity }}</output>
+      </div>
+
+      </div>
+      </div>
+
+
+      <h2 class="subtitle is-4">Sampling Settings</h2>
+      <div class="columns">
+      <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+    
+      <div class="field">
+        <label for="sampling-numtop">
+          Sample from the Top-X scored
+        </label>
+        <input id="sampling-numtop" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="sampling_numtop" step="10" min="10" max="10000">
+        <output for="sampling-numtop">{{ sampling_numtop }}</output>
+      </div>
+
+      <div class="field">
+        <label for="sampling-offset">
+          Offset, i.e. [1+offset, top+offset] scores
+        </label>
+        <input id="sampling-offset" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="sampling_offset" step="100" min="0" max="100000">
+        <output for="sampling-offset">{{ sampling_offset }}</output>
+      </div>
+
+      </div>
+      </div>
 
   <h2 class="subtitle is-4">General Settings for the Interactive Bestworst UI</h2>
   <div class="columns">
@@ -378,6 +441,9 @@ export default defineComponent({
     } = useInteractivity();
 
     const {
+      // also used in bestworst3
+      reorderpoint, orderquantity, 
+      sampling_numtop, sampling_offset,
       // Settings for (1) and (2)
       flagInitialLoadOnly,
       min_pool_size, max_pool_size,
@@ -421,6 +487,8 @@ export default defineComponent({
     return { 
       t,
       hasConsented, debug,
+      reorderpoint, orderquantity, 
+        sampling_numtop, sampling_offset,
       min_pool_size, max_pool_size, 
         flagInitialLoadOnly,
         flagDropDistribution, flagAddDistribution, bin_edges_text, target_probas_text, 
