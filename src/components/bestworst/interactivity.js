@@ -3,7 +3,7 @@ import { sampling, ranking } from 'bwsample';  // counting
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
 // import { v4 as uuid4 } from 'uuid'; // nur für dev
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
-import { useBwsQueue } from '@/components/bestworst/queue.js';
+import { useQueue } from '@/components/bestworst/queue.js';
 
 
 const getLast = (arr) => {
@@ -593,7 +593,7 @@ export const useInteractivity = () => {
   /**
    * (2c) watch `pool` to trigger sync with API/DB
    */
-  const { searchlemmata } = useBwsQueue();
+  const { searchlemmata } = useQueue();
   watch( () => Object.keys(pool).length, (current_pool_size) => {
     if (current_pool_size < max_pool_size.value && searchlemmata.value){
       if(debug.value){console.log(`Only examples ${current_pool_size} in pool.`)}

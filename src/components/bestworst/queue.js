@@ -2,7 +2,7 @@ import { reactive, ref } from 'vue';
 import { traverseObject } from '@/functions/traverse-objects.js';
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
 
-export const useBwsQueue = () => {
+export const useQueue = () => {
   // UI-name
   const uispec = reactive({"name": "noname"})
 
@@ -38,7 +38,7 @@ export const useBwsQueue = () => {
    * 
    * Example:
    * --------
-   *    const { pullFromQueue } = useBwsQueue();
+   *    const { pullFromQueue } = useQueue();
    *    pullFromQueue();
    */
   const pullFromQueue = () => {
@@ -69,7 +69,7 @@ export const useBwsQueue = () => {
    * 
    * Example:
    * --------
-   *    const { nextExampleSet } = useBwsQueue(loadSettings, replenishQueue);
+   *    const { nextExampleSet } = useQueue(loadSettings, replenishQueue);
    *    nextExampleSet(history)
    * 
    */
@@ -112,7 +112,7 @@ export const useBwsQueue = () => {
    * 
    * Example:
    * --------
-   *    const { isSaving, saveEvaluations } = useBwsQueue();
+   *    const { isSaving, saveEvaluations } = useQueue();
    *    watch( () => data.evaluated.length, 
    *      (num_evaluated) => {
    *        if (num_evaluated > 0 && !isSaving.value){

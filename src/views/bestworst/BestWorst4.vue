@@ -41,7 +41,7 @@ import { useSettings } from '@/functions/settings.js';
 //import { counting } from 'bwsample';
 //import { ranking } from 'bwsample';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
-import { useBwsQueue } from '@/components/bestworst/queue.js';
+import { useQueue } from '@/components/bestworst/queue.js';
 import { v4 as uuid4 } from 'uuid';
 
 
@@ -77,7 +77,7 @@ export default defineComponent({
       isSaving, saveEvaluations,
       pullFromQueue, nextExampleSet, 
       resetQueue
-    } = useBwsQueue();
+    } = useQueue();
 
     // configure UI meta info
     uispec["name"] = "bestworst4";

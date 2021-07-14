@@ -42,7 +42,7 @@ import { defineComponent, watchEffect, watch, unref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useApi, useAuth } from '@/functions/axios-evidence.js';
 import { useSettings } from '@/functions/settings.js';
-import { useBwsQueue } from '@/components/bestworst/queue.js';
+import { useQueue } from '@/components/bestworst/queue.js';
 
 
 export default defineComponent({
@@ -78,7 +78,7 @@ export default defineComponent({
       isSaving, saveEvaluations,
       pullFromQueue, nextExampleSet, 
       resetQueue
-    } = useBwsQueue();
+    } = useQueue();
 
     // configure UI meta info
     uispec["name"] = "bestworst3";
