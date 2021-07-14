@@ -36,7 +36,7 @@ import BestWorstChoices from '@/components/bestworst/Choices.vue';
 import { defineComponent, watchEffect, watch } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
-import { useSettings } from '@/functions/settings.js';
+import { useGeneralSettings } from '@/components/settings/general-settings.js';
 //import { traverseObject } from '@/functions/traverse-objects.js';
 //import { counting } from 'bwsample';
 //import { ranking } from 'bwsample';
@@ -65,9 +65,9 @@ export default defineComponent({
 
     // Load bestworst3 UI settings
     const { 
-      loadSettings, reorderpoint 
-    } = useSettings();
-    loadSettings();
+      loadGeneralSettings, reorderpoint 
+    } = useGeneralSettings();
+    loadGeneralSettings();
 
 
     // Load reactive variables for BWS Queue

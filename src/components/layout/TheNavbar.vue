@@ -214,7 +214,6 @@
 
 
 <script>
-// import '@/components/layout/navbar-toggle.js';
 import { useI18n } from 'vue-i18n';
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
 import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
