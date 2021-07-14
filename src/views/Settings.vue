@@ -7,6 +7,7 @@
     <div class="container">
       <!-- put the following into components ... -->
       <GeneralSettings />
+      <LegalSettings />
       <BwsSettings />
       <!-- put the above into components ... -->
     </div>
@@ -19,6 +20,7 @@ import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
 import GeneralSettings from '@/components/settings/GeneralSettings.vue';
+import LegalSettings from '@/components/settings/LegalSettings.vue';
 import BwsSettings from '@/components/bestworst/BwsSettings.vue';
 
 export default {
@@ -27,6 +29,7 @@ export default {
   components: {
     TheNavbar,
     GeneralSettings,
+    LegalSettings,
     BwsSettings
   },
 
