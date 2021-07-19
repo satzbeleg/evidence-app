@@ -1,12 +1,22 @@
-/** Connectivity Detection and Bulma Toast notification 
+/** 
+ * Connectivity Detection and Bulma Toast notification 
  * 
- * USAGE
+ * Usage:
+ * ------
+ * Call the function in `App.vue` so that the connectivity is
+ *  checked for all app views. 
+ * 
  *  import useConnToast from '@/functions/conn-toast.js';
  *  export default {
  *    setup(){
  *      useConnToast();
  *    }
  *  }
+ * 
+ * Dependencies:
+ * -------------
+ *  - package.json: bulma-toast
+ * 
  */
 import { toast } from "bulma-toast";
 import { onMounted, onUnmounted } from 'vue';

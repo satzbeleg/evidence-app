@@ -26,8 +26,8 @@ Fixes:
 
 ```
 NODE_ENV=local
-REST_PUBLIC_URL=http://0.0.0.0:55017
-GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
+VUE_APP_REST_PUBLIC_URL=http://0.0.0.0:55017
+VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
 Oder
@@ -152,18 +152,6 @@ components: {
 },
 ...
 </script>
-```
-
-### functions/conn-toast.js
-Verbindungsstatus erkennen (d.h. Online vs Offline) und eine Toast Benachrichtigung in der App anzeigen.
-
-```vue
-import useConnToast from '@/functions/conn-toast.js';
-export default {
-  setup(){
-    useConnToast();
-  }
-}
 ```
 
 
