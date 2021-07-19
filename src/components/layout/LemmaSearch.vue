@@ -25,6 +25,27 @@
 <script>
 import { defineComponent, ref } from "vue";
 
+
+/**
+ * Search field for lemmata
+ * 
+ * HTML:
+ * -----
+ *     <LemmaSearch v-bind:keywords="mylemmata" 
+ *        v-on:search-for-new-lemmata="triggerSearch" />
+ * JS:
+ * ---
+ *    import LemmaSearch from "@/components/layout/LemmaSearch.vue";
+ *    import { ref } from "vue";
+ *    ...
+ *    components: {LemmaSearch},
+ *    ...
+ *    setup(){
+ *      const mylemmata = ref('Stichwort1, Mehr Worte')
+ *      async function triggerSearch(keywords){
+ *        console.log('Lemma Search clicked: ', keywords) }
+ *      return { triggerSearch, mylemmata }
+ */
 export default defineComponent({
   name: "LemmaSearch",
 
