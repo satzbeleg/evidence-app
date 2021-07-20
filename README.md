@@ -66,3 +66,13 @@ No 'Access-Control-Allow-Origin' header is present on the requested resource.
 
 Um CORS zu deaktivieren installiere das Chrome Plugin ["Moesif CORS"](https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc) oder das entsprechende [Firefox Plugin](https://addons.mozilla.org/en-US/firefox/addon/moesif-origin-cors-changer1/). Stelle im Plugin den Status auf **"off"**. 
 
+
+## Tips & Tricks
+
+### Force Cache Refresh
+Bump the `pwa.assetVersion` value up in `./vue.config.js`.
+
+### Changing the App Name
+- `./vue.config.js`: `pwa.name` value
+- `./public/index.html`: `<title>` tag
+
