@@ -35,7 +35,10 @@ VUE_APP_REST_PUBLIC_URL=http://0.0.0.0:55017
 VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
-Oder
+Notes: Local variables specifiec in `.env.local` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
+
+
+or for Docker
 
 * `REST_PUBLIC_URL=http://evidence.bbaw.de:55017`
 * `REST_PUBLIC_URL=https://evidence.bbaw.de`
