@@ -7,8 +7,8 @@ services:
       context: ${WEBAPP_PATH:-.}/
       dockerfile: Dockerfile
       args:
-        - VUE_APP_REST_PUBLIC_URL: ${REST_PUBLIC_URL}
-        - VUE_APP_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
+        VUE_APP_REST_PUBLIC_URL: ${REST_PUBLIC_URL}
+        VUE_APP_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
     ports:
       - "${WEBAPP_HOSTPORT}:8080"  # 55018
     networks:
