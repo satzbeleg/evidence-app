@@ -1,6 +1,15 @@
-# EVIDENCE App
-UI for the EVIDENCE project (BBAW/TUD)
+# EVIDENCE project - Web Application (Vue3)
 
+
+## Purpose
+The web application is programmed with Vue3 and provides user interfaces to conduct Best-Worst Scaling surveys about sentence examples, and search for good and diverse sets of sentence examples.
+The Web App accesses the [databases](https://github.com/satzbeleg/evidence-database) via the [REST API](https://github.com/satzbeleg/evidence-restapi).
+
+## Installation
+Please follow the instruction of the [deployment repository](https://github.com/satzbeleg/evidence-deploy).
+
+
+## Local Development
 
 
 ## Run the Web App in a docker container
@@ -9,6 +18,7 @@ The file `docker-compose.yml` contains an **configuration example** how to deplo
 ```sh
 # Host Server's Port Settings
 export WEBAPP_HOSTPORT=55018
+export REST_PUBLIC_URL=http://yourdomain:55017
 
 # Start containers
 # - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
@@ -27,7 +37,7 @@ yarn install
 yarn serve --port 55018
 ```
 
-### .env.local
+Setup `.env.local`
 
 ```
 NODE_ENV=local
@@ -36,12 +46,6 @@ VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
 Notes: Local variables specifiec in `.env.local` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
-
-
-or for Docker
-
-* `REST_PUBLIC_URL=http://evidence.bbaw.de:55017`
-* `REST_PUBLIC_URL=https://evidence.bbaw.de`
 
 
 ### Useful commands
@@ -78,4 +82,13 @@ Bump the `pwa.assetVersion` value up in `./vue.config.js`.
 ### Changing the App Name
 - `./vue.config.js`: `pwa.name` value
 - `./public/index.html`: `<title>` tag
+
+
+# Appendix
+
+## Support
+Please [open an issue](https://github.com/satzbeleg/evidence-app/issues/new) for support.
+
+## Contributing
+Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-app/compare/).
 
