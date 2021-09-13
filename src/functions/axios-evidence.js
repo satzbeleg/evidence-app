@@ -64,42 +64,6 @@ export const useAuth = () => {
   const failedLoginAttempts = ref(0);
   const verificationStatus = ref("");
 
-  /** 
-   * Legacy Login based on username/password
-   */
-  const loginLegacy = (username, password) => {
-    return new Promise((resolve, reject) => {
-      // Auth Request started
-      isLoading.value = true;
-
-      // convert JSON object into query string bcoz FastAPI expects query string
-      const params = new URLSearchParams();
-      params.append('username', username);
-      params.append('password', password);
-
-      // start POST request
-      const { api } = useApi();
-      api.post('v1/auth-legacy/login', params)
-        .then(resp => {
-          authStatus.value = 'success'; // save JWT token in Cookie and axios
-          jwtToken.value = resp.data.access_token;
-          Cookies.set('auth_token', resp.data.access_token, { expires: 7, sameSite: 'strict' }); //{ secure: true }
-          //api.defaults.headers.common['Authorization'] = resp.data.access_token;
-          resolve(resp);
-        })
-        .catch(err => {
-          authStatus.value = 'error';
-          jwtToken.value = undefined;
-          failedLoginAttempts.value += 1;
-          reject(err);
-        })
-        .finally(() => {
-          isLoading.value = false
-        });
-      // fin.
-    });
-  }
-
   /**
    * Email/Password based Authentication
    */
@@ -268,7 +232,6 @@ export const useAuth = () => {
   const isAuthenticated = computed(() => !!jwtToken.value);
 
   return {
-    loginLegacy,
     loginEmail,
     logout,
     getToken,
