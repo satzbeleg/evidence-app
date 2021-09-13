@@ -28,11 +28,3 @@ export default {
 @import '~bulma-slider';
 @import '~bulma-pageloader';
 </style>
-
-
-<style>
-/*#app > .section {
-  padding-top: 3.5rem;
-}*/
-</style>
-
