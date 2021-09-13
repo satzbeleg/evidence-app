@@ -25,3 +25,9 @@ app.directive('fit2box', Fit2Box);
 
 /** Mount the app */
 app.mount('#app');
+
+/* Bulma CSS */
+import 'bulma/css/bulma.min.css';
+import 'bulma-switch/dist/css/bulma-switch.min.css';
+import 'bulma-slider/dist/css/bulma-slider.min.css';
+import 'bulma-pageloader/dist/css/bulma-pageloader.min.css';
