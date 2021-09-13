@@ -80,11 +80,11 @@ export default defineComponent({
 
 /** style the card depending on the state */
 .state-best {
-  background: hsl(141, 50%, 60%);
+  background: #3298dc;   /** 3298dc */
 }
 
 .state-worst {
-  background: hsl(348, 30%, 60%);
+  background: #ff8a65;  /** ff8a65 */
 }
 </style>
 
