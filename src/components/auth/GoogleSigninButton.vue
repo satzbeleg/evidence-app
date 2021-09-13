@@ -39,7 +39,7 @@ export default defineComponent({
     // multi-lingual support
     const { t } = useI18n();
 
-// flag if HTML tags for Google OAuth 2.0 API Javascript Client were added to `window`
+    // flag if HTML tags for Google OAuth 2.0 API Javascript Client were added to `window`
     const showGoogleButton = ref(false);
 
     // Add HTML tags for GAPI JS Client
