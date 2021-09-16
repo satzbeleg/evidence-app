@@ -1,6 +1,6 @@
 import { reactive, ref } from 'vue';
 import { traverseObject } from '@/functions/traverse-objects.js';
-import { useApi, useAuth } from '@/functions/axios-evidence.js';
+import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 
 export const useQueue = () => {
   // UI-name
@@ -124,7 +124,7 @@ export const useQueue = () => {
     return new Promise((resolve, reject) => {
       isSaving.value = true;
       const { getToken } = useAuth();
-      const { api } = useApi(getToken());
+      const { api } = useApi2(getToken());
       api.post(`v1/bestworst/evaluations`, data.evaluated)
       .then(response => {
         // delete evaluated sets if API confirms its storage

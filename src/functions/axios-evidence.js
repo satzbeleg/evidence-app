@@ -24,6 +24,23 @@ export const useApi = (token) => {
   return { api }
 }
 
+
+export const useApi2 = (token) => {
+  // Creat an axios api instance. 
+  const api = axios.create({
+    baseURL: process.env.VUE_APP_REST_PUBLIC_URL || 'http://0.0.0.0:55017',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Authorization': token ? `Bearer ${token}` : undefined
+    }
+  });
+  // output variables
+  return { api }
+}
+
+
 /**
  * Google OAuth 2.0 API Javascript Client
  * - Check if GAPI was mounted to DOM window

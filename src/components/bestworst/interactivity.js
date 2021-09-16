@@ -1,6 +1,6 @@
 import { reactive, ref, watch } from 'vue';
 import { sampling, ranking } from 'bwsample';  // counting
-import { useApi, useAuth } from '@/functions/axios-evidence.js';
+import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 // import { v4 as uuid4 } from 'uuid'; // nur für dev
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useQueue } from '@/components/bestworst/queue.js';
@@ -450,7 +450,7 @@ export const useInteractivity = () => {
       if (hasDataDonationConsent.value){
         // load other functions and objects
         const { getToken } = useAuth();
-        const { api } = useApi(getToken());
+        const { api } = useApi2(getToken());
         // Start API request
         api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
           .then(response => {
@@ -528,7 +528,7 @@ export const useInteractivity = () => {
 
         // load API conn
         const { getToken } = useAuth();
-        const { api } = useApi(getToken());
+        const { api } = useApi2(getToken());
         // start AJAX call
         api.post(`v1/interactivity/training-examples/${num_additions}/100/0`, params)
           .then(response => {

@@ -1,5 +1,5 @@
 import { reactive, ref, watchEffect } from 'vue';
-import { useApi, useAuth } from '@/functions/axios-evidence.js';
+import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 
 
 /** 
@@ -62,7 +62,7 @@ export const useBwsSettings = () => {
   const loadBwsSettings = () => {
     return new Promise((resolve, reject) => {
       const { getToken } = useAuth();
-      const { api } = useApi(getToken());
+      const { api } = useApi2(getToken());
       api.get(`v1/user/settings`)
         .then(response => {
           // also used in bestworst3
@@ -111,7 +111,7 @@ export const useBwsSettings = () => {
   const saveBwsSettings = () => {
     return new Promise((resolve, reject) => {
       const { getToken } = useAuth();
-      const { api } = useApi(getToken());
+      const { api } = useApi2(getToken());
       api.post(`v1/user/settings`, {
         // also used in bestworst3
         'queue-reorderpoint': queue_reorderpoint.value,
