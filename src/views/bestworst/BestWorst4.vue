@@ -64,7 +64,7 @@ export default defineComponent({
     });
 
 
-    // Load bestworst3 UI settings
+    // Load General UI settings
     // const { loadGeneralSettings } = useGeneralSettings();
     // loadGeneralSettings();
 
@@ -75,10 +75,15 @@ export default defineComponent({
 
     // Load reactive variables for BWS Queue
     const { 
-      uispec, searchlemmata, data, 
-      isReplenishing, message_suggestion,
-      isSaving, saveEvaluations,
-      pullFromQueue, nextExampleSet, 
+      uispec, 
+      searchlemmata, 
+      data, 
+      isReplenishing, 
+      message_suggestion,
+      isSaving, 
+      saveEvaluations,
+      pullFromQueue, 
+      nextExampleSet, 
       resetQueue
     } = useQueue();
 
@@ -87,7 +92,9 @@ export default defineComponent({
 
     // Load Interactivity Settings
     const { 
-      pool, pairs, resetPool,
+      pool, 
+      pairs, 
+      resetPool,
       dropExamplesFromPool,
       addExamplesToPool,
       sampleBwsSets, 

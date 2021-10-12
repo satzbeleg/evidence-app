@@ -699,8 +699,11 @@ export const useInteractivity = () => {
   // Go to (1)
   return { 
     errorMessage,
-    pool, pairs, resetPool,
-    dropExamplesFromPool, addExamplesToPool,
+    pool, 
+    pairs, 
+    resetPool,
+    dropExamplesFromPool, 
+    addExamplesToPool,
     sampleBwsSets, 
     computeTrainingScores, 
   }
