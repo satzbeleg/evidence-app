@@ -1,4 +1,11 @@
 # EVIDENCE project - Web Application (Vue3)
+Table of contents
+
+- [Purpose](#purpose)
+- [Installation](#installation)
+- [Local Development](#local-development)
+- [Common Problems](#common-problems)
+- [Appendix](#appendix)
 
 
 ## Purpose
@@ -10,10 +17,34 @@ Please follow the instruction of the [deployment repository](https://github.com/
 
 
 ## Local Development
+- [Setup and start local web server](#setup-and-start-local-web-server)
+- [Check if the docker configuration of the REST API works](#check-if-the-docker-configuration-of-the-rest-api-works)
+
+### Setup and start local web server 
+1) Install NPM modules
+
+```sh
+yarn install
+```
+
+2) Setup `.env.local`
+
+```
+NODE_ENV=local
+VUE_APP_REST_PUBLIC_URL=http://0.0.0.0:55017
+VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
+```
+
+Notes: Local variables specifiec in `.env.local` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
+
+3) Start web server
+
+```sh
+yarn serve --port 55018
+```
 
 
-## Run the Web App in a docker container
-The file `docker-compose.yml` contains an **configuration example** how to deploy the REST API as docker container. It is recommended to add this repository as git submodule to an deployment repository with a central Docker Compose configuration that suits your needs. 
+### Check if the docker configuration of the REST API works
 
 ```sh
 # Host Server's Port Settings
@@ -26,43 +57,20 @@ docker compose -p evidence -f network.yml -f webapp.yml up --build
 ```
 
 
-
-## Run the Web App locally (Development Mode)
-
-```sh
-yarn install
-```
-
-```sh
-yarn serve --port 55018
-```
-
-Setup `.env.local`
-
-```
-NODE_ENV=local
-VUE_APP_REST_PUBLIC_URL=http://0.0.0.0:55017
-VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
-```
-
-Notes: Local variables specifiec in `.env.local` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
-
-
 ### Useful commands
-- Compiles and hot-reloads for development: `yarn serve`
-- Compiles and minifies for production: `yarn build`
 - Compile SASS: `yarn css-build`
 - Update Icons: `yarn new-icons`
+- Compiles and hot-reloads for development: `yarn serve`
+- Compiles and minifies for production: `yarn build`
 - Lints and fixes files: `yarn lint`
 - Open Vue.js UI: `vue ui`
-- VS Code extension: [Volar](https://github.com/johnsoncodehk/volar)
 
-### Fixes
-- "Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime": Run `npm rebuild node-sass`
-- node-gpy erors: Delete `rm -rf ~/.node-gyp`
 
-### Login bei lokaler Entwicklung: CORS Error
-Wenn REST API und Web App auf demselben Host laufen, dann wird es beim Login zu einem "CORS" Error kommen, z.B. 
+
+## Common Problems
+
+### CORS Error
+If the REST API and the web app are running on the same host, a "CORS" error will occur when logging in, e.g.
 
 ```
 Access to XMLHttpRequest at 'http://0.0.0.0:55017/v1/auth/login' 
@@ -71,24 +79,30 @@ Response to preflight request doesn't pass access control check:
 No 'Access-Control-Allow-Origin' header is present on the requested resource.
 ```
 
-Um CORS zu deaktivieren installiere das Chrome Plugin ["Moesif CORS"](https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc) oder das entsprechende [Firefox Plugin](https://addons.mozilla.org/en-US/firefox/addon/moesif-origin-cors-changer1/). Stelle im Plugin den Status auf **"off"**. 
+The Chrome Plugin ["Moesif CORS"](https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc) or the corresponding [Firefox Plugin](https://addons.mozilla.org/en-US/firefox/addon/moesif-origin-cors-changer1/) can disable the CORS error (i.e. **"off"**). 
 
-
-## Tips & Tricks
 
 ### Force Cache Refresh
 Bump the `pwa.assetVersion` value up in `./vue.config.js`.
 
+
 ### Changing the App Name
+You need to change the following files:
+
 - `./vue.config.js`: `pwa.name` value
 - `./public/index.html`: `<title>` tag
 
 
-# Appendix
+### Other
+- "Error: Node Sass does not yet support your current environment: OS X 64-bit with Unsupported runtime": Run `npm rebuild node-sass`
+- node-gpy errors: Delete `rm -rf ~/.node-gyp`
 
-## Support
+
+## Appendix
+
+### Support
 Please [open an issue](https://github.com/satzbeleg/evidence-app/issues/new) for support.
 
-## Contributing
+### Contributing
 Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-app/compare/).
 
