@@ -39,8 +39,7 @@ import { useI18n } from 'vue-i18n';
 // import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 //import { traverseObject } from '@/functions/traverse-objects.js';
-//import { counting } from 'bwsample';
-//import { ranking } from 'bwsample';
+// import { ranking } from 'bwsample';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { v4 as uuid4 } from 'uuid';
@@ -64,7 +63,7 @@ export default defineComponent({
     });
 
 
-    // Load bestworst3 UI settings
+    // Load General UI settings
     // const { loadGeneralSettings } = useGeneralSettings();
     // loadGeneralSettings();
 
@@ -75,10 +74,15 @@ export default defineComponent({
 
     // Load reactive variables for BWS Queue
     const { 
-      uispec, searchlemmata, data, 
-      isReplenishing, message_suggestion,
-      isSaving, saveEvaluations,
-      pullFromQueue, nextExampleSet, 
+      uispec, 
+      searchlemmata, 
+      data, 
+      isReplenishing, 
+      message_suggestion,
+      isSaving, 
+      saveEvaluations,
+      pullFromQueue, 
+      nextExampleSet, 
       resetQueue
     } = useQueue();
 
@@ -87,15 +91,19 @@ export default defineComponent({
 
     // Load Interactivity Settings
     const { 
-      pool, pairs, resetPool,
+      pool, 
+      pairs, 
+      resetPool,
       dropExamplesFromPool,
       addExamplesToPool,
+      updatePairMatrix,
       sampleBwsSets, 
       // computeTrainingScores, smoothing_method, ema_alpha
     } = useInteractivity();
 
+
     /**
-     * (1) Specify Replenishment from local `pool`
+     * [A1] Specify Replenishment from local `pool`
      * 
      * Global variables from queue.js
      * ------------------------------
@@ -110,14 +118,14 @@ export default defineComponent({
      * 
      */
     const replenishQueue = async() => {
-      // (2) Add examples to pool
+      // (Step 2) Add examples to pool
       await addExamplesToPool(searchlemmata.value);
       // console.log("start repl:", pool)
 
       return new Promise((resolve, reject) => {
         try{
           isReplenishing.value = true;
-          // (3) Sample 1,2,3... BWS sets from pool
+          // (Step 3) Sample 1,2,3... BWS sets from pool
           var sampled_bwssets = sampleBwsSets();
           // => In der App anzeigen =>
           sampled_bwssets.forEach(exset => {
@@ -139,7 +147,7 @@ export default defineComponent({
           // Force moving a BWS set to UI
           if (data.current.length === 0){
             pullFromQueue(); // load data
-            console.log("New current BWS set loaded")
+            console.log("New current BWS set loaded")   // data.current
           }
           resolve();
         }catch(msg){
@@ -148,9 +156,17 @@ export default defineComponent({
         }
       });
     }
+    
+    /**
+     * [A2] Load initial current BWS-exampleset
+     * DEACTIVATED! Is triggered via low running queue [A3] 
+     *         or search request via `onSearchLemmata` [A4]
+     */
+    //replenishQueue();
+
 
     /** 
-     * (1b) Trigger AJAX request to replenish the queue
+     * [A3] Trigger AJAX request to replenish the queue
      */
     watch(
       () => data.queue.length,
@@ -164,19 +180,7 @@ export default defineComponent({
 
 
     /**
-     * (2) Trigger AJAX to post evaluated BWS-exampleset
-     */
-    watch(
-      () => data.evaluated.length,
-      (num_evaluated) => {
-        if (num_evaluated > 0 && !isSaving.value){
-          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          saveEvaluations();
-        }
-    });
-
-    /**
-     * (3) Store the new Lemma, Reset the Queue data, Load new data
+     * [A4] Store the new Lemma, Reset the Queue data, Load new data
      */
     const onSearchLemmata = async(keywords) => {
       // delete pool and pairs matrix
@@ -187,67 +191,54 @@ export default defineComponent({
       searchlemmata.value = keywords
       // force to load next example in UI
       await replenishQueue();
-      //await addExamplesToPool(data.current_lemmata, true);
+      //await addExamplesToPool(data.current_lemmata, true);  // is called in replenishQueue
       //var sampled_bwssets = sampleBwsSets();
     }
 
 
     /**
-     * (3b) Load initial current BWS-exampleset
+     * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
+     * - `saveEvaluations` will purge `data.evaluated`
      */
-    replenishQueue();
+    watch(
+      () => data.evaluated.length,
+      (num_evaluated) => {
+        if (num_evaluated > 0 && !isSaving.value){
+          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
+          // (Step 4) Update Pairs Matrix
+          updatePairMatrix(data);
+          console.log("Pairs:", JSON.parse(JSON.stringify(pairs)))
+          // queue.js: this will purge `data.evaluated`
+          saveEvaluations();
+        }
+    });
+
 
 
     // ---------------- TINKERING ------------------
-    // load initial current BWS-exampleset
-    //addExamplesToPool();
 
-    // const stateids = ['abc', 'def', 'ghi', 'jkl'];
-    // const combostates = [0, 0, 2, 1];
-    // var [cnt, bw, bn, nw] = counting.direct_extract(stateids, combostates);
-    // console.log(cnt, bw, bn, nw)
-    // var [positions, sortedids, metrics, info] = ranking.maximize_hoaglinapprox(cnt);
-    // console.log(positions, sortedids, metrics, info)
-
-
-
-    console.log("Pairs:", pairs)
-    console.log("Pool:", pool)
+    // console.log("Pairs:", pairs)
+    // console.log("Pool:", pool)
     // console.log(JSON.parse(JSON.stringify(pool)))
 
 
     // (1) Drop examples from pool
     dropExamplesFromPool();
 
-    // (2) Add examples to pool
-
-    // (3) Sample 1,2,3... BWS sets from pool
-    // var sampled_bwssets = sampleBwsSets();
-    // console.log("BWS samples 2:", sampled_bwssets);
-
-    // // => In der App anzeigen =>
-    // sampled_bwssets.forEach(exset => {
-    //   var examples = []
-    //   exset.forEach(key => {
-    //     examples.push({
-    //       "id": key,
-    //       "text": pool[key].text,
-    //       "spans": pool[key].span
-    //     });
-    //   });
-    //   data.queue.push({
-    //     set_id: "random-uuid-alkla",
-    //     lemmata: "comma,sep,list",
-    //     examples: examples
-    //   })
-    // })
+    // DONE (2) Add examples to pool
+    
+    // DONE (3) Sample 1,2,3... BWS sets from pool
 
     // => Ergebnisse verarbeiten =>
 
-    // (4) Update pairs comparison matrix
+    // DONE (4) Update pairs comparison matrix
 
     // (5) Compute the new target scores
     // computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
+// (Step 5) Compute new ranking
+// let [positions, sortedids, metrics, info] = ranking.maximize_hoaglinapprox(pairs);
+// console.log(positions, sortedids, metrics, info);
+
 
     // (6) Re-train the ML model
 

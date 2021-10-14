@@ -21,18 +21,10 @@ export default {
 </script>
 
 
-<style lang="scss">
+<!-- <style lang="scss">
 @import "~bulma/sass/utilities/_all";
 @import "~bulma";
 @import '~bulma-switch';
 @import '~bulma-slider';
 @import '~bulma-pageloader';
-</style>
-
-
-<style>
-/*#app > .section {
-  padding-top: 3.5rem;
-}*/
-</style>
-
+</style> -->

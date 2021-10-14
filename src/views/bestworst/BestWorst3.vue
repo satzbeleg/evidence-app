@@ -40,8 +40,8 @@ import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst/Choices.vue';
 import { defineComponent, watchEffect, watch, unref, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useApi, useAuth } from '@/functions/axios-evidence.js';
-import { useGeneralSettings } from '@/components/settings/general-settings.js';
+import { useApi2, useAuth } from '@/functions/axios-evidence.js';
+import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 
 
@@ -63,20 +63,28 @@ export default defineComponent({
     });
 
 
-    // (a) Load bestworst3 UI settings
+    // Load bestworst3 UI settings
     const { 
-      loadGeneralSettings, 
-      queue_reorderpoint, queue_orderquantity,
-      item_sampling_numtop, item_sampling_offset 
-    } = useGeneralSettings();
-    loadGeneralSettings();
+      loadBwsSettings, 
+      queue_reorderpoint, 
+      queue_orderquantity,
+      item_sampling_numtop, 
+      item_sampling_offset 
+    } = useBwsSettings();
+    loadBwsSettings();
+    console.log(queue_reorderpoint.value, queue_orderquantity.value, item_sampling_numtop.value, item_sampling_offset.value)
 
-    // (0b) Load reactive variables for BWS Queue
+    // Load reactive variables for BWS Queue
     const { 
-      uispec, searchlemmata, data, 
-      isReplenishing, message_suggestion,
-      isSaving, saveEvaluations,
-      pullFromQueue, nextExampleSet, 
+      uispec, 
+      searchlemmata, 
+      data, 
+      isReplenishing, 
+      message_suggestion,
+      isSaving, 
+      saveEvaluations,
+      pullFromQueue, 
+      nextExampleSet, 
       resetQueue
     } = useQueue();
 
@@ -85,7 +93,7 @@ export default defineComponent({
 
 
     /**
-     * (1) Replenish data.queue from database (load new example sets into queue)
+     * [A1] Replenish data.queue from database (load new example sets into queue)
      */
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
@@ -100,7 +108,7 @@ export default defineComponent({
         }
         // load other functions and objects
         const { getToken } = useAuth();
-        const { api } = useApi(getToken());
+        const { api } = useApi2(getToken());
         // start API request
         message_suggestion.value = "Loading new example sets ...";
         api.post(`v1/bestworst/samples/4/${unref(queue_orderquantity)}/${unref(item_sampling_numtop)}/${unref(item_sampling_offset)}`, params)
@@ -133,9 +141,16 @@ export default defineComponent({
       });
     }
 
+    /**
+     * [A2] Load initial current BWS-exampleset
+     * DEACTIVATED! Is triggered via low running queue [A3] 
+     *         or search request via `onSearchLemmata` [A4]
+     */
+    //replenishQueue();
+
 
     /** 
-     * (1b) Trigger AJAX request to replenish the queue
+     * [A3] Trigger AJAX request to replenish the queue
      */
     watch(
       () => data.queue.length,
@@ -147,22 +162,9 @@ export default defineComponent({
       }
     );
 
-    /**
-     * (2) Trigger AJAX to post evaluated BWS-exampleset
-     */
-    watch(
-      () => data.evaluated.length,
-      (num_evaluated) => {
-        if (num_evaluated > 0 && !isSaving.value){
-          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          saveEvaluations();
-        }
-      }
-    );
-
 
     /**
-     * (3) Store the new Lemma, Reset the Queue data, Load new data
+     * [A4] Store the new Lemma, Reset the Queue data, Load new data
      */
     const onSearchLemmata = async(keywords) => {
       // delete current example set in UI, and the whole queue.
@@ -175,12 +177,21 @@ export default defineComponent({
 
 
     /**
-     * (3b) Load initial current BWS-exampleset
+     * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
+     * - `saveEvaluations` will purge `data.evaluated`
      */
-    replenishQueue();
+    watch(
+      () => data.evaluated.length,
+      (num_evaluated) => {
+        if (num_evaluated > 0 && !isSaving.value){
+          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
+          saveEvaluations();
+        }
+      }
+    );
 
 
-    // compute max for progressba
+    // compute max for progressbar
     const maxprogress = computed(() => parseInt(queue_reorderpoint.value) + parseInt(queue_orderquantity.value));
 
 

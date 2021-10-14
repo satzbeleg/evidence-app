@@ -11,12 +11,6 @@ const routes = [{
     //redirect: '/bestworst3' // REDIRECT FROM HOME(!)
   },
   {
-    path: '/auth/login-legacy',
-    name: 'Login via REST API',  // Login via main REST API demo accounts
-    component: () =>
-      import ( /* webpackPreload: true */ '../views/auth-legacy/Login.vue')
-  },
-  {
     path: '/auth/signup', 
     name: 'Sign Up',
     component: () =>

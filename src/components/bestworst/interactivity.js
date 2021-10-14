@@ -1,10 +1,11 @@
 import { reactive, ref, watch } from 'vue';
 import { sampling, ranking } from 'bwsample';  // counting
-import { useApi, useAuth } from '@/functions/axios-evidence.js';
+import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 // import { v4 as uuid4 } from 'uuid'; // nur für dev
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
+import { counting } from 'bwsample';
 
 
 const getLast = (arr) => {
@@ -15,13 +16,13 @@ const getLast = (arr) => {
   }
 }
 
-// const getNextToLast = (arr) => {
-//   if (arr.length  > 1){
-//     return arr[arr.length - 2];
-//   }else{
-//     return undefined
-//   }
-// }
+const getNextToLast = (arr) => {
+  if (arr.length  > 1){
+    return arr[arr.length - 2];
+  }else{
+    return undefined
+  }
+}
 
 const getLastAbsChange = (arr) => {
   if (arr.length  > 1){
@@ -29,6 +30,24 @@ const getLastAbsChange = (arr) => {
   }else{
     return undefined
   }
+}
+
+// TEMPORAR: Will be replaced in bwsample-js
+const lilAddInplace = (a, b) => {
+  for(var id1 in b){
+    if(a[id1] === undefined){
+      a[id1] = JSON.parse(JSON.stringify(b[id1]));
+    }else{
+      for (var id2 in b[id1]){
+        if(a[id1][id2] === undefined){
+          a[id1][id2] = parseInt(b[id1][id2]);
+        }else{
+          a[id1][id2] += parseInt(b[id1][id2]);
+        }
+      }
+    }
+  }
+  return undefined;
 }
 
 /**
@@ -119,7 +138,7 @@ const deletionCriteriaDisplays = (pool,
  * ------
  *  - This function is only used in `useInteractity/dropExamplesFromPool`
  */
- const deletionCriteriaConvergence = (pool, 
+const deletionCriteriaConvergence = (pool, 
                                       avail_ids, 
                                       del_ids, 
                                       eps_score_change, 
@@ -311,16 +330,25 @@ export const useInteractivity = () => {
   const {
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
     flagInitialLoadOnly,
-    min_pool_size, max_pool_size,
-    flagDropDistribution, flagAddDistribution, bin_edges, target_probas, 
+    min_pool_size, 
+    max_pool_size,
+    flagDropDistribution, 
+    flagAddDistribution, 
+    bin_edges, 
+    target_probas, 
     // Settings for (1) and (3)
-    flagDropMaxDisplay, flagExcludeMaxDisplay, max_displays, 
+    flagDropMaxDisplay, 
+    flagExcludeMaxDisplay, 
+    max_displays, 
     // Settings for (1)
-    flagDropConverge, eps_score_change,
+    flagDropConverge, 
+    eps_score_change,
     flagDropPairs,
     // Settings for (3), e.g. sampleBwsSets
-    bwsset_num_items, num_preload_bwssets, 
-      bwsset_sampling_method, item_sampling_method,
+    bwsset_num_items, 
+    num_preload_bwssets, 
+    bwsset_sampling_method, 
+    item_sampling_method,
     // Settings for (5), e.g. computeTrainingScores
     // smoothing_method, ema_alpha
     loadBwsSettings
@@ -450,7 +478,7 @@ export const useInteractivity = () => {
       if (hasDataDonationConsent.value){
         // load other functions and objects
         const { getToken } = useAuth();
-        const { api } = useApi(getToken());
+        const { api } = useApi2(getToken());
         // Start API request
         api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
           .then(response => {
@@ -528,7 +556,7 @@ export const useInteractivity = () => {
 
         // load API conn
         const { getToken } = useAuth();
-        const { api } = useApi(getToken());
+        const { api } = useApi2(getToken());
         // start AJAX call
         api.post(`v1/interactivity/training-examples/${num_additions}/100/0`, params)
           .then(response => {
@@ -684,6 +712,24 @@ export const useInteractivity = () => {
 
 
   // (4) Update pairs comparison matrix
+  const updatePairMatrix = (data) => {
+    let agg =  {};
+    data.evaluated.forEach(bwsset => {
+      let tmp = getLast(bwsset['event-history']);
+      if(tmp['message'] === "submitted"){
+        // read states and associated IDs from the 2nd last element
+        let tmp2 = getNextToLast(bwsset['event-history']);
+        let combostates = Object.values(tmp2['state']);
+        let stateids = Object.values(bwsset['state-sentid-map']);
+        // console.log("Final State: ", combostates, stateids);
+        // Extract paired comparisons from BWS set
+        agg = counting.direct_extract(stateids, combostates, agg)[0];
+        // [agg, bw, bn, nw] = counting.direct_extract(stateids, combostates, agg, bw, bn, nw);
+        // console.log("Updated Pairs Matrices:", agg);
+      }
+    });
+    lilAddInplace(pairs, agg);
+  }
 
 
   // (5) Compute the new target scores
@@ -699,9 +745,13 @@ export const useInteractivity = () => {
   // Go to (1)
   return { 
     errorMessage,
-    pool, pairs, resetPool,
-    dropExamplesFromPool, addExamplesToPool,
-    sampleBwsSets, 
+    pool, 
+    pairs, 
+    resetPool,
+    dropExamplesFromPool, 
+    addExamplesToPool,
+    sampleBwsSets,
+    updatePairMatrix,
     computeTrainingScores, 
   }
 }

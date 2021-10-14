@@ -1,5 +1,5 @@
 import { ref, watch, watchEffect } from 'vue';
-import { useApi, useAuth } from '@/functions/axios-evidence.js';
+import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 import { useI18n } from 'vue-i18n';
 
 
@@ -35,7 +35,7 @@ export const useGeneralSettings = () => {
   const loadGeneralSettings = () => {
     return new Promise((resolve, reject) => {
       const { getToken } = useAuth();
-      const { api } = useApi(getToken());
+      const { api } = useApi2(getToken());
       api.get(`v1/user/settings`)
         .then(response => {
           darkmodetheme.value = response.data['darkmodetheme'] || false;
@@ -67,7 +67,7 @@ export const useGeneralSettings = () => {
   const saveSettings = () => {
     return new Promise((resolve, reject) => {
       const { getToken } = useAuth();
-      const { api } = useApi(getToken());
+      const { api } = useApi2(getToken(), "json");
       api.post(`v1/user/settings`, {
           'darkmodetheme': darkmodetheme.value,
           'language': language.value,
