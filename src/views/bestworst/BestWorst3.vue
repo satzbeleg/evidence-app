@@ -93,7 +93,7 @@ export default defineComponent({
 
 
     /**
-     * (1) Replenish data.queue from database (load new example sets into queue)
+     * [A1] Replenish data.queue from database (load new example sets into queue)
      */
     const replenishQueue = () => {
       return new Promise((resolve, reject) => {
@@ -141,9 +141,16 @@ export default defineComponent({
       });
     }
 
+    /**
+     * [A2] Load initial current BWS-exampleset
+     * DEACTIVATED! Is triggered via low running queue [A3] 
+     *         or search request via `onSearchLemmata` [A4]
+     */
+    //replenishQueue();
+
 
     /** 
-     * (1b) Trigger AJAX request to replenish the queue
+     * [A3] Trigger AJAX request to replenish the queue
      */
     watch(
       () => data.queue.length,
@@ -155,22 +162,9 @@ export default defineComponent({
       }
     );
 
-    /**
-     * (2) Trigger AJAX to post evaluated BWS-exampleset
-     */
-    watch(
-      () => data.evaluated.length,
-      (num_evaluated) => {
-        if (num_evaluated > 0 && !isSaving.value){
-          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          saveEvaluations();
-        }
-      }
-    );
-
 
     /**
-     * (3) Store the new Lemma, Reset the Queue data, Load new data
+     * [A4] Store the new Lemma, Reset the Queue data, Load new data
      */
     const onSearchLemmata = async(keywords) => {
       // delete current example set in UI, and the whole queue.
@@ -183,12 +177,21 @@ export default defineComponent({
 
 
     /**
-     * (3b) Load initial current BWS-exampleset
+     * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
+     * - `saveEvaluations` will purge `data.evaluated`
      */
-    replenishQueue();
+    watch(
+      () => data.evaluated.length,
+      (num_evaluated) => {
+        if (num_evaluated > 0 && !isSaving.value){
+          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
+          saveEvaluations();
+        }
+      }
+    );
 
 
-    // compute max for progressba
+    // compute max for progressbar
     const maxprogress = computed(() => parseInt(queue_reorderpoint.value) + parseInt(queue_orderquantity.value));
 
 
