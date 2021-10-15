@@ -208,7 +208,7 @@ export default defineComponent({
           // (Step 4) Update Pairs Matrix
           updatePairMatrix(data);
           console.log("Pairs:", JSON.parse(JSON.stringify(pairs)))
-          // queue.js: this will purge `data.evaluated`
+          // this will purge `data.evaluated` (queue.js)
           saveEvaluations();
         }
     });

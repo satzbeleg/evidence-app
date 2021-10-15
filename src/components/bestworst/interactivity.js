@@ -715,18 +715,20 @@ export const useInteractivity = () => {
   const updatePairMatrix = (data) => {
     let agg =  {};
     data.evaluated.forEach(bwsset => {
-      let tmp = getLast(bwsset['event-history']);
-      if(tmp['message'] === "submitted"){
-        // read states and associated IDs from the 2nd last element
-        let tmp2 = getNextToLast(bwsset['event-history']);
-        let combostates = Object.values(tmp2['state']);
-        let stateids = Object.values(bwsset['state-sentid-map']);
-        // console.log("Final State: ", combostates, stateids);
-        // Extract paired comparisons from BWS set
-        agg = counting.direct_extract(stateids, combostates, agg)[0];
-        // [agg, bw, bn, nw] = counting.direct_extract(stateids, combostates, agg, bw, bn, nw);
-        // console.log("Updated Pairs Matrices:", agg);
-      }
+      if(bwsset['status-bestworst4'] === undefined){
+        let tmp = getLast(bwsset['event-history']);
+        if(tmp['message'] === "submitted"){
+          // read states and associated IDs from the 2nd last element
+          let tmp2 = getNextToLast(bwsset['event-history']);
+          let combostates = Object.values(tmp2['state']);
+          let stateids = Object.values(bwsset['state-sentid-map']);
+          // console.log("Final State: ", combostates, stateids);
+          // Extract paired comparisons from BWS set
+          agg = counting.direct_extract(stateids, combostates, agg)[0];
+          // mark BWS set as processed
+          bwsset['status-bestworst4'] = "processed"
+        }
+      } //else{console.log(bwsset['status-bestworst4'])}
     });
     lilAddInplace(pairs, agg);
   }
