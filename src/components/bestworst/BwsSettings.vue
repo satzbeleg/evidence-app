@@ -117,7 +117,7 @@
           <div class="dropdown-trigger">
             <button class="button is-rounded is-light" type="button"
                     aria-haspopup="true" 
-                    aria-controls="dropdown-bwsset-sampling-methodd">
+                    aria-controls="dropdown-bwsset-sampling-method">
               <span>
                 <template v-if="bwsset_sampling_method == 'overlap'">overlap</template>
                 <template v-if="bwsset_sampling_method == 'twice'">twice</template>
@@ -211,7 +211,7 @@
 
       <div class="field">
         <label class="label" for="max-displays">
-          Maximum number an example will be displayed
+          Maximum number of times an example will be displayed
         </label>
         <input id="max-displays" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -405,13 +405,52 @@
 
 
 
-  <h2 class="subtitle is-4">Count Pairs and Update Training Scores</h2>
+  <h2 class="subtitle is-4">Update Training Scores</h2>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="smoothing-method">
+          Smooting Methods to compute training scores
+        </label>
+        <br>
+        <div class="dropdown" id="smoothing-method"
+             v-on:click="showDropdownSmoothingMethod = !showDropdownSmoothingMethod"
+             v-bind:class="{ 'is-active': showDropdownSmoothingMethod }">
+          <div class="dropdown-trigger">
+            <button class="button is-rounded is-light" type="button"
+                    aria-haspopup="true" 
+                    aria-controls="dropdown-smoothing-method">
+              <span>
+                <template v-if="smoothing_method == 'last'">last</template>
+                <template v-if="smoothing_method == 'ema'">EMA</template>
+              </span>
+              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-smoothing-method" role="menu">
+            <div class="dropdown-content" v-on:click="smoothing_method = $event.target.id">
+              <a id="last" class="dropdown-item">last</a>
+              <a id="ema" class="dropdown-item">EMA</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="ema-alpha">
+          alpha parameter (EMA)
+        </label>
+        <input id="ema-alpha" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="ema_alpha" step="0.01" min="0.0" max="1.0">
+        <output for="ema-alpha" style="width:3.1rem;">{{ ema_alpha }}</output>
+      </div>
+
+
       <div class="field">
       </div>
-      <div class="field">
-      </div>
+
     </div>
   </div>
 
@@ -447,23 +486,38 @@ export default defineComponent({
     // Dropdown menus
     const showDropdownItemSamplingMethod = ref(false);
     const showDropdownBwsSamplingMethod = ref(false);
+    const showDropdownSmoothingMethod = ref(false);
 
     const {
       // also used in bestworst3
-      queue_reorderpoint, queue_orderquantity, 
-      item_sampling_numtop, item_sampling_offset,
+      queue_reorderpoint, 
+      queue_orderquantity, 
+      item_sampling_numtop, 
+      item_sampling_offset,
       // Settings for (1) and (2)
       flagInitialLoadOnly,
-      min_pool_size, max_pool_size,
-      flagDropDistribution, flagAddDistribution, bin_edges, target_probas, 
+      min_pool_size, 
+      max_pool_size,
+      flagDropDistribution, 
+      flagAddDistribution, 
+      bin_edges, 
+      target_probas, 
       // Settings for (1) and (3)
-      flagDropMaxDisplay, flagExcludeMaxDisplay, max_displays, 
+      flagDropMaxDisplay, 
+      flagExcludeMaxDisplay, 
+      max_displays, 
       // Settings for (1)
-      flagDropConverge, eps_score_change,
+      flagDropConverge, 
+      eps_score_change,
       flagDropPairs,
       // Settings for (3)
-      bwsset_num_items, num_preload_bwssets, 
-        bwsset_sampling_method, item_sampling_method,
+      bwsset_num_items, 
+      num_preload_bwssets, 
+      bwsset_sampling_method, 
+      item_sampling_method,
+      // Settings for (5), e.g. computeTrainingScores
+      smoothing_method, 
+      ema_alpha
     } = useBwsSettings();
 
     watch(min_pool_size, (minsz) => {
@@ -503,7 +557,9 @@ export default defineComponent({
         flagDropConverge, eps_score_change_text,
         flagDropPairs,
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
-        showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod
+        showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod,
+      smoothing_method, ema_alpha,
+        showDropdownSmoothingMethod
     }
   }
 });

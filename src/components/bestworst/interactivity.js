@@ -6,6 +6,7 @@ import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import { counting } from 'bwsample';
+import * as tf from '@tensorflow/tfjs';
 
 
 const getLast = (arr) => {
@@ -261,57 +262,6 @@ const deletionCriteriaDistribution = (pool,
 // }
 
 
-
-/**
- * (5) Compute the new target scores
- * 
- * @param {JSON}    pairs 
- * @param {JSON}    pool 
- * @param {String}  smoothing_method 
- * @param {Float}   ema_alpha 
- * 
- * Example 1:
- *    computeTrainingScores(pairs, pool, "ema", 0.7);
- * Example 2:
- *    const smoothing_method = ref("ema");
- *    const ema_alpha = 0.7;
- *    computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
- */
-const computeTrainingScores = (pairs,
-                               pool,
-                               smoothing_method = "last",
-                               ema_alpha = 0.8) => {
-  // compute ranking from paired comparisons
-  var tmp = ranking.rank(pairs, "ratio", "quantile", "exist");
-  var sortedids = tmp[1]
-  var scores = tmp[3]
-
-  if (smoothing_method === "last") {
-    // add the new training score as last value
-    Object.keys(pool).forEach(key => {
-      var idx = sortedids.indexOf(key);
-      pool[key].training_score_history.push(scores[idx]);
-    });
-
-  } else if (smoothing_method === "ema") {
-    // add the Exponential MA as the new training score
-    Object.keys(pool).forEach(key => {
-      var idx = sortedids.indexOf(key);
-      var idx_last = pool[key].training_score_history.length - 1
-      var prev = pool[key].training_score_history[idx_last];
-      if (prev === undefined) {
-        pool[key].training_score_history.push(scores[idx])
-      } else {
-        pool[key].training_score_history.push(
-          ema_alpha * scores[idx] + (1.0 - ema_alpha) * prev); // <= EMA update formula
-      }
-    });
-  }
-}
-
-
-
-
 export const useInteractivity = () => {
   // Initialize data variables
   const pool = reactive({});   // key-value database for each sentences
@@ -350,7 +300,8 @@ export const useInteractivity = () => {
     bwsset_sampling_method, 
     item_sampling_method,
     // Settings for (5), e.g. computeTrainingScores
-    // smoothing_method, ema_alpha
+    smoothing_method, 
+    ema_alpha,
     loadBwsSettings
   } = useBwsSettings();
   loadBwsSettings();
@@ -624,7 +575,7 @@ export const useInteractivity = () => {
    * @param {JSON}  pool 
    * @param {Int}   bwsset_num_items 
    * @param {Int}   num_preload_bwssets 
-   * @param {Sting} item_sampling_method 
+   * @param {String} item_sampling_method 
    * @param {Bool}  debugVerbose 
    * 
    * Example:
@@ -711,7 +662,11 @@ export const useInteractivity = () => {
   }
 
 
-  // (4) Update pairs comparison matrix
+  /**
+   * (4) Update pairs comparison matrix
+   * 
+   * @param {*} data 
+   */
   const updatePairMatrix = (data) => {
     let agg =  {};
     data.evaluated.forEach(bwsset => {
@@ -734,13 +689,77 @@ export const useInteractivity = () => {
   }
 
 
-  // (5) Compute the new target scores
-  // const smoothing_method = ref("ema");
-  // const ema_alpha = 0.7;
-  // computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
+  /**
+   * (5) Compute the new target scores
+   * 
+   * Global Variables:
+   * -----------------
+   * @param {JSON}    pairs 
+   * @param {JSON}    pool 
+   * @param {String}  smoothing_method 
+   * @param {Float}   ema_alpha 
+   * 
+   * Example:
+   * --------
+   *  const pairs = ...
+   *  const pool = ...
+   *  const smoothing_method = ref("ema");
+   *  const ema_alpha = ref(0.7);
+   *  computeTrainingScores();
+   */
+  const computeTrainingScores = () => {
+    // compute ranking from paired comparisons
+    var tmp = ranking.rank(pairs, "ratio", "quantile", "exist");
+    var sortedids = tmp[1]
+    var scores = tmp[3]
+
+    if (smoothing_method.value === "last") {
+      // add the new training score as last value
+      Object.keys(pool).forEach(key => {
+        var idx = sortedids.indexOf(key);
+        if( scores[idx] !== undefined ){ 
+          pool[key].training_score_history.push(scores[idx]);
+        }
+      });
+
+    } else if (smoothing_method.value === "ema") {
+      // add the Exponential MA as the new training score
+      Object.keys(pool).forEach(key => {
+        var idx = sortedids.indexOf(key);
+        if( scores[idx] !== undefined ){ 
+          var idx_last = pool[key].training_score_history.length - 1
+          var prev = pool[key].training_score_history[idx_last];
+          if (prev === undefined) {
+            pool[key].training_score_history.push(scores[idx])
+          } else {
+            pool[key].training_score_history.push(
+              ema_alpha.value * scores[idx] + (1.0 - ema_alpha.value) * prev); // <= EMA update formula
+          }
+        }
+      });
+    } else {
+      console.log("Error: No valid `smoothing_method` specified.")
+    }
+    updateCurrentPoolMetrics(pool);
+
+    // console.log("New training score computed:")
+    console.log("Pool:", JSON.parse(JSON.stringify(pool)))
+  }
 
 
   // (6) Re-train the ML model
+  const getRemoteModel = async() => {
+    // load the baseline model from server
+    const model = await tf.loadLayersModel(
+      'https://tfjs-models-1.storage.googleapis.com/2021-05-01/model.json');
+    // store the baseline model as new personal/individual edge model
+    await model.save('indexeddb://my-model');
+    return model;
+  };
+  const model = getRemoteModel();
+  console.log("Model:", model);
+
+  console.log("Pool", pool)
 
   // (7) Predict the new model scores for the whole pool
 

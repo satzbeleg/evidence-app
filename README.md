@@ -69,7 +69,7 @@ docker compose -p evidence -f network.yml -f webapp.yml up --build
 
 ## Common Problems
 
-### CORS Error
+### CORS Error: REST API
 If the REST API and the web app are running on the same host, a "CORS" error will occur when logging in, e.g.
 
 ```
@@ -80,6 +80,13 @@ No 'Access-Control-Allow-Origin' header is present on the requested resource.
 ```
 
 The Chrome Plugin ["Moesif CORS"](https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc) or the corresponding [Firefox Plugin](https://addons.mozilla.org/en-US/firefox/addon/moesif-origin-cors-changer1/) can disable the CORS error (i.e. **"off"**). 
+
+
+### CORS Error: Setup GCP bucket for TFJS models
+```sh
+echo '[{"origin": ["*"],"responseHeader": ["Content-Type"],"method": ["GET", "HEAD"],"maxAgeSeconds": 3600}]' > cors-config.json
+gsutil cors set cors-config.json gs://tfjs-models-1
+```
 
 
 ### Force Cache Refresh

@@ -98,7 +98,7 @@ export default defineComponent({
       addExamplesToPool,
       updatePairMatrix,
       sampleBwsSets, 
-      // computeTrainingScores, smoothing_method, ema_alpha
+      computeTrainingScores
     } = useInteractivity();
 
 
@@ -174,6 +174,7 @@ export default defineComponent({
         if (stocklevel < queue_reorderpoint.value){
           console.log(`Queue is running low: ${stocklevel} examplesets`);
           replenishQueue();
+          console.log("Pool:", JSON.parse(JSON.stringify(pool)))
         }
       }
     );
@@ -207,7 +208,8 @@ export default defineComponent({
           console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
           // (Step 4) Update Pairs Matrix
           updatePairMatrix(data);
-          console.log("Pairs:", JSON.parse(JSON.stringify(pairs)))
+          console.log("Pairs:", JSON.parse(JSON.stringify(pairs)));
+          computeTrainingScores();
           // this will purge `data.evaluated` (queue.js)
           saveEvaluations();
         }
@@ -219,7 +221,7 @@ export default defineComponent({
 
     // console.log("Pairs:", pairs)
     // console.log("Pool:", pool)
-    // console.log(JSON.parse(JSON.stringify(pool)))
+    console.log("Pool:", JSON.parse(JSON.stringify(pool)))
 
 
     // (1) Drop examples from pool
@@ -239,10 +241,12 @@ export default defineComponent({
 // let [positions, sortedids, metrics, info] = ranking.maximize_hoaglinapprox(pairs);
 // console.log(positions, sortedids, metrics, info);
 
-
     // (6) Re-train the ML model
 
     // (7) Predict the new model scores for the whole pool
+
+
+
 
     return { 
       data, 
