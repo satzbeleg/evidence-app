@@ -98,7 +98,9 @@ export default defineComponent({
       addExamplesToPool,
       updatePairMatrix,
       sampleBwsSets, 
-      computeTrainingScores
+      computeTrainingScores,
+      retrainModel,
+      predictScores
     } = useInteractivity();
 
 
@@ -209,9 +211,13 @@ export default defineComponent({
           // (Step 4) Update Pairs Matrix
           updatePairMatrix(data);
           console.log("Pairs:", JSON.parse(JSON.stringify(pairs)));
-          computeTrainingScores();
           // this will purge `data.evaluated` (queue.js)
           saveEvaluations();
+          // DELETE THIS
+          computeTrainingScores();
+          retrainModel();
+          predictScores();
+          dropExamplesFromPool();
         }
     });
 
@@ -225,7 +231,7 @@ export default defineComponent({
 
 
     // (1) Drop examples from pool
-    dropExamplesFromPool();
+    // dropExamplesFromPool();
 
     // DONE (2) Add examples to pool
     

@@ -756,12 +756,75 @@ export const useInteractivity = () => {
     await model.save('indexeddb://my-model');
     return model;
   };
-  const model = getRemoteModel();
-  console.log("Model:", model);
+  // const model = getRemoteModel();
+ 
+  const retrainModel = () => {
+    // prepare training set
+    var x_train = [];
+    var y_train = [];
+    Object.keys(pool).forEach(key => {
+      if( pool[key]['last_training_score'] !== undefined ){
+        y_train.push( pool[key]['last_training_score'] );
+        x_train.push( pool[key]['features'] );
+      }
+    });
+    console.log("Pool", pool)
+    // abort
+    if ( y_train.length < 1 ){
+      return;
+    }
 
-  console.log("Pool", pool)
+    // convert to tf tensor
+    x_train = tf.tensor(x_train).squeeze();
+    y_train = tf.oneHot(tf.tensor1d(y_train, 'int32'),5).squeeze();
+    console.log("Training set:", y_train, x_train)
+
+    // load model
+    const model = getRemoteModel();
+    console.log("Model:", model);
+  
+    model.then((res) => {
+      // specify optimization
+      res.compile({
+        optimizer: 'adagrad',
+        loss: 'categoricalCrossentropy',
+        metrics: ['accuracy']
+      });
+
+      // fit model
+      res.fit(x_train, y_train, {epochs: 5});
+      // save model here
+    });
+
+  }
+
+
 
   // (7) Predict the new model scores for the whole pool
+  const predictScores = () => {
+    // read features
+    var x_feats = [];
+    Object.keys(pool).forEach(key => {
+      if( pool[key]['last_training_score'] !== undefined ){
+        x_feats.push( pool[key]['features'] );
+      }
+    });
+    // abort
+    if ( x_feats.length < 1 ){
+      return;
+    }
+    // convert to tf tensor
+    x_feats = tf.tensor(x_feats).squeeze();
+    console.log("Features:", x_feats)
+
+    // load model
+    const model = getRemoteModel();
+    console.log("Model:", model);
+
+    // predict
+    return model.predict(x_feats);
+  }
+
 
   // Go to (1)
   return { 
@@ -774,5 +837,7 @@ export const useInteractivity = () => {
     sampleBwsSets,
     updatePairMatrix,
     computeTrainingScores, 
+    retrainModel,
+    predictScores
   }
 }
