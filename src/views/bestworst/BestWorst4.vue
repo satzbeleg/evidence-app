@@ -215,8 +215,8 @@ export default defineComponent({
           saveEvaluations();
           // DELETE THIS
           computeTrainingScores();
-          retrainModel();
           predictScores();
+          retrainModel();
           dropExamplesFromPool();
         }
     });

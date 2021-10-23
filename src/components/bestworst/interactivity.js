@@ -751,13 +751,14 @@ export const useInteractivity = () => {
   const getRemoteModel = async() => {
     // load the baseline model from server
     const model = await tf.loadLayersModel(
-      'https://tfjs-models-1.storage.googleapis.com/2021-05-01/model.json');
+      'https://tfjs-models-1.storage.googleapis.com/v0.4x-44-42-f32/model.json');
     // store the baseline model as new personal/individual edge model
     await model.save('indexeddb://my-model');
     return model;
-  };
+  }; 
   // const model = getRemoteModel();
  
+
   const retrainModel = () => {
     // prepare training set
     var x_train = [];
@@ -765,7 +766,8 @@ export const useInteractivity = () => {
     Object.keys(pool).forEach(key => {
       if( pool[key]['last_training_score'] !== undefined ){
         y_train.push( pool[key]['last_training_score'] );
-        x_train.push( pool[key]['features'] );
+        // x_train.push( pool[key]['features'] );
+        x_train.push( pool[key]['features'].slice(0, -1) );
       }
     });
     console.log("Pool", pool)
@@ -776,28 +778,33 @@ export const useInteractivity = () => {
 
     // convert to tf tensor
     x_train = tf.tensor(x_train).squeeze();
-    y_train = tf.oneHot(tf.tensor1d(y_train, 'int32'),5).squeeze();
+    y_train = tf.tensor(y_train).squeeze();
+    // y_train = tf.oneHot(tf.tensor1d(y_train, 'int32'),5).squeeze();
     console.log("Training set:", y_train, x_train)
 
-    // load model
-    const model = getRemoteModel();
-    console.log("Model:", model);
-  
-    model.then((res) => {
+    // load baseline model (async) and execute training
+    getRemoteModel().then((model) => {
+      console.log("Before Training:", model);
+      // model.getWeights().forEach((wgt) => {console.log(wgt.dataSync());})
+
       // specify optimization
-      res.compile({
+      model.compile({
         optimizer: 'adagrad',
-        loss: 'categoricalCrossentropy',
-        metrics: ['accuracy']
+        loss: tf.losses.meanSquaredError,
+        metrics: [tf.losses.meanSquaredError]
       });
 
       // fit model
-      res.fit(x_train, y_train, {epochs: 5});
+      model.fit(x_train, y_train, {epochs: 5}).then(res => {
+        console.log("After Training:", model);
+        console.log("Training losses:", res.history.loss);
+      // model.getWeights().forEach((wgt) => {console.log(wgt.dataSync());})
+      });
+
       // save model here
     });
 
   }
-
 
 
   // (7) Predict the new model scores for the whole pool
@@ -806,7 +813,8 @@ export const useInteractivity = () => {
     var x_feats = [];
     Object.keys(pool).forEach(key => {
       if( pool[key]['last_training_score'] !== undefined ){
-        x_feats.push( pool[key]['features'] );
+        // x_feats.push( pool[key]['features'] );
+        x_feats.push( pool[key]['features'].slice(0, -1) );
       }
     });
     // abort
@@ -817,12 +825,19 @@ export const useInteractivity = () => {
     x_feats = tf.tensor(x_feats).squeeze();
     console.log("Features:", x_feats)
 
-    // load model
-    const model = getRemoteModel();
-    console.log("Model:", model);
+    // load model (async) and execute prediction 
+    getRemoteModel().then((model) => {
+      console.log("Prediction Model:", model);
+      // model.getWeights().forEach((wgt) => {console.log(wgt.dataSync());})
 
-    // predict
-    return model.predict(x_feats);
+      // predict
+      const y_pred = model.predict(x_feats);
+      console.log("Prediction: ", y_pred);
+
+      // store new scores
+      //y_pred;
+    });
+
   }
 
 
