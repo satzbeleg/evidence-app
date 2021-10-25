@@ -302,7 +302,13 @@ export const useInteractivity = () => {
     // Settings for (5), e.g. computeTrainingScores
     smoothing_method, 
     ema_alpha,
-    loadBwsSettings
+    loadBwsSettings,
+    // Settings for (6): retrainModel
+    train_optimizer,
+    train_lrate, 
+    train_epochs,
+    train_loss,
+    train_minsample
   } = useBwsSettings();
   loadBwsSettings();
 
@@ -771,9 +777,11 @@ export const useInteractivity = () => {
     });
     console.log("Pool", pool)
     // abort
-    if ( y_train.length < 1 ){
+    if ( y_train.length < (train_minsample.value || 1) ){
+      console.log(`Not enough samples: ${y_train.length}`)
       return;
     }
+    
 
     // convert to tf tensor
     x_train = tf.tensor(x_train).squeeze();
@@ -787,13 +795,17 @@ export const useInteractivity = () => {
 
       // specify optimization
       model.compile({
-        optimizer: 'adam',  // adagrad < rmsprop < adam
-        loss: tf.losses.meanSquaredError,
-        metrics: [tf.losses.meanSquaredError]
+        optimizer: train_optimizer.value || 'adam',
+        loss: train_loss.value || 'meanSquaredError',
+        //metrics: [train_loss.value || 'meanSquaredError']
       });
 
       // fit model
-      model.fit(x_train, y_train, {epochs: 5}).then(res => {
+      model.fit(x_train, y_train, {
+        epochs: train_epochs.value || 5,
+        learningRate: train_lrate.value || 0.001
+      })
+      .then(res => {
         console.log("After Training:", model);
         console.log("Training losses:", res.history.loss);
       // model.getWeights().forEach((wgt) => {console.log(wgt.dataSync());})

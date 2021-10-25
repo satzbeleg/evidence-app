@@ -55,6 +55,13 @@ export const useBwsSettings = () => {
   const smoothing_method = ref();
   const ema_alpha = ref();
 
+  // Settings for (6)
+  const train_optimizer = ref();  // sgd, adagrad, rmsprop, adam
+  const train_lrate = ref();  // float
+  const train_epochs = ref();  // int
+  const train_loss = ref();  // meanSquaredError, huberLoss, absoluteDifference
+  const train_minsample = ref();  // low number of evals
+
 
   /**
    * (B.1) download user's settings from database
@@ -86,14 +93,21 @@ export const useBwsSettings = () => {
           flagDropConverge.value = response.data['flagDropConverge'] || false;
           eps_score_change.value = response.data['eps-score-change'] || 1e-6;
           flagDropPairs.value = response.data['flagDropPairs'] || false;
-          // Settings for (3), e.g. sampleBwsSets
+          // Settings for (3): sampleBwsSets
           bwsset_num_items.value = response.data['bwsset-num-items'] || 4;
           bwsset_sampling_method.value = response.data['bwsset-sampling-method'] || "overlap";
           num_preload_bwssets.value = response.data['num_preload_bwssets'] || 3;
           item_sampling_method.value = response.data['item-sampling-method'] || "exploit";
-          // Settings for (5), e.g. computeTrainingScores
-          smoothing_method.value = response.data['smoothing_method'] || "ema";
-          ema_alpha.value = response.data['ema_alpha'] || 0.7;
+          // Settings for (5): computeTrainingScores
+          smoothing_method.value = response.data['smoothing-method'] || "ema";
+          ema_alpha.value = response.data['ema-alpha'] || 0.7;
+          // Settings for (6): retrainModel
+          train_optimizer.value = response.data['train-optimizer'] || "adam";
+          train_lrate.value = response.data['train-lrate'] || 0.001;
+          train_epochs.value = response.data['train-epochs'] || 5;
+          train_loss.value = response.data['train-loss'] || "meanSquaredError";
+          train_minsample.value = response.data['train-minsample'] || 5;
+          // done
           resolve(response);
         })
         .catch(error => {
@@ -140,8 +154,14 @@ export const useBwsSettings = () => {
         'num_preload_bwssets': num_preload_bwssets.value, 
         'item-sampling-method': item_sampling_method.value,
         // Settings for (5), e.g. computeTrainingScores
-        'smoothing_method': smoothing_method.value, 
-        'ema_alpha': ema_alpha.value
+        'smoothing-method': smoothing_method.value, 
+        'ema-alpha': ema_alpha.value,
+        // Settings for (6): retrainModel
+        'train-optimizer': train_optimizer.value,
+        'train-lrate': train_lrate.value, 
+        'train-epochs': train_epochs.value,
+        'train-loss': train_loss.value,
+        'train-minsample': train_minsample.value
         })
         .then(response => {
           console.log("SAVED");
@@ -177,6 +197,8 @@ export const useBwsSettings = () => {
     // Settings for (3), e.g. sampleBwsSets
     bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
     // Settings for (5), e.g. computeTrainingScores
-    smoothing_method, ema_alpha
+    smoothing_method, ema_alpha,
+    // Settings for (6): retrainModel
+    train_optimizer, train_lrate, train_epochs, train_loss, train_minsample
   }
 }

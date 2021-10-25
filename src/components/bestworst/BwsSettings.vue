@@ -447,20 +447,105 @@
         <output for="ema-alpha" style="width:3.1rem;">{{ ema_alpha }}</output>
       </div>
 
-
-      <div class="field">
-      </div>
-
     </div>
   </div>
 
   <h2 class="subtitle is-4">Train Local ML Model</h2>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
       <div class="field">
+        <label class="label" for="train-optimizer">
+          Optimization Algorithm
+        </label>
+        <br>
+        <div class="dropdown" id="train-optimizer"
+             v-on:click="showDropdownTrainOptimizer = !showDropdownTrainOptimizer"
+             v-bind:class="{ 'is-active': showDropdownTrainOptimizer }">
+          <div class="dropdown-trigger">
+            <button class="button is-rounded is-light" type="button"
+                    aria-haspopup="true" 
+                    aria-controls="dropdown-train-optimizer">
+              <span>
+                <template v-if="train_optimizer == 'adam'">Adam</template>
+                <template v-if="train_optimizer == 'rmsprop'">RMSProp</template>
+                <template v-if="train_optimizer == 'adagrad'">AdaGrad</template>
+                <template v-if="train_optimizer == 'sgd'">SGD</template>
+              </span>
+              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-train-optimizer" role="menu">
+            <div class="dropdown-content" v-on:click="train_optimizer = $event.target.id">
+              <a id="adam" class="dropdown-item">Adam</a>
+              <a id="rmsprop" class="dropdown-item">RMSProp</a>
+              <a id="adagrad" class="dropdown-item">AdaGrad</a>
+              <a id="sgd" class="dropdown-item">SGD</a>
+            </div>
+          </div>
+        </div>
       </div>
+
       <div class="field">
+        <label class="label" for="train-lrate">
+          Learning Rate
+        </label>
+        <input id="train-lrate" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_lrate" step="0.001" min="0.0" max="0.1">
+        <output for="train-lrate" style="width:3.5rem;">{{ train_lrate }}</output>
       </div>
+
+      <div class="field">
+        <label class="label" for="train-epochs">
+          Number of Epochs per Training Cycle
+        </label>
+        <input id="train-epochs" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_epochs" step="1" min="1" max="20">
+        <output for="train-epochs" style="width:3.1rem;">{{ train_epochs }}</output>
+      </div>
+
+      <div class="field">
+        <label class="label" for="train-loss">
+          Loss Function
+        </label>
+        <br>
+        <div class="dropdown" id="train-loss"
+             v-on:click="showDropdownTrainLoss = !showDropdownTrainLoss"
+             v-bind:class="{ 'is-active': showDropdownTrainLoss }">
+          <div class="dropdown-trigger">
+            <button class="button is-rounded is-light" type="button"
+                    aria-haspopup="true" 
+                    aria-controls="dropdown-train-loss">
+              <span>
+                <template v-if="train_loss == 'meanSquaredError'">MSE</template>
+                <template v-if="train_loss == 'huberLoss'">Huber</template>
+                <template v-if="train_loss == 'absoluteDifference'">Abs. Diff.</template>
+              </span>
+              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-train-loss" role="menu">
+            <div class="dropdown-content" v-on:click="train_loss = $event.target.id">
+              <a id="meanSquaredError" class="dropdown-item">MSE</a>
+              <a id="huberLoss" class="dropdown-item">Huber</a>
+              <a id="absoluteDifference" class="dropdown-item">Abs. Diff.</a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="label" for="train-minsample">
+          Mimimum Sample Size
+        </label>
+        <input id="train-minsample" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_minsample" step="1" min="5" max="100">
+        <output for="train-minsample" style="width:3.1rem;">{{ train_minsample }}</output>
+      </div>
+
     </div>
   </div>
 
@@ -487,6 +572,8 @@ export default defineComponent({
     const showDropdownItemSamplingMethod = ref(false);
     const showDropdownBwsSamplingMethod = ref(false);
     const showDropdownSmoothingMethod = ref(false);
+    const showDropdownTrainOptimizer = ref(false);
+    const showDropdownTrainLoss = ref(false);
 
     const {
       // also used in bestworst3
@@ -517,7 +604,15 @@ export default defineComponent({
       item_sampling_method,
       // Settings for (5), e.g. computeTrainingScores
       smoothing_method, 
-      ema_alpha
+      ema_alpha,
+      // Settings for (6) and (7): getRemoteModel
+      // Settings for (6): retrainModel
+      train_optimizer,
+      train_lrate, 
+      train_epochs,
+      train_loss,
+      train_minsample
+      // Settings for (7): predictScores
     } = useBwsSettings();
 
     watch(min_pool_size, (minsz) => {
@@ -559,7 +654,9 @@ export default defineComponent({
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
         showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod,
       smoothing_method, ema_alpha,
-        showDropdownSmoothingMethod
+        showDropdownSmoothingMethod,
+      train_optimizer, train_lrate, train_epochs, train_loss, train_minsample,
+        showDropdownTrainOptimizer, showDropdownTrainLoss
     }
   }
 });
