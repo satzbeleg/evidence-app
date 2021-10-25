@@ -766,8 +766,7 @@ export const useInteractivity = () => {
     Object.keys(pool).forEach(key => {
       if( pool[key]['last_training_score'] !== undefined ){
         y_train.push( pool[key]['last_training_score'] );
-        // x_train.push( pool[key]['features'] );
-        x_train.push( pool[key]['features'].slice(0, -1) );
+        x_train.push( pool[key]['features'] );
       }
     });
     console.log("Pool", pool)
@@ -779,7 +778,6 @@ export const useInteractivity = () => {
     // convert to tf tensor
     x_train = tf.tensor(x_train).squeeze();
     y_train = tf.tensor(y_train).squeeze();
-    // y_train = tf.oneHot(tf.tensor1d(y_train, 'int32'),5).squeeze();
     console.log("Training set:", y_train, x_train)
 
     // load baseline model (async) and execute training
@@ -789,7 +787,7 @@ export const useInteractivity = () => {
 
       // specify optimization
       model.compile({
-        optimizer: 'adagrad',
+        optimizer: 'adam',  // adagrad < rmsprop < adam
         loss: tf.losses.meanSquaredError,
         metrics: [tf.losses.meanSquaredError]
       });
@@ -813,8 +811,7 @@ export const useInteractivity = () => {
     var x_feats = [];
     Object.keys(pool).forEach(key => {
       if( pool[key]['last_training_score'] !== undefined ){
-        // x_feats.push( pool[key]['features'] );
-        x_feats.push( pool[key]['features'].slice(0, -1) );
+        x_feats.push( pool[key]['features'] );
       }
     });
     // abort
