@@ -13,10 +13,10 @@
     "login_cta": "Bitte melden Sie sich an, um fortzufahren.",
     "signup": "Registrieren",
     "signup_noun": "Registrierung",
-    "signup_cta": "Bitte registrieren Sie sich mit Ihrer E-Mail-Adresse und gewünschten Passwort.",
+    "signup_cta": "Bitte registrieren Sie sich mit Ihrer E-Mail-Adresse und gewünschtem Passwort.",
     "recover": "Zurücksetzen",
     "recover_noun": "Passwort Zurücksetzen",
-    "recover_cta": "Fordern Sie neues Passwort für Ihre E-Mail-Adresse an.",
+    "recover_cta": "Fordern Sie ein neues Passwort für Ihre E-Mail-Adresse an.",
     "verify": "Bestätige",
     "verify_noun": "Bestätige E-Mail",
     "verify_cta": "Bestätige die angegebene E-Mail-Adresse.",
@@ -28,7 +28,7 @@
     "password_place": "Ihr Passwort",
     "username": "Benutzername",
     "username_place": "Ihr Benutzername",
-    "google_signin_cookie_warning": "Die Anmeldung via Google funktioniert nur, wenn in Ihrem Browser Cookies von Drittanbietern aktiviert ist."
+    "google_signin_cookie_warning": "Die Anmeldung via Google funktioniert nur, wenn in Ihrem Browser Cookies von Drittanbietern aktiviert sind."
   },
   "settings": {
     "settings": "Einstellungen",
@@ -44,7 +44,7 @@
     "evaluate": "Bewerten",
     "bestworst3": "Best-Worst Scaling",
     "bestworst3_text": "Wähle das beste & schlechteste von vier Beispielen",
-    "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Markiere zuerst das beste Satzbeispiel an. Zum Schluß wähle noch das schlechteste Satzbeispiel aus."
+    "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluß wähle noch das schlechteste Satzbeispiel aus."
   },
   "about": {
     "title": "Über das EVIDENCE Projekt",
@@ -55,14 +55,14 @@
     },
     "goals": {
       "heading": "Ziele",
-      "text": "Um Lexikograph*innen in ihrem Entscheidungsprozess zu unterstützen, soll ein System zur Extraktion, Klassifizierung und Bewertung von Korpusbelegen entwickelt werden und in das lexikalische Informationssystem des DWDS integriert werden. Das Empfehlungssystem schlägt für jedes Lemma eine Gruppe von Satzbelegen vor, die jeweils als hochwertig angesehene werden und zusammen eine hohe Vielfalt und Facetten und Nuancen des Wortgebrauchs aufweisen. Das Empfehlungssystem soll so weit entwickelt werden, dass die externen Nutzer des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen."
+      "text": "Um Lexikograph*innen in ihrem Entscheidungsprozess zu unterstützen, soll ein System zur Extraktion, Klassifizierung und Bewertung von Korpusbelegen entwickelt und in das lexikalische Informationssystem des DWDS integriert werden. Das Empfehlungssystem schlägt für jedes Lemma eine Gruppe von Satzbelegen vor, die jeweils als hochwertig angesehene werden und zusammen eine hohe Vielfalt und Facetten und Nuancen des Wortgebrauchs aufweisen. Das Empfehlungssystem soll so weit entwickelt werden, dass die externen Nutzer*innen des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen."
     },
     "method": {
       "heading": "Methodik",
-      "text": "Die Applikation dient vor allem zur Beurteilung hinsichtlich der Güte und Vielfalt der Satzbelege. Zur Bewertung der Güte wird Best-Worst-Scaling Verfahren eingesetzt. Den Annotatoren werden vier Satzbelege angezeigt von denen sie den besten und den schlechtesten Satzbeleg auswählen. Die resultierenden Ranglisten werden als Zielvariablen in einem Überwachten Lernverfahren eingesetzt. Zur Bewertung der Vielfalt von Satzbelegen für ein bestimmtes Lemma müssen Benutzer anhand von Schiebereglern angeben inwiefern sie Güte gegenüber Vielfalt abwägen und welche Arten von Vielfalt präferiert werden (z.B. unterschiedliche Satzstrukturen, Semantik, Quellenhinweise). Mit einem Quadratischen Optimierungsverfahren werden anhand dieser Parameter die angezeigten Saztbelege neusortiert bis der Benutzer mit der angezeigten Auswahl zufrieden ist."
+      "text": "Die Applikation dient vor allem zur Beurteilung hinsichtlich der Güte und Vielfalt der Satzbelege. Zur Bewertung der Güte wird das Best-Worst-Scaling Verfahren eingesetzt. Den Annotator*innen werden vier Satzbelege angezeigt, von denen sie den besten und den schlechtesten Satzbeleg auswählen. Die resultierenden Ranglisten werden als Zielvariablen in einem Überwachten Lernverfahren eingesetzt. Zur Bewertung der Vielfalt von Satzbelegen für ein bestimmtes Lemma müssen Benutzer*innen anhand von Schiebereglern angeben, inwiefern sie Güte gegenüber Vielfalt abwägen und welche Arten von Vielfalt präferiert werden (z.B. unterschiedliche Satzstrukturen, Semantik, Quellenhinweise). Mit einem Quadratischen Optimierungsverfahren werden anhand dieser Parameter die angezeigten Saztbelege neusortiert, bis der Benutzer mit der angezeigten Auswahl zufrieden ist."
     },
     "team": {
-      "heading": "Mitarbeiter",
+      "heading": "Mitarbeiter*innen",
       "member1": {
         "name": "Prof. Dr. Iryna Gurevych",
         "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
