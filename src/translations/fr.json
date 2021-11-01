@@ -51,11 +51,11 @@
     "menu_description": "Worum geht es im Forschungsprojekt?",
     "motivation": {
       "heading": "Motivation",
-      "text": "In vielen Wörterbüchern unterstützen Korpusbelege die lexikographische Beschreibung eines Wortes. Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt."
+      "text": "Dans plusieurs dictionnaires la déscription lexicographique d'un mot est soutenu par des exemples de corpus. Le choix d'exemples appropriés et aidants pose un défi parce que l'opérationnalisation de critères comme par exemple „qualité“ et „adéquation“ d'exemples de corpus n'est pas triviale et des lexicographes professionel·le·s n'arrivent pas toujours à prendre , quel exemple est le plus approprié pour la déscription d'un lemme. Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt."
     },
     "goals": {
       "heading": "Objectifs",
-      "text": "Um Lexikograph*innen in ihrem Entscheidungsprozess zu unterstützen, soll ein System zur Extraktion, Klassifizierung und Bewertung von Korpusbelegen entwickelt und in das lexikalische Informationssystem des DWDS integriert werden. Das Empfehlungssystem schlägt für jedes Lemma eine Gruppe von Satzbelegen vor, die jeweils als hochwertig angesehene werden und zusammen eine hohe Vielfalt und Facetten und Nuancen des Wortgebrauchs aufweisen. Das Empfehlungssystem soll so weit entwickelt werden, dass die externen Nutzer*innen des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen."
+      "text": "Pour assister des lexicographes dans leur processus de décision, un système pour l'extraction, la classification et l'évaluation des exemples de corpus est censé être développé et intégré dans le système d'information lexicale du DWDS. Le système de recommandation propose un groupe d'exemples d'usage pour chaque lemme qui sont considérés être de haute qualité et qui dans l'ensemble présentent une grande diversité et facettes et nuances de l'usage du mot. Le système de recommandation est censé être développé à ce que des exemples suffisamment bons soient proposés aux utilisatrices et utilisateurs externes du système d'infomations lexicale même pour des lemmes ne , dass die externen Nutzer*innen des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen."
     },
     "method": {
       "heading": "Méthode",
@@ -99,7 +99,7 @@
     },
     "funding": {
       "heading": "Financement",
-      "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
+      "text": "Ce travail a été financé par la Deutsche Forschungsgemeinschaft (DFG) - 433249742. Durée du projet: 2020-2023."
     }
   },
   "tips": {
@@ -108,18 +108,18 @@
   },
   "privacy": {
     "title": "Protection de données",
-    "menu_description": "Datenschutzhinweise für Forschungsprojekte"
+    "menu_description": "Déclaration de confidentialité pour des projets de recherce"
   },
   "terms": {
-    "title": "Nutzungsbedingungen",
-    "menu_description": "Die allgemeinen Nutzungsbedingungen dieser Anwendung"
+    "title": "Conditions d'utilisation",
+    "menu_description": "Les conditions générales d'utilisation de cette application"
   },
   "consent": {
-    "title": "Informierte Einwilligung",
-    "menu_description": "Sind Sie damit einverstanden, dass Ihre Daten veröffentlicht werden?"
+    "title": "Consentement éclairé",
+    "menu_description": "Acceptez-vous que vos données sont publiées?"
   },
   "imprint": {
-    "title": "Impressum",
+    "title": "Mentions légales",
     "menu_description": "Qui est responsable du contenu?"
   }
 }
