@@ -7,7 +7,9 @@
               aria-haspopup="true" aria-controls="dropdown-menu">
         <span>
           <template v-if="language == 'de'">Deutsch</template>
+          <template v-if="language == 'de-leicht'">Leichte Sprache</template>
           <template v-if="language == 'en'">English</template>
+          <template v-if="language == 'fr'">Français</template>
         </span>
         <span class="icon"><i class="fas fa-caret-down"></i></span>
       </button>
@@ -16,7 +18,9 @@
     <div class="dropdown-menu" id="dropdown-menu" role="menu">
       <div class="dropdown-content" v-on:click="language = $event.target.id">
         <a id="de" class="dropdown-item">Deutsch</a>
+        <a id="de-leicht" class="dropdown-item">Leichte Sprache</a>
         <a id="en" class="dropdown-item">English</a>
+        <a id="en" class="dropdown-item">Français</a>
       </div>
     </div>
   </div>
