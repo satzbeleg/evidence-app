@@ -5,18 +5,18 @@
   },
   "home": {
     "welcome": "Herzlich Willkommen",
-    "welcome_text": "Sie können Satzbeispiele mit den folgenden Tools bewerten ..."
+    "welcome_text": "Du kannst Satzbeispiele mit den folgenden Tools bewerten ..."
   },
   "auth": {
     "login": "Anmelden",
     "login_noun": "Anmeldung",
-    "login_cta": "Bitte melden Sie sich an, um fortzufahren.",
+    "login_cta": "Bitte melde dich an, um fortzufahren.",
     "signup": "Registrieren",
     "signup_noun": "Registrierung",
-    "signup_cta": "Bitte registrieren Sie sich mit Ihrer E-Mail-Adresse und gewünschtem Passwort.",
+    "signup_cta": "Bitte registriere dich mit deiner E-Mail-Adresse und gewünschtem Passwort.",
     "recover": "Zurücksetzen",
     "recover_noun": "Passwort Zurücksetzen",
-    "recover_cta": "Fordern Sie ein neues Passwort für Ihre E-Mail-Adresse an.",
+    "recover_cta": "Fordere ein neues Passwort für Ihre E-Mail-Adresse an.",
     "verify": "Bestätige",
     "verify_noun": "Bestätige E-Mail",
     "verify_cta": "Bestätige die angegebene E-Mail-Adresse.",
@@ -25,10 +25,10 @@
     "email": "E-Mail",
     "email_place": "alex at musterbeispiel.de",
     "password": "Passwort",
-    "password_place": "Ihr Passwort",
+    "password_place": "Dein Passwort",
     "username": "Benutzername",
-    "username_place": "Ihr Benutzername",
-    "google_signin_cookie_warning": "Die Anmeldung via Google funktioniert nur, wenn in Ihrem Browser Cookies von Drittanbietern aktiviert sind."
+    "username_place": "Dein Benutzername",
+    "google_signin_cookie_warning": "Die Anmeldung via Google funktioniert nur, wenn in deinem Browser Cookies von Drittanbietern aktiviert sind."
   },
   "settings": {
     "settings": "Einstellungen",
@@ -116,7 +116,7 @@
   },
   "consent": {
     "title": "Informierte Einwilligung",
-    "menu_description": "Sind Sie damit einverstanden, dass Ihre Daten veröffentlicht werden?"
+    "menu_description": "Bist du damit einverstanden, dass deine Daten veröffentlicht werden?"
   },
   "imprint": {
     "title": "Impressum",
