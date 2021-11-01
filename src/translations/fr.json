@@ -1,0 +1,125 @@
+{
+  "header": {
+    "home": "Accueil",
+    "about": "À propos"
+  },
+  "home": {
+    "welcome": "Bienvenue",
+    "welcome_text": "Vous pouvez évaluer des SATZBELEGE avec les outils suivants ..."
+  },
+  "auth": {
+    "login": "Se connecter",
+    "login_noun": "Connexion",
+    "login_cta": "Connectez-vous s'il vous plaît pour continuer.",
+    "signup": "S'inscriver",
+    "signup_noun": "Inscription",
+    "signup_cta": "Inscrivez-vous avec votre adresse email et un mot de passe s'il vous plaît.",
+    "recover": "Réinitialisation",
+    "recover_noun": "réinitialiser mot de passe",
+    "recover_cta": "Demandez un nouveau mot de passe pour votre adresse email.",
+    "verify": "Vérification",
+    "verify_noun": "Confirme l'adresse email",
+    "verify_cta": "Veuillez vérifier votre adresse email.",
+    "logout": "Se déconnecter",
+    "remember": "Mémoriser/Rester connecté.e",
+    "email": "Adresse email",
+    "email_place": "alex at example.fr",
+    "password": "Mot de passe",
+    "password_place": "Votre mot de passe",
+    "username": "Identifiant",
+    "username_place": "Votre identifiant",
+    "google_signin_cookie_warning": "La connexion avec Google fonctionne seulement, si les cookies tiers sont activés dans votre navigateur."
+  },
+  "settings": {
+    "settings": "Paramètres",
+    "general": "Paramètres générales/globales",
+    "appearance": "Apparence de l'interface utilisateur",
+    "language": "Langue de l'interface utilisateur",
+    "darkmode": "Mode sombre"
+  },
+  "bestworst": {
+    "title": "BWS Ranking"
+  },
+  "menu": {
+    "evaluate": "Évaluer",
+    "bestworst3": "Best-Worst Scaling",
+    "bestworst3_text": "Choisis le meilleur et le pire de quatre examples",
+    "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluß wähle noch das schlechteste Satzbeispiel aus."
+  },
+  "about": {
+    "title": "À propos du projet EVIDENCE",
+    "menu_description": "Worum geht es im Forschungsprojekt?",
+    "motivation": {
+      "heading": "Motivation",
+      "text": "In vielen Wörterbüchern unterstützen Korpusbelege die lexikographische Beschreibung eines Wortes. Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt."
+    },
+    "goals": {
+      "heading": "Objectifs",
+      "text": "Um Lexikograph*innen in ihrem Entscheidungsprozess zu unterstützen, soll ein System zur Extraktion, Klassifizierung und Bewertung von Korpusbelegen entwickelt und in das lexikalische Informationssystem des DWDS integriert werden. Das Empfehlungssystem schlägt für jedes Lemma eine Gruppe von Satzbelegen vor, die jeweils als hochwertig angesehene werden und zusammen eine hohe Vielfalt und Facetten und Nuancen des Wortgebrauchs aufweisen. Das Empfehlungssystem soll so weit entwickelt werden, dass die externen Nutzer*innen des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen."
+    },
+    "method": {
+      "heading": "Méthode",
+      "text": "Die Applikation dient vor allem zur Beurteilung hinsichtlich der Güte und Vielfalt der Satzbelege. Zur Bewertung der Güte wird das Best-Worst-Scaling Verfahren eingesetzt. Den Annotator*innen werden vier Satzbelege angezeigt, von denen sie den besten und den schlechtesten Satzbeleg auswählen. Die resultierenden Ranglisten werden als Zielvariablen in einem Überwachten Lernverfahren eingesetzt. Zur Bewertung der Vielfalt von Satzbelegen für ein bestimmtes Lemma müssen Benutzer*innen anhand von Schiebereglern angeben, inwiefern sie Güte gegenüber Vielfalt abwägen und welche Arten von Vielfalt präferiert werden (z.B. unterschiedliche Satzstrukturen, Semantik, Quellenhinweise). Mit einem Quadratischen Optimierungsverfahren werden anhand dieser Parameter die angezeigten Saztbelege neusortiert, bis der Benutzer mit der angezeigten Auswahl zufrieden ist."
+    },
+    "team": {
+      "heading": "Mitarbeiter*innen",
+      "member1": {
+        "name": "Prof. Dr. Iryna Gurevych",
+        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
+        "role": "Projektleiterin am Standort Darmstadt",
+        "www": "https://web.archive.org/web/20210422143659/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/head_ukp/index.en.jsp"
+      },
+      "member2": {
+        "name": "PD Dr. Alex Geyken",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Projektleiter am Standort Berlin",
+        "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
+      },
+      "member3": {
+        "name": "Dr. Lothar Lemmnitzer",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Experte Lexikographie",
+        "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
+      },
+      "member4": {
+        "name": "Ji-Ung Lee",
+        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
+        "role": "Wissenschaftlicher Mitarbeiter",
+        "www": "https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp"
+      },
+      "member5": {
+        "name": "Ulf Hamster",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Wissenschaftlicher Mitarbeiter, Softwareentwicklung",
+        "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
+      }
+    },
+    "partners": {
+      "heading": "Partenaires de projet"
+    },
+    "funding": {
+      "heading": "Financement",
+      "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
+    }
+  },
+  "tips": {
+    "title": "Tipps zur Bedienung",
+    "menu_description": "Comment utiliser cette application?"
+  },
+  "privacy": {
+    "title": "Protection de données",
+    "menu_description": "Datenschutzhinweise für Forschungsprojekte"
+  },
+  "terms": {
+    "title": "Nutzungsbedingungen",
+    "menu_description": "Die allgemeinen Nutzungsbedingungen dieser Anwendung"
+  },
+  "consent": {
+    "title": "Informierte Einwilligung",
+    "menu_description": "Sind Sie damit einverstanden, dass Ihre Daten veröffentlicht werden?"
+  },
+  "imprint": {
+    "title": "Impressum",
+    "menu_description": "Qui est responsable du contenu?"
+  }
+}
