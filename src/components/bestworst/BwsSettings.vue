@@ -453,7 +453,7 @@
   <h2 class="subtitle is-4">Train Local ML Model</h2>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-
+      
       <div class="field">
         <label class="label" for="train-optimizer">
           Optimization Algorithm

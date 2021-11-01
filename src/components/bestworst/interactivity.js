@@ -1,11 +1,10 @@
-import { reactive, ref, watch } from 'vue';
-import { sampling, ranking } from 'bwsample';  // counting
+import { reactive, ref, watch, unref } from 'vue';
+import { sampling, counting, ranking } from 'bwsample';
 import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 // import { v4 as uuid4 } from 'uuid'; // nur für dev
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
-import { counting } from 'bwsample';
 import * as tf from '@tensorflow/tfjs';
 
 
@@ -33,23 +32,6 @@ const getLastAbsChange = (arr) => {
   }
 }
 
-// TEMPORAR: Will be replaced in bwsample-js
-const lilAddInplace = (a, b) => {
-  for(var id1 in b){
-    if(a[id1] === undefined){
-      a[id1] = JSON.parse(JSON.stringify(b[id1]));
-    }else{
-      for (var id2 in b[id1]){
-        if(a[id1][id2] === undefined){
-          a[id1][id2] = parseInt(b[id1][id2]);
-        }else{
-          a[id1][id2] += parseInt(b[id1][id2]);
-        }
-      }
-    }
-  }
-  return undefined;
-}
 
 /**
  * Computes the Density (PDF) for a given histogram bin
@@ -278,6 +260,8 @@ export const useInteractivity = () => {
 
   // Load Interactivity Settings
   const {
+    item_sampling_numtop, 
+    item_sampling_offset,
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
     flagInitialLoadOnly,
     min_pool_size, 
@@ -515,7 +499,7 @@ export const useInteractivity = () => {
         const { getToken } = useAuth();
         const { api } = useApi2(getToken());
         // start AJAX call
-        api.post(`v1/interactivity/training-examples/${num_additions}/100/0`, params)
+        api.post(`v1/interactivity/training-examples/${num_additions}/${unref(item_sampling_numtop)}/${unref(item_sampling_offset)}`, params)
           .then(response => {
             if ('msg' in response.data){
               errorMessage.value = response.data['msg'];
@@ -685,13 +669,13 @@ export const useInteractivity = () => {
           let stateids = Object.values(bwsset['state-sentid-map']);
           // console.log("Final State: ", combostates, stateids);
           // Extract paired comparisons from BWS set
-          agg = counting.direct_extract(stateids, combostates, agg)[0];
+          agg = counting.directExtract(stateids, combostates, agg)[0];
           // mark BWS set as processed
           bwsset['status-bestworst4'] = "processed"
         }
       } //else{console.log(bwsset['status-bestworst4'])}
     });
-    lilAddInplace(pairs, agg);
+    counting.lilAddInplace(pairs, agg);
   }
 
 
