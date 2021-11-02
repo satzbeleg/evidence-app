@@ -5,11 +5,6 @@
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
-      <BDropdown idname="myid" labeltext="Dies ist ein Text" 
-                 v-model:selected="test123" 
-                 :options="[{'id': 'hey', 'text': 'Hey'}, {'id': 'ho', 'text': 'Ho'}]" />
-
-
       <div class="field">
         <label class="label">
           {{ t('settings.language') }}
@@ -54,15 +49,13 @@ import { useI18n } from 'vue-i18n';
 import { useDarkmodeToggle } from '@/components/settings/darkmode-toggle.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
-import BDropdown from "@/components/layout/Dropdown.vue";
 
 
 export default defineComponent({
   name: "Settings",
 
   components: {
-    LanguageSwitcher,
-    BDropdown
+    LanguageSwitcher
   },
 
   setup(){

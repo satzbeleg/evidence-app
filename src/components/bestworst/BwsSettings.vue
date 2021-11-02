@@ -506,6 +506,10 @@
         <output for="train-epochs" style="width:3.1rem;">{{ train_epochs }}</output>
       </div>
 
+      <BDropdown idname="myid" labeltext="Dies ist ein Text" 
+                 v-model:selected="test123" 
+                 :options="[{'id': 'hey', 'text': 'Hey'}, {'id': 'ho', 'text': 'Ho'}]" />
+
       <div class="field">
         <label class="label" for="train-loss">
           Loss Function
@@ -558,10 +562,15 @@ import { defineComponent, watch, ref } from 'vue';
 // import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
+import BDropdown from "@/components/layout/Dropdown.vue";
 
 
 export default defineComponent({
   name: "BwsSettings",
+
+  components: {
+    BDropdown
+  },
 
   setup(){
     // i18n data
