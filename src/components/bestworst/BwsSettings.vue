@@ -222,7 +222,7 @@
       <div class="field">
         <input id="interactivity-exclude-bwssampling-toogle" 
                class="switch is-rounded" type="checkbox"
-               v-model="flagExcludeMaxDisplay">
+               v-model="exclude_max_display">
         <label class="label" for="interactivity-exclude-bwssampling-toogle">
           Exclude from BWS sampling if shown too often (Default: On)
         </label>
@@ -231,7 +231,7 @@
       <div class="field">
         <input id="interactivity-drop-display-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="flagDropMaxDisplay">
+               v-model="drop_max_display">
         <label class="label" for="interactivity-drop-display-toogle">
           Drop examples from the pool if shown too often (Default: Off)
         </label>
@@ -291,7 +291,7 @@
       <div class="field">
         <input id="interactivity-add-only-initially-toogle" 
                class="switch is-rounded" type="checkbox"   
-               v-model="flagInitialLoadOnly">
+               v-model="initial_load_only">
         <label class="label" for="interactivity-add-only-initially-toogle">
           Only load an initial fixed pool / No pool additions lateron (Default: On)
         </label>
@@ -331,7 +331,7 @@
       <div class="field">
         <input id="interactivity-drop-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="flagDropDistribution">
+               v-model="drop_distribution">
         <label class="label" for="interactivity-drop-distribution-toogle">
           Drop examples from the pool by a target distribution (Default: Off)
         </label>
@@ -340,7 +340,7 @@
       <div class="field">
         <input id="interactivity-add-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="flagAddDistribution">
+               v-model="add_distribution">
         <label class="label" for="interactivity-add-distribution-toogle">
           Add examples to the pool by a target distribution (Default: Off)
         </label>
@@ -365,7 +365,7 @@
       <div class="field">
         <input id="interactivity-drop-converge-toogle" 
                class="switch is-rounded" type="checkbox"
-               v-model="flagDropConverge">
+               v-model="drop_converge">
         <label class="label" for="interactivity-drop-converge-toogle">
           Drop examples from pool if model score converged (Default: Off)
         </label>
@@ -394,7 +394,7 @@
       <div class="field">
         <input id="interactivity-drop-pairs-toogle" 
                class="switch is-rounded" type="checkbox"   
-               v-model="flagDropPairs">
+               v-model="drop_pairs">
         <label class="label" for="interactivity-drop-pairs-toogle">
           Drop examples from local pairs matrix
         </label>
@@ -582,21 +582,21 @@ export default defineComponent({
       item_sampling_numtop, 
       item_sampling_offset,
       // Settings for (1) and (2)
-      flagInitialLoadOnly,
+      initial_load_only,
       min_pool_size, 
       max_pool_size,
-      flagDropDistribution, 
-      flagAddDistribution, 
+      drop_distribution, 
+      add_distribution, 
       bin_edges, 
       target_probas, 
       // Settings for (1) and (3)
-      flagDropMaxDisplay, 
-      flagExcludeMaxDisplay, 
+      drop_max_display, 
+      exclude_max_display, 
       max_displays, 
       // Settings for (1)
-      flagDropConverge, 
+      drop_converge, 
       eps_score_change,
-      flagDropPairs,
+      drop_pairs,
       // Settings for (3)
       bwsset_num_items, 
       num_preload_bwssets, 
@@ -646,11 +646,11 @@ export default defineComponent({
       queue_reorderpoint, queue_orderquantity, 
         item_sampling_numtop, item_sampling_offset,
       min_pool_size, max_pool_size, 
-        flagInitialLoadOnly,
-        flagDropDistribution, flagAddDistribution, bin_edges_text, target_probas_text, 
-        flagExcludeMaxDisplay, flagDropMaxDisplay, max_displays, 
-        flagDropConverge, eps_score_change_text,
-        flagDropPairs,
+        initial_load_only,
+        drop_distribution, add_distribution, bin_edges_text, target_probas_text, 
+        exclude_max_display, drop_max_display, max_displays, 
+        drop_converge, eps_score_change_text,
+        drop_pairs,
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
         showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod,
       smoothing_method, ema_alpha,

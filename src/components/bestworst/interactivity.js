@@ -248,7 +248,7 @@ export const useInteractivity = () => {
   // Initialize data variables
   const pool = reactive({});   // key-value database for each sentences
   const pairs = reactive({});  // sparse LIL matrix with paired comparisons
-  const isPoolInitiallyLoaded = ref(false);  // For `flagInitialLoadOnly`. Reset in `onSearchLemmata`
+  const isPoolInitiallyLoaded = ref(false);  // For `initial_load_only`. Reset in `onSearchLemmata`
   const deletedPool = reactive({});
 
   // Informational variables
@@ -263,21 +263,21 @@ export const useInteractivity = () => {
     item_sampling_numtop, 
     item_sampling_offset,
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
-    flagInitialLoadOnly,
+    initial_load_only,
     min_pool_size, 
     max_pool_size,
-    flagDropDistribution, 
-    flagAddDistribution, 
+    drop_distribution, 
+    add_distribution, 
     bin_edges, 
     target_probas, 
     // Settings for (1) and (3)
-    flagDropMaxDisplay, 
-    flagExcludeMaxDisplay, 
+    drop_max_display, 
+    exclude_max_display, 
     max_displays, 
     // Settings for (1)
-    flagDropConverge, 
+    drop_converge, 
     eps_score_change,
-    flagDropPairs,
+    drop_pairs,
     // Settings for (3), e.g. sampleBwsSets
     bwsset_num_items, 
     num_preload_bwssets, 
@@ -328,7 +328,7 @@ export const useInteractivity = () => {
    * @param {Array} bin_edges
    * @param {Int}   max_displays
    * @param {Float} eps_score_change
-   * @param {Bool}  flagDropPairs
+   * @param {Bool}  drop_pairs
    * 
    * Examples:
    * ---------
@@ -337,7 +337,7 @@ export const useInteractivity = () => {
    * const bin_edges = reactive({value: [.0, .25, .5, .75, 1.]});
    * const max_displays = ref(1);
    * const eps_score_change = ref(1e-1);
-   * const flagDropPairs = ref(false);
+   * const drop_pairs = ref(false);
    * 
    * Required Functions:
    * -------------------
@@ -347,7 +347,7 @@ export const useInteractivity = () => {
    * 
    * Explanations:
    * -------------
-   * - `drop_config.flagDropPairs`: If the flag is enabled, the all columns and 
+   * - `drop_config.drop_pairs`: If the flag is enabled, the all columns and 
    *    rows of the deleted IDs are removed from the paired comparision matrix
    *    `pairs`.
    *      - Pros: The memory footprint of `pairs` is limited.
@@ -365,17 +365,17 @@ export const useInteractivity = () => {
     // identify IDs that should be deleted
     if ( max_deletions > 0 ){
       // (a) Drop examples with overrepresented training scores
-      if (flagDropDistribution.value){
+      if (drop_distribution.value){
         deletionCriteriaDistribution(
           pool, avail_ids, del_ids, bin_edges.value, target_probas.value, debugVerbose.value);
       }
       // (b) Drop if example reached `max_displays`
-      if (flagDropMaxDisplay.value){
+      if (drop_max_display.value){
         deletionCriteriaDisplays(
           pool, avail_ids, del_ids, max_displays.value, debugVerbose.value);
       }
       // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
-      if (flagDropConverge.value){
+      if (drop_converge.value){
         deletionCriteriaConvergence(
           pool, avail_ids, del_ids, eps_score_change.value, debugVerbose.value);
       }
@@ -385,7 +385,7 @@ export const useInteractivity = () => {
 
     // (Optional) Delete IDs from paired comparision matrix
     del_ids.forEach(key => {
-      if (flagDropPairs.value){
+      if (drop_pairs.value){
         delete pairs[key];
         for(var key2 in pairs){
           delete pairs[key2][key]
@@ -480,14 +480,14 @@ export const useInteractivity = () => {
    */
   const addExamplesToPool = (lemmata) => {
     // not implemented
-    if(debugVerbose.value){console.log("Not implemented: ", flagAddDistribution.value);}
-    if(debugVerbose.value){console.log("Not implemented: ", flagInitialLoadOnly.value);}
+    if(debugVerbose.value){console.log("Not implemented: ", add_distribution.value);}
+    if(debugVerbose.value){console.log("Not implemented: ", initial_load_only.value);}
 
     return new Promise((resolve, reject) => {
       // replenish pool with sentence examples
       const num_additions = max_pool_size.value - Object.keys(pool).length;
 
-      if (num_additions > 0  &&  !(flagInitialLoadOnly.value && isPoolInitiallyLoaded.value) ){
+      if (num_additions > 0  &&  !(initial_load_only.value && isPoolInitiallyLoaded.value) ){
         // settings
         var params = {
           "lemmata": lemmata.split(',').map(s => s.trim()),
@@ -524,7 +524,7 @@ export const useInteractivity = () => {
             reject(error);
           })
           .finally(() => {
-            isPoolInitiallyLoaded.value = true;  // for `flagInitialLoadOnly`
+            isPoolInitiallyLoaded.value = true;  // for `initial_load_only`
             updateCurrentPoolMetrics(pool);  // compute current metrics manually
           });
       }  
@@ -592,7 +592,7 @@ export const useInteractivity = () => {
 
     // (B) Copy keys (IDs) from pool
     var all_ids = [];
-    if (flagExcludeMaxDisplay){
+    if (exclude_max_display){
       // Remove IDs that have been shown too often
       Object.keys(pool).forEach(key => {
         if (pool[key].num_displayed < max_displays.value){
