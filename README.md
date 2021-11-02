@@ -113,3 +113,8 @@ Please [open an issue](https://github.com/satzbeleg/evidence-app/issues/new) for
 ### Contributing
 Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-app/compare/).
 
+### Syntax
+We are using 
+- `snake_case`: variable names 
+- `kebab-case`: JSON keys
+- `camelCase`: function names, class names
