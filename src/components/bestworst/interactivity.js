@@ -255,7 +255,11 @@ export const useInteractivity = () => {
   const errorMessage = ref("");
 
   // Load General Settings
-  const { hasDataDonationConsent, debugVerbose, loadGeneralSettings } = useGeneralSettings();
+  const { 
+    hasDataDonationConsent, 
+    debugVerbose, 
+    loadGeneralSettings 
+  } = useGeneralSettings();
   loadGeneralSettings();
 
   // Load Interactivity Settings
