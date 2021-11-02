@@ -20,7 +20,7 @@
         <a id="de" class="dropdown-item">Deutsch</a>
         <a id="de-leicht" class="dropdown-item">Leichte Sprache</a>
         <a id="en" class="dropdown-item">English</a>
-        <a id="en" class="dropdown-item">Français</a>
+        <a id="fr" class="dropdown-item">Français</a>
       </div>
     </div>
   </div>
