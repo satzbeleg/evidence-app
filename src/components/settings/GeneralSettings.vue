@@ -5,6 +5,11 @@
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
+      <BDropdown idname="myid" labeltext="Dies ist ein Text" 
+                 v-model:selected="test123" 
+                 :options="[{'id': 'hey', 'text': 'Hey'}, {'id': 'ho', 'text': 'Ho'}]" />
+
+
       <div class="field">
         <label class="label">
           {{ t('settings.language') }}
@@ -29,9 +34,9 @@
         <label class="label">
           Debugging Information
         </label>
-        <input id="interactivity-debugVerbose-toogle" class="switch is-rounded" type="checkbox"   
-               v-model="debugVerbose">
-        <label for="interactivity-debugVerbose-toogle">
+        <input id="interactivity-debug_verbose-toogle" class="switch is-rounded" type="checkbox"   
+               v-model="debug_verbose">
+        <label for="interactivity-debug_verbose-toogle">
           Print details to <code>console.log</code>
         </label>
       </div>
@@ -44,34 +49,42 @@
 
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useI18n } from 'vue-i18n';
 import { useDarkmodeToggle } from '@/components/settings/darkmode-toggle.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
+import BDropdown from "@/components/layout/Dropdown.vue";
 
 
 export default defineComponent({
   name: "Settings",
 
   components: {
-    LanguageSwitcher
+    LanguageSwitcher,
+    BDropdown
   },
 
   setup(){
     const { t } = useI18n();
 
 		// Load General Settings
-		const { debugVerbose, loadGeneralSettings } = useGeneralSettings();
+		const { debug_verbose, loadGeneralSettings } = useGeneralSettings();
 		loadGeneralSettings();
 
     // this also adds an watcher
     const { darkmodetheme } = useDarkmodeToggle();
+
+    const test123 = ref("")
+    watch(() => test123.value, (x) => {
+      console.log("Hey", x)
+    })
     
     return { 
       t,
       darkmodetheme,
-			debugVerbose
+			debug_verbose,
+      test123
     }
   },
 });

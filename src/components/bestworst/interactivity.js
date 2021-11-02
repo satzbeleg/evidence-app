@@ -82,7 +82,7 @@ const histpdf = (data, bin_edges) => {
  * @param {Array[ID]} avail_ids     List with unprocessed IDs
  * @param {Array[ID]} del_ids       List with IDs to be deleted
  * @param {Int}       max_displays  Maximum number of times an example should be displayed to the user
- * @param {Bool}      debugVerbose         (Optional) Flag to print logging info
+ * @param {Bool}      debug_verbose         (Optional) Flag to print logging info
  * 
  * Notes:
  * ------
@@ -92,7 +92,7 @@ const deletionCriteriaDisplays = (pool,
                                   avail_ids, 
                                   del_ids, 
                                   max_displays, 
-                                  debugVerbose=false) => {
+                                  debug_verbose=false) => {
   if (Number.isInteger(max_displays)){
     var i = avail_ids.length;
     while( i-- ){
@@ -100,9 +100,9 @@ const deletionCriteriaDisplays = (pool,
         del_ids.push(avail_ids.pop())
       }
     }
-    if (debugVerbose){console.log("Selected for deletion (Max Displays):", del_ids);}
+    if (debug_verbose){console.log("Selected for deletion (Max Displays):", del_ids);}
   }else{
-    if (debugVerbose){console.log(`max_displays=${max_displays} is not an integer`);}
+    if (debug_verbose){console.log(`max_displays=${max_displays} is not an integer`);}
   }
 }
 
@@ -115,7 +115,7 @@ const deletionCriteriaDisplays = (pool,
  * @param {Array[ID]} avail_ids     List with unprocessed IDs
  * @param {Array[ID]} del_ids       List with IDs to be deleted
  * @param {Float}     eps_score_change   Abort criteria for model score changes
- * @param {Bool}      debugVerbose         (Optional) Flag to print logging info
+ * @param {Bool}      debug_verbose         (Optional) Flag to print logging info
  * 
  * Notes:
  * ------
@@ -125,7 +125,7 @@ const deletionCriteriaConvergence = (pool,
                                       avail_ids, 
                                       del_ids, 
                                       eps_score_change, 
-                                      debugVerbose=false) => {
+                                      debug_verbose=false) => {
   if (Number.isFinite(eps_score_change)){
     var i = avail_ids.length;
     while( i-- ){
@@ -133,9 +133,9 @@ const deletionCriteriaConvergence = (pool,
         del_ids.push(avail_ids.pop())
       }
     }
-    if (debugVerbose){console.log("Selected for deletion (Covergence):", del_ids);}
+    if (debug_verbose){console.log("Selected for deletion (Covergence):", del_ids);}
   }else{
-    if (debugVerbose){console.log(`eps_score_change=${eps_score_change} is not a number`);}
+    if (debug_verbose){console.log(`eps_score_change=${eps_score_change} is not a number`);}
   }
 }
 
@@ -150,7 +150,7 @@ const deletionCriteriaConvergence = (pool,
  * @param {Array[ID]} del_ids       List with IDs to be deleted
  * @param {Array}     bin_edges     The bin edges of the histogram, e.g. [0.0, ..., 1.0]
  * @param {Array}     target_probas The desired densities for each bin
- * @param {Bool}      debugVerbose         (Optional) Flag to print logging info
+ * @param {Bool}      debug_verbose         (Optional) Flag to print logging info
  * 
  * Notes:
  * ------
@@ -161,7 +161,7 @@ const deletionCriteriaDistribution = (pool,
                                       del_ids, 
                                       bin_edges,
                                       target_probas,
-                                      debugVerbose=false) => {
+                                      debug_verbose=false) => {
   // declare variables
   var idx, excess_proba, num_del, bin_ids, disp, conv;
   const num_examples = avail_ids.length;
@@ -217,9 +217,9 @@ const deletionCriteriaDistribution = (pool,
         //console.log("Del:", j, num_del, excess_proba)
       }
     }
-    if (debugVerbose){console.log("Selected for deletion (Distribution):", del_ids);}
+    if (debug_verbose){console.log("Selected for deletion (Distribution):", del_ids);}
   }else{
-    if (debugVerbose){console.log(`target_probas and/or bin_edges are not arrays`);}
+    if (debug_verbose){console.log(`target_probas and/or bin_edges are not arrays`);}
   }
 }
 
@@ -248,16 +248,16 @@ export const useInteractivity = () => {
   // Initialize data variables
   const pool = reactive({});   // key-value database for each sentences
   const pairs = reactive({});  // sparse LIL matrix with paired comparisons
-  const isPoolInitiallyLoaded = ref(false);  // For `initial_load_only`. Reset in `onSearchLemmata`
-  const deletedPool = reactive({});
+  const is_pool_initially_loaded = ref(false);  // For `initial_load_only`. Reset in `onSearchLemmata`
+  const deleted_pool = reactive({});
 
   // Informational variables
-  const errorMessage = ref("");
+  const error_message = ref("");
 
   // Load General Settings
   const { 
-    hasDataDonationConsent, 
-    debugVerbose, 
+    has_data_donation_consent, 
+    debug_verbose, 
     loadGeneralSettings 
   } = useGeneralSettings();
   loadGeneralSettings();
@@ -326,7 +326,7 @@ export const useInteractivity = () => {
    * -----------------
    * @param {JSON}  pool 
    * @param {JSON}  pairs 
-   * @param {Bool}  debugVerbose 
+   * @param {Bool}  debug_verbose 
    * @param {Int}   min_pool_size 
    * @param {Array} target_probas
    * @param {Array} bin_edges
@@ -371,17 +371,17 @@ export const useInteractivity = () => {
       // (a) Drop examples with overrepresented training scores
       if (drop_distribution.value){
         deletionCriteriaDistribution(
-          pool, avail_ids, del_ids, bin_edges.value, target_probas.value, debugVerbose.value);
+          pool, avail_ids, del_ids, bin_edges.value, target_probas.value, debug_verbose.value);
       }
       // (b) Drop if example reached `max_displays`
       if (drop_max_display.value){
         deletionCriteriaDisplays(
-          pool, avail_ids, del_ids, max_displays.value, debugVerbose.value);
+          pool, avail_ids, del_ids, max_displays.value, debug_verbose.value);
       }
       // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
       if (drop_converge.value){
         deletionCriteriaConvergence(
-          pool, avail_ids, del_ids, eps_score_change.value, debugVerbose.value);
+          pool, avail_ids, del_ids, eps_score_change.value, debug_verbose.value);
       }
       // Restrict deletions
       del_ids = del_ids.slice(0, max_deletions);
@@ -400,7 +400,7 @@ export const useInteractivity = () => {
     // Copy pool data to buffer
     // var deletedData = {}  // API buffer
     del_ids.forEach(key => {
-      deletedPool[key] = {
+      deleted_pool[key] = {
         "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
         "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
         "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
@@ -408,55 +408,55 @@ export const useInteractivity = () => {
       delete pool[key];
     });
 
-    if (debugVerbose.value){
-      console.log("Deleted data:", JSON.parse(JSON.stringify(deletedPool)) );
+    if (debug_verbose.value){
+      console.log("Deleted data:", JSON.parse(JSON.stringify(deleted_pool)) );
     }
   }
 
   /**
    * (1b) Send deleted pool data to API/DB
    * - Start asynchronous AJAX request to backup deleted examples
-   * - Storing app data to the API/DB works only if `hasDataDonationConsent` is true
+   * - Storing app data to the API/DB works only if `has_data_donation_consent` is true
    */
   const saveDeletedPool = () => {
     return new Promise((resolve, reject) => {
-      if (hasDataDonationConsent.value){
+      if (has_data_donation_consent.value){
         // load other functions and objects
         const { getToken } = useAuth();
         const { api } = useApi2(getToken());
         // Start API request
-        api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deletedPool)) )
+        api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deleted_pool)) )
           .then(response => {
             response.data['stored-sentids'].forEach(key => {
-              delete deletedPool[key];
+              delete deleted_pool[key];
             })
-            if(debugVerbose.value){console.log(response)}
+            if(debug_verbose.value){console.log(response)}
             resolve(response);
           })
           .catch(error => {
-            if(debugVerbose.value){console.log(error)}
+            if(debug_verbose.value){console.log(error)}
             reject(error);
           })
           .finally(() => {        
           });
       }else{
         // just delete the data permanently
-        Object.keys(deletedPool).forEach(key => {
-          delete deletedPool[key];
+        Object.keys(deleted_pool).forEach(key => {
+          delete deleted_pool[key];
         });
-        if(debugVerbose.value){console.log("Dropped pool examples permanently because hasConsent=false.")}
+        if(debug_verbose.value){console.log("Dropped pool examples permanently because hasConsent=false.")}
       }
     });
   }
 
   /**
-   * (1c) watch `deletedPool` to trigger sync with API/DB
+   * (1c) watch `deleted_pool` to trigger sync with API/DB
    */
   watch(
-    () => Object.keys(deletedPool).length,
+    () => Object.keys(deleted_pool).length,
     (num_deleted_examples) => {
       if (num_deleted_examples > 0){
-        if(debugVerbose.value){console.log(`try to store ${num_deleted_examples} deleted example(s)`)}
+        if(debug_verbose.value){console.log(`try to store ${num_deleted_examples} deleted example(s)`)}
         saveDeletedPool();
       }
     }
@@ -469,7 +469,7 @@ export const useInteractivity = () => {
    * Global Variables:
    * -----------------
    * @param {JSON}    pool 
-   * @param {String}  errorMessage
+   * @param {String}  error_message
    * @param {Int}     max_pool_size
    * @param {Int}     max_displays
    * 
@@ -478,20 +478,20 @@ export const useInteractivity = () => {
    *  // watch `pool` to trigger sync with API/DB
    *  watch( () => Object.keys(pool).length, (current_pool_size) => {
    *    if (current_pool_size < max_pool_size.value){
-   *      if(debugVerbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
+   *      if(debug_verbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
    *        addExamplesToPool(searchlemmata.value);
    *  }  });
    */
   const addExamplesToPool = (lemmata) => {
     // not implemented
-    if(debugVerbose.value){console.log("Not implemented: ", add_distribution.value);}
-    if(debugVerbose.value){console.log("Not implemented: ", initial_load_only.value);}
+    if(debug_verbose.value){console.log("Not implemented: ", add_distribution.value);}
+    if(debug_verbose.value){console.log("Not implemented: ", initial_load_only.value);}
 
     return new Promise((resolve, reject) => {
       // replenish pool with sentence examples
       const num_additions = max_pool_size.value - Object.keys(pool).length;
 
-      if (num_additions > 0  &&  !(initial_load_only.value && isPoolInitiallyLoaded.value) ){
+      if (num_additions > 0  &&  !(initial_load_only.value && is_pool_initially_loaded.value) ){
         // settings
         var params = {
           "lemmata": lemmata.split(',').map(s => s.trim()),
@@ -506,7 +506,7 @@ export const useInteractivity = () => {
         api.post(`v1/interactivity/training-examples/${num_additions}/${unref(item_sampling_numtop)}/${unref(item_sampling_offset)}`, params)
           .then(response => {
             if ('msg' in response.data){
-              errorMessage.value = response.data['msg'];
+              error_message.value = response.data['msg'];
             } else {
               response.data.forEach(row => {
                 pool[row.id] = {
@@ -520,15 +520,15 @@ export const useInteractivity = () => {
                 }
               })
             }
-            if(debugVerbose.value){console.log(response)}
+            if(debug_verbose.value){console.log(response)}
             resolve(response);
           })
           .catch(error => {
-            if(debugVerbose.value){console.log(error)}
+            if(debug_verbose.value){console.log(error)}
             reject(error);
           })
           .finally(() => {
-            isPoolInitiallyLoaded.value = true;  // for `initial_load_only`
+            is_pool_initially_loaded.value = true;  // for `initial_load_only`
             updateCurrentPoolMetrics(pool);  // compute current metrics manually
           });
       }  
@@ -541,7 +541,7 @@ export const useInteractivity = () => {
    */
   const resetPool = () => {
     // set the initial loading flag to false
-    isPoolInitiallyLoaded.value = false;
+    is_pool_initially_loaded.value = false;
     // delete pool data
     Object.keys(pool).forEach(key => {delete pool[key];});
     // delete pairs matrix
@@ -555,7 +555,7 @@ export const useInteractivity = () => {
   const { searchlemmata } = useQueue();
   watch( () => Object.keys(pool).length, (current_pool_size) => {
     if (current_pool_size < max_pool_size.value && searchlemmata.value){
-      if(debugVerbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
+      if(debug_verbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
       addExamplesToPool(searchlemmata.value);
     }
   });
@@ -570,7 +570,7 @@ export const useInteractivity = () => {
    * @param {Int}   bwsset_num_items 
    * @param {Int}   num_preload_bwssets 
    * @param {String} item_sampling_method 
-   * @param {Bool}  debugVerbose 
+   * @param {Bool}  debug_verbose 
    * 
    * Example:
    * --------
@@ -578,7 +578,7 @@ export const useInteractivity = () => {
    *  const bwsset_num_items = ref(4);
    *  const num_preload_bwssets = ref(3);   // settings: Number BWS sets to preload
    *  const item_sampling_method = ref("random"); // "random", "exploit", "newer-unstable"
-   *  const debugVerbose = false;
+   *  const debug_verbose = false;
    *  // run the code
    *  var sampled_bwssets = sampleBwsSets();
    */
@@ -590,7 +590,7 @@ export const useInteractivity = () => {
     var num_examples = Math.max(num_preload_bwssets.value, 1) * Math.max(1, bwsset_num_items.value - 1);
     num_examples = Math.max(bwsset_num_items.value, num_examples);
 
-    if (debugVerbose.value) {
+    if (debug_verbose.value) {
       console.log(`Num of items to sample from pool: ${num_examples}`)
     }
 
@@ -638,7 +638,7 @@ export const useInteractivity = () => {
     // (D) Pick the first `num_examples` items of the sorted ids
     var sampled_ids = all_ids.slice(0, num_examples);
 
-    if (debugVerbose.value) {
+    if (debug_verbose.value) {
       console.log(`sampled_ids.length=${sampled_ids.length}`);
       console.log("Sampled IDs:", sampled_ids);
     }
@@ -647,7 +647,7 @@ export const useInteractivity = () => {
     var sampled_bwssets = sampling.sample(
       sampled_ids, bwsset_num_items.value, bwsset_sampling_method.value, false);
 
-    if (debugVerbose.value) {
+    if (debug_verbose.value) {
       console.log("BWS samples:", sampled_bwssets);
     }
 
@@ -840,7 +840,7 @@ export const useInteractivity = () => {
 
   // Go to (1)
   return { 
-    errorMessage,
+    error_message,
     pool, 
     pairs, 
     resetPool,

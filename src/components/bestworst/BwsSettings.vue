@@ -14,7 +14,7 @@
   </div>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-    
+
       <div class="field">
         <label class="label" for="queue-reorderpoint">
           Minimum Number of Offline BWS Sets  <!-- (econ: reorder point) -->
