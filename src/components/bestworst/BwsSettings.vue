@@ -106,33 +106,12 @@
         <output for="bwsset-num-items">{{ bwsset_num_items }}</output>
       </div>
 
-      <div class="field">
-        <label class="label" for="bwsset-sampling-method">
-          BWS sampling method
-        </label>
-        <br>
-        <div class="dropdown" id="bwsset-sampling-method"
-             v-on:click="showDropdownBwsSamplingMethod = !showDropdownBwsSamplingMethod"
-             v-bind:class="{ 'is-active': showDropdownBwsSamplingMethod }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-bwsset-sampling-method">
-              <span>
-                <template v-if="bwsset_sampling_method == 'overlap'">overlap</template>
-                <template v-if="bwsset_sampling_method == 'twice'">twice</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-bwsset-sampling-method" role="menu">
-            <div class="dropdown-content" v-on:click="bwsset_sampling_method = $event.target.id">
-              <a id="overlap" class="dropdown-item">overlap</a>
-              <a id="twice" class="dropdown-item">twice</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BDropdown idname="bwsset-sampling-method" 
+                 labeltext="BWS sampling method" 
+                 v-model:selected="bwsset_sampling_method" 
+                 :options="[
+                  {'id': 'overlap', 'text': 'overlap'}, 
+                  {'id': 'twice', 'text': 'twice'}]" />
 
     </div>
   </div>
@@ -162,34 +141,13 @@
         <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
       </div>
 
-      <div class="field">
-        <label class="label" for="interactivity-item_sampling_method">
-          Sampling Sentences from Pool (Default: exploit)
-        </label>
-        <div class="dropdown" id="interactivity-item_sampling_method" 
-             v-on:click="showDropdownItemSamplingMethod = !showDropdownItemSamplingMethod"
-             v-bind:class="{ 'is-active': showDropdownItemSamplingMethod }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-item_sampling_method">
-              <span>
-                <template v-if="item_sampling_method == 'random'">random</template>
-                <template v-if="item_sampling_method == 'exploit'">exploit</template>
-                <template v-if="item_sampling_method == 'newer-unstable'">newer-unstable</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-item_sampling_method" role="menu">
-            <div class="dropdown-content" v-on:click="item_sampling_method = $event.target.id">
-              <a id="random" class="dropdown-item">random</a>
-              <a id="exploit" class="dropdown-item">exploit</a>
-              <a id="newer-unstable" class="dropdown-item">newer-unstable</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BDropdown idname="interactivity-item-sampling-method" 
+                 labeltext="Sampling Sentences from Pool (Default: exploit)" 
+                 v-model:selected="item_sampling_method" 
+                 :options="[
+                  {'id': 'random', 'text': 'random'}, 
+                  {'id': 'exploit', 'text': 'exploit'},
+                  {'id': 'newer-unstable', 'text': 'newer-unstable'}]" />
 
     </div>
   </div>
@@ -409,33 +367,12 @@
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
-      <div class="field">
-        <label class="label" for="smoothing-method">
-          Smooting Methods to compute training scores
-        </label>
-        <br>
-        <div class="dropdown" id="smoothing-method"
-             v-on:click="showDropdownSmoothingMethod = !showDropdownSmoothingMethod"
-             v-bind:class="{ 'is-active': showDropdownSmoothingMethod }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-smoothing-method">
-              <span>
-                <template v-if="smoothing_method == 'last'">last</template>
-                <template v-if="smoothing_method == 'ema'">EMA</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-smoothing-method" role="menu">
-            <div class="dropdown-content" v-on:click="smoothing_method = $event.target.id">
-              <a id="last" class="dropdown-item">last</a>
-              <a id="ema" class="dropdown-item">EMA</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BDropdown idname="smoothing-method" 
+                 labeltext="Smooting Methods to compute training scores" 
+                 v-model:selected="smoothing_method" 
+                 :options="[
+                  {'id': 'last', 'text': 'last'}, 
+                  {'id': 'ema', 'text': 'EMA'}]" />
 
       <div class="field">
         <label class="label" for="ema-alpha">
@@ -454,37 +391,13 @@
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
       
-      <div class="field">
-        <label class="label" for="train-optimizer">
-          Optimization Algorithm
-        </label>
-        <br>
-        <div class="dropdown" id="train-optimizer"
-             v-on:click="showDropdownTrainOptimizer = !showDropdownTrainOptimizer"
-             v-bind:class="{ 'is-active': showDropdownTrainOptimizer }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-train-optimizer">
-              <span>
-                <template v-if="train_optimizer == 'adam'">Adam</template>
-                <template v-if="train_optimizer == 'rmsprop'">RMSProp</template>
-                <template v-if="train_optimizer == 'adagrad'">AdaGrad</template>
-                <template v-if="train_optimizer == 'sgd'">SGD</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-train-optimizer" role="menu">
-            <div class="dropdown-content" v-on:click="train_optimizer = $event.target.id">
-              <a id="adam" class="dropdown-item">Adam</a>
-              <a id="rmsprop" class="dropdown-item">RMSProp</a>
-              <a id="adagrad" class="dropdown-item">AdaGrad</a>
-              <a id="sgd" class="dropdown-item">SGD</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BDropdown idname="train-optimizer" labeltext="Optimization Algorithm" 
+                 v-model:selected="train_optimizer" 
+                 :options="[
+                  {'id': 'adam', 'text': 'ADAM'}, 
+                  {'id': 'rmsprop', 'text': 'RMSProp'},
+                  {'id': 'adagrad', 'text': 'AdaGrad'},
+                  {'id': 'sgd', 'text': 'SGD'}]" />
 
       <div class="field">
         <label class="label" for="train-lrate">
@@ -506,39 +419,13 @@
         <output for="train-epochs" style="width:3.1rem;">{{ train_epochs }}</output>
       </div>
 
-      <BDropdown idname="myid" labeltext="Dies ist ein Text" 
-                 v-model:selected="test123" 
-                 :options="[{'id': 'hey', 'text': 'Hey'}, {'id': 'ho', 'text': 'Ho'}]" />
+      <BDropdown idname="train-loss" labeltext="Loss Function" 
+                 v-model:selected="train_loss" 
+                 :options="[
+                  {'id': 'meanSquaredError', 'text': 'MSE'}, 
+                  {'id': 'huberLoss', 'text': 'Huber'},
+                  {'id': 'absoluteDifference', 'text': 'Abs. Diff.'}]" />
 
-      <div class="field">
-        <label class="label" for="train-loss">
-          Loss Function
-        </label>
-        <br>
-        <div class="dropdown" id="train-loss"
-             v-on:click="showDropdownTrainLoss = !showDropdownTrainLoss"
-             v-bind:class="{ 'is-active': showDropdownTrainLoss }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-train-loss">
-              <span>
-                <template v-if="train_loss == 'meanSquaredError'">MSE</template>
-                <template v-if="train_loss == 'huberLoss'">Huber</template>
-                <template v-if="train_loss == 'absoluteDifference'">Abs. Diff.</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-train-loss" role="menu">
-            <div class="dropdown-content" v-on:click="train_loss = $event.target.id">
-              <a id="meanSquaredError" class="dropdown-item">MSE</a>
-              <a id="huberLoss" class="dropdown-item">Huber</a>
-              <a id="absoluteDifference" class="dropdown-item">Abs. Diff.</a>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div class="field">
         <label class="label" for="train-minsample">
@@ -562,7 +449,7 @@ import { defineComponent, watch, ref } from 'vue';
 // import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
-import BDropdown from "@/components/layout/Dropdown.vue";
+import BDropdown from "@/components/layout/BDropdown.vue";
 
 
 export default defineComponent({
@@ -576,13 +463,6 @@ export default defineComponent({
     // i18n data
     const { t } = useI18n();
     const { language } = useGeneralSettings();
-
-    // Dropdown menus
-    const showDropdownItemSamplingMethod = ref(false);
-    const showDropdownBwsSamplingMethod = ref(false);
-    const showDropdownSmoothingMethod = ref(false);
-    const showDropdownTrainOptimizer = ref(false);
-    const showDropdownTrainLoss = ref(false);
 
     const {
       // also used in bestworst3
@@ -661,11 +541,8 @@ export default defineComponent({
         drop_converge, eps_score_change_text,
         drop_pairs,
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
-        showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod,
       smoothing_method, ema_alpha,
-        showDropdownSmoothingMethod,
-      train_optimizer, train_lrate, train_epochs, train_loss, train_minsample,
-        showDropdownTrainOptimizer, showDropdownTrainLoss
+      train_optimizer, train_lrate, train_epochs, train_loss, train_minsample
     }
   }
 });
