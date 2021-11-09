@@ -59,7 +59,7 @@
     },
     "method": {
       "heading": "Methodology",
-      "text": "The application is primarily used to assess the goodness and diversity of sentence examples. The best-worst scaling method is used to assess the goodness. The annotators are shown four sentence examples from which they can select the best and the worst sentence example. The resulting rankings are used as target variables in a supervised learning algorithm. In order to evaluate the diversity of sentence examples for a given lemma, users must use sliders to indicate to what extent they trade off goodness over diversity and which types of diversity are preferred (e.g. different grammar, semantics, source references). With a quadratic optimization algorithm, the displayed set of sentence examples are re-sorted based on these parameters until the user is satisfied with the displayed selection."
+      "text": "The application is primarily used to assess the goodness and diversity of sentence examples. The best-worst scaling method is used to assess the goodness. The annotators are shown four sentence examples from which they can select the best and the worst sentence example. The resulting rankings are used as target variables in a supervised learning algorithm. In order to evaluate the diversity of sentence examples for a given lemma, users must use sliders to indicate to what extent they trade off goodness over diversity and which types of diversity are preferred (e.g. different grammar, semantics, source references). With a quadratic optimization algorithm, the displayed sets of sentence examples are re-sorted based on these parameters until the user is satisfied with the displayed selection."
     },
     "team": {
       "heading": "Team members",

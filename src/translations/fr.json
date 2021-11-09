@@ -5,30 +5,30 @@
   },
   "home": {
     "welcome": "Bienvenue",
-    "welcome_text": "Vous pouvez évaluer des exemples avec les outils suivants ..."
+    "welcome_text": "Tu peux évaluer des exemples avec les outils suivants ..."
   },
   "auth": {
     "login": "Se connecter",
     "login_noun": "Connexion",
-    "login_cta": "Connectez-vous s'il vous plaît pour continuer.",
-    "signup": "S'inscriver",
+    "login_cta": "Connecte-toi s'il te plaît pour continuer.",
+    "signup": "S'inscrire",
     "signup_noun": "Inscription",
-    "signup_cta": "Inscrivez-vous avec votre adresse email et un mot de passe s'il vous plaît.",
+    "signup_cta": "Inscris-toi avec ton adresse email et un mot de passe s'il te plaît.",
     "recover": "Réinitialisation",
     "recover_noun": "réinitialiser mot de passe",
-    "recover_cta": "Demandez un nouveau mot de passe pour votre adresse email.",
+    "recover_cta": "Demande un nouveau mot de passe pour ton adresse email.",
     "verify": "Vérification",
     "verify_noun": "Confirme l'adresse email",
-    "verify_cta": "Veuillez vérifier votre adresse email.",
+    "verify_cta": "Vérifier l'adresse email",
     "logout": "Se déconnecter",
-    "remember": "Mémoriser/Rester connecté.e",
+    "remember": "Rester connecté·e",
     "email": "Adresse email",
     "email_place": "alex at exemple.fr",
     "password": "Mot de passe",
-    "password_place": "Votre mot de passe",
+    "password_place": "Ton mot de passe",
     "username": "Identifiant",
-    "username_place": "Votre identifiant",
-    "google_signin_cookie_warning": "La connexion avec Google fonctionne seulement si les cookies tiers sont activés dans votre navigateur."
+    "username_place": "Ton identifiant",
+    "google_signin_cookie_warning": "La connexion avec Google fonctionne seulement si les cookies tiers sont activés dans ton navigateur."
   },
   "settings": {
     "settings": "Paramètres",
@@ -59,7 +59,7 @@
     },
     "method": {
       "heading": "Méthodologie",
-      "text": "L'application sert surtout à l'évaluation concernant la qualité et la diversité des exemples. Pour le jugement de qualité la méthode Best-Worst-Scaling est utilisée. Quatre exemples sont montrés aux annotat·eur·rice·s dont ils choisissent le meilleur et le pire. Les classements résultants sont utilisés comme variable cible dans un procédé d'apprentissage surveillé. Pour évaluer la diversité des exemples d'un certain lemme, les utilisat·eur·rice·s sont demandé·e·s de mettre en balance la qualité et la diversité et de specifier quels genres de diversité sont préférés (par exemple des structures de phrase différentes, la sémantique, des indications de source) en ajustant des curseurs. Les exemples montrés sont réorganisés avec un procédé d'optimisation quadratique selon ces paramètres jusqu'à ce que l'utilisat·eur·rice soit satisfait·e de la sélection affichée."
+      "text": "L'application sert surtout à l'évaluation concernant la qualité et la diversité des exemples. Pour le jugement de qualité la méthode Best-Worst-Scaling est utilisée. Quatre exemples sont montrés aux annotat·eur·rice·s dont ils choisissent le meilleur et le pire. Les classements résultants sont utilisés comme variable cible dans un procédé d'apprentissage surveillé. Pour évaluer la diversité des exemples d'un certain lemme, les utilisat·eur·rice·s sont demandé·e·s de mettre en balance la qualité et la diversité et de spécifier quels genres de diversité sont préférés (par exemple des structures de phrase différentes, la sémantique, des indications de source) en ajustant des curseurs. Les exemples montrés sont réorganisés avec un procédé d'optimisation quadratique selon ces paramètres jusqu'à ce que l'utilisat·eur·rice soit satisfait·e de la sélection affichée."
     },
     "team": {
       "heading": "Collaborat·eur·rice·s",
@@ -116,7 +116,7 @@
   },
   "consent": {
     "title": "Consentement éclairé",
-    "menu_description": "Acceptez-vous que vos données sont publiées?"
+    "menu_description": "Accepte-tu que tes données sont publiées?"
   },
   "imprint": {
     "title": "Mentions légales",
