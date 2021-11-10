@@ -1,0 +1,125 @@
+{
+  "header": {
+    "home": "Startseite",
+    "about": "Über uns"
+  },
+  "home": {
+    "welcome": "Herzlich Willkommen",
+    "welcome_text": "Du kannst Satzbeispiele mit diesen Tools bewerten ..."
+  },
+  "auth": {
+    "login": "Anmelden",
+    "login_noun": "Anmeldung",
+    "login_cta": "Bitte melde dich an.",
+    "signup": "Konto erstellen",
+    "signup_noun": "Konto erstellen",
+    "signup_cta": "Bitte erstelle ein Konto mit mit deiner E-Mail-Adresse und einem Passwort.",
+    "recover": "Neues Passwort",
+    "recover_noun": "Neues Passwort",
+    "recover_cta": "Bekomme ein neues Passwort für deine E-Mail-Adresse.",
+    "verify": "Bestätige",
+    "verify_noun": "Bestätige E-Mail",
+    "verify_cta": "Bestätige deine E-Mail-Adresse.",
+    "logout": "Abmelden",
+    "remember": "Merken",
+    "email": "E-Mail",
+    "email_place": "alex at musterbeispiel.de",
+    "password": "Passwort",
+    "password_place": "Dein Passwort",
+    "username": "Benutzername",
+    "username_place": "Dein Benutzername",
+    "google_signin_cookie_warning": "Manchmal klappt die Anmeldung mit Google nicht. Dann musst du in deinem Browser Cookies von Drittanbietern aktivieren."
+  },
+  "settings": {
+    "settings": "Einstellungen",
+    "general": "Allgemeine Einstellungen",
+    "appearance": "Aussehen der App",
+    "language": "Sprache der App",
+    "darkmode": "Dunkler Modus"
+  },
+  "bestworst": {
+    "title": "BWS Ranking"
+  },
+  "menu": {
+    "evaluate": "Bewerten",
+    "bestworst3": "Best-Worst Scaling",
+    "bestworst3_text": "Wähle das beste & schlechteste von vier Beispielen",
+    "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle das schlechteste Satzbeispiel aus."
+  },
+  "about": {
+    "title": "Über das EVIDENCE Projekt",
+    "menu_description": "Worum geht es im Forschungsprojekt?",
+    "motivation": {
+      "heading": "Motivation",
+      "text": "In vielen Wörterbüchern helfen Korpusbelege bei der Beschreibung von einem Wort. Korpusbelege oder Satzbelege sind Beispiele aus anderen Texten. Die Auswahl von Korpusbelegen ist nicht leicht. Es ist schwer zu sagen, wann ein Korpusbeleg „gut“ oder „angemessen“ ist. Die Autoren von Wörterbüchern heißen Lexikographen. Sie wählen die Korpusbeispiele für Wörter aus. Oft sind sie sich uneinig, welches Beispiel das Wort am besten beschreibt."
+    },
+    "goals": {
+      "heading": "Ziele",
+      "text": "Lexikographen sollen Hilfe bei der Entscheidung für einen guten Korpusbeleg bekommen. Deshalb entwickeln wir ein Programm, das Korpusbelege raussucht, in Klassen einteilt und bewertet. Das Programm soll Teil vom DWDS werden. Es zeigt für jedes Wort eine Gruppe von Beispielen an. Die Beispiele beschreiben das Wort besonders gut. Sie zeigen mehrere Kontexte, in denen das Wort vorkommen kann. Manchmal haben Wörter noch keinen vollständigen Wörterbucheintrag. Das Programm soll trotzdem schon gute Beispiele für diese Wörter anzeigen."
+    },
+    "method": {
+      "heading": "Vorgehen",
+      "text": "Die App ist dazu da, gute und vielfältige Satzbelege zu bewerten. Dafür nutzen wir das Best-Worst-Scaling Verfahren. Die Nutzer sehen vier Satzbelege. Sie wählen den besten und den schlechtesten aus. Daraus entstehen Ranglisten. Also Listen, die zeigen, welches Beispiel die Nutzer gut oder schlecht finden. Das Programm lernt daraus, selbst solche Ranglisten zu erstellen. Es kann dann sagen, welche Satzbelege gut und vielfältig sind. In der Informatik heißt das Überwachtes Lernverfahren. Manchen Nutzern ist wichtiger, dass ein Satzbeleg gut oder vielfältig ist. Das zeigen sie mit Schiebereglern. Sie sollen auch sagen, was genau ihnen bei Vielfalt wichtig ist. Zum Beispiel die Struktur vom Satz, die Bedeutung oder die Quelle. Das merkt sich das Programm und zeigt den Nutzern immer neue passende Satzbelege an. Die werden so lange neu sortiert, bis der Nutzer mit den Satzbelegen zufrieden ist. Die Methode, mit der die Satzbelege neu sortiert werden, heißt Quadratisches Optimierungsverfahren."
+    },
+    "team": {
+      "heading": "Mitarbeiter",
+      "member1": {
+        "name": "Prof. Dr. Iryna Gurevych",
+        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
+        "role": "Projektleiterin am Standort Darmstadt",
+        "www": "https://web.archive.org/web/20210422143659/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/head_ukp/index.en.jsp"
+      },
+      "member2": {
+        "name": "PD Dr. Alex Geyken",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Projektleiter am Standort Berlin",
+        "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
+      },
+      "member3": {
+        "name": "Dr. Lothar Lemmnitzer",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Experte Lexikographie",
+        "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
+      },
+      "member4": {
+        "name": "Ji-Ung Lee",
+        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
+        "role": "Wissenschaftlicher Mitarbeiter",
+        "www": "https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp"
+      },
+      "member5": {
+        "name": "Ulf Hamster",
+        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
+        "role": "Wissenschaftlicher Mitarbeiter, Softwareentwicklung",
+        "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
+      }
+    },
+    "partners": {
+      "heading": "Projektpartner"
+    },
+    "funding": {
+      "heading": "Finanzierung",
+      "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
+    }
+  },
+  "tips": {
+    "title": "Tipps zur Bedienung",
+    "menu_description": "Wie benutzt man diese App?"
+  },
+  "privacy": {
+    "title": "Datenschutz",
+    "menu_description": "Wie Daten und Angaben von Personen bei Forschungsprojekten geschützt werden"
+  },
+  "terms": {
+    "title": "Nutzungs-Regeln",
+    "menu_description": "Die Regeln zur Nutzung dieser App"
+  },
+  "consent": {
+    "title": "Was mit den Daten passiert",
+    "menu_description": "Die Ergebnisse vom Forschungsprojekt stehen später vielleicht in Büchern, Artikeln oder im Internet. Dabei stehen aber nie die Namen von den Nutzern. Man kann also nicht sehen, wer die App genutzt hat. Bist du damit einverstanden, dass deine Daten veröffentlicht werden?"
+  },
+  "imprint": {
+    "title": "Impressum",
+    "menu_description": "Wer ist verantwortlich für diese App?"
+  }
+}

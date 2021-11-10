@@ -43,7 +43,7 @@
   "menu": {
     "evaluate": "Evaluate",
     "bestworst3": "Best-Worst Scaling",
-    "bestworst3_text": "Select the best and worst out of four example",
+    "bestworst3_text": "Select the best and worst out of four examples",
     "bestworst3_text2": "4 sentence examples are displayed. First mark the best sentence example. Finally, select the worst sentence example."
   },
   "about": {
@@ -51,15 +51,15 @@
     "menu_description": "What is the project about?",
     "motivation": {
       "heading": "Motivation",
-      "text": "In many dictionaries, corpus references support the lexicographical description of a word. The selection of suitable and helpful sentence examples is a challenge because the operationalization of broad criteria such as 'quality' and 'appropriateness' of sentence examples into metrics is not trivial and professional lexicographers do not always achieve a unanimous judgment which sentence examples fits best in the description of a lemma."
+      "text": "In many dictionaries, corpus references support the lexicographical description of a word. The selection of suitable and helpful sentence examples is a challenge because the operationalization of broad criteria such as 'quality' and 'appropriateness' of sentence examples into metrics is not trivial and professional lexicographers do not always achieve an unanimous judgment which sentence example fits best in the description of a lemma."
     },
     "goals": {
       "heading": "Goals",
-      "text": "In order to support lexicographers in their decision-making process, a system for the extraction, classification and evaluation of sentence example is to be developed and integrated into the lexical information system of the DWDS. The recommendation system suggests a group of sentence examples for each lemma, each of which is considered to be of high quality and together have a high variety and facets and nuances of word usage. The recommendation system is to be developed to such an extent that the external users of the lexical information system are suggested sufficiently good sentence examples even for lemmas that have not yet been fully lexically treated by an expert."
+      "text": "In order to support lexicographers in their decision-making process, a system for the extraction, classification and evaluation of sentence examples is to be developed and integrated into the lexical information system of the DWDS. The recommendation system suggests a group of sentence examples for each lemma, each of which is considered to be of high quality and together have a high variety and facets and nuances of word usage. The recommendation system is to be developed to such an extent that sufficiently good sentence examples are suggested to the external users of the lexical information system even for lemmas that have not yet been fully lexically treated by an expert."
     },
     "method": {
       "heading": "Methodology",
-      "text": "The application is primarily used to assess the goodness and diversity of sentence examples. The best-worst scaling method is used to assess the goodness. The annotators are shown four sentence examples from which they can select the best and the worst sentence example. The resulting rankings are used as target variables in a supervised learning algorithm. In order to evaluate the diversity of sentence example for a given lemma, users must use sliders to indicate to what extent they trade-off goodness over diversity and which types of diversity are preferred (e.g. different grammar, semantics, source references). With a quadratic optimization algorithm, the displayed set of sentence example are re-sorted based on these parameters until the user is satisfied with the displayed selection."
+      "text": "The application is primarily used to assess the goodness and diversity of sentence examples. The best-worst scaling method is used to assess the goodness. The annotators are shown four sentence examples from which they can select the best and the worst sentence example. The resulting rankings are used as target variables in a supervised learning algorithm. In order to evaluate the diversity of sentence examples for a given lemma, users must use sliders to indicate to what extent they trade off goodness over diversity and which types of diversity are preferred (e.g. different grammar, semantics, source references). With a quadratic optimization algorithm, the displayed sets of sentence examples are re-sorted based on these parameters until the user is satisfied with the displayed selection."
     },
     "team": {
       "heading": "Team members",
