@@ -10,19 +10,19 @@
   "auth": {
     "login": "Se connecter",
     "login_noun": "Connexion",
-    "login_cta": "Connecte-toi s'il te plaît pour continuer.",
+    "login_cta": "Merci de te connecter pour continuer.",
     "signup": "S'inscrire",
     "signup_noun": "Inscription",
-    "signup_cta": "Inscris-toi avec ton adresse email et un mot de passe s'il te plaît.",
+    "signup_cta": "Merci de créer un compte avec ton adresse e-mail.",
     "recover": "Réinitialisation",
-    "recover_noun": "réinitialiser mot de passe",
-    "recover_cta": "Demande un nouveau mot de passe pour ton adresse email.",
+    "recover_noun": "Réinitialisation de ton mot de passe",
+    "recover_cta": "Demande un nouveau mot de passe pour ton adresse e-mail.",
     "verify": "Vérification",
-    "verify_noun": "Confirme l'adresse email",
-    "verify_cta": "Vérifier l'adresse email",
+    "verify_noun": "Confirmation de l'adresse e-mail",
+    "verify_cta": "Vérifie ton adresse e-mail",
     "logout": "Se déconnecter",
-    "remember": "Rester connecté·e",
-    "email": "Adresse email",
+    "remember": "Maintenir la connexion",
+    "email": "Adresse e-mail",
     "email_place": "alex at exemple.fr",
     "password": "Mot de passe",
     "password_place": "Ton mot de passe",
@@ -32,34 +32,34 @@
   },
   "settings": {
     "settings": "Paramètres",
-    "general": "Paramètres générales/globales",
+    "general": "Paramètres généraux",
     "appearance": "Apparence de l'interface utilisateur",
     "language": "Langue de l'interface utilisateur",
     "darkmode": "Mode sombre"
   },
   "bestworst": {
-    "title": "BWS Ranking"
+    "title": "Échelle de différence maximale"
   },
   "menu": {
-    "evaluate": "Évaluer",
-    "bestworst3": "Best-Worst Scaling",
-    "bestworst3_text": "Choisis le meilleur et le pire de quatre exemples",
-    "bestworst3_text2": "4 exemples sont affichés. D'abord, clique sur le meilleur exemple. Ensuite, choisis le pire exemple."
+    "evaluate": "Évaluation",
+    "bestworst3": "Échelle de différence maximale",
+    "bestworst3_text": "Choisis le meilleur exemple et le pire parmi les quatre qui te sont proposés.",
+    "bestworst3_text2": "Quatre exemples sont affichés. Commence par cliquer sur le meilleur et clique ensuite sur le pire."
   },
   "about": {
     "title": "À propos du projet EVIDENCE",
     "menu_description": "En quoi consiste le projet de recherche?",
     "motivation": {
       "heading": "Motivation",
-      "text": "Dans plusieurs dictionnaires la déscription lexicographique d'un mot est soutenu par des exemples de corpus. Le choix d'exemples appropriés et aidants pose un défi parce que l'opérationnalisation en métrique de critères comme par exemple la „qualité“ et l'„adéquation“ d'exemples de corpus n'est pas banale et des lexicographes professionel·le·s n'arrivent pas toujours à faire un jugement unanimé au cas par cas, quel exemple est le plus approprié pour la déscription d'un lemme."
+      "text": "Dans plusieurs dictionnaires, la description lexicographique des mots est étayée par des exemples de corpus. Le choix d'exemples appropriés et utiles constitue un défi en raison de la difficulté d'opérationnaliser en métrique des critères tels que la „qualité“ et l'„adéquation“. De plus, les lexicographes professionel·le·s n'arrivent pas toujours à déterminer à l'unanimité quel est l'exemple le plus approprié pour décrire un lemme."
     },
     "goals": {
       "heading": "Objectifs",
-      "text": "Afin d'assister des lexicographes dans leur processus de décision, un système pour l'extraction, la classification et l'évaluation des exemples de corpus est censé être développé et intégré dans le système d'information lexicale du DWDS. Le système de recommandation propose un groupe d'exemples d'usage pour chaque lemme qui sont considérés être de haute qualité et qui dans l'ensemble présentent une grande diversité et facettes et nuances de l'usage du mot. Le système de recommandation est censé être développé à ce que des exemples suffisamment bons soient proposés aux utilisat·eur·rice·s externes du système d'infomations lexicales même pour des lemmes ne pas encore entièrement lexicalement traités par un·e expert·e."
+      "text": "Un système d'extraction, de classification et d'évaluation des exemples de corpus est développé et intégré dans le système d'information lexicale du DWDS afin d'assister des lexicographes dans leur prise de décisions. Ce système de recommandation a été conçu afin que des exemples suffisamment pertinents puissent être proposés aux utilisat·eur·rice·s externes du système d'infomations lexicales même pour des lemmes qui n'ont pas encore fait l'objet d'un traitement lexical complet par un·e expert·e."
     },
     "method": {
       "heading": "Méthodologie",
-      "text": "L'application sert surtout à l'évaluation concernant la qualité et la diversité des exemples. Pour le jugement de qualité la méthode Best-Worst-Scaling est utilisée. Quatre exemples sont montrés aux annotat·eur·rice·s dont ils choisissent le meilleur et le pire. Les classements résultants sont utilisés comme variable cible dans un procédé d'apprentissage surveillé. Pour évaluer la diversité des exemples d'un certain lemme, les utilisat·eur·rice·s sont demandé·e·s de mettre en balance la qualité et la diversité et de spécifier quels genres de diversité sont préférés (par exemple des structures de phrase différentes, la sémantique, des indications de source) en ajustant des curseurs. Les exemples montrés sont réorganisés avec un procédé d'optimisation quadratique selon ces paramètres jusqu'à ce que l'utilisat·eur·rice soit satisfait·e de la sélection affichée."
+      "text": "L'application sert surtout à l'évaluation de la qualité et de la diversité des exemples. La qualité des exemples est mesurée à l'aide de l'échelle de différence maximale. Les annotat·eur·rice·s doivent choisir le meilleur exemple et le pire parmi les quatre qui leur sont présentés. Les classements ainsi obtenus sont utilisés comme variable cible dans un procédé d'apprentissage surveillé. Pour évaluer la diversité des exemples d'un certain lemme, il est demandé aux utilisat·eur·rice·s de mettre en balance la qualité et la diversité et de spécifier quels genres de diversité leur convient le mieux (par exemple, des structures de phrase différentes, la sémantique, des indications de source) en ajustant des curseurs. Les exemples présentés sont réorganisés avec un procédé d'optimisation quadratique selon ces paramètres jusqu'à ce que l'utilisat·eur·rice soit satisfait·e de la sélection affichée."
     },
     "team": {
       "heading": "Collaborat·eur·rice·s",
@@ -71,13 +71,13 @@
       },
       "member2": {
         "name": "PD Dr. Alex Geyken",
-        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche langage",
+        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage",
         "role": "Responsable de projet au site de Berlin",
         "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
       },
       "member3": {
         "name": "Dr. Lothar Lemmnitzer",
-        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche langage",
+        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage",
         "role": "Expert de lexicographie",
         "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
       },
@@ -89,7 +89,7 @@
       },
       "member5": {
         "name": "Ulf Hamster",
-        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche langage",
+        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage",
         "role": "Collaborateur scientifique, développement de logiciels",
         "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
       }
@@ -108,15 +108,15 @@
   },
   "privacy": {
     "title": "Protection de données",
-    "menu_description": "Déclaration de confidentialité pour des projets de recherce"
+    "menu_description": "Déclaration de confidentialité pour les projets de recherce"
   },
   "terms": {
     "title": "Conditions d'utilisation",
-    "menu_description": "Les conditions générales d'utilisation de cette application"
+    "menu_description": "Conditions générales d'utilisation de cette application"
   },
   "consent": {
     "title": "Consentement éclairé",
-    "menu_description": "Accepte-tu que tes données sont publiées?"
+    "menu_description": "Acceptes-tu que tes données sont publiées?"
   },
   "imprint": {
     "title": "Mentions légales",
