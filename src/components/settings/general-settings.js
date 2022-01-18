@@ -24,8 +24,8 @@ export const useGeneralSettings = () => {
   // declare reactive variables
   const darkmodetheme = ref();
   const language = ref();
-  const hasDataDonationConsent = ref();  // Flag if data will be sent to the API
-  const debugVerbose = ref();
+  const has_data_donation_consent = ref();  // Flag if data will be sent to the API
+  const debug_verbose = ref();
 
 
   // `locale` is updated by language!
@@ -40,8 +40,8 @@ export const useGeneralSettings = () => {
         .then(response => {
           darkmodetheme.value = response.data['darkmodetheme'] || false;
           language.value = response.data['language'] || locale.value;
-          hasDataDonationConsent.value = response.data['hasDataDonationConsent'] || false;
-          debugVerbose.value = response.data['debugVerbose'] || false;
+          has_data_donation_consent.value = response.data['has-data-donation-consent'] || false;
+          debug_verbose.value = response.data['debug-verbose'] || false;
           resolve(response);
         })
         .catch(error => {
@@ -71,8 +71,8 @@ export const useGeneralSettings = () => {
       api.post(`v1/user/settings`, {
           'darkmodetheme': darkmodetheme.value,
           'language': language.value,
-          'hasDataDonationConsent': hasDataDonationConsent.value,
-          'debugVerbose': debugVerbose.value,
+          'has-data-donation-consent': has_data_donation_consent.value,
+          'debug-verbose': debug_verbose.value,
         })
         .then(response => {
           resolve(response);
@@ -93,7 +93,7 @@ export const useGeneralSettings = () => {
     saveSettings,
     darkmodetheme,
     language,
-    hasDataDonationConsent,
-    debugVerbose
+    has_data_donation_consent,
+    debug_verbose
   }
 }

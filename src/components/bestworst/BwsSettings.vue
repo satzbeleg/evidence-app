@@ -14,7 +14,7 @@
   </div>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-    
+
       <div class="field">
         <label class="label" for="queue-reorderpoint">
           Minimum Number of Offline BWS Sets  <!-- (econ: reorder point) -->
@@ -106,33 +106,12 @@
         <output for="bwsset-num-items">{{ bwsset_num_items }}</output>
       </div>
 
-      <div class="field">
-        <label class="label" for="bwsset-sampling-method">
-          BWS sampling method
-        </label>
-        <br>
-        <div class="dropdown" id="bwsset-sampling-method"
-             v-on:click="showDropdownBwsSamplingMethod = !showDropdownBwsSamplingMethod"
-             v-bind:class="{ 'is-active': showDropdownBwsSamplingMethod }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-bwsset-sampling-methodd">
-              <span>
-                <template v-if="bwsset_sampling_method == 'overlap'">overlap</template>
-                <template v-if="bwsset_sampling_method == 'twice'">twice</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-bwsset-sampling-method" role="menu">
-            <div class="dropdown-content" v-on:click="bwsset_sampling_method = $event.target.id">
-              <a id="overlap" class="dropdown-item">overlap</a>
-              <a id="twice" class="dropdown-item">twice</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BDropdown idname="bwsset-sampling-method" 
+                 labeltext="BWS sampling method" 
+                 v-model:selected="bwsset_sampling_method" 
+                 :options="[
+                  {'id': 'overlap', 'text': 'overlap'}, 
+                  {'id': 'twice', 'text': 'twice'}]" />
 
     </div>
   </div>
@@ -162,34 +141,13 @@
         <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
       </div>
 
-      <div class="field">
-        <label class="label" for="interactivity-item_sampling_method">
-          Sampling Sentences from Pool (Default: exploit)
-        </label>
-        <div class="dropdown" id="interactivity-item_sampling_method" 
-             v-on:click="showDropdownItemSamplingMethod = !showDropdownItemSamplingMethod"
-             v-bind:class="{ 'is-active': showDropdownItemSamplingMethod }">
-          <div class="dropdown-trigger">
-            <button class="button is-rounded is-light" type="button"
-                    aria-haspopup="true" 
-                    aria-controls="dropdown-item_sampling_method">
-              <span>
-                <template v-if="item_sampling_method == 'random'">random</template>
-                <template v-if="item_sampling_method == 'exploit'">exploit</template>
-                <template v-if="item_sampling_method == 'newer-unstable'">newer-unstable</template>
-              </span>
-              <span class="icon"><i class="fas fa-caret-down" aria-hidden="true"></i></span>
-            </button>
-          </div>
-          <div class="dropdown-menu" id="dropdown-item_sampling_method" role="menu">
-            <div class="dropdown-content" v-on:click="item_sampling_method = $event.target.id">
-              <a id="random" class="dropdown-item">random</a>
-              <a id="exploit" class="dropdown-item">exploit</a>
-              <a id="newer-unstable" class="dropdown-item">newer-unstable</a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <BDropdown idname="interactivity-item-sampling-method" 
+                 labeltext="Sampling Sentences from Pool (Default: exploit)" 
+                 v-model:selected="item_sampling_method" 
+                 :options="[
+                  {'id': 'random', 'text': 'random'}, 
+                  {'id': 'exploit', 'text': 'exploit'},
+                  {'id': 'newer-unstable', 'text': 'newer-unstable'}]" />
 
     </div>
   </div>
@@ -211,7 +169,7 @@
 
       <div class="field">
         <label class="label" for="max-displays">
-          Maximum number an example will be displayed
+          Maximum number of times an example will be displayed
         </label>
         <input id="max-displays" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -222,7 +180,7 @@
       <div class="field">
         <input id="interactivity-exclude-bwssampling-toogle" 
                class="switch is-rounded" type="checkbox"
-               v-model="flagExcludeMaxDisplay">
+               v-model="exclude_max_display">
         <label class="label" for="interactivity-exclude-bwssampling-toogle">
           Exclude from BWS sampling if shown too often (Default: On)
         </label>
@@ -231,7 +189,7 @@
       <div class="field">
         <input id="interactivity-drop-display-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="flagDropMaxDisplay">
+               v-model="drop_max_display">
         <label class="label" for="interactivity-drop-display-toogle">
           Drop examples from the pool if shown too often (Default: Off)
         </label>
@@ -291,7 +249,7 @@
       <div class="field">
         <input id="interactivity-add-only-initially-toogle" 
                class="switch is-rounded" type="checkbox"   
-               v-model="flagInitialLoadOnly">
+               v-model="initial_load_only">
         <label class="label" for="interactivity-add-only-initially-toogle">
           Only load an initial fixed pool / No pool additions lateron (Default: On)
         </label>
@@ -331,7 +289,7 @@
       <div class="field">
         <input id="interactivity-drop-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="flagDropDistribution">
+               v-model="drop_distribution">
         <label class="label" for="interactivity-drop-distribution-toogle">
           Drop examples from the pool by a target distribution (Default: Off)
         </label>
@@ -340,7 +298,7 @@
       <div class="field">
         <input id="interactivity-add-distribution-toogle" 
                class="switch is-rounded" type="checkbox"  
-               v-model="flagAddDistribution">
+               v-model="add_distribution">
         <label class="label" for="interactivity-add-distribution-toogle">
           Add examples to the pool by a target distribution (Default: Off)
         </label>
@@ -365,7 +323,7 @@
       <div class="field">
         <input id="interactivity-drop-converge-toogle" 
                class="switch is-rounded" type="checkbox"
-               v-model="flagDropConverge">
+               v-model="drop_converge">
         <label class="label" for="interactivity-drop-converge-toogle">
           Drop examples from pool if model score converged (Default: Off)
         </label>
@@ -394,7 +352,7 @@
       <div class="field">
         <input id="interactivity-drop-pairs-toogle" 
                class="switch is-rounded" type="checkbox"   
-               v-model="flagDropPairs">
+               v-model="drop_pairs">
         <label class="label" for="interactivity-drop-pairs-toogle">
           Drop examples from local pairs matrix
         </label>
@@ -405,23 +363,80 @@
 
 
 
-  <h2 class="subtitle is-4">Count Pairs and Update Training Scores</h2>
+  <h2 class="subtitle is-4">Update Training Scores</h2>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <BDropdown idname="smoothing-method" 
+                 labeltext="Smooting Methods to compute training scores" 
+                 v-model:selected="smoothing_method" 
+                 :options="[
+                  {'id': 'last', 'text': 'last'}, 
+                  {'id': 'ema', 'text': 'EMA'}]" />
+
       <div class="field">
+        <label class="label" for="ema-alpha">
+          alpha parameter (EMA)
+        </label>
+        <input id="ema-alpha" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="ema_alpha" step="0.01" min="0.0" max="1.0">
+        <output for="ema-alpha" style="width:3.1rem;">{{ ema_alpha }}</output>
       </div>
-      <div class="field">
-      </div>
+
     </div>
   </div>
 
   <h2 class="subtitle is-4">Train Local ML Model</h2>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+      
+      <BDropdown idname="train-optimizer" labeltext="Optimization Algorithm" 
+                 v-model:selected="train_optimizer" 
+                 :options="[
+                  {'id': 'adam', 'text': 'ADAM'}, 
+                  {'id': 'rmsprop', 'text': 'RMSProp'},
+                  {'id': 'adagrad', 'text': 'AdaGrad'},
+                  {'id': 'sgd', 'text': 'SGD'}]" />
+
       <div class="field">
+        <label class="label" for="train-lrate">
+          Learning Rate
+        </label>
+        <input id="train-lrate" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_lrate" step="0.001" min="0.0" max="0.1">
+        <output for="train-lrate" style="width:3.5rem;">{{ train_lrate }}</output>
       </div>
+
       <div class="field">
+        <label class="label" for="train-epochs">
+          Number of Epochs per Training Cycle
+        </label>
+        <input id="train-epochs" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_epochs" step="1" min="1" max="20">
+        <output for="train-epochs" style="width:3.1rem;">{{ train_epochs }}</output>
       </div>
+
+      <BDropdown idname="train-loss" labeltext="Loss Function" 
+                 v-model:selected="train_loss" 
+                 :options="[
+                  {'id': 'meanSquaredError', 'text': 'MSE'}, 
+                  {'id': 'huberLoss', 'text': 'Huber'},
+                  {'id': 'absoluteDifference', 'text': 'Abs. Diff.'}]" />
+
+
+      <div class="field">
+        <label class="label" for="train-minsample">
+          Mimimum Sample Size
+        </label>
+        <input id="train-minsample" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_minsample" step="1" min="5" max="100">
+        <output for="train-minsample" style="width:3.1rem;">{{ train_minsample }}</output>
+      </div>
+
     </div>
   </div>
 
@@ -434,36 +449,59 @@ import { defineComponent, watch, ref } from 'vue';
 // import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
+import BDropdown from "@/components/layout/BDropdown.vue";
 
 
 export default defineComponent({
   name: "BwsSettings",
+
+  components: {
+    BDropdown
+  },
 
   setup(){
     // i18n data
     const { t } = useI18n();
     const { language } = useGeneralSettings();
 
-    // Dropdown menus
-    const showDropdownItemSamplingMethod = ref(false);
-    const showDropdownBwsSamplingMethod = ref(false);
-
     const {
       // also used in bestworst3
-      queue_reorderpoint, queue_orderquantity, 
-      item_sampling_numtop, item_sampling_offset,
+      queue_reorderpoint, 
+      queue_orderquantity, 
+      item_sampling_numtop, 
+      item_sampling_offset,
       // Settings for (1) and (2)
-      flagInitialLoadOnly,
-      min_pool_size, max_pool_size,
-      flagDropDistribution, flagAddDistribution, bin_edges, target_probas, 
+      initial_load_only,
+      min_pool_size, 
+      max_pool_size,
+      drop_distribution, 
+      add_distribution, 
+      bin_edges, 
+      target_probas, 
       // Settings for (1) and (3)
-      flagDropMaxDisplay, flagExcludeMaxDisplay, max_displays, 
+      drop_max_display, 
+      exclude_max_display, 
+      max_displays, 
       // Settings for (1)
-      flagDropConverge, eps_score_change,
-      flagDropPairs,
+      drop_converge, 
+      eps_score_change,
+      drop_pairs,
       // Settings for (3)
-      bwsset_num_items, num_preload_bwssets, 
-        bwsset_sampling_method, item_sampling_method,
+      bwsset_num_items, 
+      num_preload_bwssets, 
+      bwsset_sampling_method, 
+      item_sampling_method,
+      // Settings for (5), e.g. computeTrainingScores
+      smoothing_method, 
+      ema_alpha,
+      // Settings for (6) and (7): getRemoteModel
+      // Settings for (6): retrainModel
+      train_optimizer,
+      train_lrate, 
+      train_epochs,
+      train_loss,
+      train_minsample
+      // Settings for (7): predictScores
     } = useBwsSettings();
 
     watch(min_pool_size, (minsz) => {
@@ -497,13 +535,14 @@ export default defineComponent({
       queue_reorderpoint, queue_orderquantity, 
         item_sampling_numtop, item_sampling_offset,
       min_pool_size, max_pool_size, 
-        flagInitialLoadOnly,
-        flagDropDistribution, flagAddDistribution, bin_edges_text, target_probas_text, 
-        flagExcludeMaxDisplay, flagDropMaxDisplay, max_displays, 
-        flagDropConverge, eps_score_change_text,
-        flagDropPairs,
+        initial_load_only,
+        drop_distribution, add_distribution, bin_edges_text, target_probas_text, 
+        exclude_max_display, drop_max_display, max_displays, 
+        drop_converge, eps_score_change_text,
+        drop_pairs,
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
-        showDropdownItemSamplingMethod, showDropdownBwsSamplingMethod
+      smoothing_method, ema_alpha,
+      train_optimizer, train_lrate, train_epochs, train_loss, train_minsample
     }
   }
 });

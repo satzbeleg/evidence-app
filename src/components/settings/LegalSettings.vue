@@ -15,7 +15,7 @@
 
       <div class="field">
         <input id="interactivity-datalicense-toogle" class="switch is-rounded" type="checkbox"   
-               v-model="hasDataDonationConsent">
+               v-model="has_data_donation_consent">
         <label for="interactivity-datalicense-toogle">
           <template v-if="language == 'de'">
             Hiermit erteile ich eine CC0-Lizenz auf alle von mir mit der Web-App erzeugten Daten.
@@ -46,12 +46,17 @@ export default defineComponent({
     const { t } = useI18n();
 
 		// Load General Settings
-		const { language, hasDataDonationConsent, loadGeneralSettings } = useGeneralSettings();
+		const { 
+      language, 
+      has_data_donation_consent, 
+      loadGeneralSettings 
+    } = useGeneralSettings();
 		loadGeneralSettings();
 
     return { 
-      t, language,
-			hasDataDonationConsent
+      t, 
+      language,
+			has_data_donation_consent
     }
   },
 });
