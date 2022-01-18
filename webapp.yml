@@ -1,4 +1,4 @@
-version: '3.9'
+version: '3.7'
 
 services:
   evidence-webapp:
@@ -11,9 +11,9 @@ services:
         VUE_APP_GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
     ports:
       - "${WEBAPP_HOSTPORT}:8080"  # 55018
-    networks:
-      evidence-network:
-        ipv4_address: 172.20.253.1
+    networks: [ evidence-network ]  # dynamic IPs!
+    # evidence-network:
+    #   ipv4_address: 172.20.253.1
     deploy:
       restart_policy:
         condition: on-failure
