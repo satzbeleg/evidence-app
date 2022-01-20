@@ -19,8 +19,14 @@ Please follow the instruction of the [deployment repository](https://github.com/
 
 
 ## Local Development
+- [Start backend services](#start-backend-services)
 - [Setup and start local web server](#setup-and-start-local-web-server)
-- [Check if the docker configuration of the REST API works](#check-if-the-docker-configuration-of-the-rest-api-works)
+
+### Start backend services
+
+```bash
+(cd $EVIDENCE_DEPLOY && docker-compose up db mail api)
+```
 
 ### Setup and start local web server 
 1) Install NPM modules
@@ -33,29 +39,16 @@ yarn install
 
 ```
 NODE_ENV=local
-VUE_APP_REST_PUBLIC_URL=http://0.0.0.0:55017
+VUE_APP_REST_PUBLIC_URL=http://localhost:8080
 VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
-Notes: Local variables specifiec in `.env.local` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
+Notes: Local variables specified in `.env.local` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
 
 3) Start web server
 
 ```sh
-yarn serve --port 55018
-```
-
-
-### Check if the docker configuration of the REST API works
-
-```sh
-# Host Server's Port Settings
-export WEBAPP_HOSTPORT=55018
-export REST_PUBLIC_URL=http://yourdomain:55017
-
-# Start containers
-# - WARNING: Don't use the `docker compose` because it cannot process `ipv4_address`!
-docker compose -p evidence -f network.yml -f webapp.yml up --build
+yarn serve --port 9090
 ```
 
 
@@ -70,19 +63,6 @@ docker compose -p evidence -f network.yml -f webapp.yml up --build
 
 
 ## Common Problems
-
-### CORS Error: REST API
-If the REST API and the web app are running on the same host, a "CORS" error will occur when logging in, e.g.
-
-```
-Access to XMLHttpRequest at 'http://0.0.0.0:55017/v1/auth/login' 
-from origin 'http://localhost:8080' has been blocked by CORS policy: 
-Response to preflight request doesn't pass access control check: 
-No 'Access-Control-Allow-Origin' header is present on the requested resource.
-```
-
-The Chrome Plugin ["Moesif CORS"](https://chrome.google.com/webstore/detail/moesif-origin-cors-change/digfbfaphojjndkpccljibejjbppifbc) or the corresponding [Firefox Plugin](https://addons.mozilla.org/en-US/firefox/addon/moesif-origin-cors-changer1/) can disable the CORS error (i.e. **"off"**). 
-
 
 ### CORS Error: Setup GCP bucket for TFJS models
 ```sh
@@ -113,7 +93,9 @@ You need to change the following files:
 Please [open an issue](https://github.com/satzbeleg/evidence-app/issues/new) for support.
 
 ### Contributing
-Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-app/compare/). You are asked to sign the CLA on your first pull request.
+Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-app/compare/).
+You are asked to sign the CLA on your first pull request.
+
 
 ### Syntax
 We are using 
