@@ -94,6 +94,8 @@ Please [open an issue](https://github.com/satzbeleg/evidence-app/issues/new) for
 
 ### Contributing
 Please contribute using [Github Flow](https://guides.github.com/introduction/flow/). Create a branch, add commits, and [open a pull request](https://github.com/satzbeleg/evidence-app/compare/).
+You are asked to sign the CLA on your first pull request.
+
 
 ### Syntax
 We are using 
