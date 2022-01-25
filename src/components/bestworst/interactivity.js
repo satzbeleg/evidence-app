@@ -82,10 +82,10 @@ const deletionCriteriaDisplays = (pool,
  *  - This function is only used in `useInteractity/dropExamplesFromPool`
  */
 const deletionCriteriaConvergence = (pool, 
-                                      avail_ids, 
-                                      del_ids, 
-                                      eps_score_change, 
-                                      debug_verbose=false) => {
+                                     avail_ids, 
+                                     del_ids, 
+                                     eps_score_change, 
+                                     debug_verbose=false) => {
   if (Number.isFinite(eps_score_change)){
     var i = avail_ids.length;
     while( i-- ){
@@ -373,6 +373,7 @@ export const useInteractivity = () => {
     }
   }
 
+
   /**
    * (1b) Send deleted pool data to API/DB
    * - Start asynchronous AJAX request to backup deleted examples
@@ -408,11 +409,10 @@ export const useInteractivity = () => {
       }
     });
   }
-
   /**
-   * (1c) watch `deleted_pool` to trigger sync with API/DB
+   * (1b) watch `deleted_pool` to trigger sync with API/DB
    */
-  watch(
+   watch(
     () => Object.keys(deleted_pool).length,
     (num_deleted_examples) => {
       if (num_deleted_examples > 0){
@@ -494,7 +494,18 @@ export const useInteractivity = () => {
       }  
     });
   }
+  /**
+   * (2a) watch `pool` to trigger sync with API/DB
+   */
+  const { searchlemmata } = useQueue();
+  watch( () => Object.keys(pool).length, (current_pool_size) => {
+    if (current_pool_size < max_pool_size.value && searchlemmata.value){
+      if(debug_verbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
+      addExamplesToPool(searchlemmata.value);
+    }
+  });
 
+  
   /**
    * (2b) Reset the pool
    * - Call this function if a new lemma search was submitted (e.g. in `onSearchLemmata`)
@@ -507,18 +518,6 @@ export const useInteractivity = () => {
     // delete pairs matrix
     Object.keys(pairs).forEach(key => {delete pairs[key];});
   }
-
-
-  /**
-   * (2c) watch `pool` to trigger sync with API/DB
-   */
-  const { searchlemmata } = useQueue();
-  watch( () => Object.keys(pool).length, (current_pool_size) => {
-    if (current_pool_size < max_pool_size.value && searchlemmata.value){
-      if(debug_verbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
-      addExamplesToPool(searchlemmata.value);
-    }
-  });
 
 
   /**

@@ -220,39 +220,7 @@ export default defineComponent({
           dropExamplesFromPool();
         }
     });
-
-
-
-    // ---------------- TINKERING ------------------
-
-    // console.log("Pairs:", pairs)
-    // console.log("Pool:", pool)
-    console.log("Pool:", JSON.parse(JSON.stringify(pool)))
-
-
-    // (1) Drop examples from pool
-    // dropExamplesFromPool();
-
-    // DONE (2) Add examples to pool
     
-    // DONE (3) Sample 1,2,3... BWS sets from pool
-
-    // => Ergebnisse verarbeiten =>
-
-    // DONE (4) Update pairs comparison matrix
-
-    // (5) Compute the new target scores
-    // computeTrainingScores(pairs, pool, smoothing_method.value, ema_alpha.value);
-// (Step 5) Compute new ranking
-// let [positions, sortedids, metrics, info] = ranking.maximize_hoaglinapprox(pairs);
-// console.log(positions, sortedids, metrics, info);
-
-    // (6) Re-train the ML model
-
-    // (7) Predict the new model scores for the whole pool
-
-
-
 
     return { 
       data, 
