@@ -44,7 +44,7 @@
 
 
 <script>
-import { defineComponent, ref, watch } from "vue";
+import { defineComponent } from "vue";
 import { useI18n } from 'vue-i18n';
 import { useDarkmodeToggle } from '@/components/settings/darkmode-toggle.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
@@ -68,16 +68,10 @@ export default defineComponent({
     // this also adds an watcher
     const { darkmodetheme } = useDarkmodeToggle();
 
-    // const test123 = ref("")
-    // watch(() => test123.value, (x) => {
-    //   console.log("Hey", x)
-    // })
-    
     return { 
       t,
       darkmodetheme,
 			debug_verbose,
-      // test123
     }
   },
 });
