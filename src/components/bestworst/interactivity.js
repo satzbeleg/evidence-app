@@ -53,16 +53,21 @@ const deletionCriteriaDisplays = (pool,
                                   del_ids, 
                                   max_displays, 
                                   debug_verbose=false) => {
-  if (Number.isInteger(max_displays)){
-    var i = avail_ids.length;
-    while( i-- ){
-      if (pool[avail_ids[i]].num_displayed >= max_displays){
-        del_ids.push(avail_ids.pop())
-      }
+  // logging
+  if(debug_verbose.value){
+    console.log(`deletionCriteriaDisplays: max_displays=${max_displays}`);
+  }
+  // abort if param is missing
+  if ( !Number.isInteger(max_displays) ){
+    console.warn(`deletionCriteriaDisplays: max_displays=${max_displays} is not an integer`);
+    return
+  }
+  // run it
+  var i = avail_ids.length;
+  while( i-- ){
+    if (pool[avail_ids[i]].num_displayed >= max_displays){
+      del_ids.push(avail_ids.pop())
     }
-    if (debug_verbose){console.log("Selected for deletion (Max Displays):", del_ids);}
-  }else{
-    if (debug_verbose){console.log(`max_displays=${max_displays} is not an integer`);}
   }
 }
 
@@ -86,16 +91,21 @@ const deletionCriteriaConvergence = (pool,
                                      del_ids, 
                                      eps_score_change, 
                                      debug_verbose=false) => {
-  if (Number.isFinite(eps_score_change)){
-    var i = avail_ids.length;
-    while( i-- ){
-      if (pool[avail_ids[i]].change_model_score < eps_score_change){
-        del_ids.push(avail_ids.pop())
-      }
+  // logging
+  if(debug_verbose.value){
+    console.log(`deletionCriteriaConvergence: eps_score_change=${eps_score_change}`);
+  }
+  // abort if param is missing
+  if ( !Number.isFinite(eps_score_change) ){
+    console.warn(`deletionCriteriaConvergence: eps_score_change=${eps_score_change} is not a number`);
+    return 
+  }
+  // run it
+  var i = avail_ids.length;
+  while( i-- ){
+    if (pool[avail_ids[i]].change_model_score < eps_score_change){
+      del_ids.push(avail_ids.pop())
     }
-    if (debug_verbose){console.log("Selected for deletion (Covergence):", del_ids);}
-  }else{
-    if (debug_verbose){console.log(`eps_score_change=${eps_score_change} is not a number`);}
   }
 }
 
@@ -122,86 +132,74 @@ const deletionCriteriaDistribution = (pool,
                                       bin_edges,
                                       target_probas,
                                       debug_verbose=false) => {
+  // logging
+  if(debug_verbose.value){
+    console.log(`deletionCriteriaDistribution:`);
+    console.log(`- bin_edges=${bin_edges}`);
+    console.log(`- target_probas=${target_probas}`);
+  }
+  // abort if param is missing
+  if ( !Array.isArray(bin_edges) || !Array.isArray(target_probas) ){
+    console.warn(`deletionCriteriaDistribution: bin_edges=${bin_edges} or/and target_probas=${target_probas} are not Arrays`);
+    return 
+  }
   // declare variables
   var idx, excess_proba, num_del, bin_ids, disp, conv;
   const num_examples = avail_ids.length;
 
-  if (Array.isArray(target_probas) && Array.isArray(bin_edges)){
-    // copy model scores into Array
-    var model_scores = [];
-    avail_ids.forEach(key => {
-      model_scores.push( pool[key]["last_training_score"] );
-    });
-    // estimate the empirical distribution
-    const empirical_probas = histpdf(model_scores, bin_edges);
-    // console.log(empirical_probas, target_probas)
+  // copy model scores into Array
+  var model_scores = [];
+  avail_ids.forEach(key => {
+    model_scores.push( pool[key]["last_training_score"] );
+  });
+  // estimate the empirical distribution
+  const empirical_probas = histpdf(model_scores, bin_edges);
+  if(debug_verbose.value){
+    console.log(`- empirical_probas=${empirical_probas}`);
+  }
 
-    // If the empirical proba exceeds the desired proba in a certain bin
-    // then randomly pick IDs with model scores of this bin
-    for (var j = 0; j < empirical_probas.length; j++){
-      // Compute number IDs to delete in this bin
-      excess_proba = empirical_probas[j] - target_probas[j];
-      num_del = Math.trunc( excess_proba * num_examples );
+  // If the empirical proba exceeds the desired proba in a certain bin
+  // then randomly pick IDs with model scores of this bin
+  for (var j = 0; j < empirical_probas.length; j++){
+    // Compute number IDs to delete in this bin
+    excess_proba = empirical_probas[j] - target_probas[j];
+    num_del = Math.trunc( excess_proba * num_examples );
 
-      if (num_del > 0){
-        // find all IDs inside the bin
-        bin_ids = [];
-        disp = [];
-        conv = [];
-        avail_ids.forEach(key => {
-          var s = pool[key]["last_training_score"];
-          var crit1 = (j === 0) ? true : bin_edges[j] < s;
-          var crit2 = (j === bin_edges.length - 1) ? true : s <= bin_edges[j+1];
-          if( crit1 && crit2 ){
-            bin_ids.push(key);
-            disp.push(pool[key].num_displayed);
-            conv.push(pool[key].change_model_score);
-          }
-        });
-
-        while (num_del > 0){
-          if (num_del % 2){  // delete by display criteria
-            idx = disp.indexOf(Math.max(...disp));
-          }else{  // delete by convergence criteria
-            idx = conv.indexOf(Math.min(...conv));
-          }
-          // save deletion ID
-          avail_ids.splice(avail_ids.indexOf(bin_ids[idx]))
-          del_ids.push(bin_ids[idx]);
-          // remove tmp data
-          bin_ids.splice(idx, 1);
-          disp.splice(idx, 1);
-          conv.splice(idx, 1);
-          num_del -= 1;
+    if (num_del > 0){
+      // find all IDs inside the bin
+      bin_ids = [];
+      disp = [];
+      conv = [];
+      avail_ids.forEach(key => {
+        var s = pool[key]["last_training_score"];
+        var crit1 = (j === 0) ? true : bin_edges[j] < s;
+        var crit2 = (j === bin_edges.length - 1) ? true : s <= bin_edges[j+1];
+        if( crit1 && crit2 ){
+          bin_ids.push(key);
+          disp.push(pool[key].num_displayed);
+          conv.push(pool[key].change_model_score);
         }
-        //console.log("Del:", j, num_del, excess_proba)
+      });
+
+      while (num_del > 0){
+        if (num_del % 2){  // delete by display criteria
+          idx = disp.indexOf(Math.max(...disp));
+        }else{  // delete by convergence criteria
+          idx = conv.indexOf(Math.min(...conv));
+        }
+        // save deletion ID
+        avail_ids.splice(avail_ids.indexOf(bin_ids[idx]))
+        del_ids.push(bin_ids[idx]);
+        // remove tmp data
+        bin_ids.splice(idx, 1);
+        disp.splice(idx, 1);
+        conv.splice(idx, 1);
+        num_del -= 1;
       }
+      //console.log("Del:", j, num_del, excess_proba)
     }
-    if (debug_verbose){console.log("Selected for deletion (Distribution):", del_ids);}
-  }else{
-    if (debug_verbose){console.log(`target_probas and/or bin_edges are not arrays`);}
   }
 }
-
-
-
-// (2) Add examples to pool
-// - Ajax Call to load new sentence examples
-// - max_load: The maximum number of sentence examples to add
-// - max_pool_size: 
-// const addExamplesToPool = (pool,
-//                            max_pool_size) => {
-//   // precomputations happens immediatly
-//   // how many examples to add?
-//   var num_load_examples = max_pool_size - Object.keys(pool).length;
-
-//   // asynchron AJAX call
-//   return new Promise((resolve, reject) => {
-//     if (num_load_examples > 0){
-//       // load
-//     }
-//   });
-// }
 
 
 export const useInteractivity = () => {
@@ -321,6 +319,11 @@ export const useInteractivity = () => {
    *    be computed from the raw evaluations already sent to the server. 
    */
   const dropExamplesFromPool = () => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(1) Drop examples from pool (dropExamplesFromPool)");
+    }
     // save IDs to be deletion
     var del_ids = [];
     var avail_ids = Object.keys(pool);
@@ -367,9 +370,10 @@ export const useInteractivity = () => {
       };
       delete pool[key];
     });
-
+    // logging
     if (debug_verbose.value){
       console.log("Deleted data:", JSON.parse(JSON.stringify(deleted_pool)) );
+      console.groupEnd();
     }
   }
 
@@ -380,7 +384,19 @@ export const useInteractivity = () => {
    * - Storing app data to the API/DB works only if `has_data_donation_consent` is true
    */
   const saveDeletedPool = () => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(1b) Send deleted pool data to API/DB (saveDeletedPool)");
+      if( has_data_donation_consent.value ){
+        console.log(`try to store ${Object.keys(deleted_pool).length} deleted example(s)`);
+      }else{
+        console.log(`Drop pool examples permanently because has_data_donation_consent=${has_data_donation_consent}`)
+      }
+      console.groupEnd();
+    }
     return new Promise((resolve, reject) => {
+      // save data
       if (has_data_donation_consent.value){
         // load other functions and objects
         const { getToken } = useAuth();
@@ -391,11 +407,11 @@ export const useInteractivity = () => {
             response.data['stored-sentids'].forEach(key => {
               delete deleted_pool[key];
             })
-            if(debug_verbose.value){console.log(response)}
+            if(debug_verbose.value){console.log("Response (saveDeletedPool): ", response)}
             resolve(response);
           })
           .catch(error => {
-            if(debug_verbose.value){console.log(error)}
+            if(debug_verbose.value){console.log("Error (saveDeletedPool): ", error)}
             reject(error);
           })
           .finally(() => {        
@@ -405,7 +421,6 @@ export const useInteractivity = () => {
         Object.keys(deleted_pool).forEach(key => {
           delete deleted_pool[key];
         });
-        if(debug_verbose.value){console.log("Dropped pool examples permanently because hasConsent=false.")}
       }
     });
   }
@@ -416,7 +431,6 @@ export const useInteractivity = () => {
     () => Object.keys(deleted_pool).length,
     (num_deleted_examples) => {
       if (num_deleted_examples > 0){
-        if(debug_verbose.value){console.log(`try to store ${num_deleted_examples} deleted example(s)`)}
         saveDeletedPool();
       }
     }
@@ -443,10 +457,23 @@ export const useInteractivity = () => {
    *  }  });
    */
   const addExamplesToPool = (lemmata) => {
-    // not implemented
-    if(debug_verbose.value){console.log("Not implemented: ", add_distribution.value);}
-    if(debug_verbose.value){console.log("Not implemented: ", initial_load_only.value);}
-
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(2a) Add examples to pool (addExamplesToPool)");
+      console.log(`- current_pool_size=${Object.keys(pool).length}`);
+      console.log(`- max_pool_size=${max_pool_size.value}`);
+      console.log(`- num_additions=${max_pool_size.value - Object.keys(pool).length}`);
+      console.log(`- item_sampling_numtop=${item_sampling_numtop.value}`);
+      console.log(`- item_sampling_offset=${item_sampling_offset.value}`);
+      console.log(`- searchlemmata=${lemmata}`);
+      console.log(`- initial_load_only=${initial_load_only.value}`)
+      console.log(`- is_pool_initially_loaded=${is_pool_initially_loaded.value}`)
+      console.log(`- max_displays=${max_displays.value}`);
+      console.log(`- N.A.: add_distribution=${add_distribution.value}`);
+      console.log(`- N.A.: initial_load_only=${initial_load_only.value}`);
+      console.groupEnd();
+    }
     return new Promise((resolve, reject) => {
       // replenish pool with sentence examples
       const num_additions = max_pool_size.value - Object.keys(pool).length;
@@ -480,30 +507,33 @@ export const useInteractivity = () => {
                 }
               })
             }
-            if(debug_verbose.value){console.log(response)}
+            if(debug_verbose.value){console.log("Response (addExamplesToPool): ", response)}
             resolve(response);
           })
           .catch(error => {
-            if(debug_verbose.value){console.log(error)}
+            if(debug_verbose.value){console.log("Error (addExamplesToPool): ", error)}
             reject(error);
           })
           .finally(() => {
             is_pool_initially_loaded.value = true;  // for `initial_load_only`
             updateCurrentPoolMetrics(pool);  // compute current metrics manually
-          });
-      }  
+        });
+      }
     });
   }
   /**
    * (2a) watch `pool` to trigger sync with API/DB
    */
   const { searchlemmata } = useQueue();
-  watch( () => Object.keys(pool).length, (current_pool_size) => {
-    if (current_pool_size < max_pool_size.value && searchlemmata.value){
-      if(debug_verbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
-      addExamplesToPool(searchlemmata.value);
+  watch( 
+    () => Object.keys(pool).length, 
+    (current_pool_size) => {
+      if (current_pool_size < max_pool_size.value && searchlemmata.value){
+        addExamplesToPool(searchlemmata.value);
+      }
+      if(debug_verbose.value){console.log(`new_pool_size=${current_pool_size}`)}
     }
-  });
+  );
 
   
   /**
@@ -511,12 +541,23 @@ export const useInteractivity = () => {
    * - Call this function if a new lemma search was submitted (e.g. in `onSearchLemmata`)
    */
   const resetPool = () => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(2b) Reset the pool (resetPool)")
+    }
+
     // set the initial loading flag to false
     is_pool_initially_loaded.value = false;
     // delete pool data
     Object.keys(pool).forEach(key => {delete pool[key];});
     // delete pairs matrix
     Object.keys(pairs).forEach(key => {delete pairs[key];});
+
+    // logging
+    if (debug_verbose.value){
+      console.groupEnd();
+    }
   }
 
 
@@ -542,6 +583,12 @@ export const useInteractivity = () => {
    *  var sampled_bwssets = sampleBwsSets();
    */
   const sampleBwsSets = () => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(3) Sample 1,2,3... BWS sets from pool (sampleBwsSets)")
+    }
+
     // (0) Ensure that the metrics are recomputed
     updateCurrentPoolMetrics(pool);
 
@@ -550,7 +597,7 @@ export const useInteractivity = () => {
     num_examples = Math.max(bwsset_num_items.value, num_examples);
 
     if (debug_verbose.value) {
-      console.log(`Num of items to sample from pool: ${num_examples}`)
+      console.log(`- Num of items to sample from pool: ${num_examples}`)
     }
 
     // (B) Copy keys (IDs) from pool
@@ -598,16 +645,18 @@ export const useInteractivity = () => {
     var sampled_ids = all_ids.slice(0, num_examples);
 
     if (debug_verbose.value) {
-      console.log(`sampled_ids.length=${sampled_ids.length}`);
-      console.log("Sampled IDs:", sampled_ids);
+      // console.log(`- sampled_ids.length=${sampled_ids.length}`);
+      console.log("- Sampled IDs:", sampled_ids);
     }
 
     // (E) Generate BWS set samples (Sorry for the naming confusion)
     var sampled_bwssets = sampling.sample(
       sampled_ids, bwsset_num_items.value, bwsset_sampling_method.value, false);
 
+    // logging
     if (debug_verbose.value) {
-      console.log("BWS samples:", sampled_bwssets);
+      console.log("- BWS samples:", sampled_bwssets);
+      console.groupEnd()
     }
 
     // done
@@ -621,6 +670,12 @@ export const useInteractivity = () => {
    * @param {*} data 
    */
   const updatePairMatrix = (data) => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(4) Update pairs comparison matrix (updatePairMatrix)")
+    }
+
     let agg =  {};
     data.evaluated.forEach(bwsset => {
       if(bwsset['status-bestworst4'] === undefined){
@@ -639,6 +694,11 @@ export const useInteractivity = () => {
       } //else{console.log(bwsset['status-bestworst4'])}
     });
     counting.lilAddInplace(pairs, agg);
+
+    // logging
+    if (debug_verbose.value){
+      console.groupEnd();
+    }
   }
 
 
@@ -661,6 +721,12 @@ export const useInteractivity = () => {
    *  computeTrainingScores();
    */
   const computeTrainingScores = () => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(5) Compute the new target scores (computeTrainingScores)")
+    }
+
     // compute ranking from paired comparisons
     var tmp = ranking.rank(pairs, "ratio", "quantile", "exist");
     var sortedids = tmp[1]
@@ -691,28 +757,42 @@ export const useInteractivity = () => {
         }
       });
     } else {
-      console.log("Error: No valid `smoothing_method` specified.")
+      console.warn("Error: No valid `smoothing_method` specified.")
     }
     updateCurrentPoolMetrics(pool);
 
-    // console.log("New training score computed:")
-    console.log("Pool:", JSON.parse(JSON.stringify(pool)))
+    // logging
+    if (debug_verbose.value){
+      console.log("Pool with new training scores:", JSON.parse(JSON.stringify(pool)))
+      console.groupEnd();
+    }
   }
 
 
   // (6) Re-train the ML model
-  const getRemoteModel = async() => {
-    // load the baseline model from server
-    const model = await tf.loadLayersModel(
-      'https://tfjs-models-1.storage.googleapis.com/v0.4x-44-42-f32/model.json');
-    // store the baseline model as new personal/individual edge model
-    await model.save('indexeddb://my-model');
-    return model;
+  const getTfjsModel = async() => {
+    try{
+      // try to load model from App's IndexDB
+      return await tf.loadLayersModel(
+        'indexeddb://user-specific-scoring-model');
+    }catch{
+      if(debug_verbose){console.log("Load the baseline TFJS model from server")}
+      const model = await tf.loadLayersModel(
+        'https://tfjs-models-1.storage.googleapis.com/v0.4x-44-42-f32/model.json');
+      // store the baseline model as new personal/individual edge model
+      await model.save('indexeddb://user-specific-scoring-model');
+      return model;
+    }
   }; 
-  // const model = getRemoteModel();
- 
 
+ 
   const retrainModel = () => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(6a) retrainModel: Prepare Training Set")
+    }
+
     // prepare training set
     var x_train = [];
     var y_train = [];
@@ -722,23 +802,35 @@ export const useInteractivity = () => {
         x_train.push( pool[key]['features'] );
       }
     });
-    console.log("Pool", pool)
+    // console.log("Pool", pool)
+
     // abort
     if ( y_train.length < (train_minsample.value || 1) ){
-      console.log(`Not enough samples: ${y_train.length}`)
+      if (debug_verbose.value){
+        console.log(`- Not enough training examples: ${y_train.length}`);
+        console.groupEnd();
+      }
       return;
     }
     
-
     // convert to tf tensor
     x_train = tf.tensor(x_train).squeeze();
     y_train = tf.tensor(y_train).squeeze();
-    console.log("Training set:", y_train, x_train)
+
+    // logging
+    if (debug_verbose.value){
+      console.log("- Training set (y_train, x_train):", y_train.arraySync(), x_train.arraySync())
+      console.groupEnd();
+    }
 
     // load baseline model (async) and execute training
-    getRemoteModel().then((model) => {
-      console.log("Before Training:", model);
-      // model.getWeights().forEach((wgt) => {console.log(wgt.dataSync());})
+    getTfjsModel().then((model) => {
+      if (debug_verbose.value){
+        console.group();
+        console.log("(6b) retrainModel: Re-train the ML model")
+        console.log("- Model before training:", model);
+        // model.getWeights().forEach((wgt) => {console.log("- Model weights:", wgt.dataSync());})
+      }
 
       // specify optimization
       model.compile({
@@ -753,12 +845,20 @@ export const useInteractivity = () => {
         learningRate: train_lrate.value || 0.001
       })
       .then(res => {
-        console.log("After Training:", model);
-        console.log("Training losses:", res.history.loss);
-      // model.getWeights().forEach((wgt) => {console.log(wgt.dataSync());})
+        if (debug_verbose.value){
+          console.log("- Model after training:", model);
+          console.log("- Training losses (res.history.loss):", res.history.loss);
+          // model.getWeights().forEach((wgt) => {console.log("- Model weights:", wgt.dataSync());})
+        }
       });
 
       // save model here
+      model.save('indexeddb://user-specific-scoring-model');
+
+      // logging
+      if (debug_verbose.value){
+        console.groupEnd();
+      }
     });
 
   }
@@ -766,34 +866,69 @@ export const useInteractivity = () => {
 
   // (7) Predict the new model scores for the whole pool
   const predictScores = () => {
+    // logging
+    if (debug_verbose.value){
+      console.group();
+      console.log("(7) predictScores: Prepare examples to predict")
+    }
+
     // read features
     var x_feats = [];
+    var x_ids = []
     Object.keys(pool).forEach(key => {
       if( pool[key]['last_training_score'] !== undefined ){
         x_feats.push( pool[key]['features'] );
+        x_ids.push( key );
       }
     });
     // abort
     if ( x_feats.length < 1 ){
+      if (debug_verbose.value){
+        console.log(`- No examples to predict: ${x_feats.length}`);
+        console.groupEnd();
+      }
       return;
     }
     // convert to tf tensor
     x_feats = tf.tensor(x_feats).squeeze();
-    console.log("Features:", x_feats)
+
+    // logging
+    if (debug_verbose.value){
+      console.log("- Features (x_feats):", x_feats.arraySync());
+      console.log("- Example IDs:", x_ids);
+      console.groupEnd();
+    }
 
     // load model (async) and execute prediction 
-    getRemoteModel().then((model) => {
-      console.log("Prediction Model:", model);
-      // model.getWeights().forEach((wgt) => {console.log(wgt.dataSync());})
+    getTfjsModel().then((model) => {
+      // logging
+      if (debug_verbose.value){
+        console.group();
+        console.log("(7) predictScores: Predict the new model scores for the whole pool")
+        console.log("- Prediction Model:", model);
+        // model.getWeights().forEach((wgt) => {console.log("- Model weights:", wgt.dataSync());})
+      }
 
       // predict
       const y_pred = model.predict(x_feats);
-      console.log("Prediction: ", y_pred);
+      if (debug_verbose.value){
+        console.log("- Predicted scores (y_pred):", y_pred.arraySync());
+      }
 
-      // store new scores
-      //y_pred;
+      // store new model scores in pool
+      y_pred.arraySync().forEach((val, i) => {
+        const key = x_ids[i]
+        if( pool[key] !== undefined ){
+          pool[key].model_score_history.push(val[0])
+        }
+      });
+      updateCurrentPoolMetrics(pool);
+
+      // logging
+      if (debug_verbose.value){
+        console.groupEnd();
+      }
     });
-
   }
 
 
