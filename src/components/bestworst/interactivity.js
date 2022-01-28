@@ -465,7 +465,7 @@ export const useInteractivity = () => {
     // logging
     if (debug_verbose.value){
       console.group();
-      console.log("(2a) Add examples to pool (addExamplesToPool)");
+      console.log("(2a) addExamplesToPool: Add examples to pool");
       console.log(`- current_pool_size=${Object.keys(pool).length}`);
       console.log(`- max_pool_size=${max_pool_size.value}`);
       console.log(`- num_additions=${max_pool_size.value - Object.keys(pool).length}`);
@@ -566,7 +566,7 @@ export const useInteractivity = () => {
 
 
   /**
-   * (3) Sample 1,2,3... BWS sets from pool
+   * (3) Sample BWS sets from pool
    * 
    * Global Variables:
    * -----------------
@@ -590,7 +590,10 @@ export const useInteractivity = () => {
     // logging
     if (debug_verbose.value){
       console.group();
-      console.log("(3) Sample 1,2,3... BWS sets from pool (sampleBwsSets)")
+      console.log("(3) sampleBwsSets: Sample BWS sets from pool");
+      console.log(`- bwsset_num_items=${bwsset_num_items.value}`);
+      console.log(`- num_preload_bwssets=${num_preload_bwssets.value}`);
+      console.log(`- item_sampling_method=${item_sampling_method.value}`);
     }
 
     // (0) Ensure that the metrics are recomputed
@@ -629,6 +632,24 @@ export const useInteractivity = () => {
       all_ids.sort((key1, key2) => {
         if (pool[key1].last_model_score < pool[key2].last_model_score) return 1;
         if (pool[key1].last_model_score > pool[key2].last_model_score) return -1;
+        return 0;
+      });
+
+    } else if (item_sampling_method.value === "newer") {
+      // Select the least displayed sentence examples
+      all_ids.sort((key1, key2) => {
+        // prefer the least displayed items (ascending)
+        if (pool[key1].num_displayed < pool[key2].num_displayed) return -1;
+        if (pool[key1].num_displayed > pool[key2].num_displayed) return 1;
+        return 0;
+      });
+
+    } else if (item_sampling_method.value === "unstable") {
+      // Select highly fluctuating model scores
+      all_ids.sort((key1, key2) => {
+        // if same number of displays, prefer most fluctating model scores (descending)
+        if (pool[key1].change_model_score < pool[key2].change_model_score) return 1;
+        if (pool[key1].change_model_score > pool[key2].change_model_score) return -1;
         return 0;
       });
 
