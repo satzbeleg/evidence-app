@@ -221,14 +221,14 @@ export default defineComponent({
     watch(
       () => queueData.counter,
       (counter) => {
-        if(debug_verbose.value){console.log(`Counter: ${counter}`)}
         if ((counter % retrain_patience.value) === 0){
+          if(debug_verbose.value){console.log(`Counter: ${counter}`)}
           computeTrainingScores();  // (Step 5)
           retrainModel();  // (Step 6)
           predictScores();  // (Step 7)
         }
     });
-    
+
 
     return { 
       queueData, 
