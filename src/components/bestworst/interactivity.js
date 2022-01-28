@@ -80,7 +80,8 @@ const deletionCriteriaDisplays = (pool,
  * @param {Array[ID]} avail_ids     List with unprocessed IDs
  * @param {Array[ID]} del_ids       List with IDs to be deleted
  * @param {Float}     eps_score_change   Abort criteria for model score changes
- * @param {Bool}      debug_verbose         (Optional) Flag to print logging info
+ * @param {Int}       patience      Number model evaluations to wait before applying this criteria 
+ * @param {Bool}      debug_verbose (Optional) Flag to print logging info
  * 
  * Notes:
  * ------
@@ -90,6 +91,7 @@ const deletionCriteriaConvergence = (pool,
                                      avail_ids, 
                                      del_ids, 
                                      eps_score_change, 
+                                     patience=0,
                                      debug_verbose=false) => {
   // logging
   if(debug_verbose.value){
@@ -100,11 +102,13 @@ const deletionCriteriaConvergence = (pool,
     console.warn(`deletionCriteriaConvergence: eps_score_change=${eps_score_change} is not a number`);
     return 
   }
-  // run it
+  // run it 
   var i = avail_ids.length;
   while( i-- ){
-    if (pool[avail_ids[i]].change_model_score < eps_score_change){
-      del_ids.push(avail_ids.pop())
+    if (pool[avail_ids[i]].model_score_history.length > patience){
+      if (pool[avail_ids[i]].change_model_score < eps_score_change){
+        del_ids.push(avail_ids.pop())
+      }
     }
   }
 }
@@ -239,6 +243,7 @@ export const useInteractivity = () => {
     // Settings for (1)
     drop_converge, 
     eps_score_change,
+    converge_patience,
     drop_pairs,
     // Settings for (3), e.g. sampleBwsSets
     bwsset_num_items, 
@@ -344,7 +349,7 @@ export const useInteractivity = () => {
       // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
       if (drop_converge.value){
         deletionCriteriaConvergence(
-          pool, avail_ids, del_ids, eps_score_change.value, debug_verbose.value);
+          pool, avail_ids, del_ids, eps_score_change.value, converge_patience.value, debug_verbose.value);
       }
       // Restrict deletions
       del_ids = del_ids.slice(0, max_deletions);
@@ -471,7 +476,6 @@ export const useInteractivity = () => {
       console.log(`- is_pool_initially_loaded=${is_pool_initially_loaded.value}`)
       console.log(`- max_displays=${max_displays.value}`);
       console.log(`- N.A.: add_distribution=${add_distribution.value}`);
-      console.log(`- N.A.: initial_load_only=${initial_load_only.value}`);
       console.groupEnd();
     }
     return new Promise((resolve, reject) => {
@@ -676,6 +680,7 @@ export const useInteractivity = () => {
       console.log("(4) Update pairs comparison matrix (updatePairMatrix)")
     }
 
+    // start update of `pairs` object
     let agg =  {};
     data.evaluated.forEach(bwsset => {
       if(bwsset['status-bestworst4'] === undefined){
@@ -685,7 +690,7 @@ export const useInteractivity = () => {
           let tmp2 = getNextToLast(bwsset['event-history']);
           let combostates = Object.values(tmp2['state']);
           let stateids = Object.values(bwsset['state-sentid-map']);
-          // console.log("Final State: ", combostates, stateids);
+          if(debug_verbose.value){console.log("Final State: ", combostates, stateids);}
           // Extract paired comparisons from BWS set
           agg = counting.directExtract(stateids, combostates, agg)[0];
           // mark BWS set as processed
@@ -697,6 +702,7 @@ export const useInteractivity = () => {
 
     // logging
     if (debug_verbose.value){
+      console.log("- Updated pairs:", JSON.parse(JSON.stringify(pairs)));
       console.groupEnd();
     }
   }
@@ -828,8 +834,9 @@ export const useInteractivity = () => {
       if (debug_verbose.value){
         console.group();
         console.log("(6b) retrainModel: Re-train the ML model")
-        console.log("- Model before training:", model);
-        // model.getWeights().forEach((wgt) => {console.log("- Model weights:", wgt.dataSync());})
+        // console.log("- Model before training:", model);
+        // model.getWeights().forEach((wgt) => {console.log("- Model weights after training:", wgt.dataSync());})
+        const wgts1 = model.getWeights(); console.log("- Last bias weight before training:", wgts1[wgts1.length - 1].dataSync());
       }
 
       // specify optimization
@@ -845,20 +852,17 @@ export const useInteractivity = () => {
         learningRate: train_lrate.value || 0.001
       })
       .then(res => {
+        // save model here
+        model.save('indexeddb://user-specific-scoring-model');
+        // logging
         if (debug_verbose.value){
-          console.log("- Model after training:", model);
           console.log("- Training losses (res.history.loss):", res.history.loss);
-          // model.getWeights().forEach((wgt) => {console.log("- Model weights:", wgt.dataSync());})
+          // console.log("- Model after training:", model);
+          // model.getWeights().forEach((wgt) => {console.log("- Model weights after training:", wgt.dataSync());})
+          let wgts2 = model.getWeights(); console.log("- Last bias weight after training:", wgts2[wgts2.length - 1].dataSync());
+          console.groupEnd();
         }
       });
-
-      // save model here
-      model.save('indexeddb://user-specific-scoring-model');
-
-      // logging
-      if (debug_verbose.value){
-        console.groupEnd();
-      }
     });
 
   }
@@ -869,7 +873,7 @@ export const useInteractivity = () => {
     // logging
     if (debug_verbose.value){
       console.group();
-      console.log("(7) predictScores: Prepare examples to predict")
+      console.log("(7a) predictScores: Prepare examples to predict")
     }
 
     // read features
@@ -904,7 +908,7 @@ export const useInteractivity = () => {
       // logging
       if (debug_verbose.value){
         console.group();
-        console.log("(7) predictScores: Predict the new model scores for the whole pool")
+        console.log("(7b) predictScores: Predict the new model scores for the whole pool")
         console.log("- Prediction Model:", model);
         // model.getWeights().forEach((wgt) => {console.log("- Model weights:", wgt.dataSync());})
       }

@@ -168,16 +168,6 @@
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
       <div class="field">
-        <label class="label" for="max-displays">
-          Maximum number of times an example will be displayed
-        </label>
-        <input id="max-displays" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="max_displays" step="1" min="1" max="30">
-        <output for="max-displays">{{ max_displays }}</output>
-      </div>
-
-      <div class="field">
         <input id="interactivity-exclude-bwssampling-toogle" 
                class="switch is-rounded" type="checkbox"
                v-model="exclude_max_display">
@@ -193,6 +183,16 @@
         <label class="label" for="interactivity-drop-display-toogle">
           Drop examples from the pool if shown too often (Default: Off)
         </label>
+      </div>
+
+      <div class="field" v-show="exclude_max_display === true || drop_max_display === true">
+        <label class="label" for="max-displays">
+          Maximum number of times an example will be displayed
+        </label>
+        <input id="max-displays" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="max_displays" step="1" min="1" max="30">
+        <output for="max-displays">{{ max_displays }}</output>
       </div>
 
     </div>
@@ -329,12 +329,22 @@
         </label>
       </div>
 
-      <div class="field">
+      <div class="field" v-show="drop_converge === true">
         <label class="label" for="interactivity-eps_score_change">
           Termination criteria: Model score changes
         </label>
         <input id="interactivity-eps_score_change" 
                class="input" type="text" v-model="eps_score_change_text">
+      </div>
+
+      <div class="field" v-show="drop_converge === true">
+        <label class="label" for="interactivity-converge_patience">
+          Patience. Number of model evaluations to wait before applying the convergence deletion criteria.
+        </label>
+        <input id="interactivity-converge_patience" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="converge_patience" step="1" min="0" max="10">
+        <output for="interactivity-converge_patience">{{ converge_patience }}</output>
       </div>
 
     </div>
@@ -485,6 +495,7 @@ export default defineComponent({
       // Settings for (1)
       drop_converge, 
       eps_score_change,
+      converge_patience,
       drop_pairs,
       // Settings for (3)
       bwsset_num_items, 
@@ -538,7 +549,7 @@ export default defineComponent({
         initial_load_only,
         drop_distribution, add_distribution, bin_edges_text, target_probas_text, 
         exclude_max_display, drop_max_display, max_displays, 
-        drop_converge, eps_score_change_text,
+        drop_converge, eps_score_change_text, converge_patience,
         drop_pairs,
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
       smoothing_method, ema_alpha,

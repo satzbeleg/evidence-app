@@ -92,7 +92,7 @@ export default defineComponent({
     // Load Interactivity Settings
     const { 
       pool, 
-      pairs, 
+      // pairs, // only needed within interactivity.js:updatePairMatrix
       resetPool,
       dropExamplesFromPool,
       addExamplesToPool,
@@ -208,11 +208,11 @@ export default defineComponent({
       (num_evaluated) => {
         if (num_evaluated > 0 && !isSaving.value){
           console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          // (Step 4) Update Pairs Matrix
-          updatePairMatrix(data);
-          console.log("Pairs:", JSON.parse(JSON.stringify(pairs)));
-          // this will purge `data.evaluated` (queue.js)
-          saveEvaluations();
+
+          updatePairMatrix(data);  // interactivity.js: Step (4)
+
+          saveEvaluations();  // queue.js: Purge `data.evaluated`
+
           // DELETE THIS
           computeTrainingScores();
           predictScores();

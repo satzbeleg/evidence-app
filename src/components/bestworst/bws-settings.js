@@ -31,16 +31,17 @@ export const useBwsSettings = () => {
   const initial_load_only = ref();
 
   const drop_distribution = ref();
-  const add_distribution = ref();  // NOT USED SO FAR
+  const add_distribution = ref();
   const target_probas = reactive({value: []});
   const bin_edges = reactive({value: []});
 
-  const exclude_max_display = ref();  // NOT USED SO FAR
+  const exclude_max_display = ref();
   const drop_max_display = ref();
   const max_displays = ref();
 
   const drop_converge = ref();
   const eps_score_change = ref();
+  const converge_patience = ref();
 
   const drop_pairs = ref();
   
@@ -92,6 +93,7 @@ export const useBwsSettings = () => {
           // Settings for (1)
           drop_converge.value = response.data['drop-converge'] || false;
           eps_score_change.value = response.data['eps-score-change'] || 1e-6;
+          converge_patience.value = response.data['converge-patience'] || 0;
           drop_pairs.value = response.data['drop-pairs'] || false;
           // Settings for (3): sampleBwsSets
           bwsset_num_items.value = response.data['bwsset-num-items'] || 4;
@@ -147,6 +149,7 @@ export const useBwsSettings = () => {
         // Settings for (1)
         'drop-converge': drop_converge.value, 
         'eps-score-change': eps_score_change.value,
+        'converge-patience': converge_patience.value,
         'drop-pairs': drop_pairs.value,
         // Settings for (3), e.g. sampleBwsSets
         'bwsset-num-items': bwsset_num_items.value, 
@@ -192,7 +195,7 @@ export const useBwsSettings = () => {
     // Settings for (1) and (3)
     drop_max_display, exclude_max_display, max_displays, 
     // Settings for (1)
-    drop_converge, eps_score_change,
+    drop_converge, eps_score_change, converge_patience,
     drop_pairs,
     // Settings for (3), e.g. sampleBwsSets
     bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
