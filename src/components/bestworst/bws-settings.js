@@ -82,7 +82,7 @@ export const useBwsSettings = () => {
           item_sampling_numtop.value = response.data['item-sampling-numtop'] || 100;
           item_sampling_offset.value = response.data['item-sampling-offset'] || 0;
           // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
-          initial_load_only.value = response.data['initial-load_only'] || true;
+          initial_load_only.value = response.data['initial-load-only'] || false;
           min_pool_size.value  = response.data['min-pool-size'] || 10;
           max_pool_size.value = response.data['max-pool-size'] || 500;
           drop_distribution.value = response.data['drop-distribution'] || false;
@@ -140,7 +140,7 @@ export const useBwsSettings = () => {
         'item-sampling-numtop': item_sampling_numtop.value,
         'item-sampling-offset': item_sampling_offset.value,
         // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
-        'initial-load_only': initial_load_only.value,
+        'initial-load-only': initial_load_only.value,
         'min-pool-size': min_pool_size.value, 
         'max-pool-size': max_pool_size.value,
         'drop-distribution': drop_distribution.value, 

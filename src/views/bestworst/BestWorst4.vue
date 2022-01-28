@@ -92,7 +92,6 @@ export default defineComponent({
     // Load Interactivity Settings
     const { 
       pool, 
-      // pairs, // only needed within interactivity.js:updatePairMatrix
       resetPool,
       dropExamplesFromPool,
       addExamplesToPool,
@@ -130,7 +129,7 @@ export default defineComponent({
         try{
           isReplenishing.value = true;
           // (Step 3) Sample BWS sets from pool
-          var sampled_bwssets = sampleBwsSets();
+          const sampled_bwssets = sampleBwsSets();
           // => In der App anzeigen =>
           sampled_bwssets.forEach(exset => {
             var examples = []
