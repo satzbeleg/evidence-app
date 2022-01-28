@@ -95,7 +95,7 @@ export default defineComponent({
     /**
      * [A1] Replenish queueData.queue from database (load new example sets into queue)
      */
-    const replenishQueue = () => {
+    const replenishQueue = async() => {
       return new Promise((resolve, reject) => {
         // Replensihing started
         isReplenishing.value = true;
@@ -118,7 +118,7 @@ export default defineComponent({
             message_suggestion.value = response.data['msg'];
           }else if (typeof response.data == "object"){
             // copy all example sets
-            response.queueData.forEach(exset => queueData.queue.push(exset));
+            response.data.forEach(exset => queueData.queue.push(exset));
           }else{
             message_suggestion.value = "API returned unexpected queueData.";
           }

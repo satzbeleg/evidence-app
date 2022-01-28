@@ -68,7 +68,7 @@ export default defineComponent({
     loadGeneralSettings();
 
     // Load BWS Settings
-    const { queue_reorderpoint, loadBwsSettings } = useBwsSettings();
+    const { queue_reorderpoint, retrain_patience, loadBwsSettings } = useBwsSettings();
     loadBwsSettings();
 
 
@@ -92,7 +92,6 @@ export default defineComponent({
     // Load Interactivity Settings
     const { 
       pool, 
-      // pairs, // only needed within interactivity.js:updatePairMatrix
       resetPool,
       dropExamplesFromPool,
       addExamplesToPool,
@@ -130,7 +129,7 @@ export default defineComponent({
         try{
           isReplenishing.value = true;
           // (Step 3) Sample BWS sets from pool
-          var sampled_bwssets = sampleBwsSets();
+          const sampled_bwssets = sampleBwsSets();
           // => In der App anzeigen =>
           sampled_bwssets.forEach(exset => {
             var examples = []
@@ -201,7 +200,7 @@ export default defineComponent({
     }
 
 
-    /**
+    /** 
      * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
      * - `saveEvaluations` will purge `queueData.evaluated`
      */
@@ -212,15 +211,23 @@ export default defineComponent({
           // console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
           updatePairMatrix(queueData);  // interactivity.js: Step (4)
           saveEvaluations();  // queue.js: Purge `queueData.evaluated`
-
-          // TRIGGER THESE FUNCTIONS TOGETHER. BUT WHERE? USE CALLBACKS!
-          // watcher to trigger depending on the queueData.queue length
-          computeTrainingScores();
-          retrainModel();
-          predictScores();
         }
     });
-    
+
+    /**
+     * [B2] Training phase 
+     */
+    watch(
+      () => queueData.counter,
+      (counter) => {
+        if ((counter % retrain_patience.value) === 0){
+          if(debug_verbose.value){console.log(`Counter: ${counter}`)}
+          computeTrainingScores();  // (Step 5)
+          retrainModel();  // (Step 6)
+          predictScores();  // (Step 7)
+        }
+    });
+
 
     return { 
       queueData, 

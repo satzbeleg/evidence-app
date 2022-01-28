@@ -374,6 +374,27 @@
 
 
 
+  <h2 class="subtitle is-4">Trigger Re-Training</h2>
+  <div class="content">
+    <p>
+      Set the number of BWS set evaluations to wait till a model re-training is triggered.
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="retrain-patience">
+          Re-Train patiences
+        </label>
+        <input id="retrain-patience" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="retrain_patience" step="1" min="1" max="20">
+        <output for="retrain-patience" style="width:3.1rem;">{{ retrain_patience }}</output>
+      </div>
+
+    </div>
+  </div>
 
   <h2 class="subtitle is-4">Update Training Scores</h2>
   <div class="columns">
@@ -504,17 +525,17 @@ export default defineComponent({
       num_preload_bwssets, 
       bwsset_sampling_method, 
       item_sampling_method,
+      // Settings for 4/5/6
+      retrain_patience,
       // Settings for (5), e.g. computeTrainingScores
       smoothing_method, 
       ema_alpha,
-      // Settings for (6) and (7): getRemoteModel
       // Settings for (6): retrainModel
       train_optimizer,
       train_lrate, 
       train_epochs,
       train_loss,
       train_minsample
-      // Settings for (7): predictScores
     } = useBwsSettings();
 
     watch(min_pool_size, (minsz) => {
@@ -554,8 +575,9 @@ export default defineComponent({
         drop_converge, eps_score_change_text, converge_patience,
         drop_pairs,
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
-      smoothing_method, ema_alpha,
-      train_optimizer, train_lrate, train_epochs, train_loss, train_minsample
+      retrain_patience,
+        smoothing_method, ema_alpha,
+        train_optimizer, train_lrate, train_epochs, train_loss, train_minsample
     }
   }
 });

@@ -79,7 +79,13 @@ export const useQueue = () => {
     // the `nextExampleSet` function)
     queueData.evaluated.forEach(elem => {
       if (elem['set-id'] === queueData.current_setid){
-        console.log(`The set-id='${elem['set-id']}' cannot be stored twice`);
+        console.warn(`The set-id='${elem['set-id']}' cannot be stored twice`);
+        if (queueData.queue.length == 0){
+          queueData.current = [];
+          queueData.current_setid = undefined;
+          queueData.current_lemmata = undefined;
+          message_suggestion.value = 'No Examples Left Over! Search of for another headword!'
+        }
         return;
       }
     });
