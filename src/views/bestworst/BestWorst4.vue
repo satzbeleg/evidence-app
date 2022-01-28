@@ -68,7 +68,7 @@ export default defineComponent({
     loadGeneralSettings();
 
     // Load BWS Settings
-    const { queue_reorderpoint, loadBwsSettings } = useBwsSettings();
+    const { queue_reorderpoint, retrain_patience, loadBwsSettings } = useBwsSettings();
     loadBwsSettings();
 
 
@@ -201,7 +201,7 @@ export default defineComponent({
     }
 
 
-    /**
+    /** 
      * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
      * - `saveEvaluations` will purge `queueData.evaluated`
      */
@@ -212,12 +212,20 @@ export default defineComponent({
           // console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
           updatePairMatrix(queueData);  // interactivity.js: Step (4)
           saveEvaluations();  // queue.js: Purge `queueData.evaluated`
+        }
+    });
 
-          // TRIGGER THESE FUNCTIONS TOGETHER. BUT WHERE? USE CALLBACKS!
-          // watcher to trigger depending on the queueData.queue length
-          computeTrainingScores();
-          retrainModel();
-          predictScores();
+    /**
+     * [B2] Training phase 
+     */
+    watch(
+      () => queueData.counter,
+      (counter) => {
+        if(debug_verbose.value){console.log(`Counter: ${counter}`)}
+        if ((counter % retrain_patience.value) === 0){
+          computeTrainingScores();  // (Step 5)
+          retrainModel();  // (Step 6)
+          predictScores();  // (Step 7)
         }
     });
     

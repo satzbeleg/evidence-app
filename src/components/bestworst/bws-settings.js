@@ -63,6 +63,9 @@ export const useBwsSettings = () => {
   const train_loss = ref();  // meanSquaredError, huberLoss, absoluteDifference
   const train_minsample = ref();  // low number of evals
 
+  // Settings for 4/5/6
+  const retrain_patience = ref();
+
 
   /**
    * (B.1) download user's settings from database
@@ -100,6 +103,8 @@ export const useBwsSettings = () => {
           bwsset_sampling_method.value = response.data['bwsset-sampling-method'] || "overlap";
           num_preload_bwssets.value = response.data['num-preload-bwssets'] || 3;
           item_sampling_method.value = response.data['item-sampling-method'] || "exploit";
+          // Settings for 4/5/6
+          retrain_patience.value = response.data['retrain-patience'] || 1;
           // Settings for (5): computeTrainingScores
           smoothing_method.value = response.data['smoothing-method'] || "ema";
           ema_alpha.value = response.data['ema-alpha'] || 0.7;
@@ -156,6 +161,8 @@ export const useBwsSettings = () => {
         'bwsset-sampling-method': bwsset_sampling_method.value, 
         'num-preload-bwssets': num_preload_bwssets.value, 
         'item-sampling-method': item_sampling_method.value,
+        // Settings for 4/5/6
+        'retrain-patience': retrain_patience.value,
         // Settings for (5), e.g. computeTrainingScores
         'smoothing-method': smoothing_method.value, 
         'ema-alpha': ema_alpha.value,
@@ -199,6 +206,8 @@ export const useBwsSettings = () => {
     drop_pairs,
     // Settings for (3), e.g. sampleBwsSets
     bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
+    // Settings for 4/5/6
+    retrain_patience,
     // Settings for (5), e.g. computeTrainingScores
     smoothing_method, ema_alpha,
     // Settings for (6): retrainModel
