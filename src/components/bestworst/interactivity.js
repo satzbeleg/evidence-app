@@ -323,63 +323,86 @@ export const useInteractivity = () => {
    *    because it would be repeated unnecessarily as the pairs (per use) can 
    *    be computed from the raw evaluations already sent to the server. 
    */
-  const dropExamplesFromPool = () => {
-    // logging
-    if (debug_verbose.value){
-      console.group();
-      console.log("(1) Drop examples from pool (dropExamplesFromPool)");
-    }
-    // save IDs to be deletion
-    var del_ids = [];
-    var avail_ids = Object.keys(pool);
-    const max_deletions = avail_ids.length - min_pool_size.value;
+  const dropExamplesFromPool = async() => {
+    return new Promise((resolve) => {
+      // logging
+      if (debug_verbose.value){
+        console.group();
+        console.log("(1) Drop examples from pool (dropExamplesFromPool)");
+        console.log(`- min_pool_size=${min_pool_size.value}`);
+        console.log(`- drop_distribution=${drop_distribution.value}`);
+        if(drop_distribution.value){
+          console.log(`- bin_edges=${bin_edges.value}`);
+          console.log(`- target_probas=${target_probas.value}`);
+        }
+        console.log(`- drop_max_display=${drop_max_display.value}`);  
+        if(drop_max_display.value){
+          console.log(`- max_displays=${max_displays}`);
+        }
+        console.log(`- drop_converge=${drop_converge.value}`);
+        if(drop_converge.value){
+          console.log(`- eps_score_change=${eps_score_change}`);
+          console.log(`- converge_patience=${converge_patience}`);  
+        }
+        console.log(`- drop_pairs=${drop_pairs}`);
+      }
+      // save IDs to be deletion
+      var del_ids = [];
+      var avail_ids = Object.keys(pool);
+      const max_deletions = avail_ids.length - min_pool_size.value;
 
-    // identify IDs that should be deleted
-    if ( max_deletions > 0 ){
-      // (a) Drop examples with overrepresented training scores
-      if (drop_distribution.value){
-        deletionCriteriaDistribution(
-          pool, avail_ids, del_ids, bin_edges.value, target_probas.value, debug_verbose.value);
+      // identify IDs that should be deleted
+      if ( max_deletions > 0 ){
+        // (a) Drop examples with overrepresented training scores
+        if (drop_distribution.value){
+          deletionCriteriaDistribution(
+            pool, avail_ids, del_ids, bin_edges.value, target_probas.value, debug_verbose.value);
+        }
+        // (b) Drop if example reached `max_displays`
+        if (drop_max_display.value){
+          deletionCriteriaDisplays(
+            pool, avail_ids, del_ids, max_displays.value, debug_verbose.value);
+        }
+        // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
+        if (drop_converge.value){
+          deletionCriteriaConvergence(
+            pool, avail_ids, del_ids, eps_score_change.value, converge_patience.value, debug_verbose.value);
+        }
+        // Restrict deletions
+        del_ids = del_ids.slice(0, max_deletions);
       }
-      // (b) Drop if example reached `max_displays`
-      if (drop_max_display.value){
-        deletionCriteriaDisplays(
-          pool, avail_ids, del_ids, max_displays.value, debug_verbose.value);
-      }
-      // (c) Drop if example's model scores converged `|delta score|<eps_score_change`
-      if (drop_converge.value){
-        deletionCriteriaConvergence(
-          pool, avail_ids, del_ids, eps_score_change.value, converge_patience.value, debug_verbose.value);
-      }
-      // Restrict deletions
-      del_ids = del_ids.slice(0, max_deletions);
-    }
 
-    // (Optional) Delete IDs from paired comparision matrix
-    del_ids.forEach(key => {
-      if (drop_pairs.value){
-        delete pairs[key];
-        for(var key2 in pairs){
-          delete pairs[key2][key]
-        }  
+      // (Optional) Delete IDs from paired comparision matrix
+      del_ids.forEach(key => {
+        if (drop_pairs.value){
+          delete pairs[key];
+          for(var key2 in pairs){
+            delete pairs[key2][key]
+          }  
+        }
+      });
+
+      // Copy pool data to buffer
+      // var deletedData = {}  // API buffer
+      del_ids.forEach(key => {
+        deleted_pool[key] = {
+          "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
+          "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
+          "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
+        };
+        delete pool[key];
+      });
+
+      // logging
+      if (debug_verbose.value){
+        console.log(`- New pool size: ${Object.keys(pool).length}`);
+        console.log(`- Num deleted examples: ${Object.keys(deleted_pool).length}`);
+        console.log("- deleted_pool:", JSON.parse(JSON.stringify(deleted_pool)) );
+        console.groupEnd();
       }
+
+      resolve();
     });
-
-    // Copy pool data to buffer
-    // var deletedData = {}  // API buffer
-    del_ids.forEach(key => {
-      deleted_pool[key] = {
-        "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
-        "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
-        "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
-      };
-      delete pool[key];
-    });
-    // logging
-    if (debug_verbose.value){
-      console.log("Deleted data:", JSON.parse(JSON.stringify(deleted_pool)) );
-      console.groupEnd();
-    }
   }
 
 
@@ -393,6 +416,7 @@ export const useInteractivity = () => {
     if (debug_verbose.value){
       console.group();
       console.log("(1b) Send deleted pool data to API/DB (saveDeletedPool)");
+      console.log(`- has_data_donation_consent=${has_data_donation_consent.value}`)
       if( has_data_donation_consent.value ){
         console.log(`try to store ${Object.keys(deleted_pool).length} deleted example(s)`);
       }else{
@@ -499,7 +523,7 @@ export const useInteractivity = () => {
             if ('msg' in response.data){
               error_message.value = response.data['msg'];
             } else {
-              response.queueData.forEach(row => {
+              response.data.forEach(row => {
                 pool[row.id] = {
                   "text": row.text,
                   "spans": row.spans,
@@ -679,7 +703,7 @@ export const useInteractivity = () => {
     // logging
     if (debug_verbose.value) {
       console.log("- Sampled IDs:", sampled_ids);
-      console.log("- BWS samples:", sampled_bwssets);
+      console.log("- Sampled BWS sets:", sampled_bwssets);
       console.groupEnd()
     }
 
@@ -691,13 +715,15 @@ export const useInteractivity = () => {
   /**
    * (4) Update pairs comparison matrix
    * 
-   * @param {*} queueData 
+   * @param {Array} queueData.evaluated
+   * @param {JSON}  pairs
    */
   const updatePairMatrix = (queueData) => {
     // logging
     if (debug_verbose.value){
       console.group();
-      console.log("(4) Update pairs comparison matrix (updatePairMatrix)")
+      console.log("(4) Update pairs comparison matrix (updatePairMatrix)");
+      console.log(`- queueData.evaluated.length=${queueData.evaluated.length}`);
     }
 
     // start update of `pairs` object
@@ -710,18 +736,21 @@ export const useInteractivity = () => {
           let tmp2 = getNextToLast(bwsset['event-history']);
           let combostates = Object.values(tmp2['state']);
           let stateids = Object.values(bwsset['state-sentid-map']);
-          if(debug_verbose.value){console.log("Final State: ", combostates, stateids);}
+          // if(debug_verbose.value){console.log("- Final State: ", combostates, stateids);}
           // Extract paired comparisons from BWS set
           agg = counting.directExtract(stateids, combostates, agg)[0];
           // mark BWS set as processed
           bwsset['status-bestworst4'] = "processed"
         }
-      } //else{console.log(bwsset['status-bestworst4'])}
+      } else{
+        console.warn(`Undeleted BWS set: ${bwsset['status-bestworst4']}`)
+      }
     });
     counting.lilAddInplace(pairs, agg);
 
     // logging
     if (debug_verbose.value){
+      console.log("- Added pairs:", JSON.parse(JSON.stringify(agg)));
       console.log("- Updated pairs:", JSON.parse(JSON.stringify(pairs)));
       console.groupEnd();
     }
@@ -750,7 +779,9 @@ export const useInteractivity = () => {
     // logging
     if (debug_verbose.value){
       console.group();
-      console.log("(5) Compute the new target scores (computeTrainingScores)")
+      console.log("(5) Compute the new target scores (computeTrainingScores)");
+      console.log(`- smoothing_method=${smoothing_method.value}`);
+      console.log(`- ema_alpha=${ema_alpha.value}`);
     }
 
     // compute ranking from paired comparisons
@@ -789,13 +820,14 @@ export const useInteractivity = () => {
 
     // logging
     if (debug_verbose.value){
-      console.log("Pool with new training scores:", JSON.parse(JSON.stringify(pool)))
+      console.log("- Pool with new training scores:", JSON.parse(JSON.stringify(pool)))
       console.groupEnd();
     }
   }
 
 
-  // (6) Re-train the ML model
+  /** (6/7) Load the TFJS model
+   */
   const getTfjsModel = async() => {
     try{
       // try to load model from App's IndexDB
@@ -812,11 +844,28 @@ export const useInteractivity = () => {
   }; 
 
  
+  /** (6) Re-train the ML model
+   * 
+   * Global Variables:
+   * -----------------
+   * @param {Float}  pool[].last_training_score
+   * @param {Array}  pool[].features
+   * @param {Int}    train_minsample
+   * @param {String} train_optimizer
+   * @param {Float}  train_lrate
+   * @param {Int}    train_epochs
+   * @param {String} train_loss
+   * 
+   * Changed
+   * -------
+   * @param {tf.keras.Model} model
+   */
   const retrainModel = () => {
     // logging
     if (debug_verbose.value){
       console.group();
-      console.log("(6a) retrainModel: Prepare Training Set")
+      console.log("(6a) retrainModel: Prepare Training Set");
+      console.log(`- train_minsample=${train_minsample.value}`);
     }
 
     // prepare training set
@@ -853,8 +902,12 @@ export const useInteractivity = () => {
     getTfjsModel().then((model) => {
       if (debug_verbose.value){
         console.group();
-        console.log("(6b) retrainModel: Re-train the ML model")
-        // console.log("- Model before training:", model);
+        console.log("(6b) retrainModel: Re-train the ML model");
+        console.log(`- train_optimizer=${train_optimizer.value}`);
+        console.log(`- train_lrate=${train_lrate.value}`);
+        console.log(`- train_epochs=${train_epochs.value}`);
+        console.log(`- train_loss=${train_loss.value}`);
+          // console.log("- Model before training:", model);
         // model.getWeights().forEach((wgt) => {console.log("- Model weights after training:", wgt.dataSync());})
         const wgts1 = model.getWeights(); console.log("- Last bias weight before training:", wgts1[wgts1.length - 1].dataSync());
       }
@@ -876,24 +929,35 @@ export const useInteractivity = () => {
         model.save('indexeddb://user-specific-scoring-model');
         // logging
         if (debug_verbose.value){
-          console.log("- Training losses (res.history.loss):", res.history.loss);
+          console.log("- (6b) Training losses (res.history.loss):", res.history.loss);
           // console.log("- Model after training:", model);
-          // model.getWeights().forEach((wgt) => {console.log("- Model weights after training:", wgt.dataSync());})
-          let wgts2 = model.getWeights(); console.log("- Last bias weight after training:", wgts2[wgts2.length - 1].dataSync());
-          console.groupEnd();
+          // model.getWeights().forEach((wgt) => {console.log("- (6b) Model weights after training:", wgt.dataSync());})
+          let wgts2 = model.getWeights(); console.log("- (6b) Last bias weight after training:", wgts2[wgts2.length - 1].dataSync());
+          // console.groupEnd();
         }
       });
+      if (debug_verbose.value){console.groupEnd();}
     });
 
   }
 
 
-  // (7) Predict the new model scores for the whole pool
+  /** (7) Predict the new model scores for the whole pool
+   * 
+   * Global Variables:
+   * -----------------
+   * @param {Array}          pool[].features
+   * @param {tf.keras.Model} model
+   * 
+   * Changed
+   * -------
+   * @param {Array}  pool[].model_score_history
+   */
   const predictScores = () => {
     // logging
     if (debug_verbose.value){
       console.group();
-      console.log("(7a) predictScores: Prepare examples to predict")
+      console.log("(7a) predictScores: Prepare examples to predict");
     }
 
     // read features
