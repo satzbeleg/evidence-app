@@ -499,7 +499,7 @@ export const useInteractivity = () => {
             if ('msg' in response.data){
               error_message.value = response.data['msg'];
             } else {
-              response.data.forEach(row => {
+              response.queueData.forEach(row => {
                 pool[row.id] = {
                   "text": row.text,
                   "spans": row.spans,
@@ -574,6 +574,7 @@ export const useInteractivity = () => {
    * @param {Int}   bwsset_num_items 
    * @param {Int}   num_preload_bwssets 
    * @param {String} item_sampling_method 
+   * @param {Bool}  exclude_max_display
    * @param {Bool}  debug_verbose 
    * 
    * Example:
@@ -594,6 +595,8 @@ export const useInteractivity = () => {
       console.log(`- bwsset_num_items=${bwsset_num_items.value}`);
       console.log(`- num_preload_bwssets=${num_preload_bwssets.value}`);
       console.log(`- item_sampling_method=${item_sampling_method.value}`);
+      console.log(`- exclude_max_display=${exclude_max_display}`);
+      if(exclude_max_display.value){console.log(`- max_displays=${max_displays}`);}
     }
 
     // (0) Ensure that the metrics are recomputed
@@ -609,7 +612,7 @@ export const useInteractivity = () => {
 
     // (B) Copy keys (IDs) from pool
     var all_ids = [];
-    if (exclude_max_display){
+    if (exclude_max_display.value){
       // Remove IDs that have been shown too often
       Object.keys(pool).forEach(key => {
         if (pool[key].num_displayed < max_displays.value){
@@ -669,17 +672,13 @@ export const useInteractivity = () => {
     // (D) Pick the first `num_examples` items of the sorted ids
     var sampled_ids = all_ids.slice(0, num_examples);
 
-    if (debug_verbose.value) {
-      // console.log(`- sampled_ids.length=${sampled_ids.length}`);
-      console.log("- Sampled IDs:", sampled_ids);
-    }
-
     // (E) Generate BWS set samples (Sorry for the naming confusion)
     var sampled_bwssets = sampling.sample(
       sampled_ids, bwsset_num_items.value, bwsset_sampling_method.value, false);
 
     // logging
     if (debug_verbose.value) {
+      console.log("- Sampled IDs:", sampled_ids);
       console.log("- BWS samples:", sampled_bwssets);
       console.groupEnd()
     }
@@ -692,9 +691,9 @@ export const useInteractivity = () => {
   /**
    * (4) Update pairs comparison matrix
    * 
-   * @param {*} data 
+   * @param {*} queueData 
    */
-  const updatePairMatrix = (data) => {
+  const updatePairMatrix = (queueData) => {
     // logging
     if (debug_verbose.value){
       console.group();
@@ -703,7 +702,7 @@ export const useInteractivity = () => {
 
     // start update of `pairs` object
     let agg =  {};
-    data.evaluated.forEach(bwsset => {
+    queueData.evaluated.forEach(bwsset => {
       if(bwsset['status-bestworst4'] === undefined){
         let tmp = getLast(bwsset['event-history']);
         if(tmp['message'] === "submitted"){

@@ -2,25 +2,25 @@
   <TheNavbar v-bind:with_lang_switch="false"
              v-bind:with_darkmode_icon="false"
              v-bind:with_lemmata_search="true"
-             v-bind:lemma_keywords="data.current_lemmata"
+             v-bind:lemma_keywords="queueData.current_lemmata"
              v-on:search-lemmata-navbar="onSearchLemmata"
-             :key="data.counter" />
+             :key="queueData.counter" />
 
   <section class="section">    
     <div class="container is-centered" style="max-width: 720px;">
 
-      <template v-if="data.current.length > 0">
+      <template v-if="queueData.current.length > 0">
         <!-- BWS UI -->
         <BestWorstChoices 
-          v-bind:items="data.current"
+          v-bind:items="queueData.current"
           v-on:ranking-done="nextExampleSet"
-          :key="data.counter"
+          :key="queueData.counter"
         />
       </template>
 
       <template v-else>
         <PageLoader 
-          v-bind:status="data.current.length == 0"
+          v-bind:status="queueData.current.length == 0"
           v-bind:messages="['Queue is empty!', message_suggestion]" />
       </template>
 
@@ -76,7 +76,7 @@ export default defineComponent({
     const { 
       uispec, 
       searchlemmata, 
-      data, 
+      queueData, 
       isReplenishing, 
       message_suggestion,
       isSaving, 
@@ -139,7 +139,7 @@ export default defineComponent({
                 "spans": pool[key].span
               });
             });
-            data.queue.push({
+            queueData.queue.push({
               set_id: uuid4(),
               lemmata: searchlemmata.value.split(',').map(s => s.trim()),
               examples: examples
@@ -147,9 +147,9 @@ export default defineComponent({
           });
           isReplenishing.value = false;
           // Force moving a BWS set to UI
-          if (data.current.length === 0){
+          if (queueData.current.length === 0){
             pullFromQueue(); // load data
-            console.log("New current BWS set loaded")   // data.current
+            console.log("New current BWS set loaded")   // queueData.current
           }
           resolve();
         }catch(msg){
@@ -171,7 +171,7 @@ export default defineComponent({
      * [A3] Trigger AJAX request to replenish the queue
      */
     watch(
-      () => data.queue.length,
+      () => queueData.queue.length,
       (stocklevel) => {
         if (stocklevel < queue_reorderpoint.value){
           console.log(`Queue is running low: ${stocklevel} examplesets`);
@@ -194,24 +194,24 @@ export default defineComponent({
       searchlemmata.value = keywords
       // force to load next example in UI
       await replenishQueue();
-      //await addExamplesToPool(data.current_lemmata, true);  // is called in replenishQueue
+      //await addExamplesToPool(queueData.current_lemmata, true);  // is called in replenishQueue
       //var sampled_bwssets = sampleBwsSets();
     }
 
 
     /**
      * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
-     * - `saveEvaluations` will purge `data.evaluated`
+     * - `saveEvaluations` will purge `queueData.evaluated`
      */
     watch(
-      () => data.evaluated.length,
+      () => queueData.evaluated.length,
       (num_evaluated) => {
         if (num_evaluated > 0 && !isSaving.value){
           console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
 
-          updatePairMatrix(data);  // interactivity.js: Step (4)
+          updatePairMatrix(queueData);  // interactivity.js: Step (4)
 
-          saveEvaluations();  // queue.js: Purge `data.evaluated`
+          saveEvaluations();  // queue.js: Purge `queueData.evaluated`
 
           // DELETE THIS
           computeTrainingScores();
@@ -223,7 +223,7 @@ export default defineComponent({
     
 
     return { 
-      data, 
+      queueData, 
       nextExampleSet,
       onSearchLemmata,
       message_suggestion
