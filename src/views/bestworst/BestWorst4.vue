@@ -2,25 +2,25 @@
   <TheNavbar v-bind:with_lang_switch="false"
              v-bind:with_darkmode_icon="false"
              v-bind:with_lemmata_search="true"
-             v-bind:lemma_keywords="data.current_lemmata"
+             v-bind:lemma_keywords="queueData.current_lemmata"
              v-on:search-lemmata-navbar="onSearchLemmata"
-             :key="data.counter" />
+             :key="queueData.counter" />
 
   <section class="section">    
     <div class="container is-centered" style="max-width: 720px;">
 
-      <template v-if="data.current.length > 0">
+      <template v-if="queueData.current.length > 0">
         <!-- BWS UI -->
         <BestWorstChoices 
-          v-bind:items="data.current"
+          v-bind:items="queueData.current"
           v-on:ranking-done="nextExampleSet"
-          :key="data.counter"
+          :key="queueData.counter"
         />
       </template>
 
       <template v-else>
         <PageLoader 
-          v-bind:status="data.current.length == 0"
+          v-bind:status="queueData.current.length == 0"
           v-bind:messages="['Queue is empty!', message_suggestion]" />
       </template>
 
@@ -36,7 +36,7 @@ import BestWorstChoices from '@/components/bestworst/Choices.vue';
 import { defineComponent, watchEffect, watch } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
-// import { useGeneralSettings } from '@/components/settings/general-settings.js';
+import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 //import { traverseObject } from '@/functions/traverse-objects.js';
 // import { ranking } from 'bwsample';
@@ -64,8 +64,8 @@ export default defineComponent({
 
 
     // Load General UI settings
-    // const { loadGeneralSettings } = useGeneralSettings();
-    // loadGeneralSettings();
+    const { loadGeneralSettings, debug_verbose } = useGeneralSettings();
+    loadGeneralSettings();
 
     // Load BWS Settings
     const { queue_reorderpoint, loadBwsSettings } = useBwsSettings();
@@ -76,7 +76,7 @@ export default defineComponent({
     const { 
       uispec, 
       searchlemmata, 
-      data, 
+      queueData, 
       isReplenishing, 
       message_suggestion,
       isSaving, 
@@ -92,7 +92,7 @@ export default defineComponent({
     // Load Interactivity Settings
     const { 
       pool, 
-      pairs, 
+      // pairs, // only needed within interactivity.js:updatePairMatrix
       resetPool,
       dropExamplesFromPool,
       addExamplesToPool,
@@ -120,14 +120,16 @@ export default defineComponent({
      * 
      */
     const replenishQueue = async() => {
+      // (Step 1) Drop examples
+      await dropExamplesFromPool();
+
       // (Step 2) Add examples to pool
       await addExamplesToPool(searchlemmata.value);
-      // console.log("start repl:", pool)
 
       return new Promise((resolve, reject) => {
         try{
           isReplenishing.value = true;
-          // (Step 3) Sample 1,2,3... BWS sets from pool
+          // (Step 3) Sample BWS sets from pool
           var sampled_bwssets = sampleBwsSets();
           // => In der App anzeigen =>
           sampled_bwssets.forEach(exset => {
@@ -139,7 +141,7 @@ export default defineComponent({
                 "spans": pool[key].span
               });
             });
-            data.queue.push({
+            queueData.queue.push({
               set_id: uuid4(),
               lemmata: searchlemmata.value.split(',').map(s => s.trim()),
               examples: examples
@@ -147,9 +149,9 @@ export default defineComponent({
           });
           isReplenishing.value = false;
           // Force moving a BWS set to UI
-          if (data.current.length === 0){
+          if (queueData.current.length === 0){
             pullFromQueue(); // load data
-            console.log("New current BWS set loaded")   // data.current
+            console.log("New current BWS set loaded")   // queueData.current
           }
           resolve();
         }catch(msg){
@@ -171,12 +173,12 @@ export default defineComponent({
      * [A3] Trigger AJAX request to replenish the queue
      */
     watch(
-      () => data.queue.length,
+      () => queueData.queue.length,
       (stocklevel) => {
         if (stocklevel < queue_reorderpoint.value){
-          console.log(`Queue is running low: ${stocklevel} examplesets`);
+          if(debug_verbose.value){console.log(`[A3] Queue is running low: ${stocklevel} examplesets`);}
           replenishQueue();
-          console.log("Pool:", JSON.parse(JSON.stringify(pool)))
+          if(debug_verbose.value){console.log(`[A3] New pool size: ${Object.keys(pool).length}`);}
         }
       }
     );
@@ -194,36 +196,34 @@ export default defineComponent({
       searchlemmata.value = keywords
       // force to load next example in UI
       await replenishQueue();
-      //await addExamplesToPool(data.current_lemmata, true);  // is called in replenishQueue
+      //await addExamplesToPool(queueData.current_lemmata, true);  // is called in replenishQueue
       //var sampled_bwssets = sampleBwsSets();
     }
 
 
     /**
      * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
-     * - `saveEvaluations` will purge `data.evaluated`
+     * - `saveEvaluations` will purge `queueData.evaluated`
      */
     watch(
-      () => data.evaluated.length,
+      () => queueData.evaluated.length,
       (num_evaluated) => {
         if (num_evaluated > 0 && !isSaving.value){
-          console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          // (Step 4) Update Pairs Matrix
-          updatePairMatrix(data);
-          console.log("Pairs:", JSON.parse(JSON.stringify(pairs)));
-          // this will purge `data.evaluated` (queue.js)
-          saveEvaluations();
-          // DELETE THIS
+          // console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
+          updatePairMatrix(queueData);  // interactivity.js: Step (4)
+          saveEvaluations();  // queue.js: Purge `queueData.evaluated`
+
+          // TRIGGER THESE FUNCTIONS TOGETHER. BUT WHERE? USE CALLBACKS!
+          // watcher to trigger depending on the queueData.queue length
           computeTrainingScores();
-          predictScores();
           retrainModel();
-          dropExamplesFromPool();
+          predictScores();
         }
     });
     
 
     return { 
-      data, 
+      queueData, 
       nextExampleSet,
       onSearchLemmata,
       message_suggestion
