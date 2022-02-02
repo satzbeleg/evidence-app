@@ -152,6 +152,27 @@ export const useQueue = () => {
     });
   }
 
+  /**
+   * Delete evaluated BWS sets
+   * 
+   * Example:
+   * --------
+   * import { useQueue } from '@/components/bestworst/queue.js';
+   * import { useGeneralSettings } from '@/components/settings/general-settings.js';
+   * const { has_data_donation_consent } = useGeneralSettings();
+   * const { saveEvaluations, flushEvaluations } = useQueue();
+   * // process queueData.evaluations
+   * postProcess(queueData.evaluations)
+   * // check information consent
+   * if( has_data_donation_consent.value ){
+   *    saveEvaluations();
+   * } else {
+   *    flushEvaluations(); 
+   * }
+   */
+  const flushEvaluations = () => {
+    queueData.evaluated = [];
+  }
   
   /**
    * Reset Queue
@@ -174,7 +195,7 @@ export const useQueue = () => {
     isReplenishing, isSaving, message_suggestion,
     pullFromQueue,
     nextExampleSet,
-    saveEvaluations,
+    saveEvaluations, flushEvaluations,
     resetQueue
   }
 }
