@@ -64,11 +64,19 @@ export default defineComponent({
 
 
     // Load General UI settings
-    const { loadGeneralSettings, debug_verbose } = useGeneralSettings();
+    const { 
+      has_data_donation_consent,
+      debug_verbose,
+      loadGeneralSettings
+    } = useGeneralSettings();
     loadGeneralSettings();
 
     // Load BWS Settings
-    const { queue_reorderpoint, retrain_patience, loadBwsSettings } = useBwsSettings();
+    const { 
+      queue_reorderpoint, 
+      retrain_patience, 
+      loadBwsSettings 
+    } = useBwsSettings();
     loadBwsSettings();
 
 
@@ -81,6 +89,7 @@ export default defineComponent({
       message_suggestion,
       isSaving, 
       saveEvaluations,
+      flushEvaluations,
       pullFromQueue, 
       nextExampleSet, 
       resetQueue
@@ -208,9 +217,15 @@ export default defineComponent({
       () => queueData.evaluated.length,
       (num_evaluated) => {
         if (num_evaluated > 0 && !isSaving.value){
-          // console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
-          updatePairMatrix(queueData);  // interactivity.js: Step (4)
-          saveEvaluations();  // queue.js: Purge `queueData.evaluated`
+          // interactivity.js: Step (4)
+          updatePairMatrix(queueData);
+
+          // queue.js: save or delete
+          if( has_data_donation_consent.value ){
+            saveEvaluations();  // queue.js: Purge `queueData.evaluated`
+          }else{
+            flushEvaluations();  // just purge `queueData.evaluated`
+          }
         }
     });
 
