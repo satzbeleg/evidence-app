@@ -5,17 +5,8 @@
   <section class="section" id="consent">
     <div class="container">
       <!-- put the following into components ... -->
-      
-      <h1 class="title is-3">{{ t('consent.title') }}</h1>
-      <p>
-      In er EVIDENCE App werden Sie gefragt, Satzbelege zu einem gegebenen Lemma zu bewerten. Um die Daten zu sammeln und weiter auswerten zu können, benötigen wir Ihre Einwilligung. Im Folgenden klären wir Sie darüber auf, welche Informationen zu welchem Zweck in dieser Studie gesammelt werden.
-      </p>
-
-      <h2 class="subtitle is-5">Lorem </h2>
-      <div class="content">
-        <p>ipsum</p>
-      </div>
-
+      <div v-show="locale === 'en'"></div>
+      <ConsentDE />
       <!-- put the above into components ... -->
     </div>
   </section>
@@ -26,13 +17,15 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
+import ConsentDE from '@/translations/pages/consent-de.vue';
 
 
 export default {
   name: "Informed Consent",
 
   components: {
-    TheNavbar
+    TheNavbar,
+    ConsentDE
   },
 
   setup(){
