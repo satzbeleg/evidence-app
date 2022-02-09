@@ -6,6 +6,7 @@ Table of contents
 - [Purpose](#purpose)
 - [Installation](#installation)
 - [Local Development](#local-development)
+- [Customizations](#customizations)
 - [Common Problems](#common-problems)
 - [Appendix](#appendix)
 
@@ -59,6 +60,13 @@ yarn serve --port 9090
 - Compiles and minifies for production: `yarn build`
 - Lints and fixes files: `yarn lint`
 - Open Vue.js UI: `vue ui`
+
+
+## Customizations
+The source code contains files that are specific to the project AUTHORS needs, 
+and must be customized to your needs if you decide to deploy this software.
+
+- `./src/translations/pages/*` contains content pages for the a) informed consents, b) privacy policy, c) terms of usage, etc. You need to tailor the content to yourself.
 
 
 
