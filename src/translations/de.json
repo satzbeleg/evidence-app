@@ -35,7 +35,13 @@
     "general": "Allgemeine Einstellungen",
     "appearance": "Aussehen der Anwendungsoberfläche",
     "language": "Sprache der Anwendungsoberfläche",
-    "darkmode": "Dunkler Modus"
+    "darkmode": "Dunkler Modus",
+    "legal": {
+      "legal_compliance": "Rechtskonformität",
+      "data_donation": "Datenspende",
+      "consent_information": "In der App werden die Präferenzen, Entscheidungen und Nutzungsverhalten der Benutzer aufgezeichnet, aber nur dann Daten an die Server gesendet, gespeichert, weiter verarbeitet, und veröffentlicht, wenn der Benutzer eine CC0-Lizenz auf die von ihm erzeugten Daten erteilt hat.",
+      "consent_confirmation": "Hiermit erteile ich eine CC0-Lizenz auf alle von mir mit der Web-App erzeugten Daten."
+    }
   },
   "bestworst": {
     "title": "BWS Ranking"

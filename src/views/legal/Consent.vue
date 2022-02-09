@@ -6,7 +6,11 @@
     <div class="container">
       <!-- put the following into components ... -->
       <div v-show="locale === 'en'"></div>
-      <ConsentDE />
+      <div><ConsentDE /></div>
+
+      <br>
+      <LegalSettings :showTitle="false"/>
+
       <!-- put the above into components ... -->
     </div>
   </section>
@@ -18,6 +22,7 @@ import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
 import ConsentDE from '@/translations/pages/consent-de.vue';
+import LegalSettings from '@/components/settings/LegalSettings.vue';
 
 
 export default {
@@ -25,7 +30,8 @@ export default {
 
   components: {
     TheNavbar,
-    ConsentDE
+    ConsentDE,
+    LegalSettings
   },
 
   setup(){
@@ -35,7 +41,9 @@ export default {
       document.title = t('consent.title');
     });
 
-    return { t, locale }
+    return { 
+      t, locale
+    }
   }
 }
 </script>
