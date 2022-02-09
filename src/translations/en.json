@@ -48,59 +48,7 @@
   },
   "about": {
     "title": "About the EVIDENCE Project",
-    "menu_description": "What is the project about?",
-    "motivation": {
-      "heading": "Motivation",
-      "text": "In many dictionaries, corpus references support the lexicographical description of a word. The selection of suitable and helpful sentence examples is a challenge because the operationalization of broad criteria such as 'quality' and 'appropriateness' of sentence examples into metrics is not trivial and professional lexicographers do not always achieve an unanimous judgment which sentence example fits best in the description of a lemma."
-    },
-    "goals": {
-      "heading": "Goals",
-      "text": "In order to support lexicographers in their decision-making process, a system for the extraction, classification and evaluation of sentence examples is to be developed and integrated into the lexical information system of the DWDS. The recommendation system suggests a group of sentence examples for each lemma, each of which is considered to be of high quality and together have a high variety and facets and nuances of word usage. The recommendation system is to be developed to such an extent that sufficiently good sentence examples are suggested to the external users of the lexical information system even for lemmas that have not yet been fully lexically treated by an expert."
-    },
-    "method": {
-      "heading": "Methodology",
-      "text": "The application is primarily used to assess the goodness and diversity of sentence examples. The best-worst scaling method is used to assess the goodness. The annotators are shown four sentence examples from which they can select the best and the worst sentence example. The resulting rankings are used as target variables in a supervised learning algorithm. In order to evaluate the diversity of sentence examples for a given lemma, users must use sliders to indicate to what extent they trade off goodness over diversity and which types of diversity are preferred (e.g. different grammar, semantics, source references). With a quadratic optimization algorithm, the displayed sets of sentence examples are re-sorted based on these parameters until the user is satisfied with the displayed selection."
-    },
-    "team": {
-      "heading": "Team members",
-      "member1": {
-        "name": "Prof. Dr. Iryna Gurevych",
-        "inst": "Technical University of Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Principal Investigator in Darmstadt",
-        "www": "https://web.archive.org/web/20210422143659/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/head_ukp/index.en.jsp"
-      },
-      "member2": {
-        "name": "PD Dr. Alex Geyken",
-        "inst": "Berlin-Brandenburg Academy of Sciences and Humanities, Research Centre Language",
-        "role": "Principal Investigator in Berlin",
-        "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
-      },
-      "member3": {
-        "name": "Dr. Lothar Lemmnitzer",
-        "inst": "Berlin-Brandenburg Academy of Sciences and Humanities, Research Centre Language",
-        "role": "Expert Lexicography",
-        "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
-      },
-      "member4": {
-        "name": "Ji-Ung Lee",
-        "inst": "Technical University of Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Doctoral researcher",
-        "www": "https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp"
-      },
-      "member5": {
-        "name": "Ulf Hamster",
-        "inst": "Berlin-Brandenburg Academy of Sciences and Humanities, Research Centre Language",
-        "role": "Research Software Engineer",
-        "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
-      }
-    },
-    "partners": {
-      "heading": "Project partners"
-    },
-    "funding": {
-      "heading": "Funding",
-      "text": "This work was funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 433249742. Project duration: 2020-2023."
-    }
+    "menu_description": "What is the project about?"
   },
   "tips": {
     "title": "Tips for Good Experiences",

@@ -5,33 +5,47 @@
   <h2 class="subtitle is-5">Motivation</h2>
   <div class="content">
     <p>
-      In vielen Wörterbüchern unterstützen Korpusbelege die lexikographische Beschreibung eines Wortes. 
-      Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt.
+      In vielen Wörterbüchern helfen Korpusbelege bei der Beschreibung von einem Wort. Korpusbelege oder Satzbelege sind Beispiele aus anderen Texten. 
+      Die Auswahl von Korpusbelegen ist nicht leicht. 
+      Es ist schwer zu sagen, wann ein Korpusbeleg „gut“ oder „angemessen“ ist. 
+      Die Autoren von Wörterbüchern heißen Lexikographen. 
+      Sie wählen die Korpusbeispiele für Wörter aus. 
+      Oft sind sie sich uneinig, welches Beispiel das Wort am besten beschreibt.
     </p>
   </div>
 
   <h2 class="subtitle is-5">Ziele</h2>
   <div class="content">
     <p>
-      Um Lexikograph*innen in ihrem Entscheidungsprozess zu unterstützen, soll ein System zur Extraktion, Klassifizierung und Bewertung von Korpusbelegen entwickelt und in das lexikalische Informationssystem des DWDS integriert werden. 
-      Das Empfehlungssystem schlägt für jedes Lemma eine Gruppe von Satzbelegen vor, die jeweils als hochwertig angesehene werden und zusammen eine hohe Vielfalt und Facetten und Nuancen des Wortgebrauchs aufweisen. 
-      Das Empfehlungssystem soll so weit entwickelt werden, dass die externen Nutzer*innen des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen.
+      Lexikographen sollen Hilfe bei der Entscheidung für einen guten Korpusbeleg bekommen. 
+      Deshalb entwickeln wir ein Programm, das Korpusbelege raussucht, in Klassen einteilt und bewertet.
+      Das Programm soll Teil vom DWDS werden. 
+      Es zeigt für jedes Wort eine Gruppe von Beispielen an. Die Beispiele beschreiben das Wort besonders gut. 
+      Sie zeigen mehrere Kontexte, in denen das Wort vorkommen kann. 
+      Manchmal haben Wörter noch keinen vollständigen Wörterbucheintrag. 
+      Das Programm soll trotzdem schon gute Beispiele für diese Wörter anzeigen.
     </p>
   </div>
 
-  <h2 class="subtitle is-5">Methodik</h2>
+  <h2 class="subtitle is-5">Vorgehen</h2>
   <div class="content">
     <p>
-      Die Applikation dient vor allem zur Beurteilung hinsichtlich der Güte und Vielfalt der Satzbelege.
-      Zur Bewertung der Güte wird das Best-Worst-Scaling Verfahren eingesetzt. 
-      Den Annotator*innen werden vier Satzbelege angezeigt, von denen sie den besten und den schlechtesten Satzbeleg auswählen. 
-      Die resultierenden Ranglisten werden als Zielvariablen in einem Überwachten Lernverfahren eingesetzt. 
-      Zur Bewertung der Vielfalt von Satzbelegen für ein bestimmtes Lemma müssen Benutzer*innen anhand von Schiebereglern angeben, inwiefern sie Güte gegenüber Vielfalt abwägen und welche Arten von Vielfalt präferiert werden (z.B. unterschiedliche Satzstrukturen, Semantik, Quellenhinweise). 
-      Mit einem Quadratischen Optimierungsverfahren werden anhand dieser Parameter die angezeigten Satzbelege neusortiert, bis der*die Benutzer*in mit der angezeigten Auswahl zufrieden ist.
+      Die App ist dazu da, gute und vielfältige Satzbelege zu bewerten. Dafür nutzen wir das Best-Worst-Scaling Verfahren. 
+      Die Nutzer sehen vier Satzbelege. Sie wählen den besten und den schlechtesten aus. 
+      Daraus entstehen Ranglisten. Also Listen, die zeigen, welches Beispiel die Nutzer gut oder schlecht finden. 
+      Das Programm lernt daraus, selbst solche Ranglisten zu erstellen. 
+      Es kann dann sagen, welche Satzbelege gut und vielfältig sind. In der Informatik heißt das Überwachtes Lernverfahren. 
+      Manchen Nutzern ist wichtiger, dass ein Satzbeleg gut oder vielfältig ist. 
+      Das zeigen sie mit Schiebereglern. 
+      Sie sollen auch sagen, was genau ihnen bei Vielfalt wichtig ist. 
+      Zum Beispiel die Struktur vom Satz, die Bedeutung oder die Quelle. 
+      Das merkt sich das Programm und zeigt den Nutzern immer neue passende Satzbelege an. 
+      Die werden so lange neu sortiert, bis der Nutzer mit den Satzbelegen zufrieden ist. 
+      Die Methode, mit der die Satzbelege neu sortiert werden, heißt Quadratisches Optimierungsverfahren.
     </p>
   </div>
 
-  <h2 class="subtitle is-5">Mitarbeiter*innen</h2>
+  <h2 class="subtitle is-5">Mitarbeiter</h2>
   <div class="content">
     <ul>
       <li>
@@ -92,7 +106,9 @@
 
   <h2 class="subtitle is-5">Finanzierung</h2>
   <div class="content">
-    <p>Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023.</p>
+    <p>
+      Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023.
+    </p>
     <a href="https://gepris.dfg.de/gepris/projekt/433249742">https://gepris.dfg.de/gepris/projekt/433249742</a>
   </div>
 
@@ -104,7 +120,7 @@ import { defineComponent } from "vue";
 import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
-  name: "AboutDE",
+  name: "AboutDELeicht",
   components: {},
   setup(){
     const { t } = useI18n();

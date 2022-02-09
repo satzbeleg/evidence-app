@@ -29,13 +29,13 @@ export default {
   },
 
   setup(){
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
 
     watchEffect(() => {
       document.title = t('imprint.title');
     });
 
-    return { t }
+    return { t, locale }
   }
 }
 </script>

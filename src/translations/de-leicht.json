@@ -48,59 +48,7 @@
   },
   "about": {
     "title": "Über das EVIDENCE Projekt",
-    "menu_description": "Worum geht es im Forschungsprojekt?",
-    "motivation": {
-      "heading": "Motivation",
-      "text": "In vielen Wörterbüchern helfen Korpusbelege bei der Beschreibung von einem Wort. Korpusbelege oder Satzbelege sind Beispiele aus anderen Texten. Die Auswahl von Korpusbelegen ist nicht leicht. Es ist schwer zu sagen, wann ein Korpusbeleg „gut“ oder „angemessen“ ist. Die Autoren von Wörterbüchern heißen Lexikographen. Sie wählen die Korpusbeispiele für Wörter aus. Oft sind sie sich uneinig, welches Beispiel das Wort am besten beschreibt."
-    },
-    "goals": {
-      "heading": "Ziele",
-      "text": "Lexikographen sollen Hilfe bei der Entscheidung für einen guten Korpusbeleg bekommen. Deshalb entwickeln wir ein Programm, das Korpusbelege raussucht, in Klassen einteilt und bewertet. Das Programm soll Teil vom DWDS werden. Es zeigt für jedes Wort eine Gruppe von Beispielen an. Die Beispiele beschreiben das Wort besonders gut. Sie zeigen mehrere Kontexte, in denen das Wort vorkommen kann. Manchmal haben Wörter noch keinen vollständigen Wörterbucheintrag. Das Programm soll trotzdem schon gute Beispiele für diese Wörter anzeigen."
-    },
-    "method": {
-      "heading": "Vorgehen",
-      "text": "Die App ist dazu da, gute und vielfältige Satzbelege zu bewerten. Dafür nutzen wir das Best-Worst-Scaling Verfahren. Die Nutzer sehen vier Satzbelege. Sie wählen den besten und den schlechtesten aus. Daraus entstehen Ranglisten. Also Listen, die zeigen, welches Beispiel die Nutzer gut oder schlecht finden. Das Programm lernt daraus, selbst solche Ranglisten zu erstellen. Es kann dann sagen, welche Satzbelege gut und vielfältig sind. In der Informatik heißt das Überwachtes Lernverfahren. Manchen Nutzern ist wichtiger, dass ein Satzbeleg gut oder vielfältig ist. Das zeigen sie mit Schiebereglern. Sie sollen auch sagen, was genau ihnen bei Vielfalt wichtig ist. Zum Beispiel die Struktur vom Satz, die Bedeutung oder die Quelle. Das merkt sich das Programm und zeigt den Nutzern immer neue passende Satzbelege an. Die werden so lange neu sortiert, bis der Nutzer mit den Satzbelegen zufrieden ist. Die Methode, mit der die Satzbelege neu sortiert werden, heißt Quadratisches Optimierungsverfahren."
-    },
-    "team": {
-      "heading": "Mitarbeiter",
-      "member1": {
-        "name": "Prof. Dr. Iryna Gurevych",
-        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Projektleiterin am Standort Darmstadt",
-        "www": "https://web.archive.org/web/20210422143659/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/head_ukp/index.en.jsp"
-      },
-      "member2": {
-        "name": "PD Dr. Alex Geyken",
-        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
-        "role": "Projektleiter am Standort Berlin",
-        "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
-      },
-      "member3": {
-        "name": "Dr. Lothar Lemmnitzer",
-        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
-        "role": "Experte Lexikographie",
-        "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
-      },
-      "member4": {
-        "name": "Ji-Ung Lee",
-        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Wissenschaftlicher Mitarbeiter",
-        "www": "https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp"
-      },
-      "member5": {
-        "name": "Ulf Hamster",
-        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
-        "role": "Wissenschaftlicher Mitarbeiter, Softwareentwicklung",
-        "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
-      }
-    },
-    "partners": {
-      "heading": "Projektpartner"
-    },
-    "funding": {
-      "heading": "Finanzierung",
-      "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
-    }
+    "menu_description": "Worum geht es im Forschungsprojekt?"
   },
   "tips": {
     "title": "Tipps zur Bedienung",
