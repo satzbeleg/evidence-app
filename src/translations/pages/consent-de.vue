@@ -19,7 +19,7 @@
     <p>
       Projektleiter am Standort Berlin: Dr. Alexander Geyken 
       <br>
-      E-Mail: evidence ät bbaw dot de
+      E-Mail: evidence@bbaw.de
     </p>
   </div>
 
