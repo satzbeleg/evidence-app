@@ -35,7 +35,13 @@
     "general": "Allgemeine Einstellungen",
     "appearance": "Aussehen der Anwendungsoberfläche",
     "language": "Sprache der Anwendungsoberfläche",
-    "darkmode": "Dunkler Modus"
+    "darkmode": "Dunkler Modus",
+    "legal": {
+      "legal_compliance": "Rechtskonformität",
+      "data_donation": "Datenspende",
+      "consent_information": "In der App werden die Präferenzen, Entscheidungen und Nutzungsverhalten der Benutzer aufgezeichnet, aber nur dann Daten an die Server gesendet, gespeichert, weiter verarbeitet, und veröffentlicht, wenn der Benutzer eine CC0-Lizenz auf die von ihm erzeugten Daten erteilt hat.",
+      "consent_confirmation": "Hiermit erteile ich eine CC0-Lizenz auf alle von mir mit der Web-App erzeugten Daten (Evaluationsdaten, Modelldaten und demographische Daten)."
+    }
   },
   "bestworst": {
     "title": "BWS Ranking"
@@ -48,59 +54,7 @@
   },
   "about": {
     "title": "Über das EVIDENCE Projekt",
-    "menu_description": "Worum geht es im Forschungsprojekt?",
-    "motivation": {
-      "heading": "Motivation",
-      "text": "In vielen Wörterbüchern unterstützen Korpusbelege die lexikographische Beschreibung eines Wortes. Die Auswahl passender und hilfreicher Korpusbelege stellt eine Herausforderung dar, weil die Operationalisierung von Kriterien wie bspw. „Qualität“ und „Angemessenheit“ von Korpusbelegen in Messgrößen nicht trivial ist und professionelle Lexikograph*innen im Einzelfall nicht immer ein einstimmiges Urteil darüber erzielen, welcher Beleg am besten in die Beschreibung eines Lemmas passt."
-    },
-    "goals": {
-      "heading": "Ziele",
-      "text": "Um Lexikograph*innen in ihrem Entscheidungsprozess zu unterstützen, soll ein System zur Extraktion, Klassifizierung und Bewertung von Korpusbelegen entwickelt und in das lexikalische Informationssystem des DWDS integriert werden. Das Empfehlungssystem schlägt für jedes Lemma eine Gruppe von Satzbelegen vor, die jeweils als hochwertig angesehene werden und zusammen eine hohe Vielfalt und Facetten und Nuancen des Wortgebrauchs aufweisen. Das Empfehlungssystem soll so weit entwickelt werden, dass die externen Nutzer*innen des lexikalischen Informationssystems auch für noch nicht vollständig lexikalisch behandelte Lemmata ausreichend gute Korpusbelege vorgeschlagen bekommen."
-    },
-    "method": {
-      "heading": "Methodik",
-      "text": "Die Applikation dient vor allem zur Beurteilung hinsichtlich der Güte und Vielfalt der Satzbelege. Zur Bewertung der Güte wird das Best-Worst-Scaling Verfahren eingesetzt. Den Annotator*innen werden vier Satzbelege angezeigt, von denen sie den besten und den schlechtesten Satzbeleg auswählen. Die resultierenden Ranglisten werden als Zielvariablen in einem Überwachten Lernverfahren eingesetzt. Zur Bewertung der Vielfalt von Satzbelegen für ein bestimmtes Lemma müssen Benutzer*innen anhand von Schiebereglern angeben, inwiefern sie Güte gegenüber Vielfalt abwägen und welche Arten von Vielfalt präferiert werden (z.B. unterschiedliche Satzstrukturen, Semantik, Quellenhinweise). Mit einem Quadratischen Optimierungsverfahren werden anhand dieser Parameter die angezeigten Satzbelege neusortiert, bis der*die Benutzer*in mit der angezeigten Auswahl zufrieden ist."
-    },
-    "team": {
-      "heading": "Mitarbeiter*innen",
-      "member1": {
-        "name": "Prof. Dr. Iryna Gurevych",
-        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Projektleiterin am Standort Darmstadt",
-        "www": "https://web.archive.org/web/20210422143659/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/head_ukp/index.en.jsp"
-      },
-      "member2": {
-        "name": "PD Dr. Alex Geyken",
-        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
-        "role": "Projektleiter am Standort Berlin",
-        "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
-      },
-      "member3": {
-        "name": "Dr. Lothar Lemmnitzer",
-        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
-        "role": "Experte Lexikographie",
-        "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
-      },
-      "member4": {
-        "name": "Ji-Ung Lee",
-        "inst": "Technische Universität Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Wissenschaftlicher Mitarbeiter",
-        "www": "https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp"
-      },
-      "member5": {
-        "name": "Ulf Hamster",
-        "inst": "Berlin-Brandenburgische Akademie der Wissenschaften, Zentrum Sprache",
-        "role": "Wissenschaftlicher Mitarbeiter, Softwareentwicklung",
-        "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
-      }
-    },
-    "partners": {
-      "heading": "Projektpartner"
-    },
-    "funding": {
-      "heading": "Finanzierung",
-      "text": "Diese Arbeit wurde von der Deutschen Forschungsgemeinschaft (DFG) gefördert - 433249742. Projektlaufzeit: 2020-2023."
-    }
+    "menu_description": "Worum geht es im Forschungsprojekt?"
   },
   "tips": {
     "title": "Tipps zur Bedienung",

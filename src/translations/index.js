@@ -43,6 +43,8 @@ export default createI18n({
   formatter: new CustomFormatter({ default_locale }),
   messages: {
     'de': require('./de.json'),
-    'en': require('./en.json')
+    'de-leicht': require('./de-leicht.json'),
+    'en': require('./en.json'),
+    'fr': require('./fr.json'),
   }
 })
