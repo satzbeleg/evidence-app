@@ -2,7 +2,7 @@
   <h1 class="title is-3">Informierte Einwilligung</h1>
   <div class="content">
     <p>
-      In er EVIDENCE App werden Sie gefragt, Satzbelege zu einem gegebenen Lemma zu bewerten. 
+      In der EVIDENCE App werden Sie gefragt, Satzbelege zu einem gegebenen Lemma zu bewerten. 
       Um die Daten zu sammeln und weiter auswerten zu können, benötigen wir Ihre Einwilligung. 
       Im Folgenden klären wir Sie darüber auf, welche Informationen zu welchem Zweck in der EVIDENCE App gesammelt werden.
     </p>
