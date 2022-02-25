@@ -5,13 +5,13 @@
   <h2 class="subtitle is-5">Herausgeber</h2>
   <div class="content">
     <p>
-    Berlin-Brandenburgische Akademie der Wissenschaften <br>
-    Jägerstraße 22/23 <br>
-    10117 Berlin
-    <br>
+      Berlin-Brandenburgische Akademie der Wissenschaften <br>
+      Jägerstraße 22/23 <br>
+      10117 Berlin
+      <br>
     </p>
     <p>
-    Projektleister am Standort Berlin: Dr. Alexander Geyken 
+      Projektleiter am Standort Berlin: Dr. Alexander Geyken 
     </p>
   </div>
 
