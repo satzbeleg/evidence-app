@@ -89,11 +89,11 @@
       Jeder Benutzer bekommt einen Identifier zugeordet, einen Universally Unique Identifier (UUID) in der Version 4, was eine pseudozufällig generierte 128-bit Zahl darstellt.
       <br>
       In der Authentifizierungsdatenbank ist die UUID eines Benutzers mit direkt personenbezogenen Daten (z.B. Email, Passwort) assoziiert, und wird als Pseudonym i.S. des Art. 4 Nr. 5 DSGVO in der Applikationsdatenbank mit Annotationen assoziiert (z.B. Rankingbewertungen durch einen Benutzer), 
-      wenn der Benutzer der <a href="consent">Informierten Einwilligung</a> zugestimmt hat.
+      wenn der Benutzer der <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link> zugestimmt hat.
       <br>
       Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden alle Daten eines Benutzer aus der Authentifizierungsdatenbank gelöscht. Die UUIDs in Applikationsdatenbank können dann nicht mehr eindeutig einer spezifischen Person zugeordnet werden, d.h. es handelt sich um eine Pseudonymisierung i.S. des Art. 4 Nr. 5 DSGVO.
       <br>
-      Die UUID Identifier in der Applikationsdatenbank sind Teil späterer Datenpublikationen falls der Benutzer der <a href="consent">Informierten Einwilligung</a> zugestimmt hat.
+      Die UUID Identifier in der Applikationsdatenbank sind Teil späterer Datenpublikationen falls der Benutzer der <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link> zugestimmt hat.
     </p>
   </div>
 
@@ -101,7 +101,7 @@
   <div class="content">
     <p>
       Eine Übermittlung der direkt personenbezogene Daten an Dritte findet nur im Rahmen der gennanten Zwecke statt (z.B. Bestätigungslink via E-Mail versenden).
-      Das EVIDENCE System ein KI-basiertes Empfehlungssystem (Recommender System), d.h. die pseudonymisierten Daten explizit für Profiling eingesetzt sind auch für eine Datenpublikation vorgesehen (Siehe Informierte Einwilligun). 
+      Das EVIDENCE System ein KI-basiertes Empfehlungssystem (Recommender System), d.h. die pseudonymisierten Daten explizit für Profiling eingesetzt sind auch für eine Datenpublikation vorgesehen (Siehe <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link>). 
     </p>
   </div>
 

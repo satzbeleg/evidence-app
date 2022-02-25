@@ -1,5 +1,5 @@
 <template>
-  <h1 class="title is-3">Informierte Einwilligung</h1>
+  <h1 class="title is-3">Informierte Einwilligung zur Datenspende</h1>
   <div class="content">
     <p>
       In der EVIDENCE App werden Sie gefragt, Satzbelege zu einem gegebenen Lemma zu bewerten. 
@@ -76,30 +76,6 @@
   <div class="content">
     <p>
       Die Evaluationsdaten, Modelldaten und demographische Daten werden im Internet veröffentlicht.
-    </p>
-  </div>
-
-
-  <h2 class="subtitle is-4">Betroffenenrechte nach DSGVO</h2>
-  <div class="content">
-    <p>
-      Sie haben uns gegenüber hinsichtlich der Sie betreffenden personenbezogenen Daten die nachfolgenden Rechte:
-      <ul>
-        <li>gemäß Art. 15 DSGVO Auskunft über Ihre von uns verarbeiteten personenbezogenen Daten zu verlangen;</li>
-        <li>gemäß Art. 16 DSGVO unverzüglich die Berichtigung unrichtiger oder Vervollständigung Ihrer bei uns gespeicherten personenbezogenen Daten zu verlangen;</li>
-        <li>gemäß Art. 17 DSGVO die Löschung Ihrer bei uns gespeicherten personenbezogenen Daten zu verlangen (außer in den in Art. 17 Abs. 3 DSGVO genannten Fällen);</li>
-        <li>gemäß Art. 18 DSGVO die Einschränkung der Verarbeitung Ihrer personenbezogenen Daten zu verlangen, soweit die Richtigkeit der Daten von Ihnen bestritten wird, die Verarbeitung unrechtmäßig ist, Sie aber deren Löschung ablehnen und wir die Daten nicht mehr benötigen, Sie jedoch diese zur Geltendmachung, Ausübung oder Verteidigung von Rechtsansprüchen benötigen oder Sie gemäß Art. 21 DSGVO Widerspruch gegen die Verarbeitung eingelegt haben;</li>
-        <li>gemäß Art. 77 DSGVO sich bei einer Aufsichtsbehörde zu beschweren. In der Regel können Sie sich hierfür an die Aufsichtsbehörde Ihres üblichen Aufenthaltsortes oder unseres Standorts wenden.</li>
-      </ul>
-    </p>
-    <p>
-      Bei der Registrierung wird die E-Mail der Benutzer gespeichert.
-      Falls der Benutzer Googles OAuth2-Dienst verwenden wird deren Google ID zusätzlich gespeichert.
-      Unter <a href="">diesem Hyperlink</a> können Sie
-      ihre E-Mail und ggf. Google ID einsehen (Art. 15 DSGVO),
-      ihr Konto von der Google ID trennen (Art. 16 und 17 DSGVO),
-      oder Konto samt E-Mail und ggf. Google ID löschen (Art. 17 DSGVO).
-      Im Falle eines Änderungswunsch ihrer E-Mail (Art. 16 DSGVO) bitten wir Sie mit per E-Mail direkt zu kontaktieren.
     </p>
   </div>
 
