@@ -18,7 +18,8 @@
       E-Mail: praesident@bbaw.de <br>
       Telefon: +49 (0)30 – 20370-0 <br>
       <br>
-      Der Datenschutzbeauftragte der Berlin-Brandenburgischen Akademie der Wissenschaften, Prof. Dr. Matthäus Heil, ist unter der o.g. Anschrift beziehungsweise unter heil@bbaw.de erreichbar.
+      Der Datenschutzbeauftragte der Berlin-Brandenburgischen Akademie der Wissenschaften, 
+      Prof. Dr. Matthäus Heil, ist unter der o.g. Anschrift beziehungsweise unter heil@bbaw.de erreichbar.
     </p>
   </div>
 
