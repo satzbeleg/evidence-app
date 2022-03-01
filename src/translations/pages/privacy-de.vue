@@ -24,18 +24,18 @@
   </div>
 
   <h2 class="subtitle is-5">
-    Erhebung und Speicherung personenbezogener Daten sowie Art und Zweck und deren Verwendung
+    Erhebung und Speicherung personenbezogener Daten sowie Art und Zweck derer Verwendung
   </h2>
   <div class="content">
     <p>
-      Die Webanwendung, die dazugehörige REST APIs, Datenbanken und Server speichern personenbezogene Daten i.S. des Art. 4 Nr. 1 DSGVO, z.B. Name, Adresse, E-Mailadressen, IP-Adresse.
+      Die Webanwendung, die dazugehörigen REST APIs, Datenbanken und Server speichern personenbezogene Daten i.S. des Art. 4 Nr. 1 DSGVO, z.B. Name, Adresse, E-Mailadressen, IP-Adresse.
     </p>
   </div>
 
   <h3 class="subtitle is-5">Protokolldateien</h3>
   <div class="content">
     <p>
-    Bei jedem Zugriff eines Nutzers auf das Internet-Angebot der Berlin-Brandenburgischen Akademie der Wissenschaften und bei jedem Abruf einer Datei werden Daten über diesen Vorgang technisch bedingt vorübergehend in einer Protokolldatei gespeichert und verarbeitet:
+    Bei jedem Zugriff einer Benutzer*in auf das Internet-Angebot der Berlin-Brandenburgischen Akademie der Wissenschaften und bei jedem Abruf einer Datei werden Daten über diesen Vorgang technisch bedingt vorübergehend in einer Protokolldatei gespeichert und verarbeitet:
     <ul>
       <li>die IP-Adresse (diese wird unmittelbar nach dem Zugriff anonymisiert)</li>
       <li>Datum und Uhrzeit</li>
@@ -55,54 +55,54 @@
   <h2 class="subtitle is-5">Cookies</h2>
   <div class="content">
     <p>
-      Nach der erfolgreichen Anmeldung des Benutzer sendet die EVIDENCE REST API einen Access Token mit einer zeitlich begrenzten Gültigkeit (OAuth 2.0) an die EVIDENCE Webanwendung der in einem Cookie gespeichert wird. 
-      Diese temporäre Cookies beinhalten keine personenbezogenen Daten.
+      Nach der erfolgreichen Anmeldung der Benutzer*in sendet die EVIDENCE REST API einen Access Token mit einer zeitlich begrenzten Gültigkeit (OAuth 2.0) an die EVIDENCE Webanwendung, der in einem Cookie gespeichert wird. 
+      Diese temporären Cookies beinhalten keine personenbezogenen Daten.
     </p>
   </div>
 
   <h2 class="subtitle is-5">E-Mail und Passwort</h2>
   <div class="content">
     <p>
-      Zwecks Authentfizierung wird die E-Mail und Zugangspasswort eines Benutzers in einer seperaten Authentfizierungsdatenbank gespeichert.
-      Zwecks E-Mail-Bestätigung und Passwortwiederherstellung werden automatische E-Mails an den Benutzer gesendet.
+      Zwecks Authentfizierung wird die E-Mail und Zugangspasswort einer Benutzer*in in einer seperaten Authentifizierungsdatenbank gespeichert.
+      Zwecks E-Mail-Bestätigung und Passwortwiederherstellung werden automatische E-Mails an die Benutzer*in gesendet.
       <br>
-      Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden E-Email und Passwort des Benutzers dauerhaft und unwiderruflich aus der Authentfizierungsdatenbank gelöscht.
+      Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden E-Email und Passwort der Benutzer*in dauerhaft und unwiderruflich aus der Authentifizierungsdatenbank gelöscht.
     </p>
   </div>
 
   <h2 class="subtitle is-5">Anmeldung via Google OAuth 2.0 Client ID</h2>
   <div class="content">
     <p>
-      Die EVIDENCE App bietet optional die Anmeldung über einen "Google Button" an wodurch die Google-ID und Google E-Mail eines Benutzers in der EVIDENCE Authentfizierungsdatenbank gespeichert wird.
+      Die EVIDENCE App bietet optional die Anmeldung über einen "Google Button" an, wodurch die Google-ID und Google E-Mail einer Benutzer*in in der EVIDENCE Authentifizierungsdatenbank gespeichert werden.
       <br>
-      Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden Google ID und E-Email  des Benutzers dauerhaft und unwiderruflich aus der Authentfizierungsdatenbank gelöscht.
+      Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden Google ID und E-Email der Benutzer*in dauerhaft und unwiderruflich aus der Authentifizierungsdatenbank gelöscht.
       <br>
-      Es sei nochmals ausdrücklich darauf hingewiesen, dass sich nur um ein alternatives Anmeldungeverfahren für die EVIDENCE App handelt.
+      Es sei nochmals ausdrücklich darauf hingewiesen, dass es sich nur um ein alternatives Anmeldungeverfahren für die EVIDENCE App handelt.
       <br>
-      Die Benutzer, die dieses Anmeldeverfahren benutzen haben müssen in der Vergangenheit sich bereits ein Google-Konto eingerichtet haben und dabei den <a href="https://policies.google.com/privacy">Datenschutzbestimmungen der Firma Google</a> und den <a href="https://policies.google.com/terms">Nutzungsbedingungen der Fa. Google</a> zugestimmt haben. 
-      Der Betreiber der EVIDENCE App übernimmt keine Haftung oder Gewähr für das Google-Konto des Benutzers. 
+      Die Benutzer*innen, die dieses Anmeldeverfahren benutzt haben, müssen sich in der Vergangenheit bereits ein Google-Konto eingerichtet haben und dabei den <a href="https://policies.google.com/privacy">Datenschutzbestimmungen der Firma Google</a> und den <a href="https://policies.google.com/terms">Nutzungsbedingungen der Fa. Google</a> zugestimmt haben. 
+      Der Betreiber der EVIDENCE App übernimmt keine Haftung oder Gewähr für das Google-Konto der Benutzer*in. 
     </p>
   </div>
 
-  <h2 class="subtitle is-5">Identifier eines Benutzer und Pseudonymisierung</h2>
+  <h2 class="subtitle is-5">Identifier einer Benutzer*in und Pseudonymisierung</h2>
   <div class="content">
     <p>
-      Jeder Benutzer bekommt einen Identifier zugeordet, einen Universally Unique Identifier (UUID) in der Version 4, was eine pseudozufällig generierte 128-bit Zahl darstellt.
+      Jede Benutzer*in bekommt einen Identifier zugeordet, einen Universally Unique Identifier (UUID) in der Version 4, was eine pseudozufällig generierte 128-bit Zahl darstellt.
       <br>
-      In der Authentifizierungsdatenbank ist die UUID eines Benutzers mit direkt personenbezogenen Daten (z.B. Email, Passwort) assoziiert, und wird als Pseudonym i.S. des Art. 4 Nr. 5 DSGVO in der Applikationsdatenbank mit Annotationen assoziiert (z.B. Rankingbewertungen durch einen Benutzer), 
-      wenn der Benutzer der <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link> zugestimmt hat.
+      In der Authentifizierungsdatenbank ist die UUID einer Benutzer*in mit direkt personenbezogenen Daten (z.B. Email, Passwort) assoziiert und wird als Pseudonym i.S. des Art. 4 Nr. 5 DSGVO in der Applikationsdatenbank mit Annotationen assoziiert (z.B. Rankingbewertungen durch eine Benutzer*in), 
+      wenn die Benutzer*in der <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link> zugestimmt hat.
       <br>
-      Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden alle Daten eines Benutzer aus der Authentifizierungsdatenbank gelöscht. Die UUIDs in Applikationsdatenbank können dann nicht mehr eindeutig einer spezifischen Person zugeordnet werden, d.h. es handelt sich um eine Pseudonymisierung i.S. des Art. 4 Nr. 5 DSGVO.
+      Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden alle Daten einer Benutzer*in aus der Authentifizierungsdatenbank gelöscht. Die UUIDs in Applikationsdatenbank können dann nicht mehr eindeutig einer spezifischen Person zugeordnet werden, d.h. es handelt sich um eine Pseudonymisierung i.S. des Art. 4 Nr. 5 DSGVO.
       <br>
-      Die UUID Identifier in der Applikationsdatenbank sind Teil späterer Datenpublikationen falls der Benutzer der <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link> zugestimmt hat.
+      Die UUID Identifier in der Applikationsdatenbank sind Teil späterer Datenpublikationen, falls die Benutzer*in der <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link> zugestimmt hat.
     </p>
   </div>
 
   <h2 class="subtitle is-5">Weitergabe von Daten an Dritte</h2>
   <div class="content">
     <p>
-      Eine Übermittlung der direkt personenbezogene Daten an Dritte findet nur im Rahmen der gennanten Zwecke statt (z.B. Bestätigungslink via E-Mail versenden).
-      Das EVIDENCE System ein KI-basiertes Empfehlungssystem (Recommender System), d.h. die pseudonymisierten Daten explizit für Profiling eingesetzt sind auch für eine Datenpublikation vorgesehen (Siehe <router-link :to="{ path: '/legal/consent' }">Informierten Einwilligung</router-link>). 
+      Eine Übermittlung der direkt personenbezogenen Daten an Dritte findet nur im Rahmen der gennanten Zwecke statt (z.B. Bestätigungslink via E-Mail versenden).
+      Das EVIDENCE System nutzt ein KI-basiertes Empfehlungssystem (Recommender System), d.h. die pseudonymisierten Daten werden explizit für Profiling eingesetzt und sind auch für eine Datenpublikation vorgesehen (Siehe <router-link :to="{ path: '/legal/consent' }">Informierte Einwilligung</router-link>). 
     </p>
   </div>
 
