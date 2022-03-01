@@ -46,7 +46,7 @@
       im zentralen Datensatz mit den <i>Evaluationsdaten, Modelldaten und demographischen Daten</i> gesammelt und veröffentlicht wird.
     <br>
     Die <i>demographischen Daten</i> werden aber nur in einem Detailliertheitsgrad veröffentlicht,
-      der sicherstellt, dass mindestens 10 Benutzer*innen eine bestimmte Kombination von veröffentlichten demographischen Merkmalen aufweist.
+      der sicherstellt, dass mindestens 10 Benutzer*innen eine bestimmte Kombination von veröffentlichten demographischen Merkmalen aufweisen.
       Beispiel: Die Kombination <code>(Alter=30 bis 40, Erstsprache=Spanisch, Sprachniveau=C1)</code> muss mindestens 10 unterschiedliche Benutzer*innen aufweisen. 
       Wenn dies nicht der Fall ist, müssen Merkmalsausprägungen gröber gewählt werden, z.B. <code>Alter=18 bis 60</code>,
       oder Merkmale komplett weggelassen werden, um die Mindestanzahl von 10 Benutzer*innen zu erreichen.

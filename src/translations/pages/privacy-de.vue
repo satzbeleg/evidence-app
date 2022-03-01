@@ -24,7 +24,7 @@
   </div>
 
   <h2 class="subtitle is-5">
-    Erhebung und Speicherung personenbezogener Daten sowie Art und Zweck derer Verwendung
+    Erhebung und Speicherung personenbezogener Daten sowie Art und Zweck deren Verwendung
   </h2>
   <div class="content">
     <p>
@@ -63,7 +63,7 @@
   <h2 class="subtitle is-5">E-Mail und Passwort</h2>
   <div class="content">
     <p>
-      Zwecks Authentfizierung wird die E-Mail und Zugangspasswort einer Benutzer*in in einer seperaten Authentifizierungsdatenbank gespeichert.
+      Zwecks Authentifizierung wird die E-Mail und Zugangspasswort einer Benutzer*in in einer seperaten Authentifizierungsdatenbank gespeichert.
       Zwecks E-Mail-Bestätigung und Passwortwiederherstellung werden automatische E-Mails an die Benutzer*in gesendet.
       <br>
       Im Falle einer Löschungsanfrage nach Art. 17 DSGVO werden E-Email und Passwort der Benutzer*in dauerhaft und unwiderruflich aus der Authentifizierungsdatenbank gelöscht.
@@ -80,7 +80,7 @@
       Es sei nochmals ausdrücklich darauf hingewiesen, dass es sich nur um ein alternatives Anmeldungeverfahren für die EVIDENCE App handelt.
       <br>
       Die Benutzer*innen, die dieses Anmeldeverfahren benutzt haben, müssen sich in der Vergangenheit bereits ein Google-Konto eingerichtet haben und dabei den <a href="https://policies.google.com/privacy">Datenschutzbestimmungen der Firma Google</a> und den <a href="https://policies.google.com/terms">Nutzungsbedingungen der Fa. Google</a> zugestimmt haben. 
-      Der Betreiber der EVIDENCE App übernimmt keine Haftung oder Gewähr für das Google-Konto der Benutzer*in. 
+      Die Betreiber*in der EVIDENCE App übernimmt keine Haftung oder Gewähr für das Google-Konto der Benutzer*in. 
     </p>
   </div>
 
