@@ -2,7 +2,7 @@
   <h1 class="title is-3">Impressum</h1>
   <p></p>
 
-  <h2 class="subtitle is-5">Herausgeber</h2>
+  <h2 class="subtitle is-5">Herausgeberin</h2>
   <div class="content">
     <p>
       Berlin-Brandenburgische Akademie der Wissenschaften <br>
@@ -40,11 +40,11 @@
   <h2 class="subtitle is-5">Haftungsausschluss</h2>
   <div class="content">
     <p>
-    Bei der Verlinkung bzw. Übernahme von Informationsangeboten Dritter hat das EVIDENCE Projekt alle vertretbaren Maßnahmen unternommen, die fremden Inhalte daraufhin zu überprüfen, ob durch sie eine zivilrechtliche oder strafrechtliche Verantwortlichkeit ausgelöst wird. Eine permanente inhaltliche Kontrolle der verknüpften externen Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Sollte das EVIDENCE Projekt feststellen oder von anderen darauf hingewiesen werden, dass ein Angebot eines Dritten, welches per Link verknüpft wurde, eine zivil- oder strafrechtliche Verantwortlichkeit auslöst, wird es den Link auf dieses Angebot unverzüglich aufheben. Das DWDS distanziert sich ausdrücklich von derartigen Inhalten.
+    Bei der Verlinkung bzw. Übernahme von Informationsangeboten Dritter hat das EVIDENCE Projekt alle vertretbaren Maßnahmen unternommen, die fremden Inhalte daraufhin zu überprüfen, ob durch sie durch eine zivilrechtliche oder strafrechtliche Verantwortlichkeit ausgelöst wird. Eine permanente inhaltliche Kontrolle der verknüpften externen Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Sollte das EVIDENCE Projekt feststellen oder von anderen darauf hingewiesen werden, dass ein Angebot Dritter, welches per Link verknüpft wurde, eine zivil- oder strafrechtliche Verantwortlichkeit auslöst, wird es den Link auf dieses Angebot unverzüglich aufheben. Das DWDS distanziert sich ausdrücklich von derartigen Inhalten.
     <br>
-    Die Verwendung sämtlicher Daten des EVIDENCE Projekt erfolgt auf eigenes Risiko. Für Schäden, die sich aus der Verwendung abgerufener Informationen ergeben, wird keine Haftung übernommen.
+    Die Verwendung sämtlicher Daten des EVIDENCE Projekts erfolgt auf eigenes Risiko. Für Schäden, die sich aus der Verwendung abgerufener Informationen ergeben, wird keine Haftung übernommen.
     <br>
-    Diese Hinweise gelten in gleicher Weise für Subdomains [subdomain].evidence.bbaw.de, deren inhaltliche Verantwortlichkeit bei den jeweiligen Autoren liegt.
+    Diese Hinweise gelten in gleicher Weise für Subdomains [subdomain].evidence.bbaw.de, deren inhaltliche Verantwortlichkeit bei den jeweiligen Autor*innen liegt.
     </p>
   </div>
 
