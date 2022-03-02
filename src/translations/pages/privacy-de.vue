@@ -79,7 +79,7 @@
       <br>
       Es sei nochmals ausdrücklich darauf hingewiesen, dass es sich nur um ein alternatives Anmeldungeverfahren für die EVIDENCE App handelt.
       <br>
-      Die Benutzer*innen, die dieses Anmeldeverfahren benutzt haben, müssen sich in der Vergangenheit bereits ein Google-Konto eingerichtet haben und dabei den <a href="https://policies.google.com/privacy">Datenschutzbestimmungen der Firma Google</a> und den <a href="https://policies.google.com/terms">Nutzungsbedingungen der Fa. Google</a> zugestimmt haben. 
+      Die Benutzer*innen, die dieses Anmeldeverfahren benutzt haben, müssen sich in der Vergangenheit bereits ein Google-Konto eingerichtet haben und dabei den <a href="https://policies.google.com/privacy">Datenschutzbestimmungen der Firma Google</a> und den <a href="https://policies.google.com/terms">Nutzungsbedingungen der Firma Google</a> zugestimmt haben. 
       Die Betreiber*in der EVIDENCE App übernimmt keine Haftung oder Gewähr für das Google-Konto der Benutzer*in. 
     </p>
   </div>
