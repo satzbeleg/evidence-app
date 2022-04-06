@@ -1,7 +1,9 @@
 <template>
-  <TheNavbar v-bind:with_lang_switch="true"
-             v-bind:with_darkmode_icon="true"
-             v-bind:with_lemmata_search="false" />
+  <TheNavbar v-bind:with_lang_switch="false"
+             v-bind:with_darkmode_icon="false"
+             v-bind:with_lemmata_search="true" 
+             lemma_keywords="Haus"
+             v-on:search-lemmata-navbar="console.log('not implemented')" />
 
   <section class="section" id="terms">
     <div class="container">
@@ -127,6 +129,7 @@ import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect, ref, reactive } from "vue";
 import { highlightSpans } from '@/functions/highlight-spans.js';
+import { useQuadOpt } from '@/components/diversity/quadopt.js';
 
 export default {
   name: "Find diverse sets of sentence examples",
@@ -154,6 +157,29 @@ export default {
     watchEffect(() => {
       document.title = t('general.title');
     });
+
+    const { aggregate_matrices, get_weights } = useQuadOpt()
+    let simi1 = [
+      [1, .9, .8, .7],
+      [.9, 1, .6, .5],
+      [.8, .6, 1, .4],
+      [.7, .5, .4, 1],
+    ]
+    let beta1 = 2.
+    let simi2 = [
+      [1, .7, .8, .3],
+      [.7, 1, .4, .2],
+      [.8, .4, 1, .6],
+      [.3, .2, .6, 1],
+    ]
+    let beta2 = 0.5
+    let simi = aggregate_matrices(simi1, beta1, simi2, beta2)
+    simi.print()
+
+    let good = [.51, .53, .55, .57]
+    let lam = 0.4
+    let wbest = get_weights(good, simi, lam)
+    wbest.print()
 
     return { 
       t,
