@@ -48,59 +48,7 @@
   },
   "about": {
     "title": "À propos du projet EVIDENCE",
-    "menu_description": "En quoi consiste le projet de recherche?",
-    "motivation": {
-      "heading": "Motivation",
-      "text": "Dans plusieurs dictionnaires, la description lexicographique des mots est étayée par des exemples de corpus. Le choix d'exemples appropriés et utiles constitue un défi en raison de la difficulté d'opérationnaliser en métrique des critères tels que la „qualité“ et l'„adéquation“. De plus, les lexicographes professionel·le·s n'arrivent pas toujours à déterminer à l'unanimité quel est l'exemple le plus approprié pour décrire un lemme."
-    },
-    "goals": {
-      "heading": "Objectifs",
-      "text": "Un système d'extraction, de classification et d'évaluation des exemples de corpus est développé et intégré dans le système d'information lexicale du DWDS afin d'assister des lexicographes dans leur prise de décisions. Ce système de recommandation a été conçu afin que des exemples suffisamment pertinents puissent être proposés aux utilisat·eur·rice·s externes du système d'infomations lexicales même pour des lemmes qui n'ont pas encore fait l'objet d'un traitement lexical complet par un·e expert·e."
-    },
-    "method": {
-      "heading": "Méthodologie",
-      "text": "L'application sert surtout à l'évaluation de la qualité et de la diversité des exemples. La qualité des exemples est mesurée à l'aide de l'échelle de différence maximale. Les annotat·eur·rice·s doivent choisir le meilleur exemple et le pire parmi les quatre qui leur sont présentés. Les classements ainsi obtenus sont utilisés comme variable cible dans un procédé d'apprentissage surveillé. Pour évaluer la diversité des exemples d'un certain lemme, il est demandé aux utilisat·eur·rice·s de mettre en balance la qualité et la diversité et de spécifier quels genres de diversité leur convient le mieux (par exemple, des structures de phrase différentes, la sémantique, des indications de source) en ajustant des curseurs. Les exemples présentés sont réorganisés avec un procédé d'optimisation quadratique selon ces paramètres jusqu'à ce que l'utilisat·eur·rice soit satisfait·e de la sélection affichée."
-    },
-    "team": {
-      "heading": "Collaborat·eur·rice·s",
-      "member1": {
-        "name": "Prof. Dr. Iryna Gurevych",
-        "inst": "Université Technique de Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Responsable de projet au site de Darmstadt",
-        "www": "https://web.archive.org/web/20210422143659/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/head_ukp/index.en.jsp"
-      },
-      "member2": {
-        "name": "PD Dr. Alex Geyken",
-        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage",
-        "role": "Responsable de projet au site de Berlin",
-        "www": "https://web.archive.org/web/20201025172725/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/geyken-alexander"
-      },
-      "member3": {
-        "name": "Dr. Lothar Lemmnitzer",
-        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage",
-        "role": "Expert de lexicographie",
-        "www": "https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar"
-      },
-      "member4": {
-        "name": "Ji-Ung Lee",
-        "inst": "Université Technique de Darmstadt, Ubiquitous Knowledge Processing Lab",
-        "role": "Collaborateur scientifique",
-        "www": "https://web.archive.org/web/20201022100203/https://www.informatik.tu-darmstadt.de/ukp/ukp_home/staff_ukp/detailseite_mitarbeiter_1_42880.en.jsp"
-      },
-      "member5": {
-        "name": "Ulf Hamster",
-        "inst": "Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage",
-        "role": "Collaborateur scientifique, développement de logiciels",
-        "www": "https://web.archive.org/web/20201207164444/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/hamster-ulf"
-      }
-    },
-    "partners": {
-      "heading": "Partenaires de projet"
-    },
-    "funding": {
-      "heading": "Financement",
-      "text": "Ce travail a été financé par la Deutsche Forschungsgemeinschaft (DFG) - 433249742. Durée du projet: 2020-2023."
-    }
+    "menu_description": "En quoi consiste le projet de recherche?"
   },
   "tips": {
     "title": "Conseils d'utilisation",

@@ -5,15 +5,8 @@
   <section class="section" id="terms">
     <div class="container">
       <!-- put the following into components ... -->
-      
-      <h1 class="title is-3">{{ t('terms.title') }}</h1>
-      <p></p>
-
-      <h2 class="subtitle is-5">Lorem </h2>
-      <div class="content">
-        <p>ipsum</p>
-      </div>
-
+      <div v-show="locale === 'en'"></div>
+      <TermsDE />
       <!-- put the above into components ... -->
     </div>
   </section>
@@ -24,23 +17,26 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
-
+import TermsDE from '@/translations/pages/terms-de.vue';
 
 export default {
   name: "Terms of Use",
 
   components: {
-    TheNavbar
+    TheNavbar,
+    TermsDE
   },
 
   setup(){
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
 
     watchEffect(() => {
       document.title = t('terms.title');
     });
 
-    return { t }
+    console.log("Sprache: ", locale.value)
+
+    return { t, locale }
   }
 }
 </script>

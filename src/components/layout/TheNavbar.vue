@@ -106,18 +106,6 @@
             </router-link>
             <hr class="navbar-divider is-hidden-widescreen" />
 
-            <router-link class="navbar-item" :to="{ path: '/legal/consent' }">
-              <div class="media">
-                <span class="icon has-text-success"><i class="fas fa-handshake"></i></span>
-                <div class="media-content">
-                  <strong>{{ t('consent.title') }}</strong>
-                  <br />
-                  <small>{{ t('consent.menu_description') }}</small>
-                </div>
-              </div>
-            </router-link>
-            <hr class="navbar-divider is-hidden-widescreen" />
-
             <router-link class="navbar-item" :to="{ path: '/info/tips' }">
               <div class="media">
                 <span class="icon has-text-warning"><i class="fas fa-question-circle"></i></span>
@@ -130,18 +118,6 @@
             </router-link>
             <hr class="navbar-divider is-hidden-widescreen" />
 
-            <router-link class="navbar-item" :to="{ path: '/legal/terms' }">
-              <div class="media">
-                <span class="icon"><i class="fas fa-balance-scale"></i></span>
-                <div class="media-content">
-                  <strong>{{ t('terms.title') }}</strong>
-                  <br />
-                  <small>{{ t('terms.menu_description') }}</small>
-                </div>
-              </div>
-            </router-link>
-            <hr class="navbar-divider is-hidden-widescreen" />
-
             <router-link class="navbar-item" :to="{ path: '/legal/privacy' }">
               <div class="media">
                 <span class="icon"><i class="fas fa-user-secret"></i></span>
@@ -149,6 +125,30 @@
                   <strong>{{ t('privacy.title') }}</strong>
                   <br />
                   <small>{{ t('privacy.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/legal/consent' }">
+              <div class="media">
+                <span class="icon"><i class="fas fa-handshake"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('consent.title') }}</strong>
+                  <br />
+                  <small>{{ t('consent.menu_description') }}</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/legal/terms' }">
+              <div class="media">
+                <span class="icon"><i class="fas fa-balance-scale"></i></span>
+                <div class="media-content">
+                  <strong>{{ t('terms.title') }}</strong>
+                  <br />
+                  <small>{{ t('terms.menu_description') }}</small>
                 </div>
               </div>
             </router-link>

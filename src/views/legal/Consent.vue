@@ -5,16 +5,11 @@
   <section class="section" id="consent">
     <div class="container">
       <!-- put the following into components ... -->
-      
-      <h1 class="title is-3">{{ t('consent.title') }}</h1>
-      <p>
-      In er EVIDENCE App werden Sie gefragt, Satzbelege zu einem gegebenen Lemma zu bewerten. Um die Daten zu sammeln und weiter auswerten zu können, benötigen wir Ihre Einwilligung. Im Folgenden klären wir Sie darüber auf, welche Informationen zu welchem Zweck in dieser Studie gesammelt werden.
-      </p>
+      <div v-show="locale === 'en'"></div>
+      <div><ConsentDE /></div>
 
-      <h2 class="subtitle is-5">Lorem </h2>
-      <div class="content">
-        <p>ipsum</p>
-      </div>
+      <br>
+      <LegalSettings :showTitle="false"/>
 
       <!-- put the above into components ... -->
     </div>
@@ -26,23 +21,29 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect } from "vue";
+import ConsentDE from '@/translations/pages/consent-de.vue';
+import LegalSettings from '@/components/settings/LegalSettings.vue';
 
 
 export default {
   name: "Informed Consent",
 
   components: {
-    TheNavbar
+    TheNavbar,
+    ConsentDE,
+    LegalSettings
   },
 
   setup(){
-    const { t } = useI18n();
+    const { t, locale } = useI18n();
 
     watchEffect(() => {
       document.title = t('consent.title');
     });
 
-    return { t }
+    return { 
+      t, locale
+    }
   }
 }
 </script>

@@ -31,16 +31,17 @@ export const useBwsSettings = () => {
   const initial_load_only = ref();
 
   const drop_distribution = ref();
-  const add_distribution = ref();  // NOT USED SO FAR
+  const add_distribution = ref();
   const target_probas = reactive({value: []});
   const bin_edges = reactive({value: []});
 
-  const exclude_max_display = ref();  // NOT USED SO FAR
+  const exclude_max_display = ref();
   const drop_max_display = ref();
   const max_displays = ref();
 
   const drop_converge = ref();
   const eps_score_change = ref();
+  const converge_patience = ref();
 
   const drop_pairs = ref();
   
@@ -62,6 +63,9 @@ export const useBwsSettings = () => {
   const train_loss = ref();  // meanSquaredError, huberLoss, absoluteDifference
   const train_minsample = ref();  // low number of evals
 
+  // Settings for 4/5/6
+  const retrain_patience = ref();
+
 
   /**
    * (B.1) download user's settings from database
@@ -78,7 +82,7 @@ export const useBwsSettings = () => {
           item_sampling_numtop.value = response.data['item-sampling-numtop'] || 100;
           item_sampling_offset.value = response.data['item-sampling-offset'] || 0;
           // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
-          initial_load_only.value = response.data['initial-load_only'] || true;
+          initial_load_only.value = response.data['initial-load-only'] || false;
           min_pool_size.value  = response.data['min-pool-size'] || 10;
           max_pool_size.value = response.data['max-pool-size'] || 500;
           drop_distribution.value = response.data['drop-distribution'] || false;
@@ -92,12 +96,15 @@ export const useBwsSettings = () => {
           // Settings for (1)
           drop_converge.value = response.data['drop-converge'] || false;
           eps_score_change.value = response.data['eps-score-change'] || 1e-6;
+          converge_patience.value = response.data['converge-patience'] || 0;
           drop_pairs.value = response.data['drop-pairs'] || false;
           // Settings for (3): sampleBwsSets
           bwsset_num_items.value = response.data['bwsset-num-items'] || 4;
           bwsset_sampling_method.value = response.data['bwsset-sampling-method'] || "overlap";
           num_preload_bwssets.value = response.data['num-preload-bwssets'] || 3;
           item_sampling_method.value = response.data['item-sampling-method'] || "exploit";
+          // Settings for 4/5/6
+          retrain_patience.value = response.data['retrain-patience'] || 1;
           // Settings for (5): computeTrainingScores
           smoothing_method.value = response.data['smoothing-method'] || "ema";
           ema_alpha.value = response.data['ema-alpha'] || 0.7;
@@ -133,7 +140,7 @@ export const useBwsSettings = () => {
         'item-sampling-numtop': item_sampling_numtop.value,
         'item-sampling-offset': item_sampling_offset.value,
         // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
-        'initial-load_only': initial_load_only.value,
+        'initial-load-only': initial_load_only.value,
         'min-pool-size': min_pool_size.value, 
         'max-pool-size': max_pool_size.value,
         'drop-distribution': drop_distribution.value, 
@@ -147,12 +154,15 @@ export const useBwsSettings = () => {
         // Settings for (1)
         'drop-converge': drop_converge.value, 
         'eps-score-change': eps_score_change.value,
+        'converge-patience': converge_patience.value,
         'drop-pairs': drop_pairs.value,
         // Settings for (3), e.g. sampleBwsSets
         'bwsset-num-items': bwsset_num_items.value, 
         'bwsset-sampling-method': bwsset_sampling_method.value, 
         'num-preload-bwssets': num_preload_bwssets.value, 
         'item-sampling-method': item_sampling_method.value,
+        // Settings for 4/5/6
+        'retrain-patience': retrain_patience.value,
         // Settings for (5), e.g. computeTrainingScores
         'smoothing-method': smoothing_method.value, 
         'ema-alpha': ema_alpha.value,
@@ -192,10 +202,12 @@ export const useBwsSettings = () => {
     // Settings for (1) and (3)
     drop_max_display, exclude_max_display, max_displays, 
     // Settings for (1)
-    drop_converge, eps_score_change,
+    drop_converge, eps_score_change, converge_patience,
     drop_pairs,
     // Settings for (3), e.g. sampleBwsSets
     bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
+    // Settings for 4/5/6
+    retrain_patience,
     // Settings for (5), e.g. computeTrainingScores
     smoothing_method, ema_alpha,
     // Settings for (6): retrainModel

@@ -2,30 +2,30 @@
   <TheNavbar v-bind:with_lang_switch="false"
              v-bind:with_darkmode_icon="false"
              v-bind:with_lemmata_search="true"
-             v-bind:lemma_keywords="data.current_lemmata"
+             v-bind:lemma_keywords="queueData.current_lemmata"
              v-on:search-lemmata-navbar="onSearchLemmata"
-             :key="data.counter" />
+             :key="queueData.counter" />
 
   <section class="section">    
     <div class="container is-centered" style="max-width: 720px;">
 
-      <template v-if="data.current.length > 0">
+      <template v-if="queueData.current.length > 0">
         <!-- BWS UI -->
         <BestWorstChoices 
-          v-bind:items="data.current"
+          v-bind:items="queueData.current"
           v-on:ranking-done="nextExampleSet"
-          :key="data.counter"
+          :key="queueData.counter"
         />
         <!-- progress bar -->
         <progress class="progress is-info mt-5" 
-                  v-bind:value="data.queue.length" 
+                  v-bind:value="queueData.queue.length" 
                   v-bind:max="maxprogress">
-          {{ data.queue.length }}
+          {{ queueData.queue.length }}
         </progress>
       </template>
       <template v-else>
         <PageLoader 
-          v-bind:status="data.current.length == 0"
+          v-bind:status="queueData.current.length == 0"
           v-bind:messages="['Queue is empty!', message_suggestion]" />
       </template>
 
@@ -78,7 +78,7 @@ export default defineComponent({
     const { 
       uispec, 
       searchlemmata, 
-      data, 
+      queueData, 
       isReplenishing, 
       message_suggestion,
       isSaving, 
@@ -93,9 +93,9 @@ export default defineComponent({
 
 
     /**
-     * [A1] Replenish data.queue from database (load new example sets into queue)
+     * [A1] Replenish queueData.queue from database (load new example sets into queue)
      */
-    const replenishQueue = () => {
+    const replenishQueue = async() => {
       return new Promise((resolve, reject) => {
         // Replensihing started
         isReplenishing.value = true;
@@ -118,9 +118,9 @@ export default defineComponent({
             message_suggestion.value = response.data['msg'];
           }else if (typeof response.data == "object"){
             // copy all example sets
-            response.data.forEach(exset => data.queue.push(exset));
+            response.data.forEach(exset => queueData.queue.push(exset));
           }else{
-            message_suggestion.value = "API returned unexpected data.";
+            message_suggestion.value = "API returned unexpected queueData.";
           }
           resolve(response);
         })
@@ -131,8 +131,8 @@ export default defineComponent({
         })
         .finally(() => {
           isReplenishing.value = false;
-          console.log(`Queue replenished to ${data.queue.length} examplesets`);
-          if (data.current.length === 0){
+          console.log(`Queue replenished to ${queueData.queue.length} examplesets`);
+          if (queueData.current.length === 0){
             pullFromQueue(); // load data
             console.log("New current BWS set loaded")
           }
@@ -153,7 +153,7 @@ export default defineComponent({
      * [A3] Trigger AJAX request to replenish the queue
      */
     watch(
-      () => data.queue.length,
+      () => queueData.queue.length,
       (stocklevel) => {
         if (stocklevel < queue_reorderpoint.value){
           console.log(`Queue is running low: ${stocklevel} examplesets`);
@@ -178,10 +178,10 @@ export default defineComponent({
 
     /**
      * [B1] Trigger AJAX to post evaluated BWS-exampleset to database
-     * - `saveEvaluations` will purge `data.evaluated`
+     * - `saveEvaluations` will purge `queueData.evaluated`
      */
     watch(
-      () => data.evaluated.length,
+      () => queueData.evaluated.length,
       (num_evaluated) => {
         if (num_evaluated > 0 && !isSaving.value){
           console.log(`Number of evaluated BWS example sets: ${num_evaluated}`);
@@ -196,7 +196,7 @@ export default defineComponent({
 
 
     return { 
-      data, 
+      queueData, 
       nextExampleSet,
       maxprogress,
       onSearchLemmata,
