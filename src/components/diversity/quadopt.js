@@ -41,8 +41,6 @@ export const useQuadOpt = () => {
   /** loss function with regularization */
   const custom_loss = (w, c, lamQ) => {
     // norm to 1
-    // let v = w.sub(tf.minimum(0., w.min()))
-    // v = v.div(tf.maximum(1e-8, v.sum()))
     let v = norm_to_1(w)
     // quadratic problem
     let loss = tf.tensor(0.0)
