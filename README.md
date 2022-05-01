@@ -26,7 +26,7 @@ Please follow the instruction of the [deployment repository](https://github.com/
 ### Start backend services
 
 ```bash
-(cd $EVIDENCE_DEPLOY && docker-compose up db mail api)
+(cd $EVIDENCE_DEPLOY && docker-compose up db mail api simi-biblio simi-kshingle simi-semantic simi-syntax)
 ```
 
 ### Setup and start local web server 
@@ -41,6 +41,10 @@ yarn install
 ```
 NODE_ENV=local
 VUE_APP_REST_PUBLIC_URL=http://localhost:8080
+VUE_APP_SIMISCORE_BIBLIO=http://localhost:8081
+VUE_APP_SIMISCORE_KSHINGLE=http://localhost:8082
+VUE_APP_SIMISCORE_SEMANTIC=http://localhost:8083
+VUE_APP_SIMISCORE_SYNTAX=http://localhost:8084
 VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
