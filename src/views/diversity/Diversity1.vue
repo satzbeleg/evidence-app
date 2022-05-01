@@ -178,8 +178,8 @@ export default {
 
     let good = [.51, .53, .55, .57]
     let lam = 0.4
-    let wbest = get_weights(good, simi, lam)
-    wbest.print()
+    let wbest = get_weights(good, simi, lam, undefined, 200);
+    console.log(`Solution weights: ${wbest.arraySync()}`);
 
     return { 
       t,
