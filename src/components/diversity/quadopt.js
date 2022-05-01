@@ -39,7 +39,7 @@ export const useQuadOpt = () => {
   }
 
   /** loss function with regularization */
-  const custom_loss = (w, c, lamQ) => {
+  const custom_loss = (w, c, lamQ, b) => {
     // norm to 1
     let v = norm_to_1(w)
     // quadratic problem
@@ -50,6 +50,8 @@ export const useQuadOpt = () => {
     loss = loss.add(tf.pow(tf.tensor(1.).sub(w.sum()), 2))
     // regularization: w_i >= 0
     loss = loss.add(tf.sum(tf.tensor(0.).sub(tf.minimum(w, 0.0))))
+    // regularization: w_i leq b
+    loss = loss.add(tf.sum(tf.tensor(0.).sub(tf.minimum(b - w, 0.0))))
     return loss
   }
 
@@ -63,7 +65,7 @@ export const useQuadOpt = () => {
    * @param {Int} patience 
    * @returns {tf.tensor} wbest
    */
-  const get_weights = (c, Q, lam, maxiter=500, ftol=1e-06, patience=20) => {
+  const get_weights = (c, Q, lam, b=undefined, maxiter=500, ftol=1e-06, patience=20) => {
     console.group()
     console.log(`Max. num of iterations: ${maxiter}`)
     console.log(`Termination ftol: ${ftol}`)
@@ -74,15 +76,16 @@ export const useQuadOpt = () => {
       throw "the preference lambda='{lam}' must be positive"
     }
 
+    // cast
+    if( !(c instanceof tf.Tensor) ){
+      c = tf.tensor(c, undefined, 'float32')  // (n,)
+    }
+
     // We can multipy `lam*Q` beforehand and save compute time! And cast
     if( !(Q instanceof tf.Tensor) ){
       Q = tf.tensor(Q, undefined, 'float32')
     }
     const lamQ = Q.mul(lam)  // (n,n)
-    // cast
-    if( !(c instanceof tf.Tensor) ){
-      c = tf.tensor(c, undefined, 'float32')  // (n,)
-    }
 
     // how many alternatives
     const n_examples = c.shape[0]
@@ -90,18 +93,22 @@ export const useQuadOpt = () => {
     // trainable params with initial values
     let w = tf.variable(tf.ones([n_examples]).div(n_examples), true)
 
+    // set default upper boundary
+    if( typeof b !== 'undefined'){
+      b = tf.minimum(tf.tensor(1.0), tf.tensor(2.0).div(tf.tensor(n_examples, undefined, 'float32')))
+    }
 
     // https://js.tensorflow.org/api/latest/#tf.train.Optimizer.minimize
-    const optimizer = tf.train.adam(0.1, .9, .999, 1e-7)
+    const optimizer = tf.train.adam(0.0003, .9, .999, 1e-7)
 
     // start values
     let f, wbest;
-    let fbest = custom_loss(w, c, lamQ)
+    let fbest = custom_loss(w, c, lamQ, b)
     let wait = 0;
     // start optimization
     for(let i=0; i < maxiter; i++){
-      optimizer.minimize(() => custom_loss(w, c, lamQ))
-      f = custom_loss(w, c, lamQ)
+      optimizer.minimize(() => custom_loss(w, c, lamQ, b))
+      f = custom_loss(w, c, lamQ, b)
       if (fbest > (f + ftol)){
         fbest = f;
         wbest = norm_to_1(w);
