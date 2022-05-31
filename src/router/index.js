@@ -94,10 +94,10 @@ const routes = [{
     meta: { requiresAuth: true }
   },
   {
-    path: '/diversity1',
+    path: '/variation1',
     name: 'Curating diverse sentence examples',
     component: () =>
-      import ( /* webpackPreload: true */ '../views/diversity/Diversity1.vue'),
+      import ( /* webpackPreload: true */ '../views/variation/Variation1.vue'),
     meta: { requiresAuth: false }
   },
 ];

@@ -22,11 +22,11 @@ export const useQuadOpt = () => {
       throw "An even number of input arguments expected";
     }
     // // copy the first matrix
-    var out = tf.tensor(args[0], undefined, 'float32').mul(tf.tensor(args[1], [1], 'float32'))
+    var out = tf.tensor(args[0], undefined, 'float32').mul(tf.tensor(args[1], [1.], 'float32'))
 
     // add the other matrices
     for (let i = 2; i < args.length; i+=2){
-      out = out.add(tf.tensor(args[i], undefined, 'float32').mul(tf.tensor(args[i + 1], [1], 'float32')))
+      out = out.add(tf.tensor(args[i], undefined, 'float32').mul(tf.tensor(args[i + 1], [1.], 'float32')))
     }
     // done
     return out

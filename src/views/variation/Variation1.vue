@@ -129,7 +129,7 @@ import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect, ref, reactive } from "vue";
 import { highlightSpans } from '@/functions/highlight-spans.js';
-import { useQuadOpt } from '@/components/diversity/quadopt.js';
+import { useQuadOpt } from '@/components/variation/quadopt.js';
 
 export default {
   name: "Find diverse sets of sentence examples",
