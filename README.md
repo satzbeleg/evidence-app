@@ -26,6 +26,7 @@ Please follow the instruction of the [deployment repository](https://github.com/
 ### Start backend services
 
 ```bash
+EVIDENCE_DEPLOY=../
 (cd $EVIDENCE_DEPLOY && docker-compose up db mail api simi-biblio simi-kshingle simi-semantic simi-syntax)
 ```
 
