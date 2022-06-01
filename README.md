@@ -26,9 +26,21 @@ Please follow the instruction of the [deployment repository](https://github.com/
 ### Start backend services
 
 ```bash
-EVIDENCE_DEPLOY=../
-(cd $EVIDENCE_DEPLOY && docker-compose up db mail api simi-biblio simi-kshingle simi-semantic simi-syntax)
+cd $EVIDENCE_DEPLOY 
+docker-compose up --build dbauth mail api simi-biblio simi-kshingle simi-semantic simi-syntax
 ```
+
+### Add a test account
+```sh
+cd $EVIDENCE_DEPLOY 
+cat restapi/test/addtestaccount.sql | docker exec -i evidence_dbauth psql -U evidence -d evidence
+```
+
+```
+username : nobody@example.com
+password : supersecret
+```
+
 
 ### Setup and start local web server 
 1) Install NPM modules
