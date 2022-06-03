@@ -1,9 +1,9 @@
 <template>
   <TheNavbar v-bind:with_lang_switch="false"
              v-bind:with_darkmode_icon="false"
-             v-bind:with_lemmata_search="true"
-             v-bind:lemma_keywords="queueData.current_lemmata"
-             v-on:search-lemmata-navbar="onSearchLemmata"
+             v-bind:with_headword_search="true"
+             v-bind:search_string="queueData.current_headword"
+             v-on:search-headword-navbar="onSearchHeadword"
              :key="queueData.counter" />
 
   <section class="section">    
@@ -77,7 +77,7 @@ export default defineComponent({
     // Load reactive variables for BWS Queue
     const { 
       uispec, 
-      searchlemmata, 
+      search_headword, 
       queueData, 
       isReplenishing, 
       message_suggestion,
@@ -99,11 +99,11 @@ export default defineComponent({
       return new Promise((resolve, reject) => {
         // Replensihing started
         isReplenishing.value = true;
-        // preprocess lemmata/keyword search for POST request
+        // preprocess headword/keyword search for POST request
         var params = {}
-        if (typeof searchlemmata.value == "string"){
-          if (searchlemmata.value.length > 0){
-            params = {"lemmata": searchlemmata.value.split(',').map(s => s.trim())}
+        if (typeof search_headword.value == "string"){
+          if (search_headword.value.length > 0){
+            params = {"headword": search_headword.value.trim()}
           }
         }
         // load other functions and objects
@@ -144,7 +144,7 @@ export default defineComponent({
     /**
      * [A2] Load initial current BWS-exampleset
      * DEACTIVATED! Is triggered via low running queue [A3] 
-     *         or search request via `onSearchLemmata` [A4]
+     *         or search request via `onSearchHeadword` [A4]
      */
     //replenishQueue();
 
@@ -166,11 +166,11 @@ export default defineComponent({
     /**
      * [A4] Store the new Lemma, Reset the Queue data, Load new data
      */
-    const onSearchLemmata = async(keywords) => {
+    const onSearchHeadword = async(keywords) => {
       // delete current example set in UI, and the whole queue.
       resetQueue();
-      // reset `searchlemmata`
-      searchlemmata.value = keywords
+      // reset `search_headword`
+      search_headword.value = keywords
       // force to load next example in UI
       await replenishQueue();
     }
@@ -199,7 +199,7 @@ export default defineComponent({
       queueData, 
       nextExampleSet,
       maxprogress,
-      onSearchLemmata,
+      onSearchHeadword,
       message_suggestion
     }
   },

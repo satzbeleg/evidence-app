@@ -8,9 +8,10 @@
       </router-link>
 
 
-      <div class="navbar-item" v-if="with_lemmata_search">
-        <LemmaSearch v-bind:initial_keywords="lemma_keywords" 
-                     v-on:search-lemmata-field="onSearchLemmata" />
+      <div class="navbar-item" v-if="with_headword_search">
+        <HeadwordSearch 
+          v-bind:initial_headword="search_string" 
+          v-on:search-headword-field="onSearchHeadword" />
       </div>
 
       <div class="navbar-item" v-if="with_lang_switch">
@@ -217,7 +218,7 @@
 import { useI18n } from 'vue-i18n';
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher.vue";
 import DarkmodeIcon from "@/components/layout/DarkmodeIcon.vue";
-import LemmaSearch from "@/components/layout/LemmaSearch.vue";
+import HeadwordSearch from "@/components/layout/HeadwordSearch.vue";
 import { defineComponent, ref } from 'vue';
 import router from '@/router';
 import { useAuth } from '@/functions/axios-evidence.js';
@@ -227,17 +228,17 @@ export default defineComponent({
   name: "TheNavbar",
 
   components: {
-    LemmaSearch,
+    HeadwordSearch,
     LanguageSwitcher,
     DarkmodeIcon
   },
 
   props: {
-    with_lemmata_search: {
+    with_headword_search: {
       type: Boolean,
       default: false
     },
-    lemma_keywords: {
+    search_string: {
       type: String,
       default: undefined
     },
@@ -252,7 +253,7 @@ export default defineComponent({
   },
 
   emits: [
-    'search-lemmata-navbar'
+    'search-headword-navbar'
   ],
 
   setup(props, {emit}){
@@ -274,14 +275,14 @@ export default defineComponent({
     }
 
     // forward search field string to parent component
-    const onSearchLemmata = async(keywords) => {
+    const onSearchHeadword = async(keywords) => {
       //console.log('NavBar:', keywords)
-      emit('search-lemmata-navbar', keywords)
+      emit('search-headword-navbar', keywords)
     }
 
     return { 
       t, locale, 
-      showNavBurger, onSearchLemmata,
+      showNavBurger, onSearchHeadword,
       onLogout, isAuthenticated
     }
   }

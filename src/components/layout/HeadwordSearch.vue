@@ -1,18 +1,18 @@
 <template>
-  <!-- Keyword Search Field/Button 
+  <!-- Headword Search Field/Button 
     class `has-addons-fullwidth` doesn't work here
   -->
   <div class="field has-addons has-addons-fullwidth">
     <div class="control">  <!-- has-icons-left -->
       <!-- <span class="icon is-small is-left"><i class="fas fa-search"></i></span> -->
       <input class="input is-rounded" type="text" 
-             v-model="keywords"
-             placeholder="lemma1, lemma2, ...">
+             v-model="headword"
+             placeholder="type the headword ...">
     </div>
 
     <div class="control">
       <button class="button is-rounded is-primary" type="submit" 
-              v-on:click.prevent="onSearchLemmata">
+              v-on:click.prevent="onSearchHeadword">
         <i class="fas fa-search"></i>
         <strong class="is-hidden-mobile">&nbsp;Search</strong>
       </button>
@@ -27,50 +27,51 @@ import { defineComponent, ref } from "vue";
 
 
 /**
- * Search field for lemmata
+ * Search field for headword
  * 
  * HTML:
  * -----
- *     <LemmaSearch v-bind:keywords="mylemmata" 
- *        v-on:search-for-new-lemmata="triggerSearch" />
+ *     <HeadwordSearch 
+ *        v-bind:headword="myheadword" 
+ *        v-on:search-headword-field="triggerSearch" />
  * JS:
  * ---
- *    import LemmaSearch from "@/components/layout/LemmaSearch.vue";
+ *    import HeadwordSearch from "@/components/layout/HeadwordSearch.vue";
  *    import { ref } from "vue";
  *    ...
- *    components: {LemmaSearch},
+ *    components: { HeadwordSearch },
  *    ...
  *    setup(){
- *      const mylemmata = ref('Stichwort1, Mehr Worte')
- *      async function triggerSearch(keywords){
- *        console.log('Lemma Search clicked: ', keywords) }
- *      return { triggerSearch, mylemmata }
+ *      const myheadword = ref('Stichwort1')
+ *      async function triggerSearch(headword){
+ *        console.log('Lemma Search clicked: ', headword) }
+ *      return { triggerSearch, myheadword }
  */
 export default defineComponent({
-  name: "LemmaSearch",
+  name: "HeadwordSearch",
 
   props: {
-    initial_keywords: {
+    initial_headword: {
       type: String,
       required: false
     }
   },
 
   emits: [
-    'search-lemmata-field'
+    'search-headword-field'
   ],
 
   setup(props, {emit}){
     // set initial value if available
-    const keywords = ref(props.initial_keywords)
+    const headword = ref(props.initial_headword)
 
     // forward search field string to parent component
-    const onSearchLemmata = async() => {
-      //console.log("LemmaSearch keywords:", keywords.value)
-      emit('search-lemmata-field', keywords.value);
+    const onSearchHeadword = async() => {
+      //console.log("LemmaSearch headword:", headword.value)
+      emit('search-headword-field', headword.value);
     }
 
-    return { keywords, onSearchLemmata }
+    return { headword, onSearchHeadword }
   }
 })
 </script>

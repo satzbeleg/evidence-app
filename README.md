@@ -27,7 +27,7 @@ Please follow the instruction of the [deployment repository](https://github.com/
 
 ```bash
 cd $EVIDENCE_DEPLOY 
-docker-compose up --build dbauth mail api simi-biblio simi-kshingle simi-semantic simi-syntax
+docker-compose up --build dbauth dbeval dbeval-install mail api simi-biblio simi-kshingle simi-semantic simi-syntax
 ```
 
 ### Add a test account

@@ -1,9 +1,9 @@
 <template>
   <TheNavbar v-bind:with_lang_switch="false"
              v-bind:with_darkmode_icon="false"
-             v-bind:with_lemmata_search="true"
-             v-bind:lemma_keywords="queueData.current_lemmata"
-             v-on:search-lemmata-navbar="onSearchLemmata"
+             v-bind:with_headword_search="true"
+             v-bind:search_string="queueData.current_headword"
+             v-on:search-headword-navbar="onSearchHeadword"
              :key="queueData.counter" />
 
   <section class="section">    
@@ -83,7 +83,7 @@ export default defineComponent({
     // Load reactive variables for BWS Queue
     const { 
       uispec, 
-      searchlemmata, 
+      search_headword, 
       queueData, 
       isReplenishing, 
       message_suggestion,
@@ -117,7 +117,7 @@ export default defineComponent({
      * 
      * Global variables from queue.js
      * ------------------------------
-     * @param {String} searchlemmata
+     * @param {String} search_headword
      * @param {JSON}   data
      * @param {Boolan} isReplenishing
      * @param {String} message_suggestion
@@ -132,7 +132,7 @@ export default defineComponent({
       await dropExamplesFromPool();
 
       // (Step 2) Add examples to pool
-      await addExamplesToPool(searchlemmata.value);
+      await addExamplesToPool(search_headword.value);
 
       return new Promise((resolve, reject) => {
         try{
@@ -151,7 +151,7 @@ export default defineComponent({
             });
             queueData.queue.push({
               set_id: uuid4(),
-              lemmata: searchlemmata.value.split(',').map(s => s.trim()),
+              headword: search_headword.value.trim(),
               examples: examples
             })
           });
@@ -172,7 +172,7 @@ export default defineComponent({
     /**
      * [A2] Load initial current BWS-exampleset
      * DEACTIVATED! Is triggered via low running queue [A3] 
-     *         or search request via `onSearchLemmata` [A4]
+     *         or search request via `onSearchHeadword` [A4]
      */
     //replenishQueue();
 
@@ -195,17 +195,15 @@ export default defineComponent({
     /**
      * [A4] Store the new Lemma, Reset the Queue data, Load new data
      */
-    const onSearchLemmata = async(keywords) => {
+    const onSearchHeadword = async(keywords) => {
       // delete pool and pairs matrix
       resetPool();
       // delete current example set in UI, and the whole queue.
       resetQueue();
-      // reset `searchlemmata`
-      searchlemmata.value = keywords
+      // reset `search_headword`
+      search_headword.value = keywords
       // force to load next example in UI
       await replenishQueue();
-      //await addExamplesToPool(queueData.current_lemmata, true);  // is called in replenishQueue
-      //var sampled_bwssets = sampleBwsSets();
     }
 
 
@@ -247,7 +245,7 @@ export default defineComponent({
     return { 
       queueData, 
       nextExampleSet,
-      onSearchLemmata,
+      onSearchHeadword,
       message_suggestion
     }
   },
