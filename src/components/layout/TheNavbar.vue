@@ -59,13 +59,13 @@
 
           <div class="navbar-dropdown">
 
-            <router-link class="navbar-item" :to="{ path: '/bestworst3' }">
+            <router-link class="navbar-item" :to="{ path: '/variation1' }">
               <div class="media">
-                <span class="icon is-primary"><i class="fas fa-random"></i></span>
+                <span class="icon  has-text-success"><i class="fas fa-file-lines"></i></span>
                 <div class="media-content">
-                  <strong>Best-Worst Scaling</strong>
+                  <strong>Varying Sets of Sentences</strong>
                   <br />
-                  <small>Best-Worst Scaling UI v3</small>
+                  <small>Curate different sentence examples</small>
                 </div>
               </div>
             </router-link>
@@ -78,6 +78,18 @@
                   <strong>Interactive Best-Worst Scaling</strong>
                   <br />
                   <small>Best-Worst Scaling UI v4</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" />
+
+            <router-link class="navbar-item" :to="{ path: '/bestworst3' }">
+              <div class="media">
+                <span class="icon is-primary"><i class="fas fa-random"></i></span>
+                <div class="media-content">
+                  <strong>Best-Worst Scaling</strong>
+                  <br />
+                  <small>Best-Worst Scaling UI v3</small>
                 </div>
               </div>
             </router-link>
