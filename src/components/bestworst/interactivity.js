@@ -386,8 +386,11 @@ export const useInteractivity = () => {
       // var deletedData = {}  // API buffer
       del_ids.forEach(key => {
         deleted_pool[key] = {
-          "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
-          "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
+          "example-id": pool[key].example_id,
+          "sentence-text": pool[key].text,
+          "headword": pool[key].headword,
+          "training-score-history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
+          "model-score-history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
           "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
         };
         delete pool[key];
@@ -433,7 +436,7 @@ export const useInteractivity = () => {
         // Start API request
         api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deleted_pool)) )
           .then(response => {
-            response.data['stored-sentids'].forEach(key => {
+            response.data['stored-example-ids'].forEach(key => {
               delete deleted_pool[key];
             })
             if(debug_verbose.value){console.log("Response (saveDeletedPool): ", response)}
@@ -524,8 +527,10 @@ export const useInteractivity = () => {
               error_message.value = response.data['msg'];
             } else {
               response.data.forEach(row => {
-                pool[row.id] = {
+                pool[row.example_id] = {
+                  "example_id": row.example_id,
                   "text": row.text,
+                  "headword": row.headword,
                   "spans": row.spans,
                   "context": row.context,
                   "features": row.features,
