@@ -1,23 +1,28 @@
 <template>
   <TheNavbar v-bind:with_lang_switch="false"
              v-bind:with_darkmode_icon="false"
-             v-bind:with_lemmata_search="true" 
-             lemma_keywords="Haus"
-             v-on:search-lemmata-navbar="console.log('not implemented')" />
+             v-bind:with_headword_search="true"
+             v-bind:search_string="currentHeadword"
+             v-on:search-headword-navbar="onSearchHeadword"
+             :key="currentHeadword" />
 
-  <section class="section" id="terms">
+  <PageLoader v-if="isLoading"
+    v-bind:status="isLoading"
+    v-bind:messages="['Loading Data', 'Computing similarities', 'Solve optimization problem']" />
+
+  <section class="section" id="variation" v-else>
     <div class="container">
       <!-- put the following into components ... -->
       
-      <h1 class="title is-3">Find diverse sets of sentence examples</h1>
-      <p></p>
+      <!-- <h1 class="title is-3">Find diverse sets of sentence examples</h1> -->
+      <!-- <p></p> -->
 
-      <div class="field is-grouped is-grouped-centered"> 
+      <div class="field is-grouped is-grouped-centered" style="position: sticky; display: inline-block;"> 
         <p class="control">
           <button class="button is-rounded is-info" 
                   v-on:click="showEditModal = true">
             <span class="icon"><i class="fas fa-filter"></i></span>
-            <strong>Filter Settings</strong>
+            <strong>Preference Parameters</strong>
           </button>
         </p>
       </div>
@@ -34,13 +39,12 @@
             </div>
             <div class="content center">
             <p class="is-size-7 has-text-grey is-italic">
-              w<sub>{{ item.id }}</sub>: {{ parseFloat(item.weight).toFixed(3) }} |
+              w<sub>{{ item.id }}</sub>: {{ parseFloat(item.weight).toFixed(4) }} |
               {{ item.bibl }}
             </p>
           </div>
         </div>
       </div>
-
 
       <!-- put the above into components ... -->
     </div>
@@ -60,59 +64,69 @@
           
             <div class="field">
               <label class="label" for="item-goodness-score">
-                Goodness Score (0.0 - 1.0)
+                Variation (0) vs Goodness Score (100)
               </label>
               <input id="item-goodness-score" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="lambdaTradeOff" step="0.01" min="0" max="1">
-              <output for="item-sampling-numtop" style="width:3.1rem;">{{ lambdaTradeOff }}</output>
+                    type="range" v-model="lambdaTradeOff" step="0.01" min="0.01" max="0.99">
+              <output for="item-goodness-score" style="width:3.1rem;">{{ lambdaTradeOff * 100 }}</output>
             </div>
 
             <div class="field">
-              <label class="label" for="item-diversity-semantic">
+              <label class="label" for="item-beta-semantic">
                 Semantic
               </label>
-              <input id="item-diversity-score" 
+              <input id="item-beta-semantic" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversitySemantic" step="0.01" min="0.0" max="1.0">
-              <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversitySemantic }}</output>
+                    type="range" v-model="betaSemantic" step="0.01" min="0.0" max="1.0">
+              <output for="item-beta-semantic" style="width:3.1rem;">{{ betaSemantic * 100 }}</output>
             </div>
 
             <div class="field">
-              <label class="label" for="item-diversity-syntax">
-                Syntax
+              <label class="label" for="item-beta-grammar">
+                Grammar
               </label>
-              <input id="item-diversity-syntax" 
+              <input id="item-beta-grammar" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversitySyntax" step="0.01" min="0.0" max="1.0">
-              <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversitySyntax }}</output>
+                    type="range" v-model="betaGrammar" step="0.01" min="0.0" max="1.0">
+              <output for="item-beta-grammar" style="width:3.1rem;">{{ betaGrammar * 100 }}</output>
             </div>
 
             <div class="field">
-              <label class="label" for="item-diversity-fingerprint">
-                Fingerprint
+              <label class="label" for="item-beta-duplicate">
+                Near Duplicates
               </label>
-              <input id="item-diversity-fingerprint" 
+              <input id="item-beta-duplicate" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversityFingerprint" step="0.01" min="0.0" max="1.0">
-              <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversityFingerprint }}</output>
+                    type="range" v-model="betaDuplicate" step="0.01" min="0.0" max="1.0">
+              <output for="item-beta-duplicate" style="width:3.1rem;">{{ betaDuplicate * 100 }}</output>
             </div>
 
             <div class="field">
-              <label class="label" for="item-diversity-meta">
-                Meta information
+              <label class="label" for="item-beta-biblio">
+                Bibliographic
               </label>
-              <input id="item-diversity-meta" 
+              <input id="item-beta-biblio" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversityMeta" step="0.01" min="0.0" max="1.0">
-              <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversityMeta }}</output>
+                    type="range" v-model="betaBiblio" step="0.01" min="0.0" max="1.0">
+              <output for="item-beta-biblio" style="width:3.1rem;">{{ betaBiblio * 100 }}</output>
+            </div>
+
+            <div class="field">
+              <label class="label" for="item-num-examples">
+                Number of Examples
+              </label>
+              <input id="item-num-examples" 
+                    class="slider has-output is-fullwidth is-secondary is-circle is-medium" 
+                    type="range" v-model="numExamples" step="5" min="20" max="200">
+              <output for="item-num-examples" style="width:3.1rem;">{{ numExamples }}</output>
             </div>
           </div>
         </div>
       </section>
       <footer class="modal-card-foot">
         <button class="button is-rounded is-danger is-light" 
-                v-on:click="showEditModal = false">
+                v-on:click="() => {lambdaTradeOff = .25; betaSemantic = .5; betaGrammar = 0.; betaDuplicate = 0.; betaBiblio = 0.;}">
           <span class="icon"><i class="fas fa-trash"></i></span>
           <strong>Reset</strong>
         </button>
@@ -135,6 +149,7 @@
 
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
+import PageLoader from '@/components/layout/PageLoader.vue';
 import { useI18n } from 'vue-i18n';
 import { watchEffect, ref, reactive, watch, getCurrentInstance } from "vue";
 import { highlightSpans } from '@/functions/highlight-spans.js';
@@ -146,24 +161,28 @@ export default {
   name: "Find diverse sets of sentence examples",
 
   components: {
-    TheNavbar
+    TheNavbar,
+    PageLoader
   },
 
   setup(){
     const { t } = useI18n();
 
     watchEffect(() => {
-      document.title = t('general.title');
+      document.title = t('variation.title');
     });
 
+    const currentHeadword = ref("")
     const showEditModal = ref(false);
     const recomputeMatrix = ref(false);
+    const isLoading = ref(false);
 
-    const lambdaTradeOff = ref(1.0);
-    const diversitySemantic = ref(1.0);
-    const diversitySyntax = ref(1.0);
-    const diversityFingerprint = ref(1.0);
-    const diversityMeta = ref(1.0);
+    const lambdaTradeOff = ref(.25);
+    const betaSemantic = ref(.5);
+    const betaGrammar = ref(.0);
+    const betaDuplicate = ref(.0);
+    const betaBiblio = ref(.0);
+    const numExamples = ref(30)
 
     /* Load Data via Axios */
     const { 
@@ -179,9 +198,16 @@ export default {
       trigger_matrix_aggregation
     } = useSimilarityMatrices();
 
-    loadSimilarityMatrices("Insel", 5);
 
-    
+    /* Load if new headword was submitted */
+    const onSearchHeadword = async(keywords) => {
+      if(keywords.length > 0){
+        isLoading.value = true;
+        console.log("New headword:", keywords)
+        loadSimilarityMatrices(keywords, numExamples.value);
+        currentHeadword.value = keywords;
+      }
+    }
 
     /* Update Cards */
     const sentenceExamples = reactive([])
@@ -203,6 +229,9 @@ export default {
               'good-score': good_scores[idx], 'weight': 0.0
             });
           });
+          // console.log("Force rerendering");
+          // const instance = getCurrentInstance();
+          // instance?.proxy?.$forceUpdate();
           console.groupEnd();
         }
       }
@@ -217,7 +246,7 @@ export default {
 
     /** Aggregate matrices if ... 
      * - new sentences in `sentenceExamples`
-     * - preference params changed, e.g. `diversitySemantic`
+     * - preference params changed, e.g. `betaSemantic`
      */ 
     const { aggregate_matrices, get_weights } = useQuadOpt()
 
@@ -225,7 +254,8 @@ export default {
       () => trigger_matrix_aggregation.value,
       (flag) => {
         if(flag){
-          updateWeights()
+          updateWeights();
+          trigger_matrix_aggregation.value = false;
         }
       }
     );
@@ -240,15 +270,23 @@ export default {
     );
 
     const updateWeights = () => {
+      isLoading.value = true;
+      console.log("Lambda:", parseFloat(lambdaTradeOff.value));
+      console.log("Semantic:", parseFloat(betaSemantic.value));
+      console.log("Grammar:", parseFloat(betaGrammar.value));
+      console.log("Duplicates:", parseFloat(betaDuplicate.value));
+      console.log("Bibliographic:", parseFloat(betaBiblio.value));
       // aggregate similarity matrices
       let simi = aggregate_matrices(
-        simi_semantic, parseFloat(diversitySemantic.value), 
-        simi_grammar, parseFloat(diversitySyntax.value),
-        simi_duplicate, parseFloat(diversityFingerprint.value),
-        simi_biblio, parseFloat(diversityMeta.value)
+        simi_semantic, parseFloat(betaSemantic.value), 
+        simi_grammar, parseFloat(betaGrammar.value),
+        simi_duplicate, parseFloat(betaDuplicate.value),
+        simi_biblio, parseFloat(betaBiblio.value)
       );
+      simi.print();
       // solve problem
-      let wbest = get_weights(good_scores, simi, lambdaTradeOff.value, undefined, 200);
+      let wbest = get_weights(
+        good_scores, simi, parseFloat(lambdaTradeOff.value), undefined, 25);
       // assign weights
       let arr = wbest.arraySync();
       sentenceExamples.forEach((d) => {
@@ -257,17 +295,22 @@ export default {
       // force rerendering
       const instance = getCurrentInstance();
       instance?.proxy?.$forceUpdate();
+      isLoading.value = false;
     }
 
     return { 
       t,
+      currentHeadword,
+      onSearchHeadword,
+      isLoading,
       showEditModal,
       recomputeMatrix,
       lambdaTradeOff,
-      diversitySemantic,
-      diversitySyntax,
-      diversityFingerprint,
-      diversityMeta,
+      betaSemantic,
+      betaGrammar,
+      betaDuplicate,
+      betaBiblio,
+      numExamples,
       sentenceExamples,
       sortByWeight,
       // renderCards,
