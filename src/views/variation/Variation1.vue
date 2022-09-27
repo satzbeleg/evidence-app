@@ -22,12 +22,21 @@
         </p>
       </div>
 
-      <div class="card is-quarter" v-for="(item, idx) in sentenceExamples" :key="idx">
+      <div class="card is-quarter" 
+        v-for="(item, idx) in sortByWeight(sentenceExamples)" 
+        :key="idx"
+      >
         <div class="card-content">
           <div class="content center">
             <!-- <div v-fit2box="item.text" class="fixed-box"> -->
               <div v-html="highlightSpans(item.text, item.spans, 'span', 'tag is-success is-light is-rounded reset-to-parent-font-height')"></div>
             <!-- </div> -->
+            </div>
+            <div class="content center">
+            <p class="is-size-7 has-text-grey is-italic">
+              w<sub>{{ item.id }}</sub>: {{ parseFloat(item.weight).toFixed(3) }} |
+              {{ item.bibl }}
+            </p>
           </div>
         </div>
       </div>
@@ -55,8 +64,8 @@
               </label>
               <input id="item-goodness-score" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="goodnessScore" step="0.01" min="0" max="1">
-              <output for="item-sampling-numtop" style="width:3.1rem;">{{ goodnessScore }}</output>
+                    type="range" v-model="lambdaTradeOff" step="0.01" min="0" max="1">
+              <output for="item-sampling-numtop" style="width:3.1rem;">{{ lambdaTradeOff }}</output>
             </div>
 
             <div class="field">
@@ -65,7 +74,7 @@
               </label>
               <input id="item-diversity-score" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversitySemantic" step="0.01" min="0" max="1">
+                    type="range" v-model="diversitySemantic" step="0.01" min="0.0" max="1.0">
               <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversitySemantic }}</output>
             </div>
 
@@ -75,7 +84,7 @@
               </label>
               <input id="item-diversity-syntax" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversitySyntax" step="0.01" min="0" max="1">
+                    type="range" v-model="diversitySyntax" step="0.01" min="0.0" max="1.0">
               <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversitySyntax }}</output>
             </div>
 
@@ -85,7 +94,7 @@
               </label>
               <input id="item-diversity-fingerprint" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversityFingerprint" step="0.01" min="0" max="1">
+                    type="range" v-model="diversityFingerprint" step="0.01" min="0.0" max="1.0">
               <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversityFingerprint }}</output>
             </div>
 
@@ -95,7 +104,7 @@
               </label>
               <input id="item-diversity-meta" 
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-                    type="range" v-model="diversityMeta" step="0.01" min="0" max="1">
+                    type="range" v-model="diversityMeta" step="0.01" min="0.0" max="1.0">
               <output for="item-sampling-numtop" style="width:3.1rem;">{{ diversityMeta }}</output>
             </div>
           </div>
@@ -113,7 +122,7 @@
           <strong>Cancel</strong>
         </button>
         <button class="button is-rounded is-success" 
-                v-on:click="showEditModal = false">
+                v-on:click="() => {showEditModal = false; recomputeMatrix = true;}">
           <span class="icon"><i class="fas fa-repeat"></i></span>
           <strong>Recompute</strong>
         </button>
@@ -127,9 +136,11 @@
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
-import { watchEffect, ref, reactive } from "vue";
+import { watchEffect, ref, reactive, watch, getCurrentInstance } from "vue";
 import { highlightSpans } from '@/functions/highlight-spans.js';
 import { useQuadOpt } from '@/components/variation/quadopt.js';
+import { useSimilarityMatrices } from '../../components/variation/similarity-matrices';
+
 
 export default {
   name: "Find diverse sets of sentence examples",
@@ -141,55 +152,125 @@ export default {
   setup(){
     const { t } = useI18n();
 
-    const showEditModal = ref(false);
-
-    const goodnessScore = ref(1.0);
-    const diversitySemantic = ref(0.0);
-    const diversitySyntax = ref(0.0);
-    const diversityFingerprint = ref(0.0);
-    const diversityMeta = ref(0.0);
-
-    const sentenceExamples = reactive([
-      {"id": "123", "text": "Das Haus ist groß.", "spans": [[4, 8]]},
-      {"id": "123", "text": "Das Haus war blau, aber nun gelb bevor es angemalt wurde.", "spans": [[4, 8]]},
-    ]);
-
     watchEffect(() => {
       document.title = t('general.title');
     });
 
-    const { aggregate_matrices, get_weights } = useQuadOpt()
-    let simi1 = [
-      [1, .9, .8, .7],
-      [.9, 1, .6, .5],
-      [.8, .6, 1, .4],
-      [.7, .5, .4, 1],
-    ]
-    let beta1 = 2.
-    let simi2 = [
-      [1, .7, .8, .3],
-      [.7, 1, .4, .2],
-      [.8, .4, 1, .6],
-      [.3, .2, .6, 1],
-    ]
-    let beta2 = 0.5
-    let simi = aggregate_matrices(simi1, beta1, simi2, beta2)
-    simi.print()
+    const showEditModal = ref(false);
+    const recomputeMatrix = ref(false);
 
-    let good = [.51, .53, .55, .57]
-    let lam = 0.4
-    let wbest = get_weights(good, simi, lam, undefined, 200);
-    console.log(`Solution weights: ${wbest.arraySync()}`);
+    const lambdaTradeOff = ref(1.0);
+    const diversitySemantic = ref(1.0);
+    const diversitySyntax = ref(1.0);
+    const diversityFingerprint = ref(1.0);
+    const diversityMeta = ref(1.0);
+
+    /* Load Data via Axios */
+    const { 
+      sentences,
+      biblio,
+      good_scores,
+      simi_semantic,
+      simi_grammar,
+      simi_duplicate,
+      simi_biblio,
+      loadSimilarityMatrices,
+      // simi_matrices_are_loading,
+      trigger_matrix_aggregation
+    } = useSimilarityMatrices();
+
+    loadSimilarityMatrices("Insel", 5);
+
+    
+
+    /* Update Cards */
+    const sentenceExamples = reactive([])
+    // const sentenceExamples = reactive([
+    //   {"id": "123", "text": "Das Haus ist groß.", "spans": [[4, 8]]},
+    //   {"id": "123", "text": "Das Haus war blau, aber nun gelb bevor es angemalt wurde.", "spans": [[4, 8]]},
+    // ]);
+
+    watch(
+      () => trigger_matrix_aggregation.value,
+      (flag) => {
+        if (flag){
+          console.group();
+          console.log("Update cards");
+          Object.assign(sentenceExamples, [])
+          sentences.forEach((txt, idx) => {
+            sentenceExamples.push({
+              'text': txt, 'id': idx, 'bibl': biblio[idx],
+              'good-score': good_scores[idx], 'weight': 0.0
+            });
+          });
+          console.groupEnd();
+        }
+      }
+    )
+
+    const sortByWeight = (arr) => {
+      if (arr.length > 0){
+        return arr.slice().sort((a, b) => {return b.weight - a.weight})
+      }
+      return arr
+    }
+
+    /** Aggregate matrices if ... 
+     * - new sentences in `sentenceExamples`
+     * - preference params changed, e.g. `diversitySemantic`
+     */ 
+    const { aggregate_matrices, get_weights } = useQuadOpt()
+
+    watch(
+      () => trigger_matrix_aggregation.value,
+      (flag) => {
+        if(flag){
+          updateWeights()
+        }
+      }
+    );
+    watch(
+      () => recomputeMatrix.value,
+      (flag) => {
+        if (flag){
+          updateWeights();
+          recomputeMatrix.value = false;
+        }
+      }
+    );
+
+    const updateWeights = () => {
+      // aggregate similarity matrices
+      let simi = aggregate_matrices(
+        simi_semantic, parseFloat(diversitySemantic.value), 
+        simi_grammar, parseFloat(diversitySyntax.value),
+        simi_duplicate, parseFloat(diversityFingerprint.value),
+        simi_biblio, parseFloat(diversityMeta.value)
+      );
+      // solve problem
+      let wbest = get_weights(good_scores, simi, lambdaTradeOff.value, undefined, 200);
+      // assign weights
+      let arr = wbest.arraySync();
+      sentenceExamples.forEach((d) => {
+        d.weight = arr[d.id]
+      });
+      // force rerendering
+      const instance = getCurrentInstance();
+      instance?.proxy?.$forceUpdate();
+    }
 
     return { 
       t,
       showEditModal,
-      goodnessScore,
+      recomputeMatrix,
+      lambdaTradeOff,
       diversitySemantic,
       diversitySyntax,
       diversityFingerprint,
       diversityMeta,
       sentenceExamples,
+      sortByWeight,
+      // renderCards,
       highlightSpans
     }
   }
