@@ -112,7 +112,7 @@
               <output for="item-beta-biblio" style="width:3.1rem;">{{ betaBiblio * 100 }}</output>
             </div>
 
-            <div class="field">
+            <!-- <div class="field">
               <label class="label" for="item-num-examples">
                 Number of Examples
               </label>
@@ -120,7 +120,7 @@
                     class="slider has-output is-fullwidth is-secondary is-circle is-medium" 
                     type="range" v-model="numExamples" step="5" min="20" max="200">
               <output for="item-num-examples" style="width:3.1rem;">{{ numExamples }}</output>
-            </div>
+            </div> -->
           </div>
         </div>
       </section>
@@ -182,7 +182,7 @@ export default {
     const betaGrammar = ref(.0);
     const betaDuplicate = ref(.0);
     const betaBiblio = ref(.0);
-    const numExamples = ref(30)
+    const numExamples = ref(150)
 
     /* Load Data via Axios */
     const { 
@@ -204,8 +204,9 @@ export default {
       if(keywords.length > 0){
         isLoading.value = true;
         console.log("New headword:", keywords)
-        loadSimilarityMatrices(keywords, numExamples.value);
+        await loadSimilarityMatrices(keywords, numExamples.value);
         currentHeadword.value = keywords;
+        isLoading.value = false;
       }
     }
 
@@ -222,7 +223,7 @@ export default {
         if (flag){
           console.group();
           console.log("Update cards");
-          Object.assign(sentenceExamples, [])
+          Object.assign(sentenceExamples, []);
           sentences.forEach((txt, idx) => {
             sentenceExamples.push({
               'text': txt, 'id': idx, 'bibl': biblio[idx],
@@ -270,12 +271,15 @@ export default {
     );
 
     const updateWeights = () => {
+      // open pagerloader
       isLoading.value = true;
+      console.group();
       console.log("Lambda:", parseFloat(lambdaTradeOff.value));
       console.log("Semantic:", parseFloat(betaSemantic.value));
       console.log("Grammar:", parseFloat(betaGrammar.value));
       console.log("Duplicates:", parseFloat(betaDuplicate.value));
       console.log("Bibliographic:", parseFloat(betaBiblio.value));
+      console.groupEnd();
       // aggregate similarity matrices
       let simi = aggregate_matrices(
         simi_semantic, parseFloat(betaSemantic.value), 
@@ -293,8 +297,10 @@ export default {
         d.weight = arr[d.id]
       });
       // force rerendering
+      console.log("Force rerendering")
       const instance = getCurrentInstance();
       instance?.proxy?.$forceUpdate();
+      // close pagerloader
       isLoading.value = false;
     }
 
