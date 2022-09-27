@@ -22,12 +22,18 @@ export const useQuadOpt = () => {
       throw "An even number of input arguments expected";
     }
     // // copy the first matrix
-    var out = tf.tensor(args[0], undefined, 'float32').mul(tf.tensor(args[1], [1.], 'float32'))
+    var out = tf.tensor(args[0], undefined, 'float32').mul(
+      tf.tensor(args[1], [1.], 'float32'))
+    var sum = tf.tensor(args[1], [1.], 'float32')
 
     // add the other matrices
     for (let i = 2; i < args.length; i+=2){
-      out = out.add(tf.tensor(args[i], undefined, 'float32').mul(tf.tensor(args[i + 1], [1.], 'float32')))
+      out = out.add(tf.tensor(args[i], undefined, 'float32').mul(
+        tf.tensor(args[i + 1], [1.], 'float32')))
+      sum = sum.add(tf.tensor(args[i + 1], [1.], 'float32'))
     }
+    // scale by sum of preference params
+    out = out.div(sum)
     // done
     return out
   }
@@ -90,12 +96,13 @@ export const useQuadOpt = () => {
     if( !(c instanceof tf.Tensor) ){
       c = tf.tensor(c, undefined, 'float32')  // (n,)
     }
+    const lamC = c.mul(lam)
 
     // We can multipy `lam*Q` beforehand and save compute time! And cast
     if( !(Q instanceof tf.Tensor) ){
       Q = tf.tensor(Q, undefined, 'float32')
     }
-    const lamQ = Q.mul(lam)  // (n,n)
+    const lamQ = Q.mul(1. - lam)  // (n,n)
 
     // how many alternatives
     const n_examples = c.shape[0]
@@ -116,14 +123,15 @@ export const useQuadOpt = () => {
     const optimizer = tf.train.adam(0.0003, .9, .999, 1e-7)
 
     // start values
-    let f, wbest; 
-    let worig;  // check
-    let fbest = custom_loss(w, c, lamQ, b, alpha1, alpha2, alpha3);
+    let f;
+    let wbest = w; 
+    let worig = w;  // check
+    let fbest = custom_loss(w, lamC, lamQ, b, alpha1, alpha2, alpha3);
     let wait = 0;
     // start optimization
     for(let i=0; i < maxiter; i++){
-      optimizer.minimize(() => custom_loss(w, c, lamQ, b, alpha1, alpha2, alpha3))
-      f = custom_loss(w, c, lamQ, b, alpha1, alpha2, alpha3)
+      optimizer.minimize(() => custom_loss(w, lamC, lamQ, b, alpha1, alpha2, alpha3))
+      f = custom_loss(w, lamC, lamQ, b, alpha1, alpha2, alpha3)
       if (fbest > (f + ftol)){
         fbest = f;
         wbest = norm_to_1(w);
