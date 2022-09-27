@@ -46,6 +46,9 @@
   "bestworst": {
     "title": "BWS Ranking"
   },
+  "variation": {
+    "title": "Belegvariation"
+  },
   "menu": {
     "evaluate": "Bewerten",
     "bestworst3": "Best-Worst Scaling",
