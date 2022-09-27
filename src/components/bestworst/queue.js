@@ -6,8 +6,8 @@ export const useQueue = () => {
   // UI-name
   const uispec = reactive({"name": "noname"})
 
-  // Search string for lemmata/keywords
-  const searchlemmata = ref("");
+  // Search string for headword/keywords
+  const search_headword = ref("");
 
   // reactive data of this component
   const queueData = reactive({
@@ -16,7 +16,7 @@ export const useQueue = () => {
     // The current BWS-exampleset displayed inside the app
     current: [],
     current_setid: undefined,
-    current_lemmata: undefined, //'Hello world,cool',
+    current_headword: undefined, //'Hello world,cool',
     // Use to trigger component re-rendering with :key
     counter: 1,
     // Post this to the REST API (see saveEvaluations)
@@ -50,11 +50,11 @@ export const useQueue = () => {
       if (typeof tmp !== 'undefined' ){
         queueData.current = tmp.examples;
         queueData.current_setid = tmp.set_id;
-        queueData.current_lemmata = tmp.lemmata.join(", ");
+        queueData.current_headword = tmp.headword;
       }else{
         queueData.current = [];
         queueData.current_setid = undefined;
-        queueData.current_lemmata = undefined;
+        queueData.current_headword = undefined;
       }
     }
   }
@@ -83,7 +83,7 @@ export const useQueue = () => {
         if (queueData.queue.length == 0){
           queueData.current = [];
           queueData.current_setid = undefined;
-          queueData.current_lemmata = undefined;
+          queueData.current_headword = undefined;
           message_suggestion.value = 'No Examples Left Over! Search of for another headword!'
         }
         return;
@@ -98,7 +98,7 @@ export const useQueue = () => {
       'set-id': queueData.current_setid,  // Only required for App/API-Sync
       'ui-spec': JSON.parse(JSON.stringify(uispec)), // DB SQL CHANGE REQUIRED
       'ui-name': uispec.name,  // DELETE THIS
-      'lemmata': queueData.current_lemmata.split(',').map(s => s.trim()),
+      'headword': queueData.current_headword.trim(),
       'event-history': JSON.parse(JSON.stringify(history)),  // to be stored in DB
       'state-sentid-map': state_sentid_map,  // to be stored in DB
       'tracking-data': {
@@ -178,12 +178,12 @@ export const useQueue = () => {
    * Reset Queue
    */
   const resetQueue = () => {
-    // reset `searchlemmata`
-    searchlemmata.value = ""
+    // reset `search_headword`
+    search_headword.value = ""
     // delete current example set in UI
     queueData.current = [];
     queueData.current_setid = undefined;
-    queueData.current_lemmata = undefined;
+    queueData.current_headword = undefined;
     // delete lined up BWS sets
     queueData.queue = []; 
   }
@@ -191,7 +191,7 @@ export const useQueue = () => {
 
   /// done
   return {
-    uispec, searchlemmata, queueData,
+    uispec, search_headword, queueData,
     isReplenishing, isSaving, message_suggestion,
     pullFromQueue,
     nextExampleSet,

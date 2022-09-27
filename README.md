@@ -26,8 +26,21 @@ Please follow the instruction of the [deployment repository](https://github.com/
 ### Start backend services
 
 ```bash
-(cd $EVIDENCE_DEPLOY && docker-compose up db mail api)
+cd $EVIDENCE_DEPLOY 
+docker-compose up --build dbauth dbeval dbeval-install mail api
 ```
+
+### Add a test account
+```sh
+cd $EVIDENCE_DEPLOY 
+cat restapi/test/addtestaccount.sql | docker exec -i evidence_dbauth psql -U evidence -d evidence
+```
+
+```
+username : nobody@example.com
+password : supersecret
+```
+
 
 ### Setup and start local web server 
 1) Install NPM modules

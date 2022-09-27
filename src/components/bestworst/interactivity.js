@@ -386,8 +386,11 @@ export const useInteractivity = () => {
       // var deletedData = {}  // API buffer
       del_ids.forEach(key => {
         deleted_pool[key] = {
-          "training_score_history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
-          "model_score_history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
+          "example-id": pool[key].example_id,
+          "sentence-text": pool[key].text,
+          "headword": pool[key].headword,
+          "training-score-history": JSON.parse(JSON.stringify(pool[key].training_score_history)),
+          "model-score-history": JSON.parse(JSON.stringify(pool[key].model_score_history)),
           "displayed": JSON.parse(JSON.stringify(pool[key].displayed))
         };
         delete pool[key];
@@ -433,7 +436,7 @@ export const useInteractivity = () => {
         // Start API request
         api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deleted_pool)) )
           .then(response => {
-            response.data['stored-sentids'].forEach(key => {
+            response.data['stored-example-ids'].forEach(key => {
               delete deleted_pool[key];
             })
             if(debug_verbose.value){console.log("Response (saveDeletedPool): ", response)}
@@ -482,10 +485,10 @@ export const useInteractivity = () => {
    *  watch( () => Object.keys(pool).length, (current_pool_size) => {
    *    if (current_pool_size < max_pool_size.value){
    *      if(debug_verbose.value){console.log(`Only examples ${current_pool_size} in pool.`)}
-   *        addExamplesToPool(searchlemmata.value);
+   *        addExamplesToPool(search_headword.value);
    *  }  });
    */
-  const addExamplesToPool = (lemmata) => {
+  const addExamplesToPool = (headword) => {
     // logging
     if (debug_verbose.value){
       console.group();
@@ -495,7 +498,7 @@ export const useInteractivity = () => {
       console.log(`- num_additions=${max_pool_size.value - Object.keys(pool).length}`);
       console.log(`- item_sampling_numtop=${item_sampling_numtop.value}`);
       console.log(`- item_sampling_offset=${item_sampling_offset.value}`);
-      console.log(`- searchlemmata=${lemmata}`);
+      console.log(`- search_headword=${headword}`);
       console.log(`- initial_load_only=${initial_load_only.value}`)
       console.log(`- is_pool_initially_loaded=${is_pool_initially_loaded.value}`)
       console.log(`- max_displays=${max_displays.value}`);
@@ -509,7 +512,7 @@ export const useInteractivity = () => {
       if (num_additions > 0  &&  !(initial_load_only.value && is_pool_initially_loaded.value) ){
         // settings
         var params = {
-          "lemmata": lemmata.split(',').map(s => s.trim()),
+          "headword": headword.trim(),
           //"exclude_deleted_ids": true,
           "max_displays": max_displays.value,
         }
@@ -524,8 +527,10 @@ export const useInteractivity = () => {
               error_message.value = response.data['msg'];
             } else {
               response.data.forEach(row => {
-                pool[row.id] = {
+                pool[row.example_id] = {
+                  "example_id": row.example_id,
                   "text": row.text,
+                  "headword": row.headword,
                   "spans": row.spans,
                   "context": row.context,
                   "features": row.features,
@@ -552,12 +557,12 @@ export const useInteractivity = () => {
   /**
    * (2a) watch `pool` to trigger sync with API/DB
    */
-  const { searchlemmata } = useQueue();
+  const { search_headword } = useQueue();
   watch( 
     () => Object.keys(pool).length, 
     (current_pool_size) => {
-      if (current_pool_size < max_pool_size.value && searchlemmata.value){
-        addExamplesToPool(searchlemmata.value);
+      if (current_pool_size < max_pool_size.value && search_headword.value){
+        addExamplesToPool(search_headword.value);
       }
       if(debug_verbose.value){console.log(`new_pool_size=${current_pool_size}`)}
     }

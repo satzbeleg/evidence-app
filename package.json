@@ -6,11 +6,11 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "css-build": "node-sass --omit-source-map-url sass/darktheme.scss public/css/darktheme.css && node-sass --omit-source-map-url sass/lighttheme.scss public/css/lighttheme.css",
+    "css-build": "sass sass/darktheme.scss public/css/darktheme.css && sass sass/lighttheme.scss public/css/lighttheme.css",
     "new-icons": "npx vue-pwa-asset-generator -a src/assets/logo.png -o public/img/icons --no-manifest && mv public/img/icons/favicon.ico public/favicon.ico"
   },
   "dependencies": {
-    "@fortawesome/fontawesome-free": "^5.15.3",
+    "@fortawesome/fontawesome-free": "^6.1.2",
     "@tensorflow/tfjs": "^3.9.0",
     "@vue/preload-webpack-plugin": "^1.1.2",
     "axios": "^0.21.4",
@@ -44,8 +44,6 @@
     "glob-parent": "^5.1.2",
     "jpeg-js": "^0.4.4",
     "minimist": "^1.2.6",
-    "node-sass": "^7.0.0",
-    "sass-loader": "^10",
     "trim-newlines": "^3.0.1",
     "vue-pwa-asset-generator": "^1.6.0"
   },

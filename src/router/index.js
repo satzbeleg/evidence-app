@@ -93,6 +93,13 @@ const routes = [{
       import ( /* webpackPreload: true */ '../views/bestworst/BestWorst4.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/variation1',
+    name: 'Curating diverse sentence examples',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/variation/Variation1.vue'),
+    meta: { requiresAuth: false }
+  },
 ];
 
 

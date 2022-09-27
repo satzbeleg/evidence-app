@@ -40,6 +40,9 @@
   "bestworst": {
     "title": "BWS Ranking"
   },
+  "variation": {
+    "title": "Unterschiedliche Sätze"
+  },
   "menu": {
     "evaluate": "Bewerten",
     "bestworst3": "Best-Worst Scaling",

@@ -46,6 +46,9 @@
   "bestworst": {
     "title": "Best Worst Scaling"
   },
+  "variation": {
+    "title": "Sentence Variations"
+  },
   "menu": {
     "evaluate": "Evaluate",
     "bestworst3": "Best-Worst Scaling",
