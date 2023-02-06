@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "serve": "vue-cli-service --openssl-legacy-provider serve",
+    "build": "npx browserslist@latest --update-db && vue-cli-service --openssl-legacy-provider build",
     "lint": "vue-cli-service lint",
     "css-build": "sass sass/darktheme.scss public/css/darktheme.css && sass sass/lighttheme.scss public/css/lighttheme.css",
     "new-icons": "npx vue-pwa-asset-generator -a src/assets/logo.png -o public/img/icons --no-manifest && mv public/img/icons/favicon.ico public/favicon.ico"
@@ -39,6 +39,8 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/compiler-sfc": "^3.0.2",
     "babel-eslint": "^10.1.0",
+    "browserslist": "^4.21.5",
+    "caniuse-lite": "^1.0.30001450",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^7.0.0-alpha.0",
     "glob-parent": "^5.1.2",
