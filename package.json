@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service --openssl-legacy-provider serve",
-    "build": "npx browserslist@latest --update-db && vue-cli-service --openssl-legacy-provider build",
+    "build": "vue-cli-service --openssl-legacy-provider build",
     "lint": "vue-cli-service lint",
     "css-build": "sass sass/darktheme.scss public/css/darktheme.css && sass sass/lighttheme.scss public/css/lighttheme.css",
     "new-icons": "npx vue-pwa-asset-generator -a src/assets/logo.png -o public/img/icons --no-manifest && mv public/img/icons/favicon.ico public/favicon.ico"
