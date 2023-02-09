@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "serve": "vue-cli-service --openssl-legacy-provider serve",
-    "build": "vue-cli-service --openssl-legacy-provider build",
-    "lint": "vue-cli-service lint",
+    "serve": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service serve",
+    "build": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build",
+    "lint": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service lint",
     "css-build": "sass sass/darktheme.scss public/css/darktheme.css && sass sass/lighttheme.scss public/css/lighttheme.css",
     "new-icons": "npx vue-pwa-asset-generator -a src/assets/logo.png -o public/img/icons --no-manifest && mv public/img/icons/favicon.ico public/favicon.ico"
   },
