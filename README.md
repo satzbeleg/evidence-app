@@ -49,15 +49,16 @@ password : supersecret
 yarn install
 ```
 
-2) Setup `.env.local`
+2) Setup `.env`
 
 ```
 NODE_ENV=local
-VUE_APP_REST_PUBLIC_URL=http://localhost:8080
+# NODE_ENV=production
+VUE_APP_REST_PUBLIC_URL=http://localhost:7070
 VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
-Notes: Local variables specified in `.env.local` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
+Notes: Local variables specified in `.env` are not added to code (see [here](https://cli.vuejs.org/guide/mode-and-env.html#local-only-variables)). All variables needs to prefixed `VUE_APP_` to be available as `process.env.VUE_APP_...` JS variable in Vue. Never expose secret keys or passwords as Vue environment variable.
 
 3) Start web server
 
