@@ -55,7 +55,7 @@ yarn install
 NODE_ENV=local
 VUE_APP_REST_PUBLIC_URL=http://localhost:7070
 # NODE_ENV=production
-# VUE_APP_REST_PUBLIC_URL=http://youractualdomain.org:7070
+# VUE_APP_REST_PUBLIC_URL=https://youractualdomain.org:7070
 VUE_APP_GOOGLE_CLIENT_ID=verylongsometing.apps.googleusercontent.com
 ```
 
