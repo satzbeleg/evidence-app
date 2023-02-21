@@ -701,9 +701,17 @@ export const useInteractivity = () => {
     // (D) Pick the first `num_examples` items of the sorted ids
     var sampled_ids = all_ids.slice(0, num_examples);
 
+    // sort by text length + 10% noise
+    sampled_ids.sort((key1, key2) => {
+        // sort by shortest text length
+        const len2 = pool[key2].text.length * (0.9 + Math.random() * 0.2)
+        if (pool[key1].text.length < len2){return -1;}
+        else{ return 1;}
+    });
+
     // (E) Generate BWS set samples (Sorry for the naming confusion)
     var sampled_bwssets = sampling.sample(
-      sampled_ids, bwsset_num_items.value, bwsset_sampling_method.value, false);
+      sampled_ids, bwsset_num_items.value, bwsset_sampling_method.value, true);
 
     // logging
     if (debug_verbose.value) {
@@ -740,6 +748,7 @@ export const useInteractivity = () => {
           // read states and associated IDs from the 2nd last element
           let tmp2 = getNextToLast(bwsset['event-history']);
           let combostates = Object.values(tmp2['state']);
+          console.log(combostates)
           let stateids = Object.values(bwsset['state-sentid-map']);
           // if(debug_verbose.value){console.log("- Final State: ", combostates, stateids);}
           // Extract paired comparisons from BWS set

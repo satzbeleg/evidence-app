@@ -2867,10 +2867,10 @@ bulma@^0.9.0:
   resolved "https://registry.yarnpkg.com/bulma/-/bulma-0.9.3.tgz#ddccb7436ebe3e21bf47afe01d3c43a296b70243"
   integrity sha512-0d7GNW1PY4ud8TWxdNcP6Cc8Bu7MxcntD/RRLGWuiw/s0a9P+XlH/6QoOIrmbj6o8WWJzJYhytiu9nFjTszk1g==
 
-bwsample@^0.1.4:
-  version "0.1.4"
-  resolved "https://registry.yarnpkg.com/bwsample/-/bwsample-0.1.4.tgz#18a185d8019a62f3c445309fc6f313d54e7e1a58"
-  integrity sha512-zPhe5c88Tm8eSG0fx5kQgfoTfBSPUKKZucuP89triNooFuxe8A9QIltCrKXgLURPVhYP6uNipQwOya/oj8j0uA==
+bwsample@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/bwsample/-/bwsample-0.1.5.tgz#1c46877fc03a4a4505a9dc42bac161d68158b803"
+  integrity sha512-afHSXzaR7/2+/dmqM88lGLzsNq5lfim9S+u2y+5RqyoURR9AULz7BIixT8xO+yfwEEFQIxU20ZIflctvPokWGg==
   dependencies:
     deep-equal "^2.0.5"
     uuid "^8.3.2"
