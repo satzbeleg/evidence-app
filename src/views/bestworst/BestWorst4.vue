@@ -9,6 +9,17 @@
   <section class="section">    
     <div class="container is-centered" style="max-width: 720px;">
 
+      <!-- Ranking Overview Modal: the button-->
+      <div class="field is-grouped is-grouped-centered" style="position: sticky; display: inline-block;"> 
+        <p class="control">
+          <button class="button is-rounded is-info" 
+                  v-on:click="showModal = true">
+            <span class="icon"><i class="fas fa-filter"></i></span>
+            <strong>Ranking Overview</strong>
+          </button>
+        </p>
+      </div>
+
       <template v-if="queueData.current.length > 0">
         <!-- BWS UI -->
         <BestWorstChoices 
@@ -17,7 +28,6 @@
           :key="queueData.counter"
         />
       </template>
-
       <template v-else>
         <PageLoader 
           v-bind:status="queueData.current.length == 0"
@@ -26,6 +36,43 @@
 
     </div>
   </section>
+
+
+  <div class="modal" :class="{ 'is-active': showModal }">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+      <header class="modal-card-head">
+        <p class="modal-card-title">Current Rankings</p>
+        <button class="delete" aria-label="close" v-on:click="showModal = false"></button>
+      </header>
+      <section class="modal-card-body" v-if="showModal">
+        <!-- Content ... -->
+        <!-- <div class="card" v-for="(item, idx) in getPoolData()" :key="idx"> -->
+        <div class="card" v-for="(item, idx) in pool" :key="idx">
+          <div class="card-content">
+            <div class="column">
+              <div class="columns is-mobile">
+                <div class="column is-10">
+                  <p>{{ item.text }}</p>
+                  <p class="is-size-7 has-text-grey is-italic"> {{ item.context.biblio }} </p>
+                  <p class="is-size-7 has-text-grey is-italic"> {{ item.context.license }} </p>
+                </div>
+                <div class="column">
+                  <p class="is-size-7 has-text-grey is-italic"> {{ item.num_displayed }} x</p>
+                  <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_training_score * 100.).toFixed(1) }} (r)</p>
+                  <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_model_score * 100.).toFixed(1) }} (m)</p> 
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <!-- Content ... -->
+      </section>
+    </div>
+  </div>
+
+
 </template>
 
 
@@ -33,7 +80,7 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst/Choices.vue';
-import { defineComponent, watchEffect, watch } from 'vue'; // unref, watch, computed
+import { defineComponent, watchEffect, watch, ref, toRaw } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
@@ -242,14 +289,47 @@ export default defineComponent({
     });
 
 
+    // Ranking overview modal
+    const showModal = ref(false);
+
+    // watch(
+    //   () => showModal.value,
+    //   (show) => {
+    //     if (show){
+    //       const instance = getCurrentInstance();
+    //       instance?.proxy?.$forceUpdate();
+    //     }
+    // });
+
+    const getPoolData = () => {
+      const arr = toRaw(pool);
+      if (arr.length > 0){
+        return arr.slice().sort((a, b) => {
+          if (a.last_training_score < b.last_training_score){return 1;}
+          else if (a.last_training_score > b.last_training_score){return -1;}
+          else if (a.last_model_score < b.last_model_score){return 1;}
+          else if (a.last_model_score > b.last_model_score){return -1;}
+          return 0;
+        })
+      }
+      return arr
+    }
+
     return { 
       queueData, 
       nextExampleSet,
       onSearchHeadword,
-      message_suggestion
+      message_suggestion,
+      // fot the Ranking Overview modal
+      showModal, getPoolData, pool
     }
   },
 
 });
 </script>
 
+<style scoped>
+.card {
+  margin-bottom: min(2vh, 25px); /* min(2vh, 25px); */
+}
+</style>
