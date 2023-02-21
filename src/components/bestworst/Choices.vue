@@ -60,7 +60,7 @@
 
 
 <script>
-import ItemCard from './Item.vue';
+import ItemCard from './ItemCard.vue';
 import s from './enums.js';
 import { defineComponent, reactive, computed } from 'vue';
 
