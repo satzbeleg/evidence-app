@@ -1,7 +1,7 @@
 import { ref, reactive } from 'vue';
 import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
-
+import * as tf from '@tensorflow/tfjs';
 
 export const useSimilarityMatrices = () => {
 
@@ -71,6 +71,20 @@ export const useSimilarityMatrices = () => {
             Object.assign(simi_grammar, response.data['simi-grammar'])
             Object.assign(simi_duplicate, response.data['simi-duplicate'])
             Object.assign(simi_biblio, response.data['simi-biblio'])
+            // evaluaute with individual model
+            try{
+              tf.loadLayersModel('indexeddb://user-specific-scoring-model').then((model) => {
+                const y_pred = model.predict(
+                  tf.tensor(response.data['features']).squeeze()
+                );
+                y_pred.arraySync().forEach((val, i) => {
+                  good_scores[i] = val[0]
+                });
+                if(debug_verbose.value){console.log("Local scoring model applied", good_scores);}
+              });
+            }catch{
+              if(debug_verbose.value){console.log("Cannot load model from IndexDB.");}
+            }
           }
           if(debug_verbose.value){console.log("Response (loadSimilarityMatrices): ", response)}
           resolve(response);
@@ -83,9 +97,10 @@ export const useSimilarityMatrices = () => {
           // compute stuff 
           simi_matrices_are_loading.value = false
           trigger_matrix_aggregation.value = true
-      });
+      });  
     });
   }
+
 
   return {
     sentences,
