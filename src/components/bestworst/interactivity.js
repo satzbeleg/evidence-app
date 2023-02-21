@@ -748,7 +748,6 @@ export const useInteractivity = () => {
           // read states and associated IDs from the 2nd last element
           let tmp2 = getNextToLast(bwsset['event-history']);
           let combostates = Object.values(tmp2['state']);
-          console.log(combostates)
           let stateids = Object.values(bwsset['state-sentid-map']);
           // if(debug_verbose.value){console.log("- Final State: ", combostates, stateids);}
           // Extract paired comparisons from BWS set

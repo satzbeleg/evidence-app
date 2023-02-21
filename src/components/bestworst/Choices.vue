@@ -1,6 +1,15 @@
 <template>
   <div>
-    <ItemCard 
+    <ItemCard v-for="(item, idx) in items" :key="idx"
+      v-bind:itemPos="idx.toString()"
+      v-bind:itemState="data.states[idx]"
+      v-bind:sentId="item.id"
+      v-bind:sentText="item.text"
+      v-bind:lemmaSpans="item.spans"
+      v-on:item-selected="onTransition"
+    />
+
+    <!-- <ItemCard 
       itemPos="0"
       v-bind:itemState="data.states[0]"
       v-bind:sentId="items[0].id"
@@ -34,7 +43,7 @@
       v-bind:sentText="items[3].text"
       v-bind:lemmaSpans="items[3].spans"
       v-on:item-selected="onTransition"
-    />
+    /> -->
 
     <div class="field is-grouped is-grouped-centered">  <!-- style="max-width: 400px;" -->
       <!-- Skip -->
@@ -82,8 +91,12 @@ export default defineComponent({
 
   setup(props, { emit }){
 
+    var init = [];
+    for (let i=0; i < 5; i++){
+      init.push(s.MIDDLE)
+    }
     const data = reactive({
-      states: [s.MIDDLE, s.MIDDLE, s.MIDDLE, s.MIDDLE],  // initial state?
+      states: init,  // initial state?
       history: []
     });
 
