@@ -92,7 +92,7 @@ export default defineComponent({
   setup(props, { emit }){
 
     var init = [];
-    for (let i=0; i < 5; i++){
+    for (let i=0; i < props.items.length; i++){
       init.push(s.MIDDLE)
     }
     const data = reactive({
