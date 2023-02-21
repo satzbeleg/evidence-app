@@ -32,17 +32,11 @@
         :key="idx"
       >
         <div class="card-content">
-          <div class="content center">
-            <!-- <div v-fit2box="item.text" class="fixed-box"> -->
-              <div v-html="highlightSpans(item.text, item.spans, 'span', 'tag is-success is-light is-rounded reset-to-parent-font-height')"></div>
-            <!-- </div> -->
-            </div>
-            <div class="content center">
-            <p class="is-size-7 has-text-grey is-italic">
-              w<sub>{{ item.id }}</sub>: {{ parseFloat(item.weight).toFixed(4) }} |
-              {{ item.bibl }}
-            </p>
-          </div>
+          <div v-html="highlightSpans(item.text, item.spans, 'span', 'tag is-success is-light is-rounded reset-to-parent-font-height')"></div>
+          <p class="is-size-7 has-text-grey is-italic">
+            w<sub>{{ item.id }}</sub>: {{ parseFloat(item.weight).toFixed(4) }} |
+            {{ item.bibl }}
+          </p>
         </div>
       </div>
 
