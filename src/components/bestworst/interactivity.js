@@ -847,13 +847,33 @@ export const useInteractivity = () => {
       return await tf.loadLayersModel(
         'indexeddb://user-specific-scoring-model');
     }catch{
-      if(debug_verbose){console.log("Load the baseline TFJS model from server")}
-      const model = await tf.loadLayersModel(
-        'https://tfjs-models-1.storage.googleapis.com/v0.4x-44-42-f32/model.json');
-      // store the baseline model as new personal/individual edge model
-      await model.save('indexeddb://user-specific-scoring-model');
+      const model = tf.sequential();
+      model.add(tf.layers.dense({
+        inputShape: [1181], 
+        units: 32, kernelInitializer: 'heNormal',
+        useBias: true, biasInitializer: 'zeros', biasRegularizer: tf.regularizers.l2({l2: 0.01}),
+        activation: 'swish', 
+      }));
+      model.add(tf.layers.dropout({
+        rate: 0.5
+      }));  // 0.5 to 0.8
+      model.add(tf.layers.dense({
+        units: 1, 
+        kernelInitializer: 'heNormal',
+        useBias: false, 
+        activation: 'sigmoid', 
+      }));
+      model.compile({optimizer: 'adagrad', loss: 'meanSquaredError'});
       return model;
     }
+    // }catch{
+    //   if(debug_verbose){console.log("Load the baseline TFJS model from server")}
+    //   const model = await tf.loadLayersModel(
+    //     'https://tfjs-models-1.storage.googleapis.com/v0.4x-44-42-f32/model.json');
+    //   // store the baseline model as new personal/individual edge model
+    //   await model.save('indexeddb://user-specific-scoring-model');
+    //   return model;
+    // }
   }; 
 
  
@@ -945,7 +965,7 @@ export const useInteractivity = () => {
           console.log("- (6b) Training losses (res.history.loss):", res.history.loss);
           // console.log("- Model after training:", model);
           // model.getWeights().forEach((wgt) => {console.log("- (6b) Model weights after training:", wgt.dataSync());})
-          let wgts2 = model.getWeights(); console.log("- (6b) Last bias weight after training:", wgts2[wgts2.length - 1].dataSync());
+          let wgts2 = model.getWeights(); console.log("- (6b) Last layer weightsafter training:", wgts2[wgts2.length - 1].dataSync());
           // console.groupEnd();
         }
       });
