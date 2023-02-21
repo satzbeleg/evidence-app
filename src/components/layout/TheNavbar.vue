@@ -71,6 +71,18 @@
             </router-link>
             <hr class="navbar-divider is-hidden-widescreen" />
 
+            <!-- <router-link class="navbar-item" :to="{ path: '/ranking-summary4' }">
+              <div class="media">
+                <span class="icon has-text-success"><i class="fas fa-list-alt"></i></span>
+                <div class="media-content">
+                  <strong>Ranking Overview</strong>
+                  <br />
+                  <small>sentences ranked with BWS v4</small>
+                </div>
+              </div>
+            </router-link>
+            <hr class="navbar-divider is-hidden-widescreen" /> -->
+
             <router-link class="navbar-item" :to="{ path: '/bestworst4' }">
               <div class="media">
                 <span class="icon has-text-success"><i class="fas fa-undo-alt"></i></span>
