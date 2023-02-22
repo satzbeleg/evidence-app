@@ -48,7 +48,7 @@
       <section class="modal-card-body" v-if="showModal">
         <!-- Content ... -->
         <!-- <div class="card" v-for="(item, idx) in getPoolData()" :key="idx"> -->
-        <div class="card" v-for="(item, idx) in pool" :key="idx">
+        <div class="card" v-for="(item, idx) in getPoolData()" :key="idx">
           <div class="card-content">
             <div class="column">
               <div class="columns is-mobile">
@@ -292,17 +292,9 @@ export default defineComponent({
     // Ranking overview modal
     const showModal = ref(false);
 
-    // watch(
-    //   () => showModal.value,
-    //   (show) => {
-    //     if (show){
-    //       const instance = getCurrentInstance();
-    //       instance?.proxy?.$forceUpdate();
-    //     }
-    // });
-
     const getPoolData = () => {
-      const arr = toRaw(pool);
+      const arr = Object.values(toRaw(pool));
+      console.log("ARR", arr)
       if (arr.length > 0){
         return arr.slice().sort((a, b) => {
           if (a.last_training_score < b.last_training_score){return 1;}
@@ -321,7 +313,7 @@ export default defineComponent({
       onSearchHeadword,
       message_suggestion,
       // fot the Ranking Overview modal
-      showModal, getPoolData, pool
+      showModal, getPoolData
     }
   },
 
