@@ -269,8 +269,11 @@ export const useInteractivity = () => {
   const updateCurrentPoolMetrics = (pool) => {
     Object.keys(pool).forEach(key => {
       // Number of times an item was displayed
-      pool[key]["num_displayed"] = pool[key].displayed.reduce(
-        (a,b) => Number(a) + Number(b), 0);
+      if( typeof pairs[key] === "undefined"){
+        pool[key]["num_displayed"]  = 0;
+      }else{
+        pool[key]["num_displayed"] = Object.values(pairs[key]).reduce((a,b) => Number(a) + Number(b), 0);
+      }
       // Last training score
       pool[key]["last_training_score"] = getLast(pool[key].training_score_history);
       // Last model score
