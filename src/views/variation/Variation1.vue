@@ -17,7 +17,11 @@
       <!-- <h1 class="title is-3">Find diverse sets of sentence examples</h1> -->
       <!-- <p></p> -->
 
-      <div class="field is-grouped is-grouped-centered" style="position: sticky; display: inline-block;"> 
+      <div 
+        class="field is-grouped is-grouped-centered" 
+        style="position: sticky; display: inline-block;"
+        v-if="sentenceExamples.length > 0"
+      > 
         <p class="control">
           <button class="button is-rounded is-info" 
                   v-on:click="showEditModal = true">
@@ -118,6 +122,7 @@
           </div>
         </div>
       </section>
+
       <footer class="modal-card-foot">
         <button class="button is-rounded is-danger is-light" 
                 v-on:click="() => {lambdaTradeOff = .25; betaSemantic = .5; betaGrammar = 0.; betaDuplicate = 0.; betaBiblio = 0.;}">
@@ -176,7 +181,7 @@ export default {
     const betaGrammar = ref(.0);
     const betaDuplicate = ref(.0);
     const betaBiblio = ref(.0);
-    const numExamples = ref(150)
+    const numExamples = ref(150); // !
 
     /* Load Data via Axios */
     const { 
