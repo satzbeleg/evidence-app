@@ -27,7 +27,7 @@ Please follow the instruction of the [deployment repository](https://github.com/
 
 ```bash
 cd $EVIDENCE_DEPLOY 
-docker-compose up --build dbauth dbeval dbeval-install mail api
+docker-compose up --build dbauth dbeval mail api
 ```
 
 ### Add a test account
@@ -66,6 +66,7 @@ Never expose secret keys or passwords as Vue environment variable because they a
 3) Start web server
 
 ```sh
+# export NODE_OPTIONS=--openssl-legacy-provider
 yarn serve --port 9090
 ```
 
