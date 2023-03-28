@@ -1,6 +1,7 @@
 import { reactive, ref } from 'vue';
 import { traverseObject } from '@/functions/traverse-objects.js';
 import { useApi2, useAuth } from '@/functions/axios-evidence.js';
+import router from '@/router';
 
 export const useQueue = () => {
   // UI-name
@@ -129,7 +130,7 @@ export const useQueue = () => {
   const saveEvaluations = () => {
     return new Promise((resolve, reject) => {
       isSaving.value = true;
-      const { getToken } = useAuth();
+      const { getToken, logout } = useAuth();
       const { api } = useApi2(getToken());
       api.post(`v1/bestworst/evaluations`, queueData.evaluated)
       .then(response => {
@@ -144,6 +145,11 @@ export const useQueue = () => {
         resolve(response);
       })
       .catch(error => {
+        if (error.response.status === 401) {
+          console.log("Unauthorized: ", error.response.data);
+          logout();
+          router.push('/auth/login');
+        }
         reject(error);
       })
       .finally(() => {

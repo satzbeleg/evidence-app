@@ -7,6 +7,7 @@ import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import * as tf from '@tensorflow/tfjs';
+import router from '@/router';
 
 
 const getLast = (arr) => {
@@ -434,7 +435,7 @@ export const useInteractivity = () => {
       // save data
       if (has_data_donation_consent.value){
         // load other functions and objects
-        const { getToken } = useAuth();
+        const { getToken, logout } = useAuth();
         const { api } = useApi2(getToken());
         // Start API request
         api.post(`v1/interactivity/deleted-episodes`, JSON.parse(JSON.stringify(deleted_pool)) )
@@ -446,6 +447,11 @@ export const useInteractivity = () => {
             resolve(response);
           })
           .catch(error => {
+            if (error.response.status === 401) {
+              console.log("Unauthorized: ", error.response.data);
+              logout();
+              router.push('/auth/login');
+            }
             if(debug_verbose.value){console.log("Error (saveDeletedPool): ", error)}
             reject(error);
           })
@@ -521,7 +527,7 @@ export const useInteractivity = () => {
         }
 
         // load API conn
-        const { getToken } = useAuth();
+        const { getToken, logout } = useAuth();
         const { api } = useApi2(getToken());
         // start AJAX call
         api.post(`v1/interactivity/training-examples/${num_additions}/${unref(item_sampling_numtop)}/${unref(item_sampling_offset)}`, params)
@@ -547,6 +553,11 @@ export const useInteractivity = () => {
             resolve(response);
           })
           .catch(error => {
+            if (error.response.status === 401) {
+              console.log("Unauthorized: ", error.response.data);
+              logout();
+              router.push('/auth/login');
+            }
             if(debug_verbose.value){console.log("Error (addExamplesToPool): ", error)}
             reject(error);
           })

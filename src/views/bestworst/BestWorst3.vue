@@ -43,7 +43,7 @@ import { useI18n } from 'vue-i18n';
 import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useQueue } from '@/components/bestworst/queue.js';
-
+import router from '@/router';
 
 export default defineComponent({
   name: "BestWorst3",
@@ -107,7 +107,7 @@ export default defineComponent({
           }
         }
         // load other functions and objects
-        const { getToken } = useAuth();
+        const { getToken, logout } = useAuth();
         const { api } = useApi2(getToken());
         // start API request
         message_suggestion.value = "Loading new example sets ...";
@@ -125,6 +125,11 @@ export default defineComponent({
           resolve(response);
         })
         .catch(error => {
+          if (error.response.status === 401) {
+            console.log("Unauthorized: ", error.response.data);
+            logout();
+            router.push('/auth/login');
+          }
           // message to user
           message_suggestion.value = "Unknown Error!";
           reject(error);

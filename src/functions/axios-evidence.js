@@ -100,7 +100,7 @@ export const useAuth = () => {
         .then(resp => {
           authStatus.value = 'success'; // save JWT token in Cookie and axios
           jwtToken.value = resp.data.access_token;
-          Cookies.set('auth_token', resp.data.access_token, { expires: 7, sameSite: 'strict' }); //{ secure: true }
+          Cookies.set('auth_token', resp.data.access_token, { expires: 0.67, sameSite: 'strict' }); //{ secure: true }
           //api.defaults.headers.common['Authorization'] = resp.data.access_token;
           resolve(resp);
         })

@@ -2,6 +2,7 @@ import { ref, reactive } from 'vue';
 import { useApi2, useAuth } from '@/functions/axios-evidence.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import * as tf from '@tensorflow/tfjs';
+import router from '@/router';
 
 export const useSimilarityMatrices = () => {
 
@@ -56,7 +57,7 @@ export const useSimilarityMatrices = () => {
         "limit": limit,
       }
       // load API conn
-      const { getToken } = useAuth();
+      const { getToken, logout } = useAuth();
       const { api } = useApi2(getToken());
       // start AJAX call
       api.post(`v1/variation/similarity-matrices`, params)
@@ -90,6 +91,11 @@ export const useSimilarityMatrices = () => {
           resolve(response);
         })
         .catch(error => {
+          if (error.response.status === 401) {
+            console.log("Unauthorized: ", error.response.data);
+            logout();
+            router.push('/auth/login');
+          }
           if(debug_verbose.value){console.log("Error (loadSimilarityMatrices): ", error)}
           reject(error);
         })
