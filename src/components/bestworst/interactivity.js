@@ -1,4 +1,4 @@
-import { reactive, ref, watch, unref } from 'vue';
+import { reactive, ref, watch } from 'vue';
 import { sampling, counting, ranking } from 'bwsample';
 import { histpdf } from 'histpdf';
 import { useApi2, useAuth } from '@/functions/axios-evidence.js';
@@ -8,6 +8,8 @@ import { useQueue } from '@/components/bestworst/queue.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import * as tf from '@tensorflow/tfjs';
 import router from '@/router';
+import { int2float } from '@/components/bestworst/transform.js';
+
 
 
 const getLast = (arr) => {
@@ -522,27 +524,48 @@ export const useInteractivity = () => {
         // settings
         var params = {
           "headword": headword.trim(),
+          "limit": num_additions,
           //"exclude_deleted_ids": true,
-          "max_displays": max_displays.value,
+          // "max_displays": max_displays.value,
         }
 
         // load API conn
         const { getToken, logout } = useAuth();
         const { api } = useApi2(getToken());
+
+        // removed: num_additions, item_sampling_numtop, item_sampling_offset
+
         // start AJAX call
-        api.post(`v1/interactivity/training-examples/${num_additions}/${unref(item_sampling_numtop)}/${unref(item_sampling_offset)}`, params)
+        api.post(`v1/serialized-features/`, params)
           .then(response => {
             if ('msg' in response.data){
               error_message.value = response.data['msg'];
             } else {
-              response.data.forEach(row => {
+              response.data.examples.forEach(row => {
                 pool[row.example_id] = {
                   "example_id": row.example_id,
-                  "text": row.text,
+                  "text": row.sentence,
                   "headword": row.headword,
-                  "spans": row.spans,
-                  "context": row.context,
-                  "features": row.features,
+                  "spans": JSON.parse(row.spans),
+                  "context": {
+                    "license": row.license,
+                    "biblio": row.biblio,
+                    "sentence_id": row.sentence_id
+                  },
+                  "features": int2float(
+                    row.feats1,
+                    row.feats2,
+                    row.feats3,
+                    row.feats4,
+                    row.feats5,
+                    row.feats6,
+                    row.feats7,
+                    row.feats8,
+                    row.feats9,
+                    row.feats12,
+                    row.feats13,
+                    row.feats14,
+                  ),
                   "training_score_history": [undefined],
                   "model_score_history": [row.score],
                   "displayed": [false]
