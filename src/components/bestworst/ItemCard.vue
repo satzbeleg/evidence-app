@@ -1,15 +1,21 @@
 <template>
-  <a v-on:click="onClick">
-    <div class="card is-quarter" v-bind:id="sentId" :class="stateCss">
-      <div class="card-content">
-        <div class="content center">
-          <div v-fit2box="sentText" class="fixed-box">
+  <div class="card" v-bind:id="sentId" :class="stateCss">
+    <div class="flex-container">
+
+      <div class="flex-left fit2box-height" v-on:click="onClick">
+        <div class="fit2box-center" >
+          <div v-fit2box="sentText" class="fit2box-padding fit2box-height">
             <div v-html="highlightSpans(sentText, lemmaSpans, 'span', 'tag is-success is-light is-rounded reset-to-parent-font-height')"></div>
           </div>
         </div>
       </div>
+
+      <div class="flex-right" v-on:click="onMenu">
+        <span class="icon"><i class="fas fa-ellipsis-v"></i></span>
+      </div>
+
     </div>
-  </a>
+  </div>
 </template>
 
 
@@ -46,7 +52,11 @@ export default defineComponent({
       }
     });
 
-    return { onClick, stateCss, highlightSpans }
+    async function onMenu(evt){
+      console.log("OPEN Menu!", evt)
+    }
+
+    return { onClick, stateCss, highlightSpans, onMenu }
   },
 
 });
@@ -60,21 +70,38 @@ export default defineComponent({
   /*max-width: 400px;*/
 }
 
-.center {
-  margin: 0;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  -ms-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
-  text-align: center;
-  width: 90%;
+.flex-container {
+  /* background-color: red; */
+  /* padding: 3px; */
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
 }
 
-.fixed-box {
-  padding-top: min(2vh, 25px); /* min(3vh, 25px); */
+.flex-left {
+  /* background-color: green; */
+  order: 1;
+  flex-grow: 10;
+}
+
+.flex-right {
+  /* background-color: yellow; */
+  padding: 6px 3px 0px 12px;
+  text-align: right;
+  order: 2;
+  flex-shrink: 10;
+}
+
+.fit2box-center {
+  text-align: center;
+  /* width: 96%; */
+  /* padding-left: 2%; */
+}
+.fit2box-height {
   height: 15vh; /* min(17vh, 180px); */
-  /* max-width: 400px; */
+}
+.fit2box-padding {
+  padding-top: min(2vh, 25px); /* min(3vh, 25px); */
 }
 
 
@@ -86,9 +113,7 @@ export default defineComponent({
 .state-worst {
   background: #ff8a65;  /** ff8a65 */
 }
-</style>
 
-<style>
 /** For lemma spans; Must be global setting...*/
 .reset-to-parent-font-height {
   font-size: inherit !important;
