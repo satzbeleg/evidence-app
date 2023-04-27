@@ -80,6 +80,7 @@ export default defineComponent({
 
 .flex-left {
   /* background-color: green; */
+  padding: 3px;
   order: 1;
   flex-grow: 10;
 }
