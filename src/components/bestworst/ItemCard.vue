@@ -80,7 +80,7 @@ export default defineComponent({
 
 .flex-left {
   /* background-color: green; */
-  padding: 3px;
+  /* padding: 3px; */
   order: 1;
   flex-grow: 10;
 }
@@ -95,8 +95,8 @@ export default defineComponent({
 
 .fit2box-center {
   text-align: center;
-  /* width: 96%; */
-  /* padding-left: 2%; */
+  width: 96%;
+  padding-left: 2%;
 }
 .fit2box-height {
   height: 15vh; /* min(17vh, 180px); */
