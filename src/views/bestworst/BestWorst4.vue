@@ -27,6 +27,37 @@
           v-on:ranking-done="nextExampleSet"
           :key="queueData.counter"
         />
+        <!-- progress in Zahlen -->
+        <br/>
+        <p class="has-text-right is-size-6 has-text-grey is-italic">
+          <output>
+            {{ queueData.counter }}
+          </output>
+          sets ranked or skipped so far.
+          <br/>
+          <output>
+            {{ queueData.queue.length }}
+          </output>
+          sets loaded and left to rank.
+          <br/>
+          <output>
+            {{ currentPoolSize }}
+          </output>
+          sentence examples available.
+        </p>
+        <br/>
+        <!-- Info Message -->
+        <h6 class="title is-6">Bedienungshinweise</h6>
+        <p class="is-size-6 has-text-grey is-italic">
+          <ol>
+            <li>Wähle zuerst den schlechtesten Satzbeleg aus (orange) und danach den besten Satzbeleg (blau).</li>
+            <li>Um die Entscheidund zu revidieren, klicke auf den zuletzt angekickten Satzbeleg.</li>
+            <li>Klicke auf den grünen OK-Button, um die Bewertung zu speichern und fortzufahren.</li>
+            <li>Klicke auf den gelben Skip-Button, um die Bewertung zu überspringen und fortzufahren.</li>
+            <li>Klicken auf den blauen Button "Ranking Overview", um alle Satzbelege mit den trainierten Modellscores zu sehen.</li>
+          </ol>
+          <!-- First choose the worst sentence example (orange), and then the best sentence example (blue). -->
+        </p>
       </template>
       <template v-else>
         <PageLoader 
@@ -42,11 +73,24 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Current Rankings</p>
+        <p class="modal-card-title">Current Rankings & Model Scores</p>
         <button class="delete" aria-label="close" v-on:click="showModal = false"></button>
       </header>
       <section class="modal-card-body" v-if="showModal">
         <!-- Content ... -->
+        <div class="card">
+          <div class="card-content">
+            <h6 class="title is-6">Hinweise</h6>
+          <p class="is-size-6 has-text-grey is-italic">
+            In den Karten sind rechts folgende Informationen zu sehen:
+            <ul>
+              <li>Die Anzahl der expliziten oder impliziten Bewertungen, z.B. "3x".</li>
+              <li>Die Satzbelege sind nach den Trainingscores sortiert, die sich direkt aus Ihren BWS-Rankings ergeben; in den Karten steht bspw. "76.4 (r)" (von 0 bis 100 mit "r" in Klammern).</li>
+              <li>Im Hintergrund wird in Echtzeit ein individuelles Machine-Learning Prognosemodell trainiert; die Modellscores werden bspw. als "56.7 (m)" angezeigt (von 0 bis 100 mit "m" in Klammern).</li>
+            </ul>
+          </p>
+        </div>
+        </div>
         <!-- <div class="card" v-for="(item, idx) in getPoolData()" :key="idx"> -->
         <div class="card" v-for="(item, idx) in getPoolData()" :key="idx">
           <div class="card-content">
@@ -80,7 +124,7 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst/Choices.vue';
-import { defineComponent, watchEffect, watch, ref, toRaw } from 'vue'; // unref, watch, computed
+import { defineComponent, watchEffect, watch, ref, toRaw, computed } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
@@ -307,13 +351,17 @@ export default defineComponent({
       return arr
     }
 
+    const currentPoolSize = computed(() => {
+      return Object.keys(pool).length
+    })
+
     return { 
       queueData, 
       nextExampleSet,
       onSearchHeadword,
       message_suggestion,
       // fot the Ranking Overview modal
-      showModal, getPoolData
+      showModal, getPoolData, currentPoolSize
     }
   },
 
