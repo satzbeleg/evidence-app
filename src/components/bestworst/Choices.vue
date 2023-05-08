@@ -84,18 +84,18 @@ export default defineComponent({
       // set new state
       if(itemState === s.MIDDLE){  // the previous state was MIDDLE
         if(data.states.every((x) => x === s.MIDDLE)){ // are we still in the initial state? (i.e. all are MIDDLE)
-          data.states[itemPos] = s.BEST;  // not safe
-          logStates(evt);
-        }else if( data.states.some((x) => x === s.BEST) 
-               && !data.states.some((x) => x === s.WORST) ){  // BEST has been selected, but not WORST 
           data.states[itemPos] = s.WORST;  // not safe
           logStates(evt);
+        }else if( data.states.some((x) => x === s.WORST) 
+               && !data.states.some((x) => x === s.BEST) ){  // WORST has been selected, but not BEST 
+          data.states[itemPos] = s.BEST;  // not safe
+          logStates(evt);
         }
-      }else if( itemState === s.BEST
-             && !data.states.some((x) => x === s.WORST) ){  // UNDO 1
+      }else if( itemState === s.WORST
+             && !data.states.some((x) => x === s.BEST) ){  // UNDO 1
         data.states[itemPos] = s.MIDDLE
         logStates(evt);
-      }else if( itemState === s.WORST ){  // UNDO 2
+      }else if( itemState === s.BEST ){  // UNDO 2
         data.states[itemPos] = s.MIDDLE
         logStates(evt);
       }
@@ -120,7 +120,7 @@ export default defineComponent({
     }
 
     const isFinalState = computed(() => {  // damit der Submit/Ok Button auftaucht
-      return data.states.some((x) => x === s.WORST)
+      return data.states.some((x) => x === s.BEST)
     });
 
     return { data, logStates, onTransition, onSubmit, onAbort, isFinalState }
