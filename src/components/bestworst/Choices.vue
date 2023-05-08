@@ -3,7 +3,7 @@
     <ItemCard v-for="(item, idx) in items" :key="idx"
       v-bind:itemPos="idx.toString()"
       v-bind:itemState="data.states[idx]"
-      v-bind:sentId="item.id"
+      v-bind:exampleId="item.example_id"
       v-bind:sentText="item.text"
       v-bind:lemmaSpans="item.spans"
       v-on:item-selected="onTransition"
@@ -44,7 +44,7 @@
       v-bind:lemmaSpans="items[3].spans"
       v-on:item-selected="onTransition"
     /> -->
-
+    
     <div class="field is-grouped is-grouped-centered">  <!-- style="max-width: 400px;" -->
       <!-- Skip -->
       <p class="control">

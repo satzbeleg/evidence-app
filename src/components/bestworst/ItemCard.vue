@@ -1,5 +1,5 @@
 <template>
-  <div class="card" v-bind:id="sentId" :class="stateCss">
+  <div class="card" v-bind:id="exampleId" :class="stateCss">
     <div class="flex-container">
 
       <div class="flex-left fit2box-height" v-on:click="onClick">
@@ -30,7 +30,7 @@ export default defineComponent({
   props: {
     itemPos: String, // item's position 
     itemState: Number, // item's states: [middle, best, worst]
-    sentId: String, // SentenceID
+    exampleId: String, // exampleID for (lemma, sentence)
     sentText: String,  // SentenceText
     lemmaSpans: Array
   },
@@ -53,7 +53,8 @@ export default defineComponent({
     });
 
     async function onMenu(evt){
-      console.log("OPEN Menu!", evt)
+      emit('open-modal-example-id', evt, props.exampleId)
+      console.info("[INFO] Item.vue: ", "Open Modal", props.exampleId);
     }
 
     return { onClick, stateCss, highlightSpans, onMenu }
