@@ -22,6 +22,30 @@
                   v-bind:max="maxprogress">
           {{ queueData.queue.length }}
         </progress>
+        <!-- progress in Zahlen -->
+        <p class="has-text-right is-size-6 has-text-grey is-italic">
+          <output>
+            {{ queueData.counter }}
+          </output>
+          sets ranked or skipped so far.
+          <br/>
+          <output>
+            {{ queueData.queue.length }}
+          </output>
+          sets loaded and left to rank.
+        </p>
+        <br/>
+        <!-- Info Message -->
+        <h6 class="title is-6">Bedienungshinweise</h6>
+        <p class="is-size-6 has-text-grey is-italic">
+          <ol>
+            <li>Wähle zuerst den schlechtesten Satzbeleg aus (orange) und danach den besten Satzbeleg (blau).</li>
+            <li>Um die Entscheidund zu revidieren, klicke auf den zuletzt angekickten Satzbeleg.</li>
+            <li>Klicke auf den grünen OK-Button, um die Bewertung zu speichern und fortzufahren.</li>
+            <li>Klicke auf den gelben Skip-Button, um die Bewertung zu überspringen und fortzufahren.</li>
+          </ol>
+          <!-- First choose the worst sentence example (orange), and then the best sentence example (blue). -->
+        </p>
       </template>
       <template v-else>
         <PageLoader 

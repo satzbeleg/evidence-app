@@ -13,7 +13,7 @@
       <div class="field is-grouped is-grouped-centered" style="position: sticky; display: inline-block;"> 
         <p class="control">
           <button class="button is-rounded is-info" 
-                  v-on:click="showModal = true">
+                  v-on:click="showModalOverview = true">
             <span class="icon"><i class="fas fa-filter"></i></span>
             <strong>Ranking Overview</strong>
           </button>
@@ -26,7 +26,39 @@
           v-bind:items="queueData.current"
           v-on:ranking-done="nextExampleSet"
           :key="queueData.counter"
+          v-bind:hasInfoModal="true"
         />
+        <!-- progress in Zahlen -->
+        <br/>
+        <p class="has-text-right is-size-6 has-text-grey is-italic">
+          <output>
+            {{ queueData.counter }}
+          </output>
+          sets ranked or skipped so far.
+          <br/>
+          <output>
+            {{ queueData.queue.length }}
+          </output>
+          sets loaded and left to rank.
+          <br/>
+          <output>
+            {{ currentPoolSize }}
+          </output>
+          sentence examples available.
+        </p>
+        <br/>
+        <!-- Info Message -->
+        <h6 class="title is-6">Bedienungshinweise</h6>
+        <p class="is-size-6 has-text-grey is-italic">
+          <ol>
+            <li>Wähle zuerst den schlechtesten Satzbeleg aus (orange) und danach den besten Satzbeleg (blau).</li>
+            <li>Um die Entscheidund zu revidieren, klicke auf den zuletzt angekickten Satzbeleg.</li>
+            <li>Klicke auf den grünen OK-Button, um die Bewertung zu speichern und fortzufahren.</li>
+            <li>Klicke auf den gelben Skip-Button, um die Bewertung zu überspringen und fortzufahren.</li>
+            <li>Klicken auf den blauen Button "Ranking Overview", um alle Satzbelege mit den trainierten Modellscores zu sehen.</li>
+          </ol>
+          <!-- First choose the worst sentence example (orange), and then the best sentence example (blue). -->
+        </p>
       </template>
       <template v-else>
         <PageLoader 
@@ -37,40 +69,11 @@
     </div>
   </section>
 
-
-  <div class="modal" :class="{ 'is-active': showModal }">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Current Rankings</p>
-        <button class="delete" aria-label="close" v-on:click="showModal = false"></button>
-      </header>
-      <section class="modal-card-body" v-if="showModal">
-        <!-- Content ... -->
-        <!-- <div class="card" v-for="(item, idx) in getPoolData()" :key="idx"> -->
-        <div class="card" v-for="(item, idx) in getPoolData()" :key="idx">
-          <div class="card-content">
-            <div class="column">
-              <div class="columns is-mobile">
-                <div class="column is-10">
-                  <p>{{ item.text }}</p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ item.context.biblio }} </p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ item.context.license }} </p>
-                </div>
-                <div class="column">
-                  <p class="is-size-7 has-text-grey is-italic"> {{ item.num_displayed }} x</p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_training_score * 100.).toFixed(1) }} (r)</p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_model_score * 100.).toFixed(1) }} (m)</p> 
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <!-- Content ... -->
-      </section>
-    </div>
-  </div>
+  <ModalRankingOverview 
+    v-bind:showModalOverview="showModalOverview" 
+    v-bind:pool="pool"
+    @close="showModalOverview = false"
+  />
 
 
 </template>
@@ -80,7 +83,7 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst/Choices.vue';
-import { defineComponent, watchEffect, watch, ref, toRaw } from 'vue'; // unref, watch, computed
+import { defineComponent, watchEffect, watch, ref, computed } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
@@ -90,6 +93,7 @@ import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { v4 as uuid4 } from 'uuid';
+import ModalRankingOverview from '@/components/bestworst/ModalRankingOverview.vue';
 
 
 export default defineComponent({
@@ -98,7 +102,8 @@ export default defineComponent({
   components: {
     TheNavbar,
     PageLoader,
-    BestWorstChoices
+    BestWorstChoices,
+    ModalRankingOverview
   },
 
   setup(){
@@ -193,7 +198,8 @@ export default defineComponent({
               examples.push({
                 "id": key,
                 "text": pool[key].text,
-                "spans": pool[key].span
+                "spans": pool[key].span,
+                "all_meta": pool[key],
               });
             });
             queueData.queue.push({
@@ -289,31 +295,22 @@ export default defineComponent({
     });
 
 
-    // Ranking overview modal
-    const showModal = ref(false);
+    const currentPoolSize = computed(() => {
+      return Object.keys(pool).length
+    })
 
-    const getPoolData = () => {
-      const arr = Object.values(toRaw(pool));
-      console.log("ARR", arr)
-      if (arr.length > 0){
-        return arr.slice().sort((a, b) => {
-          if (a.last_training_score < b.last_training_score){return 1;}
-          else if (a.last_training_score > b.last_training_score){return -1;}
-          else if (a.last_model_score < b.last_model_score){return 1;}
-          else if (a.last_model_score > b.last_model_score){return -1;}
-          return 0;
-        })
-      }
-      return arr
-    }
+    // Ranking overview modal
+    const showModalOverview = ref(false);
+
 
     return { 
       queueData, 
       nextExampleSet,
       onSearchHeadword,
       message_suggestion,
+      currentPoolSize,
       // fot the Ranking Overview modal
-      showModal, getPoolData
+      showModalOverview, pool, 
     }
   },
 

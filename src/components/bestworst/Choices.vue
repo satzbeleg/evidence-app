@@ -3,47 +3,13 @@
     <ItemCard v-for="(item, idx) in items" :key="idx"
       v-bind:itemPos="idx.toString()"
       v-bind:itemState="data.states[idx]"
-      v-bind:sentId="item.id"
+      v-bind:exampleId="item.example_id"
       v-bind:sentText="item.text"
       v-bind:lemmaSpans="item.spans"
       v-on:item-selected="onTransition"
+      v-bind:hasInfoModal="hasInfoModal"
+      v-bind:exampleMeta="item.all_meta"
     />
-
-    <!-- <ItemCard 
-      itemPos="0"
-      v-bind:itemState="data.states[0]"
-      v-bind:sentId="items[0].id"
-      v-bind:sentText="items[0].text"
-      v-bind:lemmaSpans="items[0].spans"
-      v-on:item-selected="onTransition"
-    />
-
-    <ItemCard 
-      itemPos="1"
-      v-bind:itemState="data.states[1]"
-      v-bind:sentId="items[1].id"
-      v-bind:sentText="items[1].text"
-      v-bind:lemmaSpans="items[1].spans"
-      v-on:item-selected="onTransition"
-    />
-
-    <ItemCard 
-      itemPos="2"
-      v-bind:itemState="data.states[2]"
-      v-bind:sentId="items[2].id"
-      v-bind:sentText="items[2].text"
-      v-bind:lemmaSpans="items[2].spans"
-      v-on:item-selected="onTransition"
-    />
-
-    <ItemCard 
-      itemPos="3"
-      v-bind:itemState="data.states[3]"
-      v-bind:sentId="items[3].id"
-      v-bind:sentText="items[3].text"
-      v-bind:lemmaSpans="items[3].spans"
-      v-on:item-selected="onTransition"
-    /> -->
 
     <div class="field is-grouped is-grouped-centered">  <!-- style="max-width: 400px;" -->
       <!-- Skip -->
@@ -84,6 +50,11 @@ export default defineComponent({
     items: {
       type: Array,
       required: true
+    },
+    hasInfoModal: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 
@@ -120,18 +91,18 @@ export default defineComponent({
       // set new state
       if(itemState === s.MIDDLE){  // the previous state was MIDDLE
         if(data.states.every((x) => x === s.MIDDLE)){ // are we still in the initial state? (i.e. all are MIDDLE)
-          data.states[itemPos] = s.BEST;  // not safe
-          logStates(evt);
-        }else if( data.states.some((x) => x === s.BEST) 
-               && !data.states.some((x) => x === s.WORST) ){  // BEST has been selected, but not WORST 
           data.states[itemPos] = s.WORST;  // not safe
           logStates(evt);
+        }else if( data.states.some((x) => x === s.WORST) 
+               && !data.states.some((x) => x === s.BEST) ){  // WORST has been selected, but not BEST 
+          data.states[itemPos] = s.BEST;  // not safe
+          logStates(evt);
         }
-      }else if( itemState === s.BEST
-             && !data.states.some((x) => x === s.WORST) ){  // UNDO 1
+      }else if( itemState === s.WORST
+             && !data.states.some((x) => x === s.BEST) ){  // UNDO 1
         data.states[itemPos] = s.MIDDLE
         logStates(evt);
-      }else if( itemState === s.WORST ){  // UNDO 2
+      }else if( itemState === s.BEST ){  // UNDO 2
         data.states[itemPos] = s.MIDDLE
         logStates(evt);
       }
@@ -156,7 +127,7 @@ export default defineComponent({
     }
 
     const isFinalState = computed(() => {  // damit der Submit/Ok Button auftaucht
-      return data.states.some((x) => x === s.WORST)
+      return data.states.some((x) => x === s.BEST)
     });
 
     return { data, logStates, onTransition, onSubmit, onAbort, isFinalState }
