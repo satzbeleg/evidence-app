@@ -26,6 +26,7 @@
           v-bind:items="queueData.current"
           v-on:ranking-done="nextExampleSet"
           :key="queueData.counter"
+          v-bind:hasInfoModal="true"
         />
         <!-- progress in Zahlen -->
         <br/>
@@ -197,7 +198,8 @@ export default defineComponent({
               examples.push({
                 "id": key,
                 "text": pool[key].text,
-                "spans": pool[key].span
+                "spans": pool[key].span,
+                "all_meta": pool[key],
               });
             });
             queueData.queue.push({

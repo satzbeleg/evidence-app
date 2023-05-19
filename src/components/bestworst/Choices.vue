@@ -7,6 +7,8 @@
       v-bind:sentText="item.text"
       v-bind:lemmaSpans="item.spans"
       v-on:item-selected="onTransition"
+      v-bind:hasInfoModal="hasInfoModal"
+      v-bind:exampleMeta="item.all_meta"
     />
 
     <div class="field is-grouped is-grouped-centered">  <!-- style="max-width: 400px;" -->
@@ -48,6 +50,11 @@ export default defineComponent({
     items: {
       type: Array,
       required: true
+    },
+    hasInfoModal: {
+      type: Boolean,
+      required: false,
+      default: false
     }
   },
 
