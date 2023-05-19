@@ -13,7 +13,7 @@
       <div class="field is-grouped is-grouped-centered" style="position: sticky; display: inline-block;"> 
         <p class="control">
           <button class="button is-rounded is-info" 
-                  v-on:click="showModal = true">
+                  v-on:click="showModalOverview = true">
             <span class="icon"><i class="fas fa-filter"></i></span>
             <strong>Ranking Overview</strong>
           </button>
@@ -68,53 +68,11 @@
     </div>
   </section>
 
-
-  <div class="modal" :class="{ 'is-active': showModal }">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Current Rankings & Model Scores</p>
-        <button class="delete" aria-label="close" v-on:click="showModal = false"></button>
-      </header>
-      <section class="modal-card-body" v-if="showModal">
-        <!-- Content ... -->
-        <div class="card">
-          <div class="card-content">
-            <h6 class="title is-6">Hinweise</h6>
-          <p class="is-size-6 has-text-grey is-italic">
-            In den Karten sind rechts folgende Informationen zu sehen:
-            <ul>
-              <li>Die Anzahl der expliziten oder impliziten Bewertungen, z.B. "3x".</li>
-              <li>Die Satzbelege sind nach den Trainingscores sortiert, die sich direkt aus Ihren BWS-Rankings ergeben; in den Karten steht bspw. "76.4 (r)" (von 0 bis 100 mit "r" in Klammern).</li>
-              <li>Im Hintergrund wird in Echtzeit ein individuelles Machine-Learning Prognosemodell trainiert; die Modellscores werden bspw. als "56.7 (m)" angezeigt (von 0 bis 100 mit "m" in Klammern).</li>
-            </ul>
-          </p>
-        </div>
-        </div>
-        <!-- <div class="card" v-for="(item, idx) in getPoolData()" :key="idx"> -->
-        <div class="card" v-for="(item, idx) in getPoolData()" :key="idx">
-          <div class="card-content">
-            <div class="column">
-              <div class="columns is-mobile">
-                <div class="column is-10">
-                  <p>{{ item.text }}</p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ item.context.biblio }} </p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ item.context.license }} </p>
-                </div>
-                <div class="column">
-                  <p class="is-size-7 has-text-grey is-italic"> {{ item.num_displayed }} x</p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_training_score * 100.).toFixed(1) }} (r)</p>
-                  <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_model_score * 100.).toFixed(1) }} (m)</p> 
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-        <!-- Content ... -->
-      </section>
-    </div>
-  </div>
+  <ModalRankingOverview 
+    v-bind:showModalOverview="showModalOverview" 
+    v-bind:pool="pool"
+    @close="showModalOverview = false"
+  />
 
 
 </template>
@@ -124,7 +82,7 @@
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import PageLoader from '@/components/layout/PageLoader.vue';
 import BestWorstChoices from '@/components/bestworst/Choices.vue';
-import { defineComponent, watchEffect, watch, ref, toRaw, computed } from 'vue'; // unref, watch, computed
+import { defineComponent, watchEffect, watch, ref, computed } from 'vue'; // unref, watch, computed
 import { useI18n } from 'vue-i18n';
 //import { useApi, useAuth } from '@/functions/axios-evidence.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
@@ -134,6 +92,7 @@ import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { v4 as uuid4 } from 'uuid';
+import ModalRankingOverview from '@/components/bestworst/ModalRankingOverview.vue';
 
 
 export default defineComponent({
@@ -142,7 +101,8 @@ export default defineComponent({
   components: {
     TheNavbar,
     PageLoader,
-    BestWorstChoices
+    BestWorstChoices,
+    ModalRankingOverview
   },
 
   setup(){
@@ -333,35 +293,22 @@ export default defineComponent({
     });
 
 
-    // Ranking overview modal
-    const showModal = ref(false);
-
-    const getPoolData = () => {
-      const arr = Object.values(toRaw(pool));
-      console.log("ARR", arr)
-      if (arr.length > 0){
-        return arr.slice().sort((a, b) => {
-          if (a.last_training_score < b.last_training_score){return 1;}
-          else if (a.last_training_score > b.last_training_score){return -1;}
-          else if (a.last_model_score < b.last_model_score){return 1;}
-          else if (a.last_model_score > b.last_model_score){return -1;}
-          return 0;
-        })
-      }
-      return arr
-    }
-
     const currentPoolSize = computed(() => {
       return Object.keys(pool).length
     })
+
+    // Ranking overview modal
+    const showModalOverview = ref(false);
+
 
     return { 
       queueData, 
       nextExampleSet,
       onSearchHeadword,
       message_suggestion,
+      currentPoolSize,
       // fot the Ranking Overview modal
-      showModal, getPoolData, currentPoolSize
+      showModalOverview, pool, 
     }
   },
 
