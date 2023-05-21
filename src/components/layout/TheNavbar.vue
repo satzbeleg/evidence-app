@@ -44,7 +44,7 @@
         <router-link class="navbar-item" :to="{ path: '/bestworst4' }">
           <span class="icon has-text-primary"><i class="fa-solid fa-ranking-star"></i></span>
           <span>
-            Beleggüte
+            {{ t('menu.bestworst')  }}
           </span>
         </router-link>
 
@@ -52,7 +52,7 @@
         <router-link class="navbar-item" :to="{ path: '/variation1' }">
           <span class="icon has-text-link"><i class="fa-solid fa-magnifying-glass"></i></span>
           <span>
-            Belegvariationen
+            {{ t('menu.variation')  }}
           </span>
         </router-link>
 

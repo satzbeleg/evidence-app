@@ -44,16 +44,16 @@
     }
   },
   "bestworst": {
-    "title": "BWS Ranking"
+    "title": "Best Worst Scaling",
+    "help_short": "Wähle das beste & schlechteste von vier Beispielen",
+    "help_long": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle noch das schlechteste Satzbeispiel aus."
   },
   "variation": {
     "title": "Belegvariation"
   },
   "menu": {
-    "evaluate": "Bewerten",
-    "bestworst3": "Best-Worst Scaling",
-    "bestworst3_text": "Wähle das beste & schlechteste von vier Beispielen",
-    "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle noch das schlechteste Satzbeispiel aus."
+    "bestworst": "Beleggüte",
+    "variation": "Belegvariation"
   },
   "about": {
     "title": "Über das EVIDENCE Projekt",
