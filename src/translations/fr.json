@@ -38,13 +38,16 @@
     "darkmode": "Mode sombre"
   },
   "bestworst": {
-    "title": "Échelle de différence maximale"
+    "title": "Échelle de différence maximale",
+    "help_short": "Choisis le meilleur exemple et le pire parmi les quatre qui te sont proposés.",
+    "help_long": "Quatre exemples sont affichés. Commence par cliquer sur le meilleur et clique ensuite sur le pire."
+  },
+  "variation": {
+    "title": "Variante de sentence"
   },
   "menu": {
-    "evaluate": "Évaluation",
-    "bestworst3": "Échelle de différence maximale",
-    "bestworst3_text": "Choisis le meilleur exemple et le pire parmi les quatre qui te sont proposés.",
-    "bestworst3_text2": "Quatre exemples sont affichés. Commence par cliquer sur le meilleur et clique ensuite sur le pire."
+    "bestworst": "Classement",
+    "variation": "Variation"
   },
   "about": {
     "title": "À propos du projet EVIDENCE",

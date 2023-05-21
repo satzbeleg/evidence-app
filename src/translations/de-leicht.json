@@ -38,16 +38,17 @@
     "darkmode": "Dunkler Modus"
   },
   "bestworst": {
-    "title": "BWS Ranking"
+    "title": "BWS Ranking",
+    "help_short": "Wähle das beste & schlechteste von vier Beispielen",
+    "help_long": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle das schlechteste Satzbeispiel aus."
   },
   "variation": {
-    "title": "Unterschiedliche Sätze"
+    "title": "Unterschiedliche Sätze",
+    "help_long": "Suche nach Satzbelegen mit bestimmten Eigenschaften."
   },
   "menu": {
-    "evaluate": "Bewerten",
-    "bestworst3": "Best-Worst Scaling",
-    "bestworst3_text": "Wähle das beste & schlechteste von vier Beispielen",
-    "bestworst3_text2": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle das schlechteste Satzbeispiel aus."
+    "bestworst": "Beleggüte",
+    "variation": "Belegvariation"
   },
   "about": {
     "title": "Über das EVIDENCE Projekt",

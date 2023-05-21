@@ -44,16 +44,17 @@
     }
   },
   "bestworst": {
-    "title": "Best Worst Scaling"
+    "title": "Best Worst Scaling",
+    "help_short": "Select the best and worst out of four examples",
+    "help_long": "4 sentence examples are displayed. First mark the best sentence example. Finally, select the worst sentence example."
   },
   "variation": {
-    "title": "Sentence Variations"
+    "title": "Sentence Variations",
+    "help_long": "Search for sentence examples for a keyword and filter how much the sentences should differ semantically, syntactically, at character level and in terms of the source information."
   },
   "menu": {
-    "evaluate": "Evaluate",
-    "bestworst3": "Best-Worst Scaling",
-    "bestworst3_text": "Select the best and worst out of four examples",
-    "bestworst3_text2": "4 sentence examples are displayed. First mark the best sentence example. Finally, select the worst sentence example."
+    "bestworst": "Ranking",
+    "variation": "Variation"
   },
   "about": {
     "title": "About the EVIDENCE Project",
