@@ -39,77 +39,29 @@
          v-on:click="showNavBurger = !showNavBurger" 
          v-bind:class="{ 'is-active' : showNavBurger }">
       <div class="navbar-start">
-
+        
+        <!-- Beleggüte / Ranking -->
         <router-link class="navbar-item" :to="{ path: '/bestworst4' }">
-          <span class="icon has-text-success"><i class="fas fa-play"></i></span>
-          <span>Start</span>
+          <span class="icon has-text-primary"><i class="fa-solid fa-ranking-star"></i></span>
+          <span>
+            Beleggüte
+          </span>
         </router-link>
 
+        <!-- Belegvariationen / Variation -->
+        <router-link class="navbar-item" :to="{ path: '/variation1' }">
+          <span class="icon has-text-link"><i class="fa-solid fa-magnifying-glass"></i></span>
+          <span>
+            Belegvariationen
+          </span>
+        </router-link>
+
+        <!-- Settings -->
         <router-link class="navbar-item" :to="{ path: '/settings' }">
-          <span class="icon has-text-dark"><i class="fas fa-cog"></i></span>
+          <span class="icon has-text-dark"><i class="fa-solid fa-gear"></i></span>
           <span>{{ t('settings.settings') }}</span>
         </router-link>
 
-
-        <!-- start submenu -->
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">
-            {{ t('menu.evaluate') }}
-          </a>
-
-          <div class="navbar-dropdown">
-
-            <router-link class="navbar-item" :to="{ path: '/variation1' }">
-              <div class="media">
-                <span class="icon  has-text-success"><i class="fas fa-file-lines"></i></span>
-                <div class="media-content">
-                  <strong>Varying Sets of Sentences</strong>
-                  <br />
-                  <small>Curate different sentence examples</small>
-                </div>
-              </div>
-            </router-link>
-            <hr class="navbar-divider is-hidden-widescreen" />
-
-            <!-- <router-link class="navbar-item" :to="{ path: '/ranking-summary4' }">
-              <div class="media">
-                <span class="icon has-text-success"><i class="fas fa-list-alt"></i></span>
-                <div class="media-content">
-                  <strong>Ranking Overview</strong>
-                  <br />
-                  <small>sentences ranked with BWS v4</small>
-                </div>
-              </div>
-            </router-link>
-            <hr class="navbar-divider is-hidden-widescreen" /> -->
-
-            <router-link class="navbar-item" :to="{ path: '/bestworst4' }">
-              <div class="media">
-                <span class="icon has-text-success"><i class="fas fa-undo-alt"></i></span>
-                <div class="media-content">
-                  <strong>Interactive Best-Worst Scaling</strong>
-                  <br />
-                  <small>Best-Worst Scaling UI v4</small>
-                </div>
-              </div>
-            </router-link>
-            <hr class="navbar-divider is-hidden-widescreen" />
-
-            <router-link class="navbar-item" :to="{ path: '/bestworst3' }">
-              <div class="media">
-                <span class="icon is-primary"><i class="fas fa-random"></i></span>
-                <div class="media-content">
-                  <strong>Best-Worst Scaling</strong>
-                  <br />
-                  <small>Best-Worst Scaling UI v3</small>
-                </div>
-              </div>
-            </router-link>
-            <hr class="navbar-divider is-hidden-widescreen" />
-
-          </div>
-        </div>
-        <!-- end submenu -->
 
         <!-- start submenu -->
         <div class="navbar-item has-dropdown is-hoverable">
