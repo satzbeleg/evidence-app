@@ -11,16 +11,35 @@
         <p class="subtitle">{{ t('home.welcome_text') }}</p>
       </div>
 
+
       <div class="card">
         <div class="card-content">
           <h1 class="title is-4">
-            {{ t('menu.bestworst3') }}
+            {{ t('bestworst.title') }}
           </h1>
           <div class="content">
-            {{ t('menu.bestworst3_text2') }}
+            {{ t('bestworst.help_long') }}
           </div>
 
           <router-link :to="{ path: '/bestworst3' }">
+            <a class="button is-primary">Start</a>
+          </router-link>
+
+        </div>
+      </div>
+
+
+
+      <div class="card">
+        <div class="card-content">
+          <h1 class="title is-4">
+            {{ t('variation.title') }}
+          </h1>
+          <div class="content">
+            {{ t('variation.help_long') }}
+          </div>
+
+          <router-link :to="{ path: '/variation1' }">
             <a class="button is-primary">Start</a>
           </router-link>
 

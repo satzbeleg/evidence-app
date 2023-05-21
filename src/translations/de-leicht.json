@@ -43,7 +43,8 @@
     "help_long": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle das schlechteste Satzbeispiel aus."
   },
   "variation": {
-    "title": "Unterschiedliche Sätze"
+    "title": "Unterschiedliche Sätze",
+    "help_long": "Suche nach Satzbelegen mit bestimmten Eigenschaften."
   },
   "menu": {
     "bestworst": "Beleggüte",

@@ -49,7 +49,8 @@
     "help_long": "4 sentence examples are displayed. First mark the best sentence example. Finally, select the worst sentence example."
   },
   "variation": {
-    "title": "Sentence Variations"
+    "title": "Sentence Variations",
+    "help_long": "Search for sentence examples for a keyword and filter how much the sentences should differ semantically, syntactically, at character level and in terms of the source information."
   },
   "menu": {
     "bestworst": "Ranking",
