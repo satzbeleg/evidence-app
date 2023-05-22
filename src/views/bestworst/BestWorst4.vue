@@ -9,16 +9,24 @@
   <section class="section">    
     <div class="container is-centered" style="max-width: 720px;">
 
-      <!-- Ranking Overview Modal: the button-->
+      <!-- Buttons -->
       <div class="field is-grouped is-grouped-centered" style="position: sticky; display: inline-block;"> 
-        <p class="control">
+        <p class="control buttons">
+          <!-- Ranking Overview Modal: the button-->
           <button class="button is-rounded is-info" 
                   v-on:click="showModalOverview = true">
             <span class="icon"><i class="fas fa-filter"></i></span>
-            <strong>Ranking Overview</strong>
+            <strong>Rankings</strong>
+          </button>
+          <!-- BWS Settings Modal: the button-->
+          <button class="button is-rounded is-dark" 
+                  v-on:click="showModalBwsSettings = true">
+            <span class="icon"><i class="fas fa-search"></i></span>
+            <strong>Settings</strong>
           </button>
         </p>
       </div>
+
 
       <template v-if="queueData.current.length > 0">
         <!-- BWS UI -->
@@ -75,6 +83,12 @@
     @close="showModalOverview = false"
   />
 
+  <ModalBwsSearchSettings
+    v-bind:showModalBwsSettings="showModalBwsSettings" 
+    v-bind:search_string="queueData.current_headword"
+    v-on:search-headword-modal="onSearchHeadword"
+    @close="showModalBwsSettings = false"
+  />
 
 </template>
 
@@ -94,6 +108,7 @@ import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { v4 as uuid4 } from 'uuid';
 import ModalRankingOverview from '@/components/bestworst/ModalRankingOverview.vue';
+import ModalBwsSearchSettings from '@/components/bestworst/ModalBwsSearchSettings.vue';
 
 
 export default defineComponent({
@@ -103,7 +118,8 @@ export default defineComponent({
     TheNavbar,
     PageLoader,
     BestWorstChoices,
-    ModalRankingOverview
+    ModalRankingOverview,
+    ModalBwsSearchSettings
   },
 
   setup(){
@@ -302,6 +318,9 @@ export default defineComponent({
     // Ranking overview modal
     const showModalOverview = ref(false);
 
+    // BWS Settings modal
+    const showModalBwsSettings = ref(false);
+
 
     return { 
       queueData, 
@@ -311,6 +330,8 @@ export default defineComponent({
       currentPoolSize,
       // fot the Ranking Overview modal
       showModalOverview, pool, 
+      // BWS Settings modal
+      showModalBwsSettings,
     }
   },
 
