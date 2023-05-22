@@ -21,7 +21,7 @@
             {{ t('bestworst.help_long') }}
           </div>
 
-          <router-link :to="{ path: '/bestworst3' }">
+          <router-link :to="{ path: '/bestworst4' }">
             <a class="button is-primary">Start</a>
           </router-link>
 
