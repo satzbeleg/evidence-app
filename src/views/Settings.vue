@@ -9,6 +9,7 @@
       <GeneralSettings />
       <LegalSettings />
       <BwsSettings />
+      <ResetToFactorySettings />
       <!-- put the above into components ... -->
     </div>
   </section>
@@ -22,6 +23,7 @@ import { watchEffect } from "vue";
 import GeneralSettings from '@/components/settings/GeneralSettings.vue';
 import LegalSettings from '@/components/settings/LegalSettings.vue';
 import BwsSettings from '@/components/bestworst/BwsSettings.vue';
+import ResetToFactorySettings from '@/components/settings/ResetToFactorySettings.vue';
 
 export default {
   name: "Settings",
@@ -30,7 +32,8 @@ export default {
     TheNavbar,
     GeneralSettings,
     LegalSettings,
-    BwsSettings
+    BwsSettings,
+    ResetToFactorySettings
   },
 
   setup(){

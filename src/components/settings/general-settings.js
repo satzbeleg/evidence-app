@@ -87,6 +87,13 @@ export const useGeneralSettings = () => {
     saveSettings();
   });
 
+  // reset user settings to default values
+  const factoryResetGeneral = () => {
+    darkmodetheme.value = false;
+    language.value = locale.value;
+    has_data_donation_consent.value = false;
+    debug_verbose.value = false;
+  }
 
   return {
     loadGeneralSettings,
@@ -94,6 +101,7 @@ export const useGeneralSettings = () => {
     darkmodetheme,
     language,
     has_data_donation_consent,
-    debug_verbose
+    debug_verbose,
+    factoryResetGeneral
   }
 }
