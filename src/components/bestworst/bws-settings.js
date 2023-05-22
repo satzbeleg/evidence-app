@@ -188,6 +188,48 @@ export const useBwsSettings = () => {
     saveBwsSettings();
   });
 
+  // reset settings
+  const factoryResetBws = () => {
+    // also used in bestworst3
+    queue_reorderpoint.value = 3;
+    queue_orderquantity.value = 10;
+    item_sampling_numtop.value = 100;
+    item_sampling_offset.value =  0;
+    // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
+    initial_load_only.value = false;
+    min_pool_size.value  = 10;
+    max_pool_size.value = 500;
+    drop_distribution.value = false;
+    add_distribution.value = false;
+    bin_edges.value = [.0, .25, .5, .75, 1.];
+    target_probas.value = [.25, .25, .25, .25];
+    // Settings for (1) and (3)
+    drop_max_display.value = false;
+    exclude_max_display.value = true;
+    max_displays.value = 3;
+    // Settings for (1)
+    drop_converge.value = false;
+    eps_score_change.value = 1e-6;
+    converge_patience.value = 0;
+    drop_pairs.value = false;
+    // Settings for (3): sampleBwsSets
+    bwsset_num_items.value = 4;
+    bwsset_sampling_method.value = "overlap";
+    num_preload_bwssets.value = 3;
+    item_sampling_method.value = "exploit";
+    // Settings for 4/5/6
+    retrain_patience.value = 1;
+    // Settings for (5): computeTrainingScores
+    smoothing_method.value = "ema";
+    ema_alpha.value = 0.7;
+    // Settings for (6): retrainModel
+    train_optimizer.value = "adam";
+    train_lrate.value = 0.001;
+    train_epochs.value = 5;
+    train_loss.value =  "meanSquaredError";
+    train_minsample.value = 5;
+  }
+
   return {
     loadBwsSettings, saveBwsSettings,
     // also used in bestworst3
@@ -211,6 +253,8 @@ export const useBwsSettings = () => {
     // Settings for (5), e.g. computeTrainingScores
     smoothing_method, ema_alpha,
     // Settings for (6): retrainModel
-    train_optimizer, train_lrate, train_epochs, train_loss, train_minsample
+    train_optimizer, train_lrate, train_epochs, train_loss, train_minsample,
+    // reset
+    factoryResetBws
   }
 }
