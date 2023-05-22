@@ -903,7 +903,11 @@ export const useInteractivity = () => {
       }));
       model.compile({optimizer: 'adagrad', loss: 'meanSquaredError'});
       // try to load model weights from server
-      await loadModelWeights(model);
+      if( has_data_donation_consent.value ){
+        await loadModelWeights(model);
+      }else{
+        console.log("No data donation consent given. Use baseline model.")
+      }
       // model.setWeights(wgts);
       // done
       return model;
@@ -1060,7 +1064,11 @@ export const useInteractivity = () => {
         // save model here
         model.save('indexeddb://user-specific-scoring-model');
         // send model weights to database
-        saveModelWeights(model);
+        if( has_data_donation_consent.value ){
+          saveModelWeights(model);
+        }else{
+          console.log("No consent to save model weights");
+        }
         // logging
         if (debug_verbose.value){
           console.group();
