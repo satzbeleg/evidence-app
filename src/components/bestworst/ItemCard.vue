@@ -5,7 +5,7 @@
       <div class="flex-left fit2box-height" v-on:click="onClick">
         <div class="fit2box-center" >
           <div v-fit2box="sentText" class="fit2box-padding fit2box-height">
-            <div v-html="highlightSpans(sentText, lemmaSpans, 'span', 'tag is-success is-light is-rounded reset-to-parent-font-height')"></div>
+            <div v-html="highlightSpans(sentText, lemmaSpans, 'span', 'has-text-info')"></div>
           </div>
         </div>
       </div>
@@ -128,12 +128,6 @@ export default defineComponent({
 
 .state-worst {
   background: #ff8a65;  /** ff8a65 */
-}
-
-/** For lemma spans; Must be global setting...*/
-.reset-to-parent-font-height {
-  font-size: inherit !important;
-  height: inherit !important;
 }
 </style>
 
