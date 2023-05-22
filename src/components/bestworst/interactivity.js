@@ -884,6 +884,7 @@ export const useInteractivity = () => {
       return await tf.loadLayersModel(
         'indexeddb://user-specific-scoring-model');
     }catch{
+      // setup model architecture from scratch
       const model = tf.sequential();
       model.add(tf.layers.dense({
         inputShape: [1181], 
@@ -901,6 +902,10 @@ export const useInteractivity = () => {
         activation: 'sigmoid', 
       }));
       model.compile({optimizer: 'adagrad', loss: 'meanSquaredError'});
+      // try to load model weights from server
+      await loadModelWeights(model);
+      // model.setWeights(wgts);
+      // done
       return model;
     }
     // }catch{
@@ -912,6 +917,61 @@ export const useInteractivity = () => {
     //   return model;
     // }
   }; 
+
+  const loadModelWeights = async (model) => {
+    return new Promise((resolve, reject) => {
+      const { getToken, logout } = useAuth();
+      const { api } = useApi2(getToken());
+      api.post(`v1/model/load`)
+      .then(response => {
+        console.log(`Model Loading Status: ${response.data['status']}`);
+        console.log(`Model Timestamp: ${response.data['timestamp']}`);
+        let wgts = []
+        response.data["weights"].forEach((wgt) => {
+          console.log(`Tensor Shape: ${wgt["shape"]}`)
+          wgts.push(tf.tensor(Array.from(wgt["values"]), wgt["shape"]));
+        });
+        model.setWeights(wgts);
+        resolve(response);
+      })
+      .catch(error => {
+        if (error.response.status === 401) {
+          console.log("Unauthorized: ", error.response.data);
+          logout();
+          router.push('/auth/login');
+        }
+        reject(error);
+      });
+    });
+  }
+
+
+  const saveModelWeights = async (model) => {
+    // extract weights
+    let wgts = []
+    model.getWeights().forEach((wgt) => {
+      wgts.push({"values": Array.from(wgt.dataSync()), "shape": wgt.shape})
+    });
+
+    // send to database
+    return new Promise((resolve, reject) => {
+      const { getToken, logout } = useAuth();
+      const { api } = useApi2(getToken());
+      api.post(`v1/model/save`, {"weights": wgts})
+      .then(response => {
+        console.log(`Model Saving Status: ${response.data['status']}`);
+        resolve(response);
+      })
+      .catch(error => {
+        if (error.response.status === 401) {
+          console.log("Unauthorized: ", error.response.data);
+          logout();
+          router.push('/auth/login');
+        }
+        reject(error);
+      });
+    });
+  }
 
  
   /** (6) Re-train the ML model
@@ -979,7 +1039,9 @@ export const useInteractivity = () => {
         console.log(`- train_loss=${train_loss.value}`);
           // console.log("- Model before training:", model);
         // model.getWeights().forEach((wgt) => {console.log("- Model weights after training:", wgt.dataSync());})
-        const wgts1 = model.getWeights(); console.log("- Last bias weight before training:", wgts1[wgts1.length - 1].dataSync());
+        // const wgts1 = model.getWeights(); console.log("- Last bias weight before training:", wgts1[wgts1.length - 1].dataSync());
+        console.log("- weights before training:"); model.getWeights().forEach((wgt) => {console.log(Array.from(wgt.dataSync()));})
+        console.groupEnd();
       }
 
       // specify optimization
@@ -997,13 +1059,15 @@ export const useInteractivity = () => {
       .then(res => {
         // save model here
         model.save('indexeddb://user-specific-scoring-model');
+        // send model weights to database
+        saveModelWeights(model);
         // logging
         if (debug_verbose.value){
-          console.log("- (6b) Training losses (res.history.loss):", res.history.loss);
-          // console.log("- Model after training:", model);
-          // model.getWeights().forEach((wgt) => {console.log("- (6b) Model weights after training:", wgt.dataSync());})
-          let wgts2 = model.getWeights(); console.log("- (6b) Last layer weightsafter training:", wgts2[wgts2.length - 1].dataSync());
-          // console.groupEnd();
+          console.group();
+          console.log("(6c) After training");
+          console.log("- training losses (res.history.loss):", res.history.loss);
+          console.log("- weight after training:"); model.getWeights().forEach((wgt) => {console.log(Array.from(wgt.dataSync()));})
+          console.groupEnd();
         }
       });
       if (debug_verbose.value){console.groupEnd();}
