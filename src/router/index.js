@@ -93,18 +93,18 @@ const routes = [{
       import ( /* webpackPreload: true */ '../views/bestworst/BestWorst4.vue'),
     meta: { requiresAuth: true }
   },
-  // {
-  //   path: '/ranking-summary4',
-  //   name: 'Ranking Summary for BWS v4',
-  //   component: () =>
-  //     import ( /* webpackPreload: true */ '../views/bestworst/RankingSummary4.vue'),
-  //   meta: { requiresAuth: true }
-  // },
   {
     path: '/variation1',
     name: 'Curating diverse sentence examples',
     component: () =>
       import ( /* webpackPreload: true */ '../views/variation/Variation1.vue'),
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/variation2',
+    name: 'Curating diverse sentence examples',
+    component: () =>
+      import ( /* webpackPreload: true */ '../views/variation/Variation2.vue'),
     meta: { requiresAuth: false }
   },
 ];

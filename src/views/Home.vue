@@ -39,7 +39,7 @@
             {{ t('variation.help_long') }}
           </div>
 
-          <router-link :to="{ path: '/variation1' }">
+          <router-link :to="{ path: '/variation2' }">
             <a class="button is-primary">Start</a>
           </router-link>
 
