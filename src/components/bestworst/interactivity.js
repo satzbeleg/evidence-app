@@ -568,8 +568,8 @@ export const useInteractivity = () => {
                   ),
                   "hashes": {
                     "semantic": int8_to_bool(row.feats1),
-                    "syntax": row.hashes15,
-                    "fingerprint": row.hashes16,
+                    "grammar": row.hashes15,
+                    "duplicate": row.hashes16,
                     "biblio": row.hashes18,
                   },
                   "training_score_history": [undefined],
@@ -1112,10 +1112,8 @@ export const useInteractivity = () => {
     var x_feats = [];
     var x_ids = []
     Object.keys(pool).forEach(key => {
-      if( pool[key]['last_training_score'] !== undefined ){
-        x_feats.push( pool[key]['features'] );
-        x_ids.push( key );
-      }
+      x_feats.push( pool[key]['features'] );
+      x_ids.push( key );
     });
     // abort
     if ( x_feats.length < 1 ){
