@@ -49,7 +49,7 @@
         </router-link>
 
         <!-- Belegvariationen / Variation -->
-        <router-link class="navbar-item" :to="{ path: '/variation1' }">
+        <router-link class="navbar-item" :to="{ path: '/variation2' }">
           <span class="icon has-text-link"><i class="fa-solid fa-magnifying-glass"></i></span>
           <span>
             {{ t('menu.variation')  }}

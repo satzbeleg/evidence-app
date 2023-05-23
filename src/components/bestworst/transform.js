@@ -394,4 +394,4 @@ const int2float = (
 
 
 // export default int2float;
-export { int2float };
+export { int2float, int8_to_bool };

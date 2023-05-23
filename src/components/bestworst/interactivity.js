@@ -8,7 +8,7 @@ import { useQueue } from '@/components/bestworst/queue.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import * as tf from '@tensorflow/tfjs';
 import router from '@/router';
-import { int2float } from '@/components/bestworst/transform.js';
+import { int2float, int8_to_bool } from '@/components/bestworst/transform.js';
 
 
 
@@ -566,6 +566,12 @@ export const useInteractivity = () => {
                     row.feats13,
                     row.feats14,
                   ),
+                  "hashes": {
+                    "semantic": int8_to_bool(row.feats1),
+                    "grammar": row.hashes15,
+                    "duplicate": row.hashes16,
+                    "biblio": row.hashes18,
+                  },
                   "training_score_history": [undefined],
                   "model_score_history": [row.score],
                   "displayed": [false]
@@ -1106,10 +1112,8 @@ export const useInteractivity = () => {
     var x_feats = [];
     var x_ids = []
     Object.keys(pool).forEach(key => {
-      if( pool[key]['last_training_score'] !== undefined ){
-        x_feats.push( pool[key]['features'] );
-        x_ids.push( key );
-      }
+      x_feats.push( pool[key]['features'] );
+      x_ids.push( key );
     });
     // abort
     if ( x_feats.length < 1 ){
