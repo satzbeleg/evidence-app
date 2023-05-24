@@ -149,7 +149,8 @@
                   {'id': 'exploit', 'text': 'exploit'},
                   {'id': 'newer', 'text': 'newer'},
                   {'id': 'unstable', 'text': 'unstable'},
-                  {'id': 'newer-unstable', 'text': 'newer-unstable'}]" />
+                  {'id': 'newer-unstable', 'text': 'newer-unstable'},
+                  {'id': 'semantic-similar', 'text': 'semantic-similar'}]" />
 
     </div>
   </div>

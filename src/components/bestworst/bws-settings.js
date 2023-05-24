@@ -49,7 +49,7 @@ export const useBwsSettings = () => {
   // Settings for (3) 
   const bwsset_num_items = ref();
   const num_preload_bwssets = ref();   // settings: Number BWS sets to preload
-  const item_sampling_method = ref(); // "random", "exploit", "newer-unstable"
+  const item_sampling_method = ref(); // "random", "exploit", "newer-unstable", "semantic-similar"
   const bwsset_sampling_method = ref() // overlap, twice
 
   // Settings for (5) 
