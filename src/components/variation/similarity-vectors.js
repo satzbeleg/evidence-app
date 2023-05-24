@@ -1,5 +1,13 @@
+import { useGeneralSettings } from '@/components/settings/general-settings.js';
+
 
 export const useSimilarityVectors = () => {
+  // Load General UI settings
+  const { 
+    debug_verbose,
+    loadGeneralSettings
+  } = useGeneralSettings();
+  loadGeneralSettings();
 
   /** Hamming Distance */
   const hamming_distance = (hash1, hash2) => {
@@ -15,6 +23,10 @@ export const useSimilarityVectors = () => {
 
   /** Compute Similarity Vectors */
   const computeSimilaries = async (pool) => {
+    if(debug_verbose.value){
+      console.group();
+      console.log("Compute similarity vectors for all examples in the pool")
+    }
     // init storage
     Object.keys(pool).forEach((key) => {
       if(pool[key]['similarities'] === undefined) {
@@ -23,6 +35,7 @@ export const useSimilarityVectors = () => {
       }
     });
     // compute similarities if not exits
+    let numPairs = 0;
     Object.keys(pool).forEach((key1) => {
       Object.keys(pool).forEach((key2) => {
         if(key1 !== key2){
@@ -46,9 +59,15 @@ export const useSimilarityVectors = () => {
               pool[key1]['hashes']['biblio'], pool[key2]['hashes']['biblio']);
               pool[key2]['similarities']['biblio'][key1] = pool[key1]['similarities']['biblio'][key2] 
           }
+          numPairs++;
         }
       });
     });
+    if(debug_verbose.value){
+      console.log(`Pairs computed: ${numPairs}`)
+      console.groupEnd();
+    }
+
   }
 
   return {
