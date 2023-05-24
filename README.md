@@ -70,6 +70,10 @@ Never expose secret keys or passwords as Vue environment variable because they a
 yarn serve --port 9090
 ```
 
+Use Node v16 to avoid the "error:0308010C:digital envelope routines::unsupported" Error
+```sh
+nvm install 16
+``` 
 
 ### Useful commands
 - Compile SASS: `yarn css-build`

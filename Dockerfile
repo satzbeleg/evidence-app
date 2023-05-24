@@ -1,5 +1,5 @@
 # see https://vuejs.org/v2/cookbook/dockerize-vuejs-app.html
-FROM node:lts-alpine as build-stage
+FROM node:16.20.0-alpine as build-stage
 
 WORKDIR /app
 
