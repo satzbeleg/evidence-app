@@ -153,7 +153,7 @@ import { useI18n } from 'vue-i18n';
 import { watchEffect, ref, reactive, watch, getCurrentInstance } from "vue";
 import { highlightSpans } from '@/functions/highlight-spans.js';
 import { useQuadOpt } from '@/components/variation/quadopt.js';
-import { useSimilarityMatrices } from '../../components/variation/similarity-matrices';
+import { useSimilarityMatrices } from '../../components/variation/similarity-matrices-api';
 
 
 export default {

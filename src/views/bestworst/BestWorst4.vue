@@ -106,6 +106,7 @@ import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 // import { ranking } from 'bwsample';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useQueue } from '@/components/bestworst/queue.js';
+import { useSimilarityVectors } from '@/components/variation/similarity-vectors.js';
 import { v4 as uuid4 } from 'uuid';
 import ModalRankingOverview from '@/components/bestworst/ModalRankingOverview.vue';
 import ModalBwsSearchSettings from '@/components/bestworst/ModalBwsSearchSettings.vue';
@@ -143,6 +144,7 @@ export default defineComponent({
     const { 
       queue_reorderpoint, 
       retrain_patience, 
+      item_sampling_method, // to trigger similarity computation
       loadBwsSettings 
     } = useBwsSettings();
     loadBwsSettings();
@@ -179,6 +181,8 @@ export default defineComponent({
       predictScores
     } = useInteractivity();
 
+    // util functions to compute similarity vectors for each example
+    const { computeSimilaries } = useSimilarityVectors();
 
     /**
      * [A1] Specify Replenishment from local `pool`
@@ -202,6 +206,11 @@ export default defineComponent({
       // (Step 2) Add examples to pool
       await addExamplesToPool(search_headword.value);
 
+      // (Step 3) Compute similarity vectors if "semantic clustering" is enabled
+      if(item_sampling_method.value === "semantic-similar"){
+        await computeSimilaries(pool);
+      }
+      // console.log("Pool", Object.values(pool))
       return new Promise((resolve, reject) => {
         try{
           isReplenishing.value = true;

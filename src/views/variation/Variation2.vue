@@ -160,6 +160,8 @@ import { highlightSpans } from '@/functions/highlight-spans.js';
 import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { useQuadOpt } from '@/components/variation/quadopt.js';
+import { useSimilarityVectors } from '@/components/variation/similarity-vectors.js';
+import { useGeneralSettings } from '@/components/settings/general-settings.js';
 // import ItemCard from '@/components/bestworst/ItemCard.vue';
 
 export default {
@@ -188,6 +190,13 @@ export default {
     const betaDuplicate = ref(.0);
     const betaBiblio = ref(.0);
 
+    // Load General UI settings
+    const { 
+      debug_verbose,
+      loadGeneralSettings
+    } = useGeneralSettings();
+    loadGeneralSettings();
+
     // Load Interactivity Settings
     const { 
       pool,  // All examples
@@ -196,6 +205,8 @@ export default {
       predictScores,  // Only call on new headword
     } = useInteractivity();
 
+    // util functions to compute similarity vectors for each example
+    const { computeSimilaries } = useSimilarityVectors();
 
     // Global Current Headword
     const { search_headword } = useQueue();
@@ -211,73 +222,11 @@ export default {
       // predict scores
       await predictScores();
       // compute all similarity pairs and its scores {id1: {id2: score}}
-      await computeSimilaries();
+      await computeSimilaries(pool);
       // solve optimization problem initiallly
       updateWeights();
       // console.log("pool", pool)
     }
-    
-
-    /** Compute Similarity Matrices */
-    const hamming_distance = (hash1, hash2) => {
-      let distance = 0;
-      for (let i = 0; i < hash1.length; i++) {
-        if (hash1[i] !== hash2[i]) {
-          distance++;
-        }
-      }
-      return distance / hash1.length;
-    }
-
-    const computeSimilaries = async () => {
-      // init storage
-      Object.keys(pool).forEach((key) => {
-        if(pool[key]['similarities'] === undefined) {
-          pool[key]['similarities'] = {
-            "semantic": {}, "grammar": {}, "duplicate": {}, "biblio": {}}
-        }
-      });
-      // compute similarities if not exits
-      Object.keys(pool).forEach((key1) => {
-        Object.keys(pool).forEach((key2) => {
-          if(key1 !== key2){
-            if(pool[key1]['similarities']['semantic'][key2] === undefined) {
-              pool[key1]['similarities']['semantic'][key2] = hamming_distance(
-                pool[key1]['hashes']['semantic'], pool[key2]['hashes']['semantic']);
-                pool[key2]['similarities']['semantic'][key1] = pool[key1]['similarities']['semantic'][key2] 
-            }
-            if(pool[key1]['similarities']['grammar'][key2] === undefined) {
-              pool[key1]['similarities']['grammar'][key2] = hamming_distance(
-                pool[key1]['hashes']['grammar'], pool[key2]['hashes']['grammar']);
-                pool[key2]['similarities']['grammar'][key1] = pool[key1]['similarities']['grammar'][key2] 
-            }
-            if(pool[key1]['similarities']['duplicate'][key2] === undefined) {
-              pool[key1]['similarities']['duplicate'][key2] = hamming_distance(
-                pool[key1]['hashes']['duplicate'], pool[key2]['hashes']['duplicate']);
-                pool[key2]['similarities']['duplicate'][key1] = pool[key1]['similarities']['duplicate'][key2] 
-            }
-            if(pool[key1]['similarities']['biblio'][key2] === undefined) {
-              pool[key1]['similarities']['biblio'][key2] = hamming_distance(
-                pool[key1]['hashes']['biblio'], pool[key2]['hashes']['biblio']);
-                pool[key2]['similarities']['biblio'][key1] = pool[key1]['similarities']['biblio'][key2] 
-            }
-          }
-        });
-      });
-    }
-
-
-
-
-    /* Sort by weights */
-    // const sortByWeight = (arr_) => {
-    //   let arr = Object.values(arr_)
-    //   if (arr.length > 0){
-    //     console.log("arr", arr)
-    //     return arr.slice().sort((a, b) => {return b.weight - a.weight})
-    //   }
-    //   return arr
-    // }
 
 
 
@@ -302,6 +251,7 @@ export default {
       }
     );
 
+    // sort by weights in the UI
     const sortedPool = ref([]);
     const sortPool = (obj) => {
       let arr = Object.values(obj) 
@@ -313,13 +263,16 @@ export default {
     const updateWeights = () => {
       // open pagerloader
       isLoading.value = true;
-      console.group();
-      console.log("Lambda:", parseFloat(lambdaTradeOff.value));
-      console.log("Semantic:", parseFloat(betaSemantic.value));
-      console.log("Grammar:", parseFloat(betaGrammar.value));
-      console.log("Duplicates:", parseFloat(betaDuplicate.value));
-      console.log("Bibliographic:", parseFloat(betaBiblio.value));
-      console.groupEnd();
+
+      if(debug_verbose.value){
+        console.group();
+        console.log("Lambda:", parseFloat(lambdaTradeOff.value));
+        console.log("Semantic:", parseFloat(betaSemantic.value));
+        console.log("Grammar:", parseFloat(betaGrammar.value));
+        console.log("Duplicates:", parseFloat(betaDuplicate.value));
+        console.log("Bibliographic:", parseFloat(betaBiblio.value));
+        console.groupEnd();
+      }
 
       // extract data from pool
       let numSamples = Object.keys(pool).length;
@@ -376,7 +329,9 @@ export default {
 
       // assign weights
       let arr = wbest.arraySync();
-      console.log("Weights:", arr);
+      if(debug_verbose.value){
+        console.log("Weights:", arr);
+      }
       let k = 0;
       orderedKeys.forEach((key) => {
         pool[key].weight = arr[k];

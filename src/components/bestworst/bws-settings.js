@@ -49,7 +49,7 @@ export const useBwsSettings = () => {
   // Settings for (3) 
   const bwsset_num_items = ref();
   const num_preload_bwssets = ref();   // settings: Number BWS sets to preload
-  const item_sampling_method = ref(); // "random", "exploit", "newer-unstable"
+  const item_sampling_method = ref(); // "random", "exploit", "newer-unstable", "semantic-similar"
   const bwsset_sampling_method = ref() // overlap, twice
 
   // Settings for (5) 
@@ -92,7 +92,7 @@ export const useBwsSettings = () => {
           // Settings for (1) and (3)
           drop_max_display.value = response.data['drop-max-display'] || false;
           exclude_max_display.value = response.data['exclude-max-display'] || true;
-          max_displays.value = response.data['max-displays'] || 3;
+          max_displays.value = response.data['max-displays'] || 2;
           // Settings for (1)
           drop_converge.value = response.data['drop-converge'] || false;
           eps_score_change.value = response.data['eps-score-change'] || 1e-6;
@@ -102,7 +102,7 @@ export const useBwsSettings = () => {
           bwsset_num_items.value = response.data['bwsset-num-items'] || 4;
           bwsset_sampling_method.value = response.data['bwsset-sampling-method'] || "overlap";
           num_preload_bwssets.value = response.data['num-preload-bwssets'] || 3;
-          item_sampling_method.value = response.data['item-sampling-method'] || "exploit";
+          item_sampling_method.value = response.data['item-sampling-method'] || "semantic-similar";
           // Settings for 4/5/6
           retrain_patience.value = response.data['retrain-patience'] || 1;
           // Settings for (5): computeTrainingScores
@@ -206,7 +206,7 @@ export const useBwsSettings = () => {
     // Settings for (1) and (3)
     drop_max_display.value = false;
     exclude_max_display.value = true;
-    max_displays.value = 3;
+    max_displays.value = 2;
     // Settings for (1)
     drop_converge.value = false;
     eps_score_change.value = 1e-6;
@@ -216,7 +216,7 @@ export const useBwsSettings = () => {
     bwsset_num_items.value = 4;
     bwsset_sampling_method.value = "overlap";
     num_preload_bwssets.value = 3;
-    item_sampling_method.value = "exploit";
+    item_sampling_method.value = "semantic-similar";
     // Settings for 4/5/6
     retrain_patience.value = 1;
     // Settings for (5): computeTrainingScores
