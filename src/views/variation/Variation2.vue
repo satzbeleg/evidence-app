@@ -161,6 +161,7 @@ import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useQueue } from '@/components/bestworst/queue.js';
 import { useQuadOpt } from '@/components/variation/quadopt.js';
 import { useSimilarityVectors } from '@/components/variation/similarity-vectors.js';
+import { useGeneralSettings } from '@/components/settings/general-settings.js';
 // import ItemCard from '@/components/bestworst/ItemCard.vue';
 
 export default {
@@ -188,6 +189,13 @@ export default {
     const betaGrammar = ref(.0);
     const betaDuplicate = ref(.0);
     const betaBiblio = ref(.0);
+
+    // Load General UI settings
+    const { 
+      debug_verbose,
+      loadGeneralSettings
+    } = useGeneralSettings();
+    loadGeneralSettings();
 
     // Load Interactivity Settings
     const { 
@@ -255,13 +263,16 @@ export default {
     const updateWeights = () => {
       // open pagerloader
       isLoading.value = true;
-      console.group();
-      console.log("Lambda:", parseFloat(lambdaTradeOff.value));
-      console.log("Semantic:", parseFloat(betaSemantic.value));
-      console.log("Grammar:", parseFloat(betaGrammar.value));
-      console.log("Duplicates:", parseFloat(betaDuplicate.value));
-      console.log("Bibliographic:", parseFloat(betaBiblio.value));
-      console.groupEnd();
+
+      if(debug_verbose.value){
+        console.group();
+        console.log("Lambda:", parseFloat(lambdaTradeOff.value));
+        console.log("Semantic:", parseFloat(betaSemantic.value));
+        console.log("Grammar:", parseFloat(betaGrammar.value));
+        console.log("Duplicates:", parseFloat(betaDuplicate.value));
+        console.log("Bibliographic:", parseFloat(betaBiblio.value));
+        console.groupEnd();
+      }
 
       // extract data from pool
       let numSamples = Object.keys(pool).length;
@@ -318,7 +329,9 @@ export default {
 
       // assign weights
       let arr = wbest.arraySync();
-      console.log("Weights:", arr);
+      if(debug_verbose.value){
+        console.log("Weights:", arr);
+      }
       let k = 0;
       orderedKeys.forEach((key) => {
         pool[key].weight = arr[k];

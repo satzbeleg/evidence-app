@@ -1,13 +1,7 @@
-// import { useInteractivity } from '@/components/bestworst/interactivity.js';
-
 
 export const useSimilarityVectors = () => {
-  // Load Interactivity Settings
-  // const { 
-  //   pool,  // All examples
-  // } = useInteractivity();
 
-  /** Compute Similarity Matrices */
+  /** Hamming Distance */
   const hamming_distance = (hash1, hash2) => {
     let distance = 0;
     for (let i = 0; i < hash1.length; i++) {
@@ -18,6 +12,8 @@ export const useSimilarityVectors = () => {
     return distance / hash1.length;
   }
 
+
+  /** Compute Similarity Vectors */
   const computeSimilaries = async (pool) => {
     // init storage
     Object.keys(pool).forEach((key) => {
