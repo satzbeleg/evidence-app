@@ -629,6 +629,8 @@ export const useInteractivity = () => {
     Object.keys(pool).forEach(key => {delete pool[key];});
     // delete pairs matrix
     Object.keys(pairs).forEach(key => {delete pairs[key];});
+    // reset last key for BWS sample
+    lastSampledMainKey.value = undefined;
 
     // logging
     if (debug_verbose.value){
@@ -659,6 +661,8 @@ export const useInteractivity = () => {
    *  // run the code
    *  var sampled_bwssets = sampleBwsSets();
    */
+  const lastSampledMainKey = ref(undefined);  // for item_sampling_method.value === "semantic-similar"
+
   const sampleBwsSets = () => {
     // logging
     if (debug_verbose.value){
@@ -738,6 +742,32 @@ export const useInteractivity = () => {
         // if same number of displays, prefer most fluctating model scores (descending)
         if (pool[key1].change_model_score < pool[key2].change_model_score) return 1;
         if (pool[key1].change_model_score > pool[key2].change_model_score) return -1;
+        return 0;
+      });
+
+    } else if (item_sampling_method.value === "semantic-similar") {
+      // randomly pick a main key or use a semantic different example
+      let key_main;
+      if (lastSampledMainKey.value === undefined){
+        const idx = Math.floor(Math.random() * (all_ids.length + 1));
+        key_main = all_ids[idx];
+        lastSampledMainKey.value = key_main;
+      }else{
+        let sortedKeys = Object.entries(pool[lastSampledMainKey.value]['similarities']['semantic'])
+          .filter(r => all_ids.includes(r[0]) )
+          .sort(([,a],[,b]) => a-b)
+          .reduce((r, [k, ]) => ([ ...r, k ]), []);  // sort by ascending order (smallest similarity)
+        // sortedKeys = sortedKeys.slice(0, Math.max(1, sortedKeys.length - num_examples)); // exlcude previously sampled keys
+        sortedKeys = sortedKeys.slice(0, Math.max(bwsset_num_items.value, sortedKeys.length * 0.1)); // PARAM: 10% of the least similar
+        console.log("Least similar, num: ", sortedKeys.length)
+        sortedKeys.sort(() => (Math.random() > .5) ? 1 : -1);  // shuffle
+        key_main = sortedKeys[0];
+      }
+      // sort by semantic similarity
+      all_ids.sort((key1, key2) => {
+        // prefer largest semantic similarity (descending)
+        if (pool[key_main]['similarities']['semantic'][key1] < pool[key_main]['similarities']['semantic'][key2]) return 1;
+        if (pool[key_main]['similarities']['semantic'][key1] > pool[key_main]['similarities']['semantic'][key2]) return -1;
         return 0;
       });
     }

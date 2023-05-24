@@ -210,7 +210,7 @@ export default defineComponent({
       if(item_sampling_method.value === "semantic-similar"){
         await computeSimilaries(pool);
       }
-
+      // console.log("Pool", Object.values(pool))
       return new Promise((resolve, reject) => {
         try{
           isReplenishing.value = true;
