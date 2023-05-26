@@ -536,7 +536,7 @@ export const useInteractivity = () => {
         // removed: num_additions, item_sampling_numtop, item_sampling_offset
 
         // start AJAX call
-        api.post(`v1/serialized-features/`, params)
+        api.post(`v1/serialized-features`, params)
           .then(response => {
             if ('msg' in response.data){
               error_message.value = response.data['msg'];
