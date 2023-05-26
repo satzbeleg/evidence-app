@@ -37,41 +37,39 @@ export const useSimilarityVectors = () => {
     });
     // compute similarities if not exits
     let numPairs = 0;
-    const computeOneExample = (key1) => {
-      Object.keys(pool).forEach((key2) => {
-        if(key1 !== key2){
-          if(pool[key1]['similarities']['semantic'][key2] === undefined) {
-            pool[key1]['similarities']['semantic'][key2] = hamming_similarity(
-              pool[key1]['hashes']['semantic'], pool[key2]['hashes']['semantic']);
-              pool[key2]['similarities']['semantic'][key1] = pool[key1]['similarities']['semantic'][key2] 
-          }
-          if(pool[key1]['similarities']['grammar'][key2] === undefined) {
-            pool[key1]['similarities']['grammar'][key2] = hamming_similarity(
-              pool[key1]['hashes']['grammar'], pool[key2]['hashes']['grammar']);
-              pool[key2]['similarities']['grammar'][key1] = pool[key1]['similarities']['grammar'][key2] 
-          }
-          if(pool[key1]['similarities']['duplicate'][key2] === undefined) {
-            pool[key1]['similarities']['duplicate'][key2] = hamming_similarity(
-              pool[key1]['hashes']['duplicate'], pool[key2]['hashes']['duplicate']);
-              pool[key2]['similarities']['duplicate'][key1] = pool[key1]['similarities']['duplicate'][key2] 
-          }
-          if(pool[key1]['similarities']['biblio'][key2] === undefined) {
-            pool[key1]['similarities']['biblio'][key2] = hamming_similarity(
-              pool[key1]['hashes']['biblio'], pool[key2]['hashes']['biblio']);
-              pool[key2]['similarities']['biblio'][key1] = pool[key1]['similarities']['biblio'][key2] 
-          }
-          numPairs++;
+    const computeOneExample = (key1, key2) => {
+      if(key1 !== key2){
+        if(pool[key1]['similarities']['semantic'][key2] === undefined) {
+          pool[key1]['similarities']['semantic'][key2] = hamming_similarity(
+            pool[key1]['hashes']['semantic'], pool[key2]['hashes']['semantic']);
+            pool[key2]['similarities']['semantic'][key1] = pool[key1]['similarities']['semantic'][key2] 
         }
-      });
+        if(pool[key1]['similarities']['grammar'][key2] === undefined) {
+          pool[key1]['similarities']['grammar'][key2] = hamming_similarity(
+            pool[key1]['hashes']['grammar'], pool[key2]['hashes']['grammar']);
+            pool[key2]['similarities']['grammar'][key1] = pool[key1]['similarities']['grammar'][key2] 
+        }
+        if(pool[key1]['similarities']['duplicate'][key2] === undefined) {
+          pool[key1]['similarities']['duplicate'][key2] = hamming_similarity(
+            pool[key1]['hashes']['duplicate'], pool[key2]['hashes']['duplicate']);
+            pool[key2]['similarities']['duplicate'][key1] = pool[key1]['similarities']['duplicate'][key2] 
+        }
+        if(pool[key1]['similarities']['biblio'][key2] === undefined) {
+          pool[key1]['similarities']['biblio'][key2] = hamming_similarity(
+            pool[key1]['hashes']['biblio'], pool[key2]['hashes']['biblio']);
+            pool[key2]['similarities']['biblio'][key1] = pool[key1]['similarities']['biblio'][key2] 
+        }
+        numPairs++;
+      }
     };
 
     let allPromises = [];
     Object.keys(pool).forEach((key1) => {
-      allPromises.push(computeOneExample(key1));
+      Object.keys(pool).forEach((key2) => {
+        allPromises.push(computeOneExample(key1, key2));
+      });
     });
-    // let responses = 
     await Promise.all(allPromises)
-    // for(let resp of responses) {}
 
     if(debug_verbose.value){
       console.log(`Pairs computed: ${numPairs}`)
