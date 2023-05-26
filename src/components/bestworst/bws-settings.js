@@ -84,7 +84,7 @@ export const useBwsSettings = () => {
           // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
           initial_load_only.value = response.data['initial-load-only'] || false;
           min_pool_size.value  = response.data['min-pool-size'] || 10;
-          max_pool_size.value = response.data['max-pool-size'] || 500;
+          max_pool_size.value = response.data['max-pool-size'] || 100;
           drop_distribution.value = response.data['drop-distribution'] || false;
           add_distribution.value = response.data['add-distribution'] || false;
           bin_edges.value = response.data['bin-edges'] || [.0, .25, .5, .75, 1.];
@@ -198,7 +198,7 @@ export const useBwsSettings = () => {
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
     initial_load_only.value = false;
     min_pool_size.value  = 10;
-    max_pool_size.value = 500;
+    max_pool_size.value = 100;
     drop_distribution.value = false;
     add_distribution.value = false;
     bin_edges.value = [.0, .25, .5, .75, 1.];
