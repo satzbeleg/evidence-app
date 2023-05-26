@@ -142,7 +142,7 @@
       </div>
 
       <BDropdown idname="interactivity-item-sampling-method" 
-                 labeltext="Sampling Sentences from Pool (Default: exploit)" 
+                 labeltext="Sampling Sentences from Pool (Default: semantic-similar)" 
                  v-model:selected="item_sampling_method" 
                  :options="[
                   {'id': 'random', 'text': 'random'}, 
