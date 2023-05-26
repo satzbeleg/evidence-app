@@ -26,6 +26,7 @@ export const useSimilarityVectors = () => {
     if(debug_verbose.value){
       console.group();
       console.log("Compute similarity vectors for all examples in the pool")
+      console.time('Elapsed time');
     }
     // init storage
     Object.keys(pool).forEach((key) => {
@@ -65,6 +66,7 @@ export const useSimilarityVectors = () => {
     });
     if(debug_verbose.value){
       console.log(`Pairs computed: ${numPairs}`)
+      console.timeEnd('Elapsed time');
       console.groupEnd();
     }
 
