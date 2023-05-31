@@ -43,7 +43,7 @@
         (Berlin-Brandenburg Academy of Sciences and Humanities, Research Centre for Language)
       </li>
       <li>
-        <a href="https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar">Dr. Lothar Lemmnitzer</a>,
+        <a href="https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar">Dr. Lothar Lemnitzer</a>,
         Expert Lexicographer
         (Berlin-Brandenburg Academy of Sciences and Humanities, Research Centre for Language)
       </li>

@@ -43,7 +43,7 @@
         (Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage)
       </li>
       <li>
-        <a href="https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar">Dr. Lothar Lemmnitzer</a>,
+        <a href="https://web.archive.org/web/20210304072438/https://www.bbaw.de/die-akademie/mitarbeiterinnen-mitarbeiter/lemnitzer-lothar">Dr. Lothar Lemnitzer</a>,
         Expert de lexicographie
         (Académie des Sciences de Berlin-Brandebourg, Centre de recherche sur le langage)
       </li>
