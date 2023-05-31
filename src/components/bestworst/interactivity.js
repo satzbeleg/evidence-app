@@ -519,8 +519,8 @@ export const useInteractivity = () => {
     return new Promise((resolve, reject) => {
       // replenish pool with sentence examples
       const num_additions = max_pool_size.value - Object.keys(pool).length;
-
-      if (num_additions > 0  &&  !(initial_load_only.value && is_pool_initially_loaded.value) ){
+      const flag = initial_load_only.value ? !is_pool_initially_loaded.value : true
+      if (num_additions > 0  &&  flag ){
         // settings
         var params = {
           "headword": headword.trim(),
@@ -594,6 +594,9 @@ export const useInteractivity = () => {
             is_pool_initially_loaded.value = true;  // for `initial_load_only`
             updateCurrentPoolMetrics(pool);  // compute current metrics manually
         });
+      }
+      else {
+        resolve("No additions to pool.");
       }
     });
   }
