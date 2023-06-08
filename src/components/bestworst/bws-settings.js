@@ -174,7 +174,7 @@ export const useBwsSettings = () => {
         'train-minsample': train_minsample.value
         })
         .then(response => {
-          console.log("SAVED");
+          console.log("SAVED: BWS Settings");
           resolve(response);
         })
         .catch(error => {
@@ -228,6 +228,7 @@ export const useBwsSettings = () => {
     train_epochs.value = 5;
     train_loss.value =  "meanSquaredError";
     train_minsample.value = 5;
+    saveBwsSettings();
   }
 
   return {

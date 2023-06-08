@@ -75,6 +75,7 @@ export const useGeneralSettings = () => {
           'debug-verbose': debug_verbose.value,
         })
         .then(response => {
+          console.log("SAVED: General settings");
           resolve(response);
         })
         .catch(error => {
@@ -93,6 +94,7 @@ export const useGeneralSettings = () => {
     language.value = locale.value;
     has_data_donation_consent.value = false;
     debug_verbose.value = false;
+    saveSettings();
   }
 
   return {

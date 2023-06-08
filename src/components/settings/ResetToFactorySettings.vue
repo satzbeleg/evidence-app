@@ -13,13 +13,14 @@ import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useI18n } from 'vue-i18n';
 
+
 export default defineComponent({
   name: "ResetToFactorySettings",
 
   components: {
   },
 
-  setup(){
+  setup(props, { emit }){
     const { t } = useI18n();
 
     const { factoryResetGeneral } = useGeneralSettings();
@@ -28,6 +29,7 @@ export default defineComponent({
     const factoryReset = () => {
       factoryResetGeneral();
       factoryResetBws();
+      emit('incrementKey');
     }
     
     return { 

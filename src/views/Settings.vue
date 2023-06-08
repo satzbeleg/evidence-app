@@ -3,13 +3,13 @@
              v-bind:with_darkmode_icon="false"
              v-bind:with_lemmata_search="false" />
 
-  <section class="section" id="settings">
+  <section class="section" id="settings" :key="componentKey">
     <div class="container">
       <!-- put the following into components ... -->
       <GeneralSettings />
       <LegalSettings />
       <BwsSettings />
-      <ResetToFactorySettings />
+      <ResetToFactorySettings @incrementKey="() => {componentKey++}"/>
       <!-- put the above into components ... -->
     </div>
   </section>
@@ -19,7 +19,7 @@
 <script>
 import TheNavbar from '@/components/layout/TheNavbar.vue';
 import { useI18n } from 'vue-i18n';
-import { watchEffect } from "vue";
+import { watchEffect, ref } from "vue";
 import GeneralSettings from '@/components/settings/GeneralSettings.vue';
 import LegalSettings from '@/components/settings/LegalSettings.vue';
 import BwsSettings from '@/components/bestworst/BwsSettings.vue';
@@ -39,11 +39,16 @@ export default {
   setup(){
     const { t } = useI18n();
 
+    const componentKey = ref(0);
+
     watchEffect(() => {
       document.title = t('settings.settings');
     });
     
-    return { t }
+    return { 
+      t,
+      componentKey 
+    }
   },
 }
 </script>
