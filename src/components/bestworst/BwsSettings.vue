@@ -152,6 +152,17 @@
                   {'id': 'newer-unstable', 'text': 'newer-unstable'},
                   {'id': 'semantic-similar', 'text': 'semantic-similar'}]" />
 
+      <div class="field">
+        <label class="label" for="interactivity-txtlen_noise">
+          Noise when sorting examples by text length (Default: 10%)
+        </label>
+        <input id="interactivity-txtlen_noise" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="txtlen_noise" step=".01" min="0.0" max=".99">
+        <output for="interactivity-txtlen_noise">{{ parseInt(txtlen_noise * 100.) }}</output>
+      </div>
+
+      
     </div>
   </div>
 
@@ -526,6 +537,7 @@ export default defineComponent({
       num_preload_bwssets, 
       bwsset_sampling_method, 
       item_sampling_method,
+      txtlen_noise,
       // Settings for 4/5/6
       retrain_patience,
       // Settings for (5), e.g. computeTrainingScores
@@ -575,7 +587,7 @@ export default defineComponent({
         exclude_max_display, drop_max_display, max_displays, 
         drop_converge, eps_score_change_text, converge_patience,
         drop_pairs,
-      bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
+      bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method, txtlen_noise,
       retrain_patience,
         smoothing_method, ema_alpha,
         train_optimizer, train_lrate, train_epochs, train_loss, train_minsample

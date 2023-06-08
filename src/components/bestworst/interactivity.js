@@ -253,6 +253,7 @@ export const useInteractivity = () => {
     num_preload_bwssets, 
     bwsset_sampling_method, 
     item_sampling_method,
+    txtlen_noise,
     // Settings for (5), e.g. computeTrainingScores
     smoothing_method, 
     ema_alpha,
@@ -780,7 +781,7 @@ export const useInteractivity = () => {
     // sort by text length + 10% noise
     sampled_ids.sort((key1, key2) => {
         // sort by shortest text length
-        const len2 = pool[key2].text.length * (0.9 + Math.random() * 0.2)
+        const len2 = pool[key2].text.length * (1.0 - txtlen_noise.value + Math.random() * 2.0 * txtlen_noise.value)
         if (pool[key1].text.length < len2){return -1;}
         else{ return 1;}
     });

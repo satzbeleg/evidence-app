@@ -51,6 +51,7 @@ export const useBwsSettings = () => {
   const num_preload_bwssets = ref();   // settings: Number BWS sets to preload
   const item_sampling_method = ref(); // "random", "exploit", "newer-unstable", "semantic-similar"
   const bwsset_sampling_method = ref() // overlap, twice
+  const txtlen_noise = ref();
 
   // Settings for (5) 
   const smoothing_method = ref();
@@ -103,6 +104,7 @@ export const useBwsSettings = () => {
           bwsset_sampling_method.value = response.data['bwsset-sampling-method'] || "overlap";
           num_preload_bwssets.value = response.data['num-preload-bwssets'] || 3;
           item_sampling_method.value = response.data['item-sampling-method'] || "semantic-similar";
+          txtlen_noise.value = response.data['txtlen-noise'] || 0.1;
           // Settings for 4/5/6
           retrain_patience.value = response.data['retrain-patience'] || 1;
           // Settings for (5): computeTrainingScores
@@ -129,6 +131,10 @@ export const useBwsSettings = () => {
   /**
    * (C.1) save user's settings to database
    */
+  const clamp = (val, min, max) => {
+    return val > max ? max : val < min ? min : val;
+  }
+
   const saveBwsSettings = () => {
     return new Promise((resolve, reject) => {
       const { getToken } = useAuth();
@@ -161,6 +167,7 @@ export const useBwsSettings = () => {
         'bwsset-sampling-method': bwsset_sampling_method.value, 
         'num-preload-bwssets': num_preload_bwssets.value, 
         'item-sampling-method': item_sampling_method.value,
+        'txtlen-noise': clamp(txtlen_noise.value, 0.0, 1.0),
         // Settings for 4/5/6
         'retrain-patience': retrain_patience.value,
         // Settings for (5), e.g. computeTrainingScores
@@ -217,6 +224,7 @@ export const useBwsSettings = () => {
     bwsset_sampling_method.value = "overlap";
     num_preload_bwssets.value = 3;
     item_sampling_method.value = "semantic-similar";
+    txtlen_noise.value = 0.1;
     // Settings for 4/5/6
     retrain_patience.value = 1;
     // Settings for (5): computeTrainingScores
@@ -248,7 +256,7 @@ export const useBwsSettings = () => {
     drop_converge, eps_score_change, converge_patience,
     drop_pairs,
     // Settings for (3), e.g. sampleBwsSets
-    bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method,
+    bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method, txtlen_noise,
     // Settings for 4/5/6
     retrain_patience,
     // Settings for (5), e.g. computeTrainingScores
