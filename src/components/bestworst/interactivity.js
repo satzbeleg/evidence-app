@@ -218,6 +218,8 @@ export const useInteractivity = () => {
 
   // Informational variables
   const error_message = ref("");
+  const current_training_losses = ref([]);
+  const last_training_loss = ref();
 
   // Load General Settings
   const { 
@@ -1109,6 +1111,9 @@ export const useInteractivity = () => {
         }else{
           console.log("No consent to save model weights");
         }
+        // update current loss
+        current_training_losses.value.push(res.history.loss[res.history.loss.length - 1]);
+        last_training_loss.value = res.history.loss[res.history.loss.length - 1];
         // logging
         if (debug_verbose.value){
           console.group();
@@ -1202,7 +1207,7 @@ export const useInteractivity = () => {
 
   // Go to (1)
   return { 
-    error_message,
+    error_message, current_training_losses, last_training_loss,
     pool, 
     pairs, 
     resetPool,
