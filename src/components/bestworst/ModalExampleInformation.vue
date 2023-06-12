@@ -42,6 +42,13 @@
           </tbody>
         </table>
 
+        <button class="button is-rounded" @click="copy2clipboard()">
+          <span class="icon is-small is-left"><i class="far fa-copy"></i></span>
+          <span class="is-right">Copy XML</span>
+        </button>
+
+        <br/>
+
         <h2 class="title is-5">Modelltraining</h2>
         <table class="table">
           <thead>
@@ -87,11 +94,28 @@ export default defineComponent({
     exampleMeta: Object
   },
 
-  setup(){
+  setup(props){
     const { t } = useI18n();
+
+    const copy2clipboard = () => {
+      const xmltxt = `
+<Beleg>
+  <Belegtext>
+    ${props.exampleMeta['text']}
+  </Belegtext>
+  <Fundstelle>
+    <Bibl>
+      ${props.exampleMeta['context']['biblio']}
+    </Bibl>
+  </Fundstelle>
+</Beleg>
+`;
+      navigator.clipboard.writeText(xmltxt);
+    }
 
     return { 
       t,
+      copy2clipboard,
     }
   }
 });
