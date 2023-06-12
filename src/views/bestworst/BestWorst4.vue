@@ -39,6 +39,11 @@
         <!-- progress in Zahlen -->
         <br/>
         <p class="has-text-right is-size-6 has-text-grey is-italic">
+          Training Loss:
+          <output :class="cssLossColor">
+            {{ Math.round(last_training_loss * 10000.0) / 10000.0 }}
+          </output>
+          <br/>
           <output>
             {{ queueData.counter }}
           </output>
@@ -145,7 +150,7 @@ export default defineComponent({
       queue_reorderpoint, 
       retrain_patience, 
       item_sampling_method, // to trigger similarity computation
-      loadBwsSettings 
+      loadBwsSettings,
     } = useBwsSettings();
     loadBwsSettings();
 
@@ -178,7 +183,8 @@ export default defineComponent({
       sampleBwsSets, 
       computeTrainingScores,
       retrainModel,
-      predictScores
+      predictScores,
+      last_training_loss,
     } = useInteractivity();
 
     // util functions to compute similarity vectors for each example
@@ -331,6 +337,20 @@ export default defineComponent({
     const showModalBwsSettings = ref(false);
 
 
+    const cssLossColor = ref("");
+    watch(
+      () => last_training_loss.value,
+      (loss) => {
+        if (loss < 0.01){
+          cssLossColor.value = "has-background-success has-text-white";
+        }else if (loss < 0.05 && loss >= 0.01){
+          cssLossColor.value = "has-background-warning has-text-dark";
+        }else{
+          cssLossColor.value = "has-background-danger has-text-white";
+        }
+      }
+    );
+
     return { 
       queueData, 
       nextExampleSet,
@@ -339,6 +359,7 @@ export default defineComponent({
       currentPoolSize,
       // fot the Ranking Overview modal
       showModalOverview, pool, 
+      last_training_loss, cssLossColor,
       // BWS Settings modal
       showModalBwsSettings,
     }
