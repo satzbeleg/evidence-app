@@ -42,10 +42,10 @@
           </tbody>
         </table>
 
-        <button class="button is-rounded" @click="copy2clipboard()">
-          <span class="icon is-small is-left"><i class="far fa-copy"></i></span>
-          <span class="is-right">Copy XML</span>
-        </button>
+        <CopyToClipboadButton 
+          :text="exampleMeta['text']" 
+          :biblio="exampleMeta['context']['biblio']" 
+        />
 
         <br/>
 
@@ -83,39 +83,25 @@
 
 import { useI18n } from 'vue-i18n';
 import { defineComponent } from "vue";
+import CopyToClipboadButton from '@/components/bestworst/CopyToClipboadButton.vue';
 
 export default defineComponent({
   name: 'ModalExampleInformation',
 
-  components: {},
+  components: {
+    CopyToClipboadButton
+  },
 
   props: {
     showModalInformation: Boolean,
     exampleMeta: Object
   },
 
-  setup(props){
+  setup(){
     const { t } = useI18n();
-
-    const copy2clipboard = () => {
-      const xmltxt = `
-<Beleg>
-  <Belegtext>
-    ${props.exampleMeta['text']}
-  </Belegtext>
-  <Fundstelle>
-    <Bibl>
-      ${props.exampleMeta['context']['biblio']}
-    </Bibl>
-  </Fundstelle>
-</Beleg>
-`;
-      navigator.clipboard.writeText(xmltxt);
-    }
 
     return { 
       t,
-      copy2clipboard,
     }
   }
 });

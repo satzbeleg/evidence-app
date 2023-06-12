@@ -34,6 +34,13 @@
                   <p class="is-size-7 has-text-grey is-italic"> {{ item.num_displayed }} x</p>
                   <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_training_score * 100.).toFixed(1) }} (r)</p>
                   <p class="is-size-7 has-text-grey is-italic"> {{ (item.last_model_score * 100.).toFixed(1) }} (m)</p> 
+                  <p>
+                    <CopyToClipboadButton 
+                      size="small" 
+                      :text="item['text']" 
+                      :biblio="item['context']['biblio']" 
+                    />
+                  </p>
                 </div>
               </div>
             </div>
@@ -50,11 +57,14 @@
 
 import { useI18n } from 'vue-i18n';
 import { defineComponent, toRaw } from "vue";
+import CopyToClipboadButton from '@/components/bestworst/CopyToClipboadButton.vue';
 
 export default defineComponent({
   name: 'ModalRankingOverview',
 
-  components: {},
+  components: {
+    CopyToClipboadButton
+  },
 
   props: {
     showModalOverview: Boolean,
