@@ -344,7 +344,7 @@ export default defineComponent({
         if (loss < 0.01){
           cssLossColor.value = "has-background-success has-text-white";
         }else if (loss < 0.05 && loss >= 0.01){
-          cssLossColor.value = "has-background-warning has-text-dark";
+          cssLossColor.value = "has-background-warning has-text-black";
         }else{
           cssLossColor.value = "has-background-danger has-text-white";
         }

@@ -124,10 +124,12 @@ export default defineComponent({
 /** style the card depending on the state */
 .state-best {
   background: #3298dc;   /** 3298dc */
+  color: rgb(48,48,48);
 }
 
 .state-worst {
   background: #ff8a65;  /** ff8a65 */
+  color: rgb(48,48,48);
 }
 </style>
 
