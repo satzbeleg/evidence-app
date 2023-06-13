@@ -28,7 +28,7 @@
       </div>
 
 
-      <template v-if="queueData.current.length > 0">
+      <template v-if="queueData.current.length > 0 && !isLoadingData">
         <!-- BWS UI -->
         <BestWorstChoices 
           v-bind:items="queueData.current"
@@ -73,11 +73,19 @@
           <!-- First choose the worst sentence example (orange), and then the best sentence example (blue). -->
         </p>
       </template>
-      <template v-else>
+
+      <template v-if="queueData.current.length == 0 && !isLoadingData">
         <PageLoader 
-          v-bind:status="queueData.current.length == 0"
-          v-bind:messages="['Queue is empty!', message_suggestion]" />
+          v-bind:status="true"
+          v-bind:messages="['Sentence pool is empty!', 'Please search for a headword']" 
+        />
       </template>
+
+      <PageLoader v-show="isLoadingData"
+        v-bind:status="true"
+        v-bind:messages="['Loading data for lemma', search_headword]" 
+      />
+
 
     </div>
   </section>
@@ -279,6 +287,8 @@ export default defineComponent({
     /**
      * [A4] Store the new Lemma, Reset the Queue data, Load new data
      */
+    const isLoadingData = ref(false);
+
     const onSearchHeadword = async(keywords) => {
       // delete pool and pairs matrix
       resetPool();
@@ -287,7 +297,9 @@ export default defineComponent({
       // reset `search_headword`
       search_headword.value = keywords
       // force to load next example in UI
+      isLoadingData.value = true;
       await replenishQueue();
+      isLoadingData.value = false;
     }
 
 
@@ -355,7 +367,8 @@ export default defineComponent({
       queueData, 
       nextExampleSet,
       onSearchHeadword,
-      message_suggestion,
+      // message_suggestion, 
+      isLoadingData, search_headword,
       currentPoolSize,
       // fot the Ranking Overview modal
       showModalOverview, pool, 

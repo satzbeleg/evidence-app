@@ -6,11 +6,10 @@
              v-on:search-headword-navbar="onSearchHeadword"
              :key="search_headword" />
 
-  <PageLoader v-if="isLoading"
-    v-bind:status="isLoading"
-    v-bind:messages="['Loading Data', 'Computing similarities', 'Solve optimization problem']" />
 
-  <section class="section" id="variation" v-else>
+  <section v-if="Object.keys(pool).length > 0 && !isLoadingData && !isPredictingScores && !isComputingSimilarities"
+    class="section" id="variation"
+  >
     <div class="container">
       <!-- put the following into components ... -->
       
@@ -143,6 +142,27 @@
     </div>
   </div>
 
+  <PageLoader 
+    v-show="Object.keys(pool).length == 0"
+    v-bind:status="true"
+    v-bind:messages="['Sentence pool is empty!', 'Please search for a headword']" 
+  />
+
+  <PageLoader v-show="isLoadingData"
+    v-bind:status="isLoadingData"
+    v-bind:messages="['Loading data for lemma', search_headword]" 
+  />
+
+  <PageLoader v-show="isPredictingScores"
+    v-bind:status="isPredictingScores"
+    v-bind:messages="['Predicting model scores ...']" 
+  />
+
+  <PageLoader v-show="isComputingSimilarities"
+    v-bind:status="isComputingSimilarities"
+    v-bind:messages="['Computing similarities ...']" 
+  />
+
 </template>
 
 
@@ -182,7 +202,9 @@ export default {
 
     const showEditModal = ref(false);
     const recomputeMatrix = ref(false);
-    const isLoading = ref(false);
+    const isLoadingData = ref(false);
+    const isPredictingScores = ref(false);
+    const isComputingSimilarities = ref(false);
 
     const lambdaTradeOff = ref(.25);
     const betaSemantic = ref(.5);
@@ -218,11 +240,17 @@ export default {
       // reset `search_headword`
       search_headword.value = keywords
       // load new examples from API/CQL
+      isLoadingData.value = true;
       await addExamplesToPool(search_headword.value);
+      isLoadingData.value = false;
       // predict scores
+      isPredictingScores.value = true;
       await predictScores();
+      isPredictingScores.value = false;
       // compute all similarity pairs and its scores {id1: {id2: score}}
+      isComputingSimilarities.value = true;
       await computeSimilaries(pool);
+      isComputingSimilarities.value = false;
       // solve optimization problem initiallly
       updateWeights();
       // console.log("pool", pool)
@@ -261,9 +289,6 @@ export default {
     }
 
     const updateWeights = () => {
-      // open pagerloader
-      isLoading.value = true;
-
       if(debug_verbose.value){
         console.group();
         console.log("Lambda:", parseFloat(lambdaTradeOff.value));
@@ -343,9 +368,6 @@ export default {
       // console.log("Force rerendering")
       // const instance = getCurrentInstance();
       // instance?.proxy?.$forceUpdate();
-
-      // close pagerloader
-      isLoading.value = false;
     }
     
 
@@ -354,7 +376,7 @@ export default {
       t,
       search_headword,
       onSearchHeadword,
-      isLoading,
+      isLoadingData, isPredictingScores, isComputingSimilarities,
       showEditModal,
       recomputeMatrix,
       lambdaTradeOff,
