@@ -971,13 +971,15 @@ export const useInteractivity = () => {
       api.post(`v1/model/load`)
       .then(response => {
         console.log(`Model Loading Status: ${response.data['status']}`);
-        console.log(`Model Timestamp: ${response.data['timestamp']}`);
-        let wgts = []
-        response.data["weights"].forEach((wgt) => {
-          console.log(`Tensor Shape: ${wgt["shape"]}`)
-          wgts.push(tf.tensor(Array.from(wgt["values"]), wgt["shape"]));
-        });
-        model.setWeights(wgts);
+        if(response.data['status'] === 'success'){
+          console.log(`Model Timestamp: ${response.data['timestamp']}`);
+          let wgts = []
+          response.data["weights"].forEach((wgt) => {
+            console.log(`Tensor Shape: ${wgt["shape"]}`)
+            wgts.push(tf.tensor(Array.from(wgt["values"]), wgt["shape"]));
+          });
+          model.setWeights(wgts);
+        }
         resolve(response);
       })
       .catch(error => {
