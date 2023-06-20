@@ -30,18 +30,14 @@
         </p>
       </div>
 
-      <div class="card is-quarter" 
-        v-for="(item, idx) in sortedPool" 
-        :key="idx"
-      >
-        <div class="card-content">
-          <div v-html="highlightSpans(item.text, item.spans, 'span', 'tag is-success is-light is-rounded reset-to-parent-font-height')"></div>
-          <p class="is-size-7 has-text-grey is-italic">
-            w<sub>{{ item.id }}</sub>: {{ parseFloat(item.weight).toFixed(8) }} |
-            {{ item.bibl }}
-          </p>
-        </div>
-      </div>
+      <ItemCard v-for="(item, idx) in sortedPool" :key="idx"
+        v-bind:itemPos="idx.toString()"
+        v-bind:exampleId="item.example_id"
+        v-bind:sentText="item.text"
+        v-bind:lemmaSpans="item.spans"
+        v-bind:hasInfoModal="true"
+        v-bind:exampleMeta="item"
+      />
 
       <!-- put the above into components ... -->
     </div>
@@ -182,7 +178,7 @@ import { useQueue } from '@/components/bestworst/queue.js';
 import { useQuadOpt } from '@/components/variation/quadopt.js';
 import { useSimilarityVectors } from '@/components/variation/similarity-vectors.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
-// import ItemCard from '@/components/bestworst/ItemCard.vue';
+import ItemCard from '@/components/bestworst/ItemCard.vue';
 
 export default {
   name: "Find diverse sets of sentence examples",
@@ -190,7 +186,7 @@ export default {
   components: {
     TheNavbar,
     PageLoader,
-    // ItemCard
+    ItemCard
   },
 
   setup(){
