@@ -41,12 +41,98 @@
       "data_donation": "Datenspende",
       "consent_information": "In der App werden die Präferenzen, Entscheidungen und Nutzungsverhalten der Benutzer aufgezeichnet, aber nur dann Daten an die Server gesendet, gespeichert, weiter verarbeitet, und veröffentlicht, wenn der Benutzer eine CC0-Lizenz auf die von ihm erzeugten Daten erteilt hat.",
       "consent_confirmation": "Hiermit erteile ich eine CC0-Lizenz auf alle von mir mit der Web-App erzeugten Daten (Evaluationsdaten, Modelldaten und demographische Daten)."
+    },
+    "debugging": {
+      "info": "Debugging Information",
+      "print": "Details ausgeben in <code>console.log</code>"
     }
   },
   "bestworst": {
     "title": "Best Worst Scaling",
     "help_short": "Wähle das beste & schlechteste von vier Beispielen",
-    "help_long": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle noch das schlechteste Satzbeispiel aus."
+    "help_long": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle noch das schlechteste Satzbeispiel aus.",
+    "offline_queue": {
+      "header": "Offline Warteschlange",
+      "info": "Die Anwendungsoberfläche hat eine eigene Warteschlange mit vorgeladenen BWS-Gruppen. Sie funktioniert offline im Falle von Netzwerkunterbrechungen und füllt sich automatisch im Hintergrund auf. Die Warteschlange ist ein Lagerhaltungsmodell mit fixem Meldebestand (reorder point) und fixer Bestellmenge (order quantity).",
+      "min_number": "Minimale Anzahl an Offline BWS-Mengen",
+      "reload_number": "Anzahl an BWS-Mengen zum Neuladen"
+    },
+    "sampling": {
+      "header": "Stichprobe der Satzbelege aus der Datenbank",
+      "info": "In der Datenbank sind für gegebene Suchparameter (z.B. Lemma) i.d.R. eine sehr große Anzahl von Satzbelegen vorhanden, die nicht alle angezeigt werden können. Abhängig vom aktuellen globalen Score werden die besten N Satzbelege betrachten, um eine Stichprobe zu entnehmen. Des Weiteren kann ein Offset für die nächsten besten Satzbelege definiert werden, d.h. <code>[1+offset, N+offset]</code>. So können bspw. die bestbewerteten Satzbelege ausgeschlossen werden.",
+      "n_top": "Stichprobenziehung aus N bestbewerteten Satzbelegen (Standardeinstellung 100)",
+      "offset": "Offset (Standardeinstellung: 0)"
+    },
+    "setconfig": {
+      "header": "BWS-Mengenkonfiguration",
+      "info1": "In der BWS-Anwendungsoberfläche können 3 bis 5 Satzbelege angezeigt werden. Die Anzahl sollte sich nach dem benötigten Arbeitsgedächtnis für die Bewertungsaufgabe richten, z.B. die Komplexität und Neuheit der Inhalte und Entscheidungskriterien, Fähigkeit sich auf alle angezeigten Satzbelegen gleichzeitig zu fokussieren, kognitive Erschöpfung (Siehe <a href='https://osf.io/qkxej/'>Kap. 3</a>).",
+      "info2": "Um logische Inferenzregeln in der Datenanalyse anzuwenden, müssen BWS-Gruppen überlappend zusammengestellt werden. Zusätzlich kannst du sicherstellen, dass jeder Satzbeleg in mindestens zwei BWS-Gruppen vorkommt (Siehe <a href='https://osf.io/qkxej/'>Kap. 5</a>).",
+      "items": "Satzbelege pro BWS-Menge (Standardeinstellung: 4)"
+    },
+    "localpool": {
+      "header": "Stichprobenziehung aus dem lokalen Speicher (v4)",
+      "info1": "Vor dem erneuten Training des lokalen ML-Modells in der interaktiven BWS-Anwendungsoberfläche (v4), wird eine bestimmte Anzahl an BWS-Gruppen den Benutzenden zur Bewertung vorgelegt.",
+      "info2": "Die Satzbelege können auf unterschiedliche Weise aus dem Speicher ausgewählt werden, z.B. per Zufall",
+      "number": "Anzahl an BWS-Mengen zur Evaluierung vor erneutem Training (Standardeinstellung: 3)",
+      "sampling": "Stichprobenziehung von Satzbelegen aus dem Speicher (Standardeinstellung: semantische Ähnlichkeit)",
+      "noise": "Anteil des weißen Rauschens beim Sortieren von Satzbelegen nach Textlänge (Standardeinstellung: 10%)"
+    },
+    "drophide": {
+      "header": "Zu oft gezeigte Satzbelege entfernen und/oder verstecken",
+      "info": "Wir können einen Schwellenwert festlegen, wie oft ein Satzbeleg einem/einer Benutzenden maximal angezeigt wird. Zunächst wird das Satzbeleg <b>vom BWS-Stichprobenziehungsprozess ausgeschlossen</b>, d.h. der Satzbeleg bleibt im Speicher, wird aber nicht mehr angezeigt -- Diese Option würde verhindern, dass der Speicher automatisch aufgefüllt wird (d.h. neue Satzbelege aus der Datenbank hinzugefügt werden). Die zweite Option besteht darin, den Satzbeleg endgültig <b>aus dem Speicher zu entfernen</b>.",
+      "exclude": "Vom BWS-Sampling ausschließen, wenn zu oft angezeigt (Standardeinstellung: Ein)",
+      "drop": "Aus dem Speicher entfernen, wenn zu oft angezeigt (Standardeinstellung: Aus)",
+      "maxnum": "Maximale Anzeigen eines Satzbelegs"
+    },
+    "poolsize": {
+      "header": "Speichergröße (v4)",
+      "info": "Die Speichergröße der lokal gespeicherten Satzbelege, Merkmalsvektoren, usw. muss eingeschränkt werden, da Endbenutzungsgeräte begrenzte Speicherkapazitäten haben.",
+      "minsize": "Minimale Speichergröße",
+      "maxsize": "Maximale Speichergröße"
+    },
+    "initpool": {
+      "header": "Speicher nur einmal mit Satzbelegen füllen",
+      "info": "Diese Option deaktiviert das automatische Auffüllen des Speichers, nachdem Satzbelege gelöscht wurden. Es gibt drei Szenarien. (a) Der Speicher ändert sich nie, d.h. keine Speicherlöschungen, keine Speicherzugänge. (b) Der Speicher schrumpft, d.h. Speicherlöschungen, aber keine Speicherzugänge. (c) Der Speicher erneuert sich, d.h. Speicherlöschungen und Speicherzugänge.",
+      "loadonce": "Speicher nur einmal mit Satzbelegen füllen / Keine späteren Speicherzugänge (Standardeinstellung: Ein)"
+    },
+    "trainscore": {
+      "header": "Satzbelege nach Zielvariablenverteilung löschen und/oder hinzufügen",
+      "info": "Um Satzbelege aus dem Speicher zu entfernen oder dem Speicher neue Satzbelege hinzuzufügen, kann eine angestrebte Zielvariablenverteilung festgelegt werden, indem die Klassengrenzen und die gewünschten Dichten angegeben werden. Wenn zu viele Satzbelege in eine Klasse fallen, werden die ältesten und die am stärksten abgedeckten Satzbelege aus dem Speicher entfernt. Fallen zu wenige Satzbelege in eine Klasse, werden Satzbelege mit einem bestimmten Score-Bereich vom Datenbankserver abgefragt und dem Speicher hinzugefügt.",
+      "edges": "Klassengrenzen",
+      "dens": "Angestrebte Dichten für jede Klasse",
+      "drop": "Satzbelege nach einer angestrebten Verteilung aus dem Speicher löschen (Standardeinstellung: Aus)",
+      "add": "Satzbelege nach einer angestrebten Verteilung zum Speicher hinzufügen (Standardeinstellung: Aus)"
+    },
+    "converge": {
+      "header": "Satzbelege mit konvergenten Modellwerten löschen",
+      "info": "Im Idealfall konvergieren die Modellwerte für alle Satzbelege. Das Modell sollte jedoch zu den korrekten Werten konvergieren. Wir könnten Satzbelege aus dem Speicher löschen, wenn wir den Verdacht haben, dass das Modell in einem lokalen Minimum gefangen ist, d.h. wenn wir glauben, dass die meisten konvergierten Scores falsch sind. Unter normalen Umständen sollten vor allem konvergente Satzbelege im Speicher bleiben.",
+      "drop": "Satzbelege aus dem Speicher löschen, falls Modellwert konvergiert (Standardeinstellung: Aus)",
+      "term": "Abbruchkriterium: Modellwert ändert sich",
+      "patience": "Wartezeit. Anzahl an Modellevaluierungen vor Anwendung des Konvergenzlöschungskriteriums."
+    },
+    "matrix": {
+      "header": "Satzbelege aus lokaler Paarvergleichsmatrix löschen",
+      "info": "Wenn Satzbelege aus dem Speicher gelöscht werden, werden ebenso Zeilen und Spalten der Paarvergleichsmatrix gelöscht.",
+      "drop": "Satzbelege aus lokaler Paarvergleichsmatrix löschen"
+    },
+    "retrain": {
+      "header": "Erneutes Training auslösen",
+      "info": "Setze die Anzahl an BWS-Mengenevaluationen so, dass gewartet wird, bis ein erneutes Training des Modells ausgelöst wird.",
+      "patiences": "Wartezeit zum Weitertraining"
+    },
+    "update": {
+      "header": "Zielvariable aktualisieren",
+      "smoothing": "Glättungsmethoden zur Berechnung der Zielvariable",
+      "ewa": "Alpha-Parameter (EWA, exponentially weighted average, exponentiell gleitender Durchschnitt)"
+    },
+    "localmodel": {
+      "header": "Lokales ML-Modell trainieren",
+      "optimizer": "Optimierungsalgorithmus",
+      "lr": "Lernrate",
+      "epochs": "Anzahl an Epochen pro Trainingszyklus",
+      "loss": "Verlustfunktion",
+      "samplesize": "Minimale Stichprobengröße"
+    }
   },
   "variation": {
     "title": "Belegvariation",
