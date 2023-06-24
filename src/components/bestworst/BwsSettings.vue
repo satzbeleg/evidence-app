@@ -1,15 +1,10 @@
 <template>
-  <h1 class="title is-3 is-spaced">Best-Worst Scaling</h1>
+  <h1 class="title is-3 is-spaced">{{ t('bestworst.title') }}</h1>
 
-  <h2 class="subtitle is-4">Offline Queue</h2>   <!-- Offline Warteschlange -->
+  <h2 class="subtitle is-4">{{ t('bestworst.offline_queue.header') }}</h2>   <!-- Offline Warteschlange -->
   <div class="content">
-    <p v-if="language == 'de'">
-      Die Benutzeroberfläche hat eine eigene Warteschlange mit vorgeladenen BWS-Gruppen. Sie funktioniert offline im Falle von Netzwerkunterbrechungen und füllt sich automatisch im Hintergrund auf.
-      Die Warteschlange ist ein Lagerhaltungsmodell mit fixen Meldebstand (reorder point) und fixer Bestellmenge (order quantity).
-    </p>
-    <p v-else>
-      The BWS UI has its own queue of preloaded BWS sets. It works offline in case of network interruptions, and replenishes the queue in the background. 
-      The queue follows a Fixed Quantity inventory model with a given reorder point and order quantity.
+    <p>
+      {{ t('bestworst.offline_queue.info') }}
     </p>
   </div>
   <div class="columns">
@@ -17,7 +12,7 @@
 
       <div class="field">
         <label class="label" for="queue-reorderpoint">
-          Minimum Number of Offline BWS Sets  <!-- (econ: reorder point) -->
+          {{ t('bestworst.offline_queue.min_number') }}  <!-- (econ: reorder point) -->
         </label>
         <input id="queue-reorderpoint" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -27,7 +22,7 @@
 
       <div class="field">
         <label class="label" for="queue-orderquantity">
-          Number of BWS Sets to Reload  <!-- (econ: order quantity) -->
+          {{ t('bestworst.offline_queue.reload_number') }}  <!-- (econ: order quantity) -->
         </label>
         <input id="queue-orderquantity" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -39,18 +34,15 @@
   </div>
 
 
-  <h2 class="subtitle is-4">Sampling of Sentence Examples from the Database</h2>  <!-- Stichprobe der Satzbelege aus der Datenbank -->
+  <!-- 
+    Stichprobe der Satzbelege aus der Datenbank 
+    - `<span v-html ...` is a hack to inject html for the meanwhile! possible dangerous
+    - Outdated Setting for bestworst3.vue and REST API `v1/bestworst/sampling`
+  -->
+  <h2 class="subtitle is-4">{{ t('bestworst.sampling.header') }}</h2>  
   <div class="content">
-    <p v-if="language == 'de'">
-      In der Datenbank sind für gegebene Suchparameter (z.B. Lemma) i.d.R. eine sehr große Anzahl von Satzbelegen vorhanden, die nicht alle angezeigt werden können.
-      Abhängig vom aktuellen globalen Score werden die besten N Satzbelege betrachten, um eine Stichprobe zu entnehmen.
-      Desweiteren kann ein Offset für die nächstenbesten Satzbelege definiert werden, d.h. <code>[1+offset, N+offset]</code>. So können bspw. die bestbewerteten Satzbelege ausgeschlossen werden.
-      
-    </p>
-    <p v-else>
-      For given search parameters (e.g. Lemma) there is usually a very large number of sentence examples in the database, all of which cannot be displayed.
-      N sentence example with the best current globals score form a pool to sample from.
-      Furthermore, an offset can be defined for the next best sentence examples as pool, i.e. <code>[1+offset, N+offset]</code>. In this way, the best scored sentence example can be excluded.
+    <p>
+      <span v-html="t('bestworst.sampling.info')"></span>
     </p>
   </div>
   <div class="columns">
@@ -58,39 +50,34 @@
     
       <div class="field">
         <label class="label" for="item-sampling-numtop">
-          Sample from N top scored sentences (Default: 100)
+          {{ t('bestworst.sampling.n_top') }}
         </label>
         <input id="item-sampling-numtop" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
                type="range" v-model="item_sampling_numtop" step="10" min="10" max="10000">
         <output for="item-sampling-numtop">{{ item_sampling_numtop }}</output>
       </div>
-
       <div class="field">
         <label class="label" for="item-sampling-offset">
-          Offset (Default: 0)
+          {{ t('bestworst.sampling.offset') }}
         </label>
         <input id="item-sampling-offset" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
                type="range" v-model="item_sampling_offset" step="100" min="0" max="100000">
         <output for="item-sampling-offset">{{ item_sampling_offset }}</output>
       </div>
-
     </div>
   </div>
 
 
-  <h2 class="subtitle is-4">BWS Sets Configuration</h2>  <!-- BWS-Gruppen Konfiguration -->
+  <h2 class="subtitle is-4">{{ t('bestworst.setconfig.header') }}</h2>  <!-- BWS-Gruppen Konfiguration -->
   <div class="content">
-    <p v-if="language == 'de'">
-      In der BWS UI können 3 bis 5 Beispiele angezeigt werden. Die Anzahl sollte sich nach dem benötigten Arbeitsgedächtnis für die Bewertungsaufgabe richten, z.B. die Komplexität und Neuheit der Inhalte und Entscheidungskriterien, Fähigkeit sich auf alle angezeigten Beispielen gleichzeitig zu fokussieren, kognitive Erschöpfung (Siehe <a href="https://osf.io/qkxej/">Kap. 3</a>).
+    <p>
+      <!-- {{ t('bestworst.setconfig.info1') }} -->
+      <span v-html="t('bestworst.setconfig.info1')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
       <br>
-      Um logische Inferenzregeln in der Datenanalyse anzuwenden, müssen BWS-Gruppen überlappend zusammengestellt werden. Zusätzlich kannst du sicherstellen, dass jeder Satzbeleg in mindestens zwei BWS-Gruppen vorkommt (Siehe <a href="https://osf.io/qkxej/">Kap. 5</a>).
-    </p>
-    <p v-else>
-      The BWS UI can display between 3 and 5 items. The number should depends on the required working memory for the judgement, e.g. the complexity and newness of the content and decision criterias, ability to focus attention on all items, cognitive exhaustion levels (see <a href="https://osf.io/qkxej/">Ch. 3</a>).
-      <br>
-      In order to apply logical inference rules in post-processing, BWS sets need to be sampled in an overlapping manner. Additionally you can ensure that each sentence example occurs in at least two BWS sets (see <a href="https://osf.io/qkxej/">Ch. 5</a>).
+      <!-- {{ t('bestworst.setconfig.info2') }} -->
+      <span v-html="t('bestworst.setconfig.info2')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
     </p>
   </div>
   <div class="columns">
@@ -98,7 +85,7 @@
 
       <div class="field">
         <label class="label" for="bwsset-num-items">
-          Items per BWS set (Default: 4)
+          {{ t('bestworst.setconfig.items') }}
         </label>
         <input id="bwsset-num-items" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -117,15 +104,12 @@
   </div>
 
 
-  <h2 class="subtitle is-4">Sampling from Local Pool (v4)</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.localpool.header') }}</h2>
   <div class="content">
-    <p v-if="language == 'de'">
-      Vor dem erneuten Training des lokalen ML-Modells in der Interactivity BWS UI (v4), wird eine bestimmte Anzahl an BWS-Gruppen den Benutzer zur Bewertung vorgelegt.
+    <p>
+      {{ t('bestworst.localpool.info1') }}
       <br>
-      Die Satzbelege können auf unterschiedliche Weise aus dem Pool ausgewählt werden, z.B. per Zufall
-    </p>
-    <p v-else>
-      Before re-training the local ML model in the Interactivity BWS UI (v4), a specific number of BWS groups is presented to the user for evaluation.
+      {{ t('bestworst.localpool.info2') }}
     </p>
   </div>
   <div class="columns">
@@ -133,7 +117,7 @@
 
       <div class="field">
         <label class="label" for="interactivity-num_preload_bwssets">
-          Number of BWS sets to evaluate before re-training (Default: 3)
+          {{ t('bestworst.localpool.number') }}
         </label>
         <input id="interactivity-num_preload_bwssets" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -142,7 +126,7 @@
       </div>
 
       <BDropdown idname="interactivity-item-sampling-method" 
-                 labeltext="Sampling Sentences from Pool (Default: semantic-similar)" 
+                :labeltext="t('bestworst.localpool.sampling')" 
                  v-model:selected="item_sampling_method" 
                  :options="[
                   {'id': 'random', 'text': 'random'}, 
@@ -154,7 +138,7 @@
 
       <div class="field">
         <label class="label" for="interactivity-txtlen_noise">
-          Noise when sorting examples by text length (Default: 10%)
+          {{ t('bestworst.localpool.noise') }}
         </label>
         <input id="interactivity-txtlen_noise" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -167,15 +151,11 @@
   </div>
 
 
-  <h2 class="subtitle is-4">Drop and/or Hide Examples if shown too often</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.drophide.header') }}</h2>
   <div class="content">
     <p>
-      We can specify a threshold of the maximum of times an examples is displayed to an user.
-      On a first level, the example is <b>excluded from the BWS sampling process</b>, 
-      i.e. the example remains in the pool but is not shown anymore -- 
-      This option would prevent replenishing the pool automatically 
-      (i.e. adding new examples from the database).
-      The second option is to <b>remove the example from the pool</b> for good.
+      <!-- {{ t('bestworst.drophide.info') }} -->
+      <span v-html="t('bestworst.drophide.info')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
     </p>
   </div>
   <div class="columns">
@@ -186,7 +166,7 @@
                class="switch is-rounded" type="checkbox"
                v-model="exclude_max_display">
         <label class="label" for="interactivity-exclude-bwssampling-toogle">
-          Exclude from BWS sampling if shown too often (Default: On)
+          {{ t('bestworst.drophide.exclude') }}
         </label>
       </div>
 
@@ -195,13 +175,13 @@
                class="switch is-rounded" type="checkbox"  
                v-model="drop_max_display">
         <label class="label" for="interactivity-drop-display-toogle">
-          Drop examples from the pool if shown too often (Default: Off)
+          {{ t('bestworst.drophide.drop') }}
         </label>
       </div>
 
       <div class="field" v-show="exclude_max_display === true || drop_max_display === true">
         <label class="label" for="max-displays">
-          Maximum number of times an example will be displayed
+          {{ t('bestworst.drophide.maxnum') }}
         </label>
         <input id="max-displays" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -213,13 +193,10 @@
   </div>
 
 
-  <h2 class="subtitle is-4">Pool Size (v4)</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.poolsize.header') }}</h2>
   <div class="content">
-    <p v-if="language == 'de'">
-      Die Poolgröße der lokal gespeicherten Satzbelege, Merkmalsvektoren, usw. muss eingeschränkt werden, da Endbenutzergeräte begrenzte Speicherkapazitäten haben.
-    </p>
-    <p v-else>
-      The pool size of the locally stored sentences, feature vectors, annotation data, etc. must be constrained as end user devices have limited storage capacities.
+    <p>
+      {{ t('bestworst.poolsize.info') }}
     </p>
   </div>
   <div class="columns">
@@ -227,7 +204,7 @@
 
       <div class="field">
         <label class="label" for="min-pool-size">
-          Minimum Pool Size
+          {{ t('bestworst.poolsize.minsize') }}
         </label>
         <input id="min-pool-size" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -237,7 +214,7 @@
 
       <div class="field">
         <label class="label" for="interactivity-max_pool_size">
-          Maximum Pool Size
+          {{ t('bestworst.poolsize.maxsize') }}
         </label>
         <input id="interactivity-max_pool_size" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -248,14 +225,10 @@
     </div>
   </div>
 
-  <h2 class="subtitle is-4">Only Load An Initial Pool Once</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.initpool.header') }}</h2>
   <div class="content">
     <p>
-      This option disable the automatic replenishment of the pool after examples were dropped.
-      There are three scenarios.
-      a) The pool never changes, i.e. no pool deletions, no pool additions.
-      b) The pool shrinks, i.e. pool deletions but no pool additions.
-      c) The pool renew itself, i.e. pool deletions and pool additions.
+      {{ t('bestworst.initpool.info') }}
     </p>
   </div>
   <div class="columns">
@@ -265,20 +238,16 @@
                class="switch is-rounded" type="checkbox"   
                v-model="initial_load_only">
         <label class="label" for="interactivity-add-only-initially-toogle">
-          Only load an initial fixed pool / No pool additions lateron (Default: On)
+          {{ t('bestworst.initpool.loadonce') }}
         </label>
       </div>
     </div>
   </div>
 
-  <h2 class="subtitle is-4">Drop and/or Add Examples by Training Score Distribution</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.trainscore.header') }}</h2>
   <div class="content">
     <p>
-      In order to drop examples from the pool, or add new examples to the pool,
-      a target training score distribution can be set 
-      by specifying the bin edges and desired densities.
-      If too many examples fall in a bin, equally the oldest and most coverged examples are removed from the pool.
-      If too few examples fann in a bin, examples with a certain score range are queried from the database server and added to the pool.
+      {{ t('bestworst.trainscore.info') }}
     </p>
   </div>
   <div class="columns">
@@ -286,7 +255,7 @@
 
       <div class="field">
         <label class="label" for="interactivity-bin_edges">
-          Bin Edges
+          {{ t('bestworst.trainscore.edges') }}
         </label>
         <input id="interactivity-bin_edges" 
                class="input" type="text" v-model="bin_edges_text">
@@ -294,7 +263,7 @@
 
       <div class="field">
         <label class="label" for="interactivity-target_probas">
-          Target Densities for each bin
+          {{ t('bestworst.trainscore.dens') }}
         </label>
         <input id="interactivity-target_probas" 
                class="input" type="text" v-model="target_probas_text">
@@ -305,7 +274,7 @@
                class="switch is-rounded" type="checkbox"  
                v-model="drop_distribution">
         <label class="label" for="interactivity-drop-distribution-toogle">
-          Drop examples from the pool by a target distribution (Default: Off)
+          {{ t('bestworst.trainscore.drop') }}
         </label>
       </div>
 
@@ -314,7 +283,7 @@
                class="switch is-rounded" type="checkbox"  
                v-model="add_distribution">
         <label class="label" for="interactivity-add-distribution-toogle">
-          Add examples to the pool by a target distribution (Default: Off)
+          {{ t('bestworst.trainscore.add') }}
         </label>
       </div>
 
@@ -322,13 +291,10 @@
   </div>
 
 
-  <h2 class="subtitle is-4">Drop Examples with Converged Model Scores</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.converge.header') }}</h2>
   <div class="content">
     <p>
-      Ideally model scores converge for all examples.
-      However, the model should converge to the correct scores.
-      We could drop the examples from the pool if we suspect that the model is trapped in a local minima, i.e. we believe that most converged scores are wrong.
-      Under normal circumstances, especially converged examples should remain within the pool.
+      {{ t('bestworst.converge.info') }}
     </p>
   </div>
   <div class="columns">
@@ -339,13 +305,13 @@
                class="switch is-rounded" type="checkbox"
                v-model="drop_converge">
         <label class="label" for="interactivity-drop-converge-toogle">
-          Drop examples from pool if model score converged (Default: Off)
+          {{ t('bestworst.converge.drop') }}
         </label>
       </div>
 
       <div class="field" v-show="drop_converge === true">
         <label class="label" for="interactivity-eps_score_change">
-          Termination criteria: Model score changes
+          {{ t('bestworst.converge.term') }}
         </label>
         <input id="interactivity-eps_score_change" 
                class="input" type="text" v-model="eps_score_change_text">
@@ -353,7 +319,7 @@
 
       <div class="field" v-show="drop_converge === true">
         <label class="label" for="interactivity-converge_patience">
-          Patience. Number of model evaluations to wait before applying the convergence deletion criteria.
+          {{ t('bestworst.converge.patience') }}
         </label>
         <input id="interactivity-converge_patience" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -364,11 +330,10 @@
     </div>
   </div>
 
-  <h2 class="subtitle is-4">Drop Examples from Local Paired Comparison Matrix</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.matrix.header') }}</h2>
   <div class="content">
     <p>
-      When examples are dropped from the pool, 
-      also delete the rows and columns of paired comparison matrix.
+      {{ t('bestworst.matrix.info') }}
     </p>
   </div>
   <div class="columns">
@@ -378,7 +343,7 @@
                class="switch is-rounded" type="checkbox"   
                v-model="drop_pairs">
         <label class="label" for="interactivity-drop-pairs-toogle">
-          Drop examples from local pairs matrix
+          {{ t('bestworst.matrix.drop') }}
         </label>
       </div>
     </div>
@@ -386,10 +351,10 @@
 
 
 
-  <h2 class="subtitle is-4">Trigger Re-Training</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.retrain.header') }}</h2>
   <div class="content">
     <p>
-      Set the number of BWS set evaluations to wait till a model re-training is triggered.
+      {{ t('bestworst.retrain.info') }}
     </p>
   </div>
   <div class="columns">
@@ -397,7 +362,7 @@
 
       <div class="field">
         <label class="label" for="retrain-patience">
-          Re-Train patiences
+          {{ t('bestworst.retrain.patiences') }}
         </label>
         <input id="retrain-patience" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -408,12 +373,12 @@
     </div>
   </div>
 
-  <h2 class="subtitle is-4">Update Training Scores</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.update.header') }}</h2>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
       <BDropdown idname="smoothing-method" 
-                 labeltext="Smooting Methods to compute training scores" 
+                :labeltext="t('bestworst.update.smoothing')" 
                  v-model:selected="smoothing_method" 
                  :options="[
                   {'id': 'last', 'text': 'last'}, 
@@ -421,7 +386,7 @@
 
       <div class="field">
         <label class="label" for="ema-alpha">
-          alpha parameter (EMA)
+          {{ t('bestworst.update.ewa') }}
         </label>
         <input id="ema-alpha" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -432,11 +397,12 @@
     </div>
   </div>
 
-  <h2 class="subtitle is-4">Train Local ML Model</h2>
+  <h2 class="subtitle is-4">{{ t('bestworst.localmodel.header') }}</h2>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
       
-      <BDropdown idname="train-optimizer" labeltext="Optimization Algorithm" 
+      <BDropdown idname="train-optimizer"
+                :labeltext="t('bestworst.localmodel.optimizer')" 
                  v-model:selected="train_optimizer" 
                  :options="[
                   {'id': 'adam', 'text': 'ADAM'}, 
@@ -446,7 +412,7 @@
 
       <div class="field">
         <label class="label" for="train-lrate">
-          Learning Rate
+          {{ t('bestworst.localmodel.lr') }}
         </label>
         <input id="train-lrate" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -456,7 +422,7 @@
 
       <div class="field">
         <label class="label" for="train-epochs">
-          Number of Epochs per Training Cycle
+          {{ t('bestworst.localmodel.epochs') }}
         </label>
         <input id="train-epochs" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -464,7 +430,8 @@
         <output for="train-epochs" style="width:3.1rem;">{{ train_epochs }}</output>
       </div>
 
-      <BDropdown idname="train-loss" labeltext="Loss Function" 
+      <BDropdown idname="train-loss" 
+                :labeltext="t('bestworst.localmodel.loss')" 
                  v-model:selected="train_loss" 
                  :options="[
                   {'id': 'meanSquaredError', 'text': 'MSE'}, 
@@ -474,7 +441,7 @@
 
       <div class="field">
         <label class="label" for="train-minsample">
-          Mimimum Sample Size
+          {{ t('bestworst.localmodel.samplesize') }}
         </label>
         <input id="train-minsample" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 

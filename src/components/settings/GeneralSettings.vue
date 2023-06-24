@@ -21,18 +21,19 @@
                type="checkbox"   
                v-model="darkmodetheme">
         <label for="darkmode-toogle">
-          Darkmode
+          {{ t('settings.darkmode') }}
         </label>
       </div>
 
       <div class="field">
         <label class="label">
-          Debugging Information
+          {{ t('settings.debugging.info') }}
         </label>
         <input id="interactivity-debug_verbose-toogle" class="switch is-rounded" type="checkbox"   
                v-model="debug_verbose">
         <label for="interactivity-debug_verbose-toogle">
-          Print details to <code>console.log</code>
+          <!-- {{ t('settings.debugging.print') }} -->
+          <span v-html="t('settings.debugging.print')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
         </label>
       </div>
 
