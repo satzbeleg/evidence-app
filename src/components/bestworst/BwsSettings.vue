@@ -34,10 +34,15 @@
   </div>
 
 
-  <h2 class="subtitle is-4">{{ t('bestworst.sampling.header') }}</h2>  <!-- Stichprobe der Satzbelege aus der Datenbank -->
+  <!-- 
+    Stichprobe der Satzbelege aus der Datenbank 
+    - `<span v-html ...` is a hack to inject html for the meanwhile! possible dangerous
+    - Outdated Setting for bestworst3.vue and REST API `v1/bestworst/sampling`
+  -->
+  <h2 class="subtitle is-4">{{ t('bestworst.sampling.header') }}</h2>  
   <div class="content">
     <p>
-      {{ t('bestworst.sampling.info') }}
+      <span v-html="t('bestworst.sampling.info')"></span>
     </p>
   </div>
   <div class="columns">
@@ -52,7 +57,6 @@
                type="range" v-model="item_sampling_numtop" step="10" min="10" max="10000">
         <output for="item-sampling-numtop">{{ item_sampling_numtop }}</output>
       </div>
-
       <div class="field">
         <label class="label" for="item-sampling-offset">
           {{ t('bestworst.sampling.offset') }}
@@ -62,7 +66,6 @@
                type="range" v-model="item_sampling_offset" step="100" min="0" max="100000">
         <output for="item-sampling-offset">{{ item_sampling_offset }}</output>
       </div>
-
     </div>
   </div>
 
@@ -70,9 +73,11 @@
   <h2 class="subtitle is-4">{{ t('bestworst.setconfig.header') }}</h2>  <!-- BWS-Gruppen Konfiguration -->
   <div class="content">
     <p>
-      {{ t('bestworst.setconfig.info1') }}
+      <!-- {{ t('bestworst.setconfig.info1') }} -->
+      <span v-html="t('bestworst.setconfig.info1')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
       <br>
-      {{ t('bestworst.setconfig.info2') }}
+      <!-- {{ t('bestworst.setconfig.info2') }} -->
+      <span v-html="t('bestworst.setconfig.info2')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
     </p>
   </div>
   <div class="columns">
@@ -149,7 +154,8 @@
   <h2 class="subtitle is-4">{{ t('bestworst.drophide.header') }}</h2>
   <div class="content">
     <p>
-      {{ t('bestworst.drophide.info') }}
+      <!-- {{ t('bestworst.drophide.info') }} -->
+      <span v-html="t('bestworst.drophide.info')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
     </p>
   </div>
   <div class="columns">
@@ -190,7 +196,7 @@
   <h2 class="subtitle is-4">{{ t('bestworst.poolsize.header') }}</h2>
   <div class="content">
     <p>
-      {{ t('bestworst.drophide.info') }}
+      {{ t('bestworst.poolsize.info') }}
     </p>
   </div>
   <div class="columns">
@@ -198,7 +204,7 @@
 
       <div class="field">
         <label class="label" for="min-pool-size">
-          {{ t('bestworst.drophide.minsize') }}
+          {{ t('bestworst.poolsize.minsize') }}
         </label>
         <input id="min-pool-size" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 
@@ -208,7 +214,7 @@
 
       <div class="field">
         <label class="label" for="interactivity-max_pool_size">
-          {{ t('bestworst.drophide.maxsize') }}
+          {{ t('bestworst.poolsize.maxsize') }}
         </label>
         <input id="interactivity-max_pool_size" 
                class="slider has-output is-fullwidth is-primary is-circle is-medium" 

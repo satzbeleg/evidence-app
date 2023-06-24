@@ -32,7 +32,8 @@
         <input id="interactivity-debug_verbose-toogle" class="switch is-rounded" type="checkbox"   
                v-model="debug_verbose">
         <label for="interactivity-debug_verbose-toogle">
-          {{ t('settings.debugging.print') }}
+          <!-- {{ t('settings.debugging.print') }} -->
+          <span v-html="t('settings.debugging.print')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
         </label>
       </div>
 
