@@ -24,6 +24,12 @@
             <span class="icon"><i class="fas fa-search"></i></span>
             <strong>Settings</strong>
           </button>
+          <!-- Convergence Modal: the button-->
+          <button class="button is-rounded is-link" 
+                  v-on:click="showModalTfjsConvergence = true">
+            <span class="icon"><i class="fas fa-road"></i></span>
+            <strong>Convergence</strong>
+          </button>
         </p>
       </div>
 
@@ -88,6 +94,8 @@
 
 
     </div>
+
+
   </section>
 
   <ModalRankingOverview 
@@ -101,6 +109,12 @@
     v-bind:search_string="queueData.current_headword"
     v-on:search-headword-modal="onSearchHeadword"
     @close="showModalBwsSettings = false"
+  />
+
+  <ModalTFJSConvergence
+    v-bind:showModalTfjsConvergence="showModalTfjsConvergence" 
+    v-bind:current_training_losses="current_training_losses"
+    @close="showModalTfjsConvergence = false"
   />
 
 </template>
@@ -123,7 +137,7 @@ import { useSimilarityVectors } from '@/components/variation/similarity-vectors.
 import { v4 as uuid4 } from 'uuid';
 import ModalRankingOverview from '@/components/bestworst/ModalRankingOverview.vue';
 import ModalBwsSearchSettings from '@/components/bestworst/ModalBwsSearchSettings.vue';
-
+import ModalTFJSConvergence from '@/components/bestworst/ModalTFJSConvergence.vue';
 
 export default defineComponent({
   name: "BestWorst4",
@@ -133,7 +147,8 @@ export default defineComponent({
     PageLoader,
     BestWorstChoices,
     ModalRankingOverview,
-    ModalBwsSearchSettings
+    ModalBwsSearchSettings,
+    ModalTFJSConvergence,
   },
 
   setup(){
@@ -192,7 +207,7 @@ export default defineComponent({
       computeTrainingScores,
       retrainModel,
       predictScores,
-      last_training_loss,
+      last_training_loss, current_training_losses,
     } = useInteractivity();
 
     // util functions to compute similarity vectors for each example
@@ -348,6 +363,9 @@ export default defineComponent({
     // BWS Settings modal
     const showModalBwsSettings = ref(false);
 
+    // TFJS Convergence modal
+    const showModalTfjsConvergence = ref(false);
+
 
     const cssLossColor = ref("");
     watch(
@@ -372,9 +390,11 @@ export default defineComponent({
       currentPoolSize,
       // fot the Ranking Overview modal
       showModalOverview, pool, 
-      last_training_loss, cssLossColor,
+      last_training_loss,  cssLossColor, 
       // BWS Settings modal
       showModalBwsSettings,
+      // TFJS Convergence modal
+      showModalTfjsConvergence, current_training_losses,
     }
   },
 

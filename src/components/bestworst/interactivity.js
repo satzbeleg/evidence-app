@@ -1,4 +1,4 @@
-import { reactive, ref, watch } from 'vue';
+import { reactive, ref, watch, unref } from 'vue';
 import { sampling, counting, ranking } from 'bwsample';
 import { histpdf } from 'histpdf';
 import { useApi2, useAuth } from '@/functions/axios-evidence.js';
@@ -1114,7 +1114,10 @@ export const useInteractivity = () => {
           console.log("No consent to save model weights");
         }
         // update current loss
-        current_training_losses.value.push(res.history.loss[res.history.loss.length - 1]);
+        current_training_losses.value.push({
+          'loss': res.history.loss[res.history.loss.length - 1],
+          'headword': unref(pool[Object.keys(pool)[0]]?.headword),
+        });
         last_training_loss.value = res.history.loss[res.history.loss.length - 1];
         // logging
         if (debug_verbose.value){
