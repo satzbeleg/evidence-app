@@ -198,8 +198,8 @@ export const useBwsSettings = () => {
   // reset settings
   const factoryResetBws = () => {
     // also used in bestworst3
-    queue_reorderpoint.value = 3;
-    queue_orderquantity.value = 10;
+    queue_reorderpoint.value = 1;
+    queue_orderquantity.value = 5;
     item_sampling_numtop.value = 100;
     item_sampling_offset.value =  0;
     // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
