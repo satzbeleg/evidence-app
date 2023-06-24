@@ -10,7 +10,7 @@
   <section v-if="Object.keys(pool).length > 0 && !isLoadingData && !isPredictingScores && !isComputingSimilarities"
     class="section" id="variation"
   >
-    <div class="container">
+    <div class="container is-centered" style="max-width: 720px;">
       <!-- put the following into components ... -->
       
       <!-- <h1 class="title is-3">Find diverse sets of sentence examples</h1> -->
