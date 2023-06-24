@@ -70,8 +70,8 @@
       "items": "Satzbelege pro BWS-Menge (Standardeinstellung: 4)"
     },
     "localpool": {
-      "header": "Stichprobenziehung aus dem lokalen Speicher (v4)",
-      "info1": "Vor dem erneuten Training des lokalen ML-Modells in der interaktiven BWS-Anwendungsoberfläche (v4), wird eine bestimmte Anzahl an BWS-Gruppen den Benutzenden zur Bewertung vorgelegt.",
+      "header": "Stichprobenziehung aus dem lokalen Speicher",
+      "info1": "Vor dem erneuten Training des lokalen ML-Modells in der interaktiven BWS-Anwendungsoberfläche, wird eine bestimmte Anzahl an BWS-Gruppen den Benutzenden zur Bewertung vorgelegt.",
       "info2": "Die Satzbelege können auf unterschiedliche Weise aus dem Speicher ausgewählt werden, z.B. per Zufall",
       "number": "Anzahl an BWS-Mengen zur Evaluierung vor erneutem Training (Standardeinstellung: 3)",
       "sampling": "Stichprobenziehung von Satzbelegen aus dem Speicher (Standardeinstellung: semantische Ähnlichkeit)",
@@ -85,7 +85,7 @@
       "maxnum": "Maximale Anzeigen eines Satzbelegs"
     },
     "poolsize": {
-      "header": "Speichergröße (v4)",
+      "header": "Speichergröße",
       "info": "Die Speichergröße der lokal gespeicherten Satzbelege, Merkmalsvektoren, usw. muss eingeschränkt werden, da Endbenutzungsgeräte begrenzte Speicherkapazitäten haben.",
       "minsize": "Minimale Speichergröße",
       "maxsize": "Maximale Speichergröße"
