@@ -14,6 +14,45 @@
           v-on:search-headword-field="onSearchHeadword" />
 
         <!-- Copied from BwsSettings.vue -->
+        
+        <h2 class="subtitle is-4">{{ t('bestworst.localpool.header') }}</h2>
+        <div class="content">
+          <template v-if="['de', 'de-leicht'].includes(language)">
+            Konfiguieren die Anzahl der BWS-Gruppen, die zu annotieren sind bevor neu gesampled wird.
+            Es stehen unterschiedliche Samplingverfahren zur Verfügung.
+          </template>
+          <template v-else>
+            Configure the number of BWS sets to annotate before resampling.
+            Different sampling methods are available.
+          </template>
+        </div>
+        <div class="columns">
+          <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+            <div class="field">
+              <label class="label" for="interactivity-num_preload_bwssets">
+                {{ t('bestworst.localpool.number') }}
+              </label>
+              <input id="interactivity-num_preload_bwssets" 
+                    class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+                    type="range" v-model="num_preload_bwssets" step="1" min="1" max="20">
+              <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
+            </div>
+
+            <BDropdown idname="interactivity-item-sampling-method" 
+                      :labeltext="t('bestworst.localpool.sampling')" 
+                      v-model:selected="item_sampling_method" 
+                      :options="[
+                        {'id': 'random', 'text': 'random'}, 
+                        {'id': 'exploit', 'text': 'exploit'},
+                        {'id': 'newer', 'text': 'newer'},
+                        {'id': 'unstable', 'text': 'unstable'},
+                        {'id': 'newer-unstable', 'text': 'newer-unstable'},
+                        {'id': 'semantic-similar', 'text': 'semantic-similar'}]" />      
+          </div>
+        </div>
+
+
         <h2 class="subtitle is-4">Pool Size</h2>
         <div class="content">
           <template v-if="['de', 'de-leicht'].includes(language)">
@@ -41,8 +80,6 @@
           </div>
         </div>
 
-        
-        <!-- Content ... -->
 
         
 
@@ -58,13 +95,14 @@ import { defineComponent, watch,  } from "vue";
 import HeadwordSearch from "@/components/layout/HeadwordSearch.vue";
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
-
+import BDropdown from "@/components/layout/BDropdown.vue";
 
 export default defineComponent({
   name: 'ModalBwsSearchSettings',
 
   components: {
     HeadwordSearch,
+    BDropdown,
   },
 
   props: {
@@ -87,6 +125,8 @@ export default defineComponent({
     const {
       min_pool_size, 
       max_pool_size,
+      num_preload_bwssets,
+      item_sampling_method,
     } = useBwsSettings();
 
     watch(min_pool_size, (minsz) => {
@@ -105,8 +145,10 @@ export default defineComponent({
     return { 
       t,
       language,
-      min_pool_size,
+      // min_pool_size,
       max_pool_size,
+      num_preload_bwssets,
+      item_sampling_method,
       onSearchHeadword
     }
   }
