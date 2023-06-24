@@ -106,7 +106,7 @@ export const useBwsSettings = () => {
           item_sampling_method.value = response.data['item-sampling-method'] || "semantic-similar";
           txtlen_noise.value = response.data['txtlen-noise'] || 0.1;
           // Settings for 4/5/6
-          retrain_patience.value = response.data['retrain-patience'] || 1;
+          retrain_patience.value = response.data['retrain-patience'] || 5;
           // Settings for (5): computeTrainingScores
           smoothing_method.value = response.data['smoothing-method'] || "ema";
           ema_alpha.value = response.data['ema-alpha'] || 0.7;
@@ -226,7 +226,7 @@ export const useBwsSettings = () => {
     item_sampling_method.value = "semantic-similar";
     txtlen_noise.value = 0.1;
     // Settings for 4/5/6
-    retrain_patience.value = 1;
+    retrain_patience.value = 5;
     // Settings for (5): computeTrainingScores
     smoothing_method.value = "ema";
     ema_alpha.value = 0.7;
