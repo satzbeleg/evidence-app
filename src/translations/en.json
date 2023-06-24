@@ -73,7 +73,7 @@
       "header": "Sampling from Local Pool",
       "info1": "Before re-training the local ML model in the Interactivity BWS UI, a specific number of BWS groups is presented to the user for evaluation.",
       "info2": "Sentence examples can be drawn from the pool in different ways, e.g. randomly",
-      "number": "Number of BWS sets to evaluate before re-training (Default: 3)",
+      "number": "Number of BWS sets to evaluate before re-sampling (Default: 3)",
       "sampling": "Sampling Sentences from Pool (Default: semantic-similar)",
       "noise": "Noise when sorting examples by text length (Default: 10%)"
     },
