@@ -48,14 +48,14 @@
     }
   },
   "bestworst": {
-    "title": "Best Worst Scaling",
+    "title": "Best Worst Scaling (BWS)",
     "help_short": "Select the best and worst out of four examples",
     "help_long": "4 sentence examples are displayed. First mark the best sentence example. Finally, select the worst sentence example.",
     "offline_queue": {
       "header": "Offline Queue",
       "info": "The BWS UI has its own queue of preloaded BWS sets. It works offline in case of network interruptions, and replenishes the queue in the background. The queue follows a Fixed Quantity inventory model with a given reorder point and order quantity.",
-      "min_number": "Minimum Number of Offline BWS Sets",
-      "reload_number": "Number of BWS Sets to Reload"
+      "min_number": "Minimum Number of Offline BWS Sets (Default: 1)",
+      "reload_number": "Number of BWS Sets to Reload (Default: 5)"
     },
     "sampling": {
       "header": "Sampling of Sentence Examples from the Database",
@@ -64,14 +64,14 @@
       "offset": "Offset (Default: 0)"
     },
     "setconfig": {
-      "header": "BWS Sets Configuration",
+      "header": "BWS Sets",
       "info1": "The BWS UI can display between 3 and 5 items. The number should depends on the required working memory for the judgement, e.g. the complexity and newness of the content and decision criterias, ability to focus attention on all items, cognitive exhaustion levels (see <a href='https://osf.io/qkxej/'>Ch. 3</a>).",
       "info2": "In order to apply logical inference rules in post-processing, BWS sets need to be sampled in an overlapping manner. Additionally you can ensure that each sentence example occurs in at least two BWS sets (see <a href='https://osf.io/qkxej/'>Ch. 5</a>).",
       "items": "Items per BWS set (Default: 4)"
     },
     "localpool": {
-      "header": "Sampling from Local Pool (v4)",
-      "info1": "Before re-training the local ML model in the Interactivity BWS UI (v4), a specific number of BWS groups is presented to the user for evaluation.",
+      "header": "Sampling from Local Pool",
+      "info1": "Before re-training the local ML model in the Interactivity BWS UI, a specific number of BWS groups is presented to the user for evaluation.",
       "info2": "Sentence examples can be drawn from the pool in different ways, e.g. randomly",
       "number": "Number of BWS sets to evaluate before re-training (Default: 3)",
       "sampling": "Sampling Sentences from Pool (Default: semantic-similar)",
@@ -85,7 +85,7 @@
       "maxnum": "Maximum number of times an example will be displayed"
     },
     "poolsize": {
-      "header": "Pool Size (v4)",
+      "header": "Pool Size",
       "info": "The pool size of the locally stored sentences, feature vectors, annotation data, etc. must be constrained as end user devices have limited storage capacities.",
       "minsize": "Minimum Pool Size",
       "maxsize": "Maximum Pool Size"

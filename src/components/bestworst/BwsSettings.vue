@@ -1,6 +1,228 @@
 <template>
   <h1 class="title is-3 is-spaced">{{ t('bestworst.title') }}</h1>
 
+
+  <h2 class="subtitle is-4">{{ t('bestworst.setconfig.header') }}</h2>  <!-- BWS-Gruppen Konfiguration -->
+  <div class="content">
+    <p>
+      <!-- {{ t('bestworst.setconfig.info1') }} -->
+      <span v-html="t('bestworst.setconfig.info1')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
+      <br>
+      <!-- {{ t('bestworst.setconfig.info2') }} -->
+      <span v-html="t('bestworst.setconfig.info2')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="bwsset-num-items">
+          {{ t('bestworst.setconfig.items') }}
+        </label>
+        <input id="bwsset-num-items" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="bwsset_num_items" step="1" min="3" max="5">
+        <output for="bwsset-num-items">{{ bwsset_num_items }}</output>
+      </div>
+
+      <BDropdown idname="bwsset-sampling-method" 
+                 labeltext="BWS sampling method" 
+                 v-model:selected="bwsset_sampling_method" 
+                 :options="[
+                  {'id': 'overlap', 'text': 'overlap'}, 
+                  {'id': 'twice', 'text': 'twice'}]" />
+
+    </div>
+  </div>
+
+
+
+  <h2 class="subtitle is-4">{{ t('bestworst.poolsize.header') }}</h2>
+  <div class="content">
+    <p>
+      {{ t('bestworst.poolsize.info') }}
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="min-pool-size">
+          {{ t('bestworst.poolsize.minsize') }}
+        </label>
+        <input id="min-pool-size" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="min_pool_size" step="10" min="10" max="1000">
+        <output for="min-pool-size">{{ min_pool_size }}</output>
+      </div>
+
+      <div class="field">
+        <label class="label" for="interactivity-max_pool_size">
+          {{ t('bestworst.poolsize.maxsize') }}
+        </label>
+        <input id="interactivity-max_pool_size" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="max_pool_size" step="10" min="20" max="1000">
+        <output for="interactivity-max_pool_size">{{ max_pool_size }}</output>
+      </div>
+
+    </div>
+  </div>
+
+
+  <h2 class="subtitle is-4">{{ t('bestworst.localpool.header') }}</h2>
+  <div class="content">
+    <p>
+      {{ t('bestworst.localpool.info1') }}
+      <br>
+      {{ t('bestworst.localpool.info2') }}
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="interactivity-num_preload_bwssets">
+          {{ t('bestworst.localpool.number') }}
+        </label>
+        <input id="interactivity-num_preload_bwssets" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="num_preload_bwssets" step="1" min="1" max="20">
+        <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
+      </div>
+
+      <BDropdown idname="interactivity-item-sampling-method" 
+                :labeltext="t('bestworst.localpool.sampling')" 
+                 v-model:selected="item_sampling_method" 
+                 :options="[
+                  {'id': 'random', 'text': 'random'}, 
+                  {'id': 'exploit', 'text': 'exploit'},
+                  {'id': 'newer', 'text': 'newer'},
+                  {'id': 'unstable', 'text': 'unstable'},
+                  {'id': 'newer-unstable', 'text': 'newer-unstable'},
+                  {'id': 'semantic-similar', 'text': 'semantic-similar'}]" />
+
+      <div class="field">
+        <label class="label" for="interactivity-txtlen_noise">
+          {{ t('bestworst.localpool.noise') }}
+        </label>
+        <input id="interactivity-txtlen_noise" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="txtlen_noise" step=".01" min="0.0" max=".99">
+        <output for="interactivity-txtlen_noise">{{ parseInt(txtlen_noise * 100.) }}</output>
+      </div>
+
+      
+    </div>
+  </div>
+
+
+  <h1 class="title is-3 is-spaced">TFJS Settings</h1>
+
+  <h2 class="subtitle is-4">{{ t('bestworst.retrain.header') }}</h2>
+  <div class="content">
+    <p>
+      {{ t('bestworst.retrain.info') }}
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <div class="field">
+        <label class="label" for="retrain-patience">
+          {{ t('bestworst.retrain.patiences') }}
+        </label>
+        <input id="retrain-patience" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="retrain_patience" step="1" min="1" max="20">
+        <output for="retrain-patience" style="width:3.1rem;">{{ retrain_patience }}</output>
+      </div>
+
+    </div>
+  </div>
+
+  <h2 class="subtitle is-4">{{ t('bestworst.update.header') }}</h2>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+
+      <BDropdown idname="smoothing-method" 
+                :labeltext="t('bestworst.update.smoothing')" 
+                 v-model:selected="smoothing_method" 
+                 :options="[
+                  {'id': 'last', 'text': 'last'}, 
+                  {'id': 'ema', 'text': 'EMA'}]" />
+
+      <div class="field">
+        <label class="label" for="ema-alpha">
+          {{ t('bestworst.update.ewa') }}
+        </label>
+        <input id="ema-alpha" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="ema_alpha" step="0.01" min="0.0" max="1.0">
+        <output for="ema-alpha" style="width:3.1rem;">{{ ema_alpha }}</output>
+      </div>
+
+    </div>
+  </div>
+
+  <h2 class="subtitle is-4">{{ t('bestworst.localmodel.header') }}</h2>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+      
+      <BDropdown idname="train-optimizer"
+                :labeltext="t('bestworst.localmodel.optimizer')" 
+                 v-model:selected="train_optimizer" 
+                 :options="[
+                  {'id': 'adam', 'text': 'ADAM'}, 
+                  {'id': 'rmsprop', 'text': 'RMSProp'},
+                  {'id': 'adagrad', 'text': 'AdaGrad'},
+                  {'id': 'sgd', 'text': 'SGD'}]" />
+
+      <div class="field">
+        <label class="label" for="train-lrate">
+          {{ t('bestworst.localmodel.lr') }}
+        </label>
+        <input id="train-lrate" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_lrate" step="0.001" min="0.0" max="0.1">
+        <output for="train-lrate" style="width:3.5rem;">{{ train_lrate }}</output>
+      </div>
+
+      <div class="field">
+        <label class="label" for="train-epochs">
+          {{ t('bestworst.localmodel.epochs') }}
+        </label>
+        <input id="train-epochs" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_epochs" step="1" min="1" max="20">
+        <output for="train-epochs" style="width:3.1rem;">{{ train_epochs }}</output>
+      </div>
+
+      <BDropdown idname="train-loss" 
+                :labeltext="t('bestworst.localmodel.loss')" 
+                 v-model:selected="train_loss" 
+                 :options="[
+                  {'id': 'meanSquaredError', 'text': 'MSE'}, 
+                  {'id': 'huberLoss', 'text': 'Huber'},
+                  {'id': 'absoluteDifference', 'text': 'Abs. Diff.'}]" />
+
+
+      <div class="field">
+        <label class="label" for="train-minsample">
+          {{ t('bestworst.localmodel.samplesize') }}
+        </label>
+        <input id="train-minsample" 
+               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
+               type="range" v-model="train_minsample" step="1" min="5" max="100">
+        <output for="train-minsample" style="width:3.1rem;">{{ train_minsample }}</output>
+      </div>
+
+    </div>
+  </div>
+
+
+  <h1 class="title is-3 is-spaced">BWS v3 [deprecated]</h1>
+
   <h2 class="subtitle is-4">{{ t('bestworst.offline_queue.header') }}</h2>   <!-- Offline Warteschlange -->
   <div class="content">
     <p>
@@ -70,87 +292,10 @@
   </div>
 
 
-  <h2 class="subtitle is-4">{{ t('bestworst.setconfig.header') }}</h2>  <!-- BWS-Gruppen Konfiguration -->
-  <div class="content">
-    <p>
-      <!-- {{ t('bestworst.setconfig.info1') }} -->
-      <span v-html="t('bestworst.setconfig.info1')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
-      <br>
-      <!-- {{ t('bestworst.setconfig.info2') }} -->
-      <span v-html="t('bestworst.setconfig.info2')"></span>   <!-- hack to inject html for the meanwhile! possible dangerous -->
-    </p>
-  </div>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-
-      <div class="field">
-        <label class="label" for="bwsset-num-items">
-          {{ t('bestworst.setconfig.items') }}
-        </label>
-        <input id="bwsset-num-items" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="bwsset_num_items" step="1" min="3" max="5">
-        <output for="bwsset-num-items">{{ bwsset_num_items }}</output>
-      </div>
-
-      <BDropdown idname="bwsset-sampling-method" 
-                 labeltext="BWS sampling method" 
-                 v-model:selected="bwsset_sampling_method" 
-                 :options="[
-                  {'id': 'overlap', 'text': 'overlap'}, 
-                  {'id': 'twice', 'text': 'twice'}]" />
-
-    </div>
-  </div>
 
 
-  <h2 class="subtitle is-4">{{ t('bestworst.localpool.header') }}</h2>
-  <div class="content">
-    <p>
-      {{ t('bestworst.localpool.info1') }}
-      <br>
-      {{ t('bestworst.localpool.info2') }}
-    </p>
-  </div>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
-      <div class="field">
-        <label class="label" for="interactivity-num_preload_bwssets">
-          {{ t('bestworst.localpool.number') }}
-        </label>
-        <input id="interactivity-num_preload_bwssets" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="num_preload_bwssets" step="1" min="1" max="20">
-        <output for="interactivity-num_preload_bwssets">{{ num_preload_bwssets }}</output>
-      </div>
-
-      <BDropdown idname="interactivity-item-sampling-method" 
-                :labeltext="t('bestworst.localpool.sampling')" 
-                 v-model:selected="item_sampling_method" 
-                 :options="[
-                  {'id': 'random', 'text': 'random'}, 
-                  {'id': 'exploit', 'text': 'exploit'},
-                  {'id': 'newer', 'text': 'newer'},
-                  {'id': 'unstable', 'text': 'unstable'},
-                  {'id': 'newer-unstable', 'text': 'newer-unstable'},
-                  {'id': 'semantic-similar', 'text': 'semantic-similar'}]" />
-
-      <div class="field">
-        <label class="label" for="interactivity-txtlen_noise">
-          {{ t('bestworst.localpool.noise') }}
-        </label>
-        <input id="interactivity-txtlen_noise" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="txtlen_noise" step=".01" min="0.0" max=".99">
-        <output for="interactivity-txtlen_noise">{{ parseInt(txtlen_noise * 100.) }}</output>
-      </div>
-
-      
-    </div>
-  </div>
-
-
+  <h1 class="title is-3 is-spaced">BWS v4 [experimental]</h1>
   <h2 class="subtitle is-4">{{ t('bestworst.drophide.header') }}</h2>
   <div class="content">
     <p>
@@ -193,37 +338,6 @@
   </div>
 
 
-  <h2 class="subtitle is-4">{{ t('bestworst.poolsize.header') }}</h2>
-  <div class="content">
-    <p>
-      {{ t('bestworst.poolsize.info') }}
-    </p>
-  </div>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-
-      <div class="field">
-        <label class="label" for="min-pool-size">
-          {{ t('bestworst.poolsize.minsize') }}
-        </label>
-        <input id="min-pool-size" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="min_pool_size" step="10" min="10" max="1000">
-        <output for="min-pool-size">{{ min_pool_size }}</output>
-      </div>
-
-      <div class="field">
-        <label class="label" for="interactivity-max_pool_size">
-          {{ t('bestworst.poolsize.maxsize') }}
-        </label>
-        <input id="interactivity-max_pool_size" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="max_pool_size" step="10" min="20" max="1000">
-        <output for="interactivity-max_pool_size">{{ max_pool_size }}</output>
-      </div>
-
-    </div>
-  </div>
 
   <h2 class="subtitle is-4">{{ t('bestworst.initpool.header') }}</h2>
   <div class="content">
@@ -351,106 +465,7 @@
 
 
 
-  <h2 class="subtitle is-4">{{ t('bestworst.retrain.header') }}</h2>
-  <div class="content">
-    <p>
-      {{ t('bestworst.retrain.info') }}
-    </p>
-  </div>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
 
-      <div class="field">
-        <label class="label" for="retrain-patience">
-          {{ t('bestworst.retrain.patiences') }}
-        </label>
-        <input id="retrain-patience" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="retrain_patience" step="1" min="1" max="20">
-        <output for="retrain-patience" style="width:3.1rem;">{{ retrain_patience }}</output>
-      </div>
-
-    </div>
-  </div>
-
-  <h2 class="subtitle is-4">{{ t('bestworst.update.header') }}</h2>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-
-      <BDropdown idname="smoothing-method" 
-                :labeltext="t('bestworst.update.smoothing')" 
-                 v-model:selected="smoothing_method" 
-                 :options="[
-                  {'id': 'last', 'text': 'last'}, 
-                  {'id': 'ema', 'text': 'EMA'}]" />
-
-      <div class="field">
-        <label class="label" for="ema-alpha">
-          {{ t('bestworst.update.ewa') }}
-        </label>
-        <input id="ema-alpha" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="ema_alpha" step="0.01" min="0.0" max="1.0">
-        <output for="ema-alpha" style="width:3.1rem;">{{ ema_alpha }}</output>
-      </div>
-
-    </div>
-  </div>
-
-  <h2 class="subtitle is-4">{{ t('bestworst.localmodel.header') }}</h2>
-  <div class="columns">
-    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-      
-      <BDropdown idname="train-optimizer"
-                :labeltext="t('bestworst.localmodel.optimizer')" 
-                 v-model:selected="train_optimizer" 
-                 :options="[
-                  {'id': 'adam', 'text': 'ADAM'}, 
-                  {'id': 'rmsprop', 'text': 'RMSProp'},
-                  {'id': 'adagrad', 'text': 'AdaGrad'},
-                  {'id': 'sgd', 'text': 'SGD'}]" />
-
-      <div class="field">
-        <label class="label" for="train-lrate">
-          {{ t('bestworst.localmodel.lr') }}
-        </label>
-        <input id="train-lrate" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="train_lrate" step="0.001" min="0.0" max="0.1">
-        <output for="train-lrate" style="width:3.5rem;">{{ train_lrate }}</output>
-      </div>
-
-      <div class="field">
-        <label class="label" for="train-epochs">
-          {{ t('bestworst.localmodel.epochs') }}
-        </label>
-        <input id="train-epochs" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="train_epochs" step="1" min="1" max="20">
-        <output for="train-epochs" style="width:3.1rem;">{{ train_epochs }}</output>
-      </div>
-
-      <BDropdown idname="train-loss" 
-                :labeltext="t('bestworst.localmodel.loss')" 
-                 v-model:selected="train_loss" 
-                 :options="[
-                  {'id': 'meanSquaredError', 'text': 'MSE'}, 
-                  {'id': 'huberLoss', 'text': 'Huber'},
-                  {'id': 'absoluteDifference', 'text': 'Abs. Diff.'}]" />
-
-
-      <div class="field">
-        <label class="label" for="train-minsample">
-          {{ t('bestworst.localmodel.samplesize') }}
-        </label>
-        <input id="train-minsample" 
-               class="slider has-output is-fullwidth is-primary is-circle is-medium" 
-               type="range" v-model="train_minsample" step="1" min="5" max="100">
-        <output for="train-minsample" style="width:3.1rem;">{{ train_minsample }}</output>
-      </div>
-
-    </div>
-  </div>
 
 </template>
 

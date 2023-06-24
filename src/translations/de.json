@@ -48,14 +48,14 @@
     }
   },
   "bestworst": {
-    "title": "Best Worst Scaling",
+    "title": "Best Worst Scaling (BWS)",
     "help_short": "Wähle das beste & schlechteste von vier Beispielen",
     "help_long": "Es werden 4 Satzbeispiele angezeigt. Klicke zuerst das beste Satzbeispiel an. Zum Schluss wähle noch das schlechteste Satzbeispiel aus.",
     "offline_queue": {
       "header": "Offline Warteschlange",
       "info": "Die Anwendungsoberfläche hat eine eigene Warteschlange mit vorgeladenen BWS-Gruppen. Sie funktioniert offline im Falle von Netzwerkunterbrechungen und füllt sich automatisch im Hintergrund auf. Die Warteschlange ist ein Lagerhaltungsmodell mit fixem Meldebestand (reorder point) und fixer Bestellmenge (order quantity).",
-      "min_number": "Minimale Anzahl an Offline BWS-Mengen",
-      "reload_number": "Anzahl an BWS-Mengen zum Neuladen"
+      "min_number": "Minimale Anzahl an Offline BWS-Gruppen (Standardeinstellung: 1)",
+      "reload_number": "Anzahl an BWS-Gruppen zum Neuladen (Standardeinstellung: 5)"
     },
     "sampling": {
       "header": "Stichprobe der Satzbelege aus der Datenbank",
@@ -64,16 +64,16 @@
       "offset": "Offset (Standardeinstellung: 0)"
     },
     "setconfig": {
-      "header": "BWS-Mengenkonfiguration",
+      "header": "BWS-Gruppen",
       "info1": "In der BWS-Anwendungsoberfläche können 3 bis 5 Satzbelege angezeigt werden. Die Anzahl sollte sich nach dem benötigten Arbeitsgedächtnis für die Bewertungsaufgabe richten, z.B. die Komplexität und Neuheit der Inhalte und Entscheidungskriterien, Fähigkeit sich auf alle angezeigten Satzbelegen gleichzeitig zu fokussieren, kognitive Erschöpfung (Siehe <a href='https://osf.io/qkxej/'>Kap. 3</a>).",
       "info2": "Um logische Inferenzregeln in der Datenanalyse anzuwenden, müssen BWS-Gruppen überlappend zusammengestellt werden. Zusätzlich kannst du sicherstellen, dass jeder Satzbeleg in mindestens zwei BWS-Gruppen vorkommt (Siehe <a href='https://osf.io/qkxej/'>Kap. 5</a>).",
-      "items": "Satzbelege pro BWS-Menge (Standardeinstellung: 4)"
+      "items": "Satzbelege pro BWS-Gruppe (Standardeinstellung: 4)"
     },
     "localpool": {
-      "header": "Stichprobenziehung aus dem lokalen Speicher (v4)",
-      "info1": "Vor dem erneuten Training des lokalen ML-Modells in der interaktiven BWS-Anwendungsoberfläche (v4), wird eine bestimmte Anzahl an BWS-Gruppen den Benutzenden zur Bewertung vorgelegt.",
+      "header": "Stichprobenziehung aus dem lokalen Speicher",
+      "info1": "Vor dem erneuten Training des lokalen ML-Modells in der interaktiven BWS-Anwendungsoberfläche, wird eine bestimmte Anzahl an BWS-Gruppen den Benutzenden zur Bewertung vorgelegt.",
       "info2": "Die Satzbelege können auf unterschiedliche Weise aus dem Speicher ausgewählt werden, z.B. per Zufall",
-      "number": "Anzahl an BWS-Mengen zur Evaluierung vor erneutem Training (Standardeinstellung: 3)",
+      "number": "Anzahl an BWS-Gruppen zur Evaluierung vor erneutem Training (Standardeinstellung: 3)",
       "sampling": "Stichprobenziehung von Satzbelegen aus dem Speicher (Standardeinstellung: semantische Ähnlichkeit)",
       "noise": "Anteil des weißen Rauschens beim Sortieren von Satzbelegen nach Textlänge (Standardeinstellung: 10%)"
     },
@@ -85,7 +85,7 @@
       "maxnum": "Maximale Anzeigen eines Satzbelegs"
     },
     "poolsize": {
-      "header": "Speichergröße (v4)",
+      "header": "Speichergröße",
       "info": "Die Speichergröße der lokal gespeicherten Satzbelege, Merkmalsvektoren, usw. muss eingeschränkt werden, da Endbenutzungsgeräte begrenzte Speicherkapazitäten haben.",
       "minsize": "Minimale Speichergröße",
       "maxsize": "Maximale Speichergröße"
@@ -117,7 +117,7 @@
     },
     "retrain": {
       "header": "Erneutes Training auslösen",
-      "info": "Setze die Anzahl an BWS-Mengenevaluationen so, dass gewartet wird, bis ein erneutes Training des Modells ausgelöst wird.",
+      "info": "Setze die Anzahl an BWS-Gruppenevaluationen so, dass gewartet wird, bis ein erneutes Training des Modells ausgelöst wird.",
       "patiences": "Wartezeit zum Weitertraining"
     },
     "update": {
