@@ -114,7 +114,7 @@ export default defineComponent({
   padding-left: 2%;
 }
 .fit2box-height {
-  height: 15vh; /* min(17vh, 180px); */
+  height: 13vh; /* min(17vh, 180px); */
 }
 .fit2box-padding {
   padding-top: min(2vh, 25px); /* min(3vh, 25px); */
