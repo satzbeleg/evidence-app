@@ -78,8 +78,8 @@ export const useBwsSettings = () => {
       api.get(`v1/user/settings`)
         .then(response => {
           // also used in bestworst3
-          queue_reorderpoint.value = response.data['queue-reorderpoint'] || 3;
-          queue_orderquantity.value = response.data['queue-orderquantity'] || 10;
+          queue_reorderpoint.value = response.data['queue-reorderpoint'] || 1;
+          queue_orderquantity.value = response.data['queue-orderquantity'] || 5;
           item_sampling_numtop.value = response.data['item-sampling-numtop'] || 100;
           item_sampling_offset.value = response.data['item-sampling-offset'] || 0;
           // Settings for (1) and (2), e.g. dropExamplesFromPool, addExamplesToPool
