@@ -576,11 +576,13 @@ export const useInteractivity = () => {
                     "biblio": row.hashes18,
                   },
                   "training_score_history": [undefined],
-                  "model_score_history": [row.score],
+                  // "model_score_history": [row.score],
+                  "model_score_history": [],  // call predictScores
                   "displayed": [false]
                 }
               })
             }
+            predictScores()
             if(debug_verbose.value){console.log("Response (addExamplesToPool): ", response)}
             resolve(response);
           })
