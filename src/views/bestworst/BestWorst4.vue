@@ -61,9 +61,10 @@
           sets loaded and left to rank.
           <br/>
           <output>
+            {{ numSentencesDisplayed }} of
             {{ currentPoolSize }}
           </output>
-          sentence examples available.
+          available sentence examples displayed.
         </p>
         <br/>
         <!-- Info Message -->
@@ -357,6 +358,16 @@ export default defineComponent({
       return Object.keys(pool).length
     })
 
+    const numSentencesDisplayed = computed(() => {
+      let num = 0;
+      Object.values(pool).forEach(item => {
+        if (item.num_displayed > 0){
+          num += 1;
+        }
+      })
+      return num;
+    })
+
     // Ranking overview modal
     const showModalOverview = ref(false);
 
@@ -388,6 +399,7 @@ export default defineComponent({
       // message_suggestion, 
       isLoadingData, search_headword,
       currentPoolSize,
+      numSentencesDisplayed,
       // fot the Ranking Overview modal
       showModalOverview, pool, 
       last_training_loss,  cssLossColor, 
