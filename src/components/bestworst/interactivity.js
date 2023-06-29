@@ -932,8 +932,11 @@ export const useInteractivity = () => {
       const model = tf.sequential();
       model.add(tf.layers.dense({
         inputShape: [1181], 
-        units: 32, kernelInitializer: 'heNormal',
-        useBias: true, biasInitializer: 'zeros', biasRegularizer: tf.regularizers.l2({l2: 0.01}),
+        units: 32, 
+        kernelInitializer: tf.initializers.heNormal({seed: 42}),
+        useBias: true, 
+        biasInitializer: 'zeros', 
+        biasRegularizer: tf.regularizers.l2({l2: 0.01}),
         activation: 'swish', 
       }));
       model.add(tf.layers.dropout({
@@ -941,7 +944,7 @@ export const useInteractivity = () => {
       }));  // 0.5 to 0.8
       model.add(tf.layers.dense({
         units: 1, 
-        kernelInitializer: 'heNormal',
+        kernelInitializer: tf.initializers.heNormal({seed: 42}),
         useBias: false, 
         activation: 'sigmoid', 
       }));
@@ -952,18 +955,12 @@ export const useInteractivity = () => {
       }else{
         console.log("No data donation consent given. Use baseline model.")
       }
-      // model.setWeights(wgts);
+      // model.getWeights().forEach(w => {
+      //   console.log(`Tensor: ${w.dataSync()}`)
+      // });
       // done
       return model;
     }
-    // }catch{
-    //   if(debug_verbose){console.log("Load the baseline TFJS model from server")}
-    //   const model = await tf.loadLayersModel(
-    //     'https://tfjs-models-1.storage.googleapis.com/v0.4x-44-42-f32/model.json');
-    //   // store the baseline model as new personal/individual edge model
-    //   await model.save('indexeddb://user-specific-scoring-model');
-    //   return model;
-    // }
   }; 
 
   const loadModelWeights = async (model) => {
