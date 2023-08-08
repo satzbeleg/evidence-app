@@ -49,7 +49,9 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Search Settings</p>
+        <p class="modal-card-title">
+          {{ !selectedExampleId ? "Optimization Problem" : "Similarity Search" }}
+        </p>
         <button class="delete" aria-label="close" v-on:click="showEditModal = false"></button>
       </header>
       <section class="modal-card-body">
@@ -57,7 +59,7 @@
         <div class="columns">
           <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
           
-            <div class="field">
+            <div class="field" v-if="!selectedExampleId">
               <label class="label" for="item-goodness-score">
                 Variation (0) vs Goodness Score (100)
               </label>
@@ -65,6 +67,13 @@
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
                     type="range" v-model="lambdaTradeOff" step="0.01" min="0.01" max="0.99">
               <output for="item-goodness-score" style="width:3.1rem;">{{ lambdaTradeOff * 100 }}</output>
+            </div>
+
+            <div class="field"  v-if="selectedExampleId">
+              <label class="label" >Similarity Search for a given sentence example</label>
+              <p>
+                example_id: {{ selectedExampleId }}
+              </p>
             </div>
 
             <div class="field">
@@ -107,10 +116,6 @@
               <output for="item-beta-biblio" style="width:3.1rem;">{{ betaBiblio * 100 }}</output>
             </div>
 
-            <div v-if="selectedExampleId">
-              <label class="label" >Similarity Search for a given sentence example</label>
-              example_id: {{ selectedExampleId }}
-            </div>
 
             <!-- <div class="field">
               <label class="label" for="item-num-examples">
