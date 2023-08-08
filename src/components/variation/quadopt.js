@@ -162,6 +162,7 @@ export const useQuadOpt = () => {
 
   return {
     aggregate_matrices,
-    get_weights
+    get_weights,
+    norm_to_1
   }
 }

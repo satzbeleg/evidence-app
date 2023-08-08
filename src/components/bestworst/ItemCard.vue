@@ -55,7 +55,7 @@ export default defineComponent({
     setup(props, { emit }) {
         async function onClick(evt) {
             // console.log("[INFO] Item.vue: ", evt); // see Choices.vue: onTransition
-            emit("item-selected", evt, props.itemPos, props.itemState);
+            emit("item-selected", evt, props.itemPos, props.itemState, props.exampleId);
         }
         const stateCss = computed(() => {
             switch (props.itemState) {
