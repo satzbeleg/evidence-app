@@ -1020,6 +1020,34 @@ export const useInteractivity = () => {
     });
   }
 
+  const downloadModelWeights = () => {
+    // load model
+    getTfjsModel().then((model) => {
+      // extract weights
+      let wgts = []
+      model.getWeights().forEach((wgt) => {
+        wgts.push({"values": Array.from(wgt.dataSync()), "shape": wgt.shape})
+      });
+      // stringify to JSON and create blob
+      const jsonBlob = new Blob([JSON.stringify(wgts)]);
+      // create an href element that points to the memory location of the blob
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(jsonBlob);
+      link.download = "model_weights.json";
+      document.body.appendChild(link);    
+      // Dispatch click event on the link
+      link.dispatchEvent(
+        new MouseEvent('click', { 
+          bubbles: true, 
+          cancelable: true, 
+          view: window 
+        })
+      );
+      // Remove link from body
+      document.body.removeChild(link);
+    });
+  }
+
  
   /** (6) Re-train the ML model
    * 
@@ -1221,6 +1249,7 @@ export const useInteractivity = () => {
     updatePairMatrix,
     computeTrainingScores, 
     retrainModel,
-    predictScores
+    predictScores,
+    downloadModelWeights,
   }
 }

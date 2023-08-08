@@ -119,6 +119,44 @@
 
   <h1 class="title is-3 is-spaced">TFJS Settings</h1>
 
+  <h2 class="subtitle is-4">Download Current Model</h2>
+  <div class="content">
+    <p>
+      Download the weights of the current model as JSON file.
+      Use the 'value' key and 'shape' key to reconstruct a TF tensor or numpy array,
+      and pass the list of tensors to Keras' <code>model.set_weights</code> method.
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+      <button class="button is-rounded is-link" 
+              v-on:click="downloadModelWeights()">
+        <span class="icon"><i class="fas fa-download"></i></span>
+        <strong>Download</strong>
+      </button> 
+    </div>
+  </div>
+
+  <h2 class="subtitle is-4">Upload New Model</h2>
+  <div class="content">
+    <p>
+      Upload the weights of a Keras model. 
+      Convert the list of tensors to a list of dictionaries
+      where the key 'values' contains a list of floating-point numbers,
+      and 'shape' the shape of the tensor.
+      WARNING: This will overwrite the current model!
+    </p>
+  </div>
+  <div class="columns">
+    <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
+      <button class="button is-rounded is-warning" 
+              v-on:click="alert('not available')">
+        <span class="icon"><i class="fas fa-upload"></i></span>
+        <strong>Upload</strong>
+      </button> 
+    </div>
+  </div>
+
   <h2 class="subtitle is-4">{{ t('bestworst.retrain.header') }}</h2>
   <div class="content">
     <p>
@@ -473,7 +511,7 @@
 <script>
 import { useI18n } from 'vue-i18n';
 import { defineComponent, watch, ref } from 'vue';
-// import { useInteractivity } from '@/components/bestworst/interactivity.js';
+import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import BDropdown from "@/components/layout/BDropdown.vue";
@@ -558,6 +596,10 @@ export default defineComponent({
       eps_score_change.value = Number.parseFloat(txt);
     });
 
+    const {
+      downloadModelWeights,
+    } = useInteractivity();
+
 
     return { 
       t, language,
@@ -572,7 +614,8 @@ export default defineComponent({
       bwsset_num_items, num_preload_bwssets, bwsset_sampling_method, item_sampling_method, txtlen_noise,
       retrain_patience,
         smoothing_method, ema_alpha,
-        train_optimizer, train_lrate, train_epochs, train_loss, train_minsample
+        train_optimizer, train_lrate, train_epochs, train_loss, train_minsample,
+      downloadModelWeights
     }
   }
 });

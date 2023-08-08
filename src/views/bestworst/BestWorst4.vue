@@ -30,9 +30,15 @@
             <span class="icon"><i class="fas fa-road"></i></span>
             <strong>Convergence</strong>
           </button>
+          <!-- Convergence Modal: the button-->
+          <!-- <button class="button is-rounded is-link" 
+                  v-on:click="downloadModelWeights()">
+            <span class="icon"><i class="fas fa-road"></i></span>
+            <strong>Download</strong>
+          </button> -->
         </p>
       </div>
-
+      
 
       <template v-if="queueData.current.length > 0 && !isLoadingData">
         <!-- BWS UI -->
@@ -209,6 +215,7 @@ export default defineComponent({
       retrainModel,
       predictScores,
       last_training_loss, current_training_losses,
+      // downloadModelWeights,
     } = useInteractivity();
 
     // util functions to compute similarity vectors for each example
@@ -407,6 +414,7 @@ export default defineComponent({
       showModalBwsSettings,
       // TFJS Convergence modal
       showModalTfjsConvergence, current_training_losses,
+      // downloadModelWeights,
     }
   },
 
