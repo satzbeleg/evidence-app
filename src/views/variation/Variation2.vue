@@ -37,6 +37,8 @@
         v-bind:lemmaSpans="item.spans"
         v-bind:hasInfoModal="true"
         v-bind:exampleMeta="item"
+        v-bind:itemState="item?.example_id === selectedExampleId ? 2 : 0"
+        v-on:item-selected="onSelection"
       />
 
       <!-- put the above into components ... -->
@@ -103,6 +105,11 @@
                     class="slider has-output is-fullwidth is-primary is-circle is-medium" 
                     type="range" v-model="betaBiblio" step="0.01" min="0.0" max="1.0">
               <output for="item-beta-biblio" style="width:3.1rem;">{{ betaBiblio * 100 }}</output>
+            </div>
+
+            <div v-if="selectedExampleId">
+              <label class="label" >Similarity Search for a given sentence example</label>
+              example_id: {{ selectedExampleId }}
             </div>
 
             <!-- <div class="field">
@@ -260,7 +267,8 @@ export default {
      */ 
     const { 
       aggregate_matrices, 
-      get_weights 
+      get_weights,
+      norm_to_1
     } = useQuadOpt()
 
 
@@ -344,9 +352,21 @@ export default {
         simi_biblio, parseFloat(betaBiblio.value)
       );
       simi.print();
+
       // solve problem
-      let wbest = get_weights(
-        good_scores, simi, parseFloat(lambdaTradeOff.value), undefined, 25);
+      let wbest;
+      if( selectedExampleId.value ){
+        // sort by similarity for a given sentence
+        let idxExample = orderedKeys.indexOf(selectedExampleId.value);
+        if( idxExample < 0 ){
+          console.log("Example not found in pool")
+        }
+        wbest = norm_to_1(simi.gather(idxExample))
+      }else{
+        // solve the optimization problem
+        wbest = get_weights(
+          good_scores, simi, parseFloat(lambdaTradeOff.value), undefined, 25);
+      }
 
       // assign weights
       let arr = wbest.arraySync();
@@ -367,6 +387,13 @@ export default {
     }
     
 
+    // similarity search
+    const selectedExampleId = ref("");
+
+    async function onSelection(evt, itemPos, itemState, exampleId){
+      selectedExampleId.value = itemState === 2 ? "" : (itemState === 0 ? exampleId : "");
+    }
+
 
     return { 
       t,
@@ -379,7 +406,9 @@ export default {
       betaSemantic, betaGrammar, betaDuplicate, betaBiblio,
       pool, sortedPool, //sortByWeight,
       // renderCards,
-      highlightSpans
+      highlightSpans,
+      // similarity search
+      selectedExampleId, onSelection,
     }
   }
 }

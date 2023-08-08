@@ -42,6 +42,7 @@
           </tbody>
         </table>
 
+        <h2 class="title is-5">Exportiere Satzbeleg</h2>
         <CopyToClipboadButton 
           :text="exampleMeta?.text" 
           :biblio="exampleMeta?.context?.biblio" 
@@ -84,6 +85,8 @@
         </template>
  
 
+        <!-- <h2 class="title is-5">Similar Sentences</h2>
+        {{ exampleMeta?.similarities?. }} -->
         <!-- Content ... -->
         <!-- <p>{{ exampleMeta }}</p> -->
         
