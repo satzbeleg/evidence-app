@@ -60,7 +60,7 @@ export default defineComponent({
         let divGoogleClientId = document.createElement("div");
         divGoogleClientId.setAttribute("id", "g_id_onload");
         divGoogleClientId.setAttribute("data-client_id", process.env.VUE_APP_GOOGLE_CLIENT_ID);
-        divGoogleClientId.setAttribute("data-callback", "handleCredentialResponse");
+        divGoogleClientId.setAttribute("data-callback", "onGoogleSignIn");
         document.body.appendChild(divGoogleClientId);
         // Show Google Button
         showGoogleButton.value = true;

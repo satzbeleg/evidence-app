@@ -47,7 +47,11 @@
                   </button>
                 </p>
               </div>
-        
+
+              <div class="is-size-7 has-text-danger" v-show="authStatus === 'error'">
+                E-Mail or Password wrong!
+              </div>
+
             </form>
 
             <span style="display:flex;justify-content:space-between;">
@@ -95,7 +99,7 @@ export default defineComponent({
     });
 
     // process submitted login request
-    const { loginEmail, gapiSignIn } = useAuth(); 
+    const { loginEmail, gapiSignIn, authStatus } = useAuth(); 
     const email = ref("");
     const password = ref("");
 
@@ -111,7 +115,7 @@ export default defineComponent({
       }
     }    
 
-    window.onSignIn = async (googleUser) => {
+    window.onGoogleSignIn = async (googleUser) => {
       try{
         await gapiSignIn(googleUser);
         router.push(route.query.redirect || '/');
@@ -120,7 +124,7 @@ export default defineComponent({
       }
     }
 
-    return { t, locale, email, password, onLogin }
+    return { t, locale, email, password, onLogin, authStatus }
   },
 
 })
