@@ -149,11 +149,7 @@
   </div>
   <div class="columns">
     <div class="column is-narrow-tablet is-narrow-desktop is-narrow-widescreen is-narrow-fullhd">
-      <button class="button is-rounded is-warning" 
-              v-on:click="alert('not available')">
-        <span class="icon"><i class="fas fa-upload"></i></span>
-        <strong>Upload</strong>
-      </button> 
+      <UploadModelWeights />
     </div>
   </div>
 
@@ -515,13 +511,14 @@ import { useInteractivity } from '@/components/bestworst/interactivity.js';
 import { useBwsSettings } from '@/components/bestworst/bws-settings.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
 import BDropdown from "@/components/layout/BDropdown.vue";
-
+import UploadModelWeights from '@/components/bestworst/UploadModelWeights.vue';
 
 export default defineComponent({
   name: "BwsSettings",
 
   components: {
-    BDropdown
+    BDropdown,
+    UploadModelWeights
   },
 
   setup(){
