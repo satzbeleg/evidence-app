@@ -1,6 +1,7 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ref, computed } from 'vue';
+import * as jose from 'jose';
 
 /**
  * @param {String} endpoint 
@@ -40,26 +41,6 @@ export const useApi2 = (token) => {
   return { api }
 }
 
-
-/**
- * Google OAuth 2.0 API Javascript Client
- * - Check if GAPI was mounted to DOM window
- * - Google Logout 
- */
-export const useGapi = () => {
-  // Check if GAPI is available in the browser
-  const isGapiAvailable = computed(() => typeof window.gapi != "undefined");
-
-  // SignOut
-  const gapiSignOut = () => {
-    var auth2 = window.gapi.auth2.getAuthInstance();
-    auth2.signOut().then(() => {
-      console.log('Google User signed out.');
-    });
-  }
-
-  return { isGapiAvailable, gapiSignOut }
-}
 
 /**
  * Manage the Access Token
@@ -184,7 +165,7 @@ export const useAuth = () => {
    * 
    * USAGE:
    *    const { gapiSignIn } = useAuth(); 
-   *    window.onSignIn = gapiSignIn;
+   *    window.onGoogleSignIn = gapiSignIn;
    */
   const gapiSignIn = async (googleUser) => {
     return new Promise((resolve, reject) => {
@@ -192,14 +173,13 @@ export const useAuth = () => {
       isLoading.value = true;
 
       // Read Google users' ID and Email
-      var profile = googleUser.getBasicProfile();
+      const profile = jose.decodeJwt(googleUser.credential);
 
       // start POST request
       const { api } = useApi();
-      const { gapiSignOut } = useGapi();
       api.post('v1/auth/google-signin', {
-        'gid': profile.getId(),
-        'email': profile.getEmail()
+        'gid': profile.sub,
+        'email': profile.email
       })
         .then(resp => {
           authStatus.value = 'success'; // save JWT token in Cookie and axios
@@ -211,7 +191,6 @@ export const useAuth = () => {
           authStatus.value = 'error';
           jwtToken.value = undefined;
           failedLoginAttempts.value += 1;
-          gapiSignOut();
           reject(err);
         })
         .finally(() => {
@@ -220,8 +199,6 @@ export const useAuth = () => {
       // fin.
     });
   }
-  // window.onSignIn = gapiSignIn;
-
 
   /**
    * Logout -- Delete Access Token 
@@ -232,10 +209,6 @@ export const useAuth = () => {
       jwtToken.value = undefined;
       Cookies.remove('auth_token');
       //delete api.defaults.headers.common['Authorization'];
-      const { isGapiAvailable, gapiSignOut } = useGapi();
-      if ( isGapiAvailable.value ){
-        gapiSignOut();
-      }
       resolve();
     });
   }

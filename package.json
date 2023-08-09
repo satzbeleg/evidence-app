@@ -22,6 +22,7 @@
     "bwsample": "^0.1.5",
     "core-js": "^3.10.0",
     "histpdf": "0.1.0",
+    "jose": "^4.14.4",
     "js-cookie": "^2.2.1",
     "messageformat": "^2.3.0",
     "register-service-worker": "^1.7.1",
