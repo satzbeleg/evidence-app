@@ -52,7 +52,8 @@
 
             <span style="display:flex;justify-content:space-between;">
               <router-link :to="{ path: '/auth/signup' }">Register new account</router-link>
-              <router-link :to="{ path: '/auth/recovery' }">Reset password </router-link>
+              <!-- PW Reset REST API not implemented. -->
+              <!-- <router-link :to="{ path: '/auth/recovery' }">Reset password </router-link> -->
             </span>
 
             <GoogleSigninButton v-bind:alwaysDisplay="false"

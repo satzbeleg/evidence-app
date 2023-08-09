@@ -9,6 +9,10 @@
         <div class="columns is-centered">
           <div class="column is-5-tablet is-4-desktop is-3-widescreen">
 
+            <div class="has-text-danger">
+              Password Recovery is not implemented in the REST API / database!
+            </div>
+
             <div v-if="error" class="error">{{ error.message }}</div>
 
             <h3 class="title">{{ t('auth.recover_noun') }}</h3>
