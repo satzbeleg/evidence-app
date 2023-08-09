@@ -176,7 +176,7 @@ export const useAuth = () => {
       const profile = jose.decodeJwt(googleUser.credential);
 
       // start POST request
-      const { api } = useApi();
+      const { api } = useApi2();
       api.post('v1/auth/google-signin', {
         'gid': profile.sub,
         'email': profile.email
