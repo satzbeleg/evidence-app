@@ -33,45 +33,75 @@
       </button> 
     </p>
   </div>
+  <!-- status message -->
+  <p class="is-size-7 has-text-success-dark" v-if="msgStatus">
+    <span class="icon">
+      <i class="fas fa-check"></i>
+    </span>
+    <span>
+      {{ msgStatus }}
+    </span>
+  </p>
 
 </template>
 
 <script>
 import { defineComponent, ref, computed } from "vue";
+import { useInteractivity } from '@/components/bestworst/interactivity.js';
+import * as tf from '@tensorflow/tfjs';
+
 
 export default defineComponent({
   name: 'UploadModelWeights',
-
-  // props: {
-  //   text: String,
-  //   biblio: String,
-  //   size: String,
-  // },
 
   setup(){
     const file = ref(null);
     const fileName = computed(() => file.value?.name);
     // const fileExtension = computed(() => fileName.value?.substr(fileName.value?.lastIndexOf(".") + 1));
     // const fileMimeType = computed(() => file.value?.type);
+    const msgStatus = ref(undefined)
+
+    const { 
+      getTfjsModel, 
+      saveModelWeights 
+    } = useInteractivity();
 
     const onFileChanged = (event) => {
       file.value = event.target.files[0];
     };
 
     const overwriteModelWeights = async () => {
-      // console.log(file.value);
+      // read weights
       const reader = new FileReader();
       reader.readAsText(file.value);
       reader.onload = async () => {
-        const wgts = JSON.parse(reader.result);
-        console.log(wgts);
+        // parse json
+        const jsonWgts = JSON.parse(reader.result);
+        // convert to tfjs weights
+        let wgts = []
+        jsonWgts.forEach((wgt) => {
+          wgts.push(tf.tensor(Array.from(wgt["values"]), wgt["shape"]));
+        });
+        // overwrite model
+        getTfjsModel().then((model) => {
+          model.setWeights(wgts);
+          // save model locally and in Cassandra
+          model.save('indexeddb://user-specific-scoring-model');
+          saveModelWeights(model);
+          // confirmation message
+          msgStatus.value = `Model weights updated with '${fileName.value}'`
+          file.value = null
+        });
       }
     }
+
+
 
     return { 
       onFileChanged,
       fileName,
       overwriteModelWeights,
+      msgStatus,
     }
   }
 });

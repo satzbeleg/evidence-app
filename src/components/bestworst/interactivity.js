@@ -1251,5 +1251,7 @@ export const useInteractivity = () => {
     retrainModel,
     predictScores,
     downloadModelWeights,
+    // for UploadModelWeights.vue
+    saveModelWeights, getTfjsModel,
   }
 }
