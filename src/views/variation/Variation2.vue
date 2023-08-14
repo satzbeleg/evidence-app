@@ -30,7 +30,7 @@
         </p>
       </div>
 
-      <ItemCard v-for="(item, idx) in sortedPool" :key="idx"
+      <ItemCard2 v-for="(item, idx) in sortedPool" :key="idx"
         v-bind:itemPos="idx.toString()"
         v-bind:exampleId="item.example_id"
         v-bind:sentText="item.text"
@@ -191,7 +191,7 @@ import { useQueue } from '@/components/bestworst/queue.js';
 import { useQuadOpt } from '@/components/variation/quadopt.js';
 import { useSimilarityVectors } from '@/components/variation/similarity-vectors.js';
 import { useGeneralSettings } from '@/components/settings/general-settings.js';
-import ItemCard from '@/components/bestworst/ItemCard.vue';
+import ItemCard2 from '@/components/bestworst/ItemCard2.vue';
 
 export default {
   name: "Find diverse sets of sentence examples",
@@ -199,7 +199,7 @@ export default {
   components: {
     TheNavbar,
     PageLoader,
-    ItemCard
+    ItemCard2
   },
 
   setup(){
