@@ -51,11 +51,15 @@
         <br/>
 
         <template v-if="exampleMeta?.weight">
-          <h2 class="title is-5">Trade-Off</h2>
+          <h2 class="title is-5">
+            {{ weightType == 'similarity' ? 'Similarity' : 'Trade-Off' }}
+          </h2>
           <table class="table">
             <tbody>
               <tr>
-                <td>Weight</td>
+                <td>
+                  {{ weightType == 'similarity' ? 'Score' : 'Weight' }}
+                </td>
                 <td>{{ exampleMeta?.weight }}</td>
               </tr>
             </tbody>
@@ -111,7 +115,8 @@ export default defineComponent({
 
   props: {
     showModalInformation: Boolean,
-    exampleMeta: Object
+    exampleMeta: Object,
+    weightType: String,
   },
 
   setup(){

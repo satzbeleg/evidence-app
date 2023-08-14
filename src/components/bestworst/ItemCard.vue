@@ -22,6 +22,7 @@
     v-bind:showModalInformation="showModalInformation" 
     v-bind:exampleMeta="exampleMeta" 
     v-on:close="showModalInformation = false" 
+    v-bind:weightType="weightType"
   />
 </template>
 
@@ -47,7 +48,8 @@ export default defineComponent({
         lemmaSpans: Array,
         // all information about the example for the modal
         hasInfoModal: Boolean,
-        exampleMeta: Object
+        exampleMeta: Object,
+        weightType: String,
     },
 
     emits: ["item-selected"],

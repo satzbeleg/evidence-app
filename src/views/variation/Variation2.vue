@@ -39,6 +39,7 @@
         v-bind:exampleMeta="item"
         v-bind:itemState="item?.example_id === selectedExampleId ? 2 : 0"
         v-on:item-selected="onSelection"
+        v-bind:weightType="weightType"
       />
 
       <!-- put the above into components ... -->
@@ -273,7 +274,7 @@ export default {
     const { 
       aggregate_matrices, 
       get_weights,
-      norm_to_1
+      // norm_to_1
     } = useQuadOpt()
 
 
@@ -297,6 +298,7 @@ export default {
       }
     }
 
+    const weightType = ref("weight");
     const updateWeights = () => {
       if(debug_verbose.value){
         console.group();
@@ -366,11 +368,14 @@ export default {
         if( idxExample < 0 ){
           console.log("Example not found in pool")
         }
-        wbest = norm_to_1(simi.gather(idxExample))
+        // wbest = norm_to_1(simi.gather(idxExample))
+        wbest = simi.gather(idxExample)  // don't norm to show the actual similarity scores
+        weightType.value = "similarity";
       }else{
         // solve the optimization problem
         wbest = get_weights(
           good_scores, simi, parseFloat(lambdaTradeOff.value), undefined, 25);
+          weightType.value = "weight";
       }
 
       // assign weights
@@ -413,7 +418,7 @@ export default {
       // renderCards,
       highlightSpans,
       // similarity search
-      selectedExampleId, onSelection,
+      selectedExampleId, onSelection, weightType
     }
   }
 }
