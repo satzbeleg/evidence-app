@@ -10,7 +10,7 @@
         </div>
 
         <div class="is-size-7 has-text-gray-grey fit2box-center">
-          {{ exampleMeta?.weight ? Math.round(exampleMeta?.weight * 10000.0) / 10000.0 : ''}}
+          {{ exampleMeta?.weight ? parseFloat(exampleMeta?.weight).toFixed(weightType == 'similarity' ? 3 : 5) : ''}}
           |
           <span class="is-italic">
             {{ exampleMeta?.context?.biblio }}
